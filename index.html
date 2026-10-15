@@ -69,7 +69,7 @@
         </div>
       </div>
 
-      <!-- DESKTOP NAV MENU DENGAN ICON -->
+      <!-- DESKTOP NAV MENU -->
       <nav class="hidden md:flex items-center space-x-5 text-sm font-medium" id="desktopNav">
         <button id="nav-beranda" onclick="switchView('beranda')" class="hover:text-yellow-300 transition inline-flex items-center gap-1.5"><i class="fa-solid fa-house text-amber-300"></i> Beranda</button>
         <button id="nav-lomba" onclick="switchView('lomba')" class="hover:text-yellow-300 transition inline-flex items-center gap-1.5"><i class="fa-solid fa-trophy text-amber-300"></i> Cabang Lomba</button>
@@ -91,7 +91,7 @@
 
     </div>
 
-    <!-- MOBILE MENU DROPDOWN DENGAN ICON -->
+    <!-- MOBILE MENU DROPDOWN -->
     <div id="mobileMenu" class="hidden md:hidden bg-emerald-900 border-t border-emerald-700 px-4 py-3 space-y-2 text-sm font-medium">
       <button id="mnav-beranda" onclick="switchView('beranda'); toggleMobileNav();" class="block w-full text-left py-2 px-3 rounded hover:bg-emerald-800 transition">
         <i class="fa-solid fa-house w-5 text-yellow-300 mr-1"></i> Beranda
@@ -117,19 +117,19 @@
     <!-- 1. BERANDA (HOME) -->
     <section id="view-beranda" class="view-page container mx-auto px-4 py-6">
       
-      <!-- HERO SLIDER BANNER -->
-      <div class="relative group rounded-2xl overflow-hidden shadow-xl border border-gray-200 mb-10 bg-emerald-950">
+      <!-- HERO SLIDER BANNER (UKURAN RAMPING - SETENGAH TINGGI) -->
+      <div class="relative group rounded-2xl overflow-hidden shadow-md border border-gray-200 mb-8 bg-emerald-950">
         <div class="swiper heroSlider">
           <div class="swiper-wrapper" id="sliderWrapper">
-            <div class="swiper-slide min-h-[260px] sm:min-h-[380px] md:min-h-[440px] flex items-center justify-center relative bg-emerald-950">
-              <img src="banner1.jpg" class="w-full h-full object-cover max-h-[460px]" alt="Banner 1" onerror="this.src='https://via.placeholder.com/1200x450?text=Pesona+Al+Firdaus+2026'">
+            <div class="swiper-slide min-h-[130px] sm:min-h-[190px] md:min-h-[220px] flex items-center justify-center relative bg-emerald-950">
+              <img src="banner1.jpg" class="w-full h-full object-cover max-h-[220px]" alt="Banner 1" onerror="this.src='https://via.placeholder.com/1200x220?text=Pesona+Al+Firdaus+2026'">
             </div>
           </div>
           <div class="swiper-button-next hidden sm:block"></div>
           <div class="swiper-button-prev hidden sm:block"></div>
           <div class="swiper-pagination"></div>
         </div>
-        <button onclick="toggleSliderAutoplay()" id="btnToggleAutoplay" title="Pause / Play Autoplay" class="absolute bottom-3 right-3 z-30 bg-black/50 hover:bg-black/70 text-white w-8 h-8 rounded-full flex items-center justify-center text-xs border border-white/30 transition">
+        <button onclick="toggleSliderAutoplay()" id="btnToggleAutoplay" title="Pause / Play Autoplay" class="absolute bottom-2 right-2 z-30 bg-black/50 hover:bg-black/70 text-white w-7 h-7 rounded-full flex items-center justify-center text-[10px] border border-white/30 transition">
           <i class="fa-solid fa-pause" id="iconAutoplay"></i>
         </button>
       </div>
@@ -219,7 +219,7 @@
       </div>
     </section>
 
-    <!-- 5. UNGGAHAN AUDIO KHUSUS -->
+    <!-- 5. UNGGAHAN AUDIO DENGAN AUTOCOMPLETE NAMA PESERTA -->
     <section id="view-unggah" class="view-page hidden container mx-auto px-4 py-8 max-w-xl">
       <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg border">
         <div class="text-center mb-6">
@@ -231,10 +231,15 @@
         </div>
 
         <form onsubmit="submitAudioUpload(event)" class="space-y-4 text-xs">
-          <div>
-            <label class="block font-bold text-gray-700 mb-1">Kode Registrasi / No. WA Peserta *</label>
-            <input type="text" id="audioKode" required placeholder="Contoh: PAF-1234 atau 08123456789" class="w-full border rounded-lg px-3 py-2 text-xs focus:outline-emerald-700">
+          <div class="relative">
+            <label class="block font-bold text-gray-700 mb-1">Cari Nama Peserta Terdaftar *</label>
+            <input type="text" id="audioNamaInput" autocomplete="off" oninput="onAudioNamaInput(this.value)" required placeholder="Ketik min. 3 huruf nama peserta (misal: Ahmad)..." class="w-full border rounded-lg px-3 py-2 text-xs focus:outline-emerald-700">
+            <input type="hidden" id="audioSelectedKode">
+            
+            <!-- REKOMENDASI DROPDOWN SUGGESTIONS -->
+            <div id="audioSuggestions" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-xl z-30 max-h-48 overflow-y-auto text-xs divide-y"></div>
           </div>
+
           <div>
             <label class="block font-bold text-gray-700 mb-1">Cabang Lomba *</label>
             <select id="audioCabang" required class="w-full border rounded-lg px-3 py-2 text-xs focus:outline-emerald-700 bg-white">
@@ -328,6 +333,7 @@
     const GAS_URL = "https://script.google.com/macros/s/AKfycbw4APJqKIcWVgs1yk29KHmuIeArlCDcu0rruBauZkOOmUmGig9Wvqy2aIKq7_gaUPGkOg/exec";
     let state = { lombaList: [], config: {}, swiperInstance: null, isAutoplayRunning: true };
     let countdownInterval = null;
+    let searchTimeout = null;
 
     window.onload = async () => {
       initSwiper();
@@ -438,8 +444,8 @@
             cfg.sliders.forEach(slide => {
               const bgImgUrl = parseImageUrl(slide.bgUrl);
               wrapper.innerHTML += `
-                <div class="swiper-slide min-h-[260px] sm:min-h-[380px] md:min-h-[440px] flex items-center justify-center relative bg-emerald-950">
-                  <img src="${bgImgUrl || 'banner1.jpg'}" class="w-full h-full object-cover max-h-[460px]" alt="Banner" onerror="this.src='https://via.placeholder.com/1200x450?text=Pesona+Al+Firdaus+2026'">
+                <div class="swiper-slide min-h-[130px] sm:min-h-[190px] md:min-h-[220px] flex items-center justify-center relative bg-emerald-950">
+                  <img src="${bgImgUrl || 'banner1.jpg'}" class="w-full h-full object-cover max-h-[220px]" alt="Banner" onerror="this.src='https://via.placeholder.com/1200x220?text=Pesona+Al+Firdaus+2026'">
                 </div>
               `;
             });
@@ -566,6 +572,61 @@
 
     function closeForm() { document.getElementById('formModal').classList.add('hidden'); }
 
+    // AUTOCOMPLETE NAMA PESERTA UNTUK UPLOAD AUDIO
+    function onAudioNamaInput(val) {
+      const sugBox = document.getElementById('audioSuggestions');
+      if (!val || val.trim().length < 3) {
+        sugBox.classList.add('hidden');
+        sugBox.innerHTML = '';
+        return;
+      }
+
+      if (searchTimeout) clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(async () => {
+        sugBox.classList.remove('hidden');
+        sugBox.innerHTML = `<div class="p-2.5 text-center text-gray-400">Mencari peserta...</div>`;
+
+        try {
+          const res = await fetch(`${GAS_URL}?action=check&query=${encodeURIComponent(val.trim())}`);
+          const result = await res.json();
+
+          if (result.status === "success" && result.results && result.results.length > 0) {
+            sugBox.innerHTML = "";
+            result.results.forEach(item => {
+              const div = document.createElement('div');
+              div.className = "p-2.5 hover:bg-emerald-50 cursor-pointer transition flex justify-between items-center";
+              div.innerHTML = `
+                <div>
+                  <strong class="text-emerald-950 font-bold block">${item.namaLengkap}</strong>
+                  <span class="text-[10px] text-gray-500">${item.asalSekolah} (${item.cabangLomba})</span>
+                </div>
+                <span class="font-mono text-[10px] font-bold bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded shrink-0 ml-2">${item.kodeRegistrasi}</span>
+              `;
+              div.onclick = () => selectAudioParticipant(item);
+              sugBox.appendChild(div);
+            });
+          } else {
+            sugBox.innerHTML = `<div class="p-2.5 text-center text-red-500 font-semibold">Nama peserta tidak ditemukan.</div>`;
+          }
+        } catch(e) {
+          sugBox.innerHTML = `<div class="p-2.5 text-center text-red-500">Gagal memuat data peserta.</div>`;
+        }
+      }, 300);
+    }
+
+    function selectAudioParticipant(item) {
+      document.getElementById('audioNamaInput').value = `${item.namaLengkap} (${item.asalSekolah})`;
+      document.getElementById('audioSelectedKode').value = item.kodeRegistrasi;
+      document.getElementById('audioSuggestions').classList.add('hidden');
+
+      const sel = document.getElementById('audioCabang');
+      if (item.cabangLomba.toLowerCase().includes('tari')) {
+        sel.value = 'Tari Kreasi';
+      } else if (item.cabangLomba.toLowerCase().includes('solo')) {
+        sel.value = 'Solosong';
+      }
+    }
+
     async function submitAudioUpload(e) {
       e.preventDefault();
       const btn = document.getElementById('btnAudioSubmit');
@@ -575,6 +636,8 @@
         const fileInput = document.getElementById('audioFile');
         if(!fileInput.files.length) return;
 
+        const selectedKode = document.getElementById('audioSelectedKode').value || document.getElementById('audioNamaInput').value;
+
         const file = fileInput.files[0];
         const reader = new FileReader();
 
@@ -582,7 +645,7 @@
           const base64Str = event.target.result;
           const payload = {
             action: 'uploadAudio',
-            kodeRegistrasi: document.getElementById('audioKode').value.trim(),
+            kodeRegistrasi: selectedKode,
             cabangLomba: document.getElementById('audioCabang').value,
             audioBase64: base64Str,
             fileName: file.name,
@@ -593,8 +656,10 @@
           const result = await res.json();
 
           if(result.status === 'success') {
-            Swal.fire({ icon: 'success', title: 'Audio Berhasil Diunggah! 🎵', text: 'File audio Anda telah tersimpan dengan aman di folder panitia.', confirmButtonColor: '#047857' });
+            Swal.fire({ icon: 'success', title: 'Audio Berhasil Diunggah! 🎵', text: 'File audio peserta telah tersimpan di folder Google Drive panitia.', confirmButtonColor: '#047857' });
             fileInput.value = "";
+            document.getElementById('audioNamaInput').value = "";
+            document.getElementById('audioSelectedKode').value = "";
           } else {
             Swal.fire({ icon: 'error', title: 'Gagal Upload', text: result.message || 'Terjadi kesalahan.', confirmButtonColor: '#047857' });
           }
