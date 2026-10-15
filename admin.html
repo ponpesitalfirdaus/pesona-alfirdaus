@@ -9,31 +9,47 @@
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans min-h-screen flex flex-col">
 
-  <!-- AUTH / LOGIN BOX (TAMPIL JIKA BELUM LOGIN) -->
+  <!-- FORM LOGIN ADMIN -->
   <div id="loginSection" class="fixed inset-0 bg-emerald-950 flex items-center justify-center p-4 z-50">
-    <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-sm w-full text-center">
-      <div class="w-16 h-16 bg-emerald-100 text-emerald-800 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
+    <div class="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 max-w-sm w-full text-center">
+      <div class="w-14 h-14 sm:w-16 sm:h-16 bg-emerald-100 text-emerald-800 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-3">
         <i class="fa-solid fa-user-gear"></i>
       </div>
-      <h2 class="text-2xl font-bold text-emerald-950">Admin Control Panel</h2>
-      <p class="text-xs text-gray-500 mb-6">Portal Manajemen Pesona Al Firdaus</p>
+      <h2 class="text-xl sm:text-2xl font-bold text-emerald-950">Admin Control Panel</h2>
+      <p class="text-xs text-gray-500 mb-5">Portal Manajemen Pesona Al Firdaus</p>
       
-      <form onsubmit="handleLogin(event)" class="space-y-4">
-        <input type="password" id="passInput" placeholder="Masukkan Password Admin" required class="w-full border rounded-xl px-4 py-2.5 text-sm text-center focus:outline-emerald-700">
-        <button type="submit" class="w-full bg-emerald-800 hover:bg-emerald-900 text-white font-bold py-2.5 rounded-xl text-sm shadow">
+      <form onsubmit="handleLogin(event)" class="space-y-3">
+        <div>
+          <input type="text" id="userInput" placeholder="Username" required class="w-full border rounded-xl px-4 py-2.5 text-xs sm:text-sm text-center focus:outline-emerald-700">
+        </div>
+        <div>
+          <input type="password" id="passInput" placeholder="Password" required class="w-full border rounded-xl px-4 py-2.5 text-xs sm:text-sm text-center focus:outline-emerald-700">
+        </div>
+        <button type="submit" class="w-full bg-emerald-800 hover:bg-emerald-900 text-white font-bold py-2.5 rounded-xl text-xs sm:text-sm shadow">
           Masuk Dashboard
         </button>
       </form>
     </div>
   </div>
 
-  <!-- DASHBOARD MAIN LAYOUT (TAMPIL SETELAH LOGIN) -->
+  <!-- DASHBOARD MAIN LAYOUT -->
   <div id="dashboardSection" class="hidden flex-1 flex flex-col md:flex-row min-h-screen">
     
-    <!-- SIDEBAR -->
-    <aside class="w-full md:w-64 bg-emerald-950 text-emerald-100 flex flex-col justify-between p-4">
+    <!-- TOPBAR HAMBURGER (UNTUK MOBILE HP) -->
+    <div class="md:hidden bg-emerald-950 text-white px-4 py-3 flex justify-between items-center sticky top-0 z-40">
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 bg-yellow-400 text-emerald-950 rounded font-bold flex items-center justify-center text-xs">PAF</div>
+        <span class="font-bold text-sm">Admin Portal</span>
+      </div>
+      <button onclick="toggleAdminSidebar()" class="text-white hover:text-yellow-300">
+        <i class="fa-solid fa-bars text-xl" id="adminHamburgerIcon"></i>
+      </button>
+    </div>
+
+    <!-- SIDEBAR NAVIGASI ADMIN -->
+    <aside id="adminSidebar" class="hidden md:flex w-full md:w-64 bg-emerald-950 text-emerald-100 flex-col justify-between p-4 transition-all">
       <div>
-        <div class="flex items-center gap-3 px-2 py-4 border-b border-emerald-900 mb-6">
+        <div class="hidden md:flex items-center gap-3 px-2 py-4 border-b border-emerald-900 mb-6">
           <div class="w-8 h-8 bg-yellow-400 text-emerald-950 rounded-lg font-extrabold flex items-center justify-center">PAF</div>
           <div>
             <h2 class="font-bold text-sm leading-tight">Admin Portal</h2>
@@ -57,7 +73,7 @@
         </nav>
       </div>
 
-      <div class="pt-4 border-t border-emerald-900">
+      <div class="pt-4 border-t border-emerald-900 mt-6 md:mt-0">
         <a href="index.html" target="_blank" class="w-full mb-2 bg-emerald-900 hover:bg-emerald-800 text-emerald-200 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-2">
           <i class="fa-solid fa-globe"></i> Buka Web Portal
         </a>
@@ -68,18 +84,18 @@
     </aside>
 
     <!-- CONTENT AREA -->
-    <main class="flex-1 bg-gray-50 p-6 md:p-8 overflow-y-auto">
+    <main class="flex-1 bg-gray-50 p-4 sm:p-6 md:p-8 overflow-y-auto">
 
-      <!-- SECTION 1: REKAP PENDAFTAR -->
-      <div id="sec-pendaftar" class="admin-sec space-y-6">
-        <div class="flex justify-between items-center">
+      <!-- 1. REKAP PENDAFTAR -->
+      <div id="sec-pendaftar" class="admin-sec space-y-4 sm:space-y-6">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
           <div>
-            <h1 class="text-2xl font-bold text-gray-900">Rekapitulasi Pendaftar</h1>
+            <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Rekapitulasi Pendaftar</h1>
             <p class="text-xs text-gray-500">Kelola dan konfirmasi pendaftaran peserta lomba</p>
           </div>
-          <div class="flex gap-2">
-            <button onclick="exportCSV()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-3.5 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 shadow">
-              <i class="fa-solid fa-file-excel"></i> Ekspor CSV
+          <div class="flex gap-2 w-full sm:w-auto">
+            <button onclick="exportCSV()" class="flex-1 sm:flex-none bg-emerald-700 hover:bg-emerald-800 text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 shadow">
+              <i class="fa-solid fa-file-excel"></i> CSV
             </button>
             <button onclick="fetchAdminData()" class="bg-white border px-3 py-2 rounded-lg text-xs font-bold text-gray-600 hover:bg-gray-50">
               <i class="fa-solid fa-rotate"></i> Refresh
@@ -87,26 +103,24 @@
           </div>
         </div>
 
-        <!-- STATS CARDS -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
           <div class="bg-white p-4 rounded-xl border shadow-sm">
             <p class="text-xs text-gray-500 font-semibold">Total Pendaftar</p>
-            <p class="text-2xl font-extrabold text-emerald-900 mt-1" id="statTotal">0</p>
+            <p class="text-xl sm:text-2xl font-extrabold text-emerald-900 mt-1" id="statTotal">0</p>
           </div>
           <div class="bg-white p-4 rounded-xl border shadow-sm">
             <p class="text-xs text-gray-500 font-semibold">Terverifikasi</p>
-            <p class="text-2xl font-extrabold text-green-600 mt-1" id="statVerified">0</p>
+            <p class="text-xl sm:text-2xl font-extrabold text-green-600 mt-1" id="statVerified">0</p>
           </div>
           <div class="bg-white p-4 rounded-xl border shadow-sm">
             <p class="text-xs text-gray-500 font-semibold">Menunggu Verifikasi</p>
-            <p class="text-2xl font-extrabold text-amber-500 mt-1" id="statPending">0</p>
+            <p class="text-xl sm:text-2xl font-extrabold text-amber-500 mt-1" id="statPending">0</p>
           </div>
         </div>
 
-        <!-- FILTER & SEARCH -->
-        <div class="bg-white p-4 rounded-xl border shadow-sm flex flex-col md:flex-row gap-3 justify-between">
-          <input type="text" id="searchBox" onkeyup="applyFilter()" placeholder="Cari Nama / Kode / WA..." class="border rounded-lg px-3 py-2 text-xs w-full md:w-1/3">
-          <div class="flex gap-2">
+        <div class="bg-white p-4 rounded-xl border shadow-sm flex flex-col sm:flex-row gap-3 justify-between">
+          <input type="text" id="searchBox" onkeyup="applyFilter()" placeholder="Cari Nama / Kode / WA..." class="border rounded-lg px-3 py-2 text-xs w-full sm:w-1/3">
+          <div class="flex flex-col sm:flex-row gap-2">
             <select id="filterLomba" onchange="applyFilter()" class="border rounded-lg px-3 py-2 text-xs bg-white">
               <option value="">Semua Cabang Lomba</option>
             </select>
@@ -119,7 +133,6 @@
           </div>
         </div>
 
-        <!-- DATA TABLE -->
         <div class="bg-white rounded-xl border shadow-sm overflow-hidden">
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
@@ -140,11 +153,11 @@
         </div>
       </div>
 
-      <!-- SECTION 2: KELOLA CABANG LOMBA -->
+      <!-- 2. KELOLA CABANG LOMBA -->
       <div id="sec-lomba" class="admin-sec hidden space-y-6">
-        <div class="flex justify-between items-center">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
           <div>
-            <h1 class="text-2xl font-bold text-gray-900">Kelola Cabang Lomba</h1>
+            <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Kelola Cabang Lomba</h1>
             <p class="text-xs text-gray-500">Tambah, ubah detail, atau tutup pendaftaran lomba</p>
           </div>
           <button onclick="resetLombaForm()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded-lg text-xs font-bold shadow">
@@ -152,9 +165,8 @@
           </button>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
-          <!-- FORM EDITOR -->
-          <form id="formLomba" onsubmit="saveLomba(event)" class="md:col-span-5 bg-white p-5 rounded-xl border shadow-sm space-y-3">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <form id="formLomba" onsubmit="saveLomba(event)" class="lg:col-span-5 bg-white p-4 sm:p-5 rounded-xl border shadow-sm space-y-3">
             <h3 class="font-bold text-sm text-emerald-900 border-b pb-2" id="lombaFormHeader">Form Cabang Lomba</h3>
             <input type="hidden" id="lombaId">
             <div>
@@ -199,19 +211,18 @@
             </button>
           </form>
 
-          <!-- LIST LOMBA -->
-          <div class="md:col-span-7 space-y-3" id="lombaCardsContainer"></div>
+          <div class="lg:col-span-7 space-y-3" id="lombaCardsContainer"></div>
         </div>
       </div>
 
-      <!-- SECTION 3: KELOLA SLIDER BANNER -->
+      <!-- 3. SLIDER BANNER -->
       <div id="sec-sliders" class="admin-sec hidden space-y-6">
         <div class="flex justify-between items-center">
           <div>
-            <h1 class="text-2xl font-bold text-gray-900">Kelola Hero Slider Banner</h1>
+            <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Kelola Hero Slider Banner</h1>
             <p class="text-xs text-gray-500">Atur konten banner slider utama di bagian atas halaman depan</p>
           </div>
-          <button onclick="addSlideRow()" class="bg-emerald-700 text-white px-3.5 py-2 rounded-lg text-xs font-bold shadow">+ Tambah Slide</button>
+          <button onclick="addSlideRow()" class="bg-emerald-700 text-white px-3 py-2 rounded-lg text-xs font-bold shadow">+ Tambah Slide</button>
         </div>
 
         <form onsubmit="saveSliders(event)" class="space-y-4">
@@ -222,14 +233,14 @@
         </form>
       </div>
 
-      <!-- SECTION 4: PENGATURAN PORTAL -->
+      <!-- 4. PENGATURAN PORTAL -->
       <div id="sec-config" class="admin-sec hidden space-y-6">
         <div>
-          <h1 class="text-2xl font-bold text-gray-900">Pengaturan Identitas Portal</h1>
+          <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Pengaturan Identitas Portal</h1>
           <p class="text-xs text-gray-500">Atur judul website, teks header, kontak, dan nomor rekening panitia</p>
         </div>
 
-        <form onsubmit="saveGlobalConfig(event)" class="bg-white p-6 rounded-xl border shadow-sm space-y-4 text-xs max-w-2xl">
+        <form onsubmit="saveGlobalConfig(event)" class="bg-white p-4 sm:p-6 rounded-xl border shadow-sm space-y-4 text-xs max-w-2xl">
           <div>
             <label class="block font-bold text-gray-700 mb-1">Judul Portal (Header Utama)</label>
             <input type="text" id="cfgHeaderTitle" class="w-full border rounded-lg px-3 py-2">
@@ -271,14 +282,24 @@
       }
     };
 
+    function toggleAdminSidebar() {
+      const sidebar = document.getElementById('adminSidebar');
+      sidebar.classList.toggle('hidden');
+    }
+
     function handleLogin(e) {
       e.preventDefault();
-      if(document.getElementById('passInput').value === "admin123") {
+      const u = document.getElementById('userInput').value.trim();
+      const p = document.getElementById('passInput').value.trim();
+
+      if(u === "pesona" && p === "alfirdaus2026") {
         localStorage.setItem('adminAuth', 'true');
         document.getElementById('loginSection').classList.add('hidden');
         document.getElementById('dashboardSection').classList.remove('hidden');
         initDashboard();
-      } else { alert("Password Admin salah!"); }
+      } else { 
+        alert("Username atau Password Admin salah!"); 
+      }
     }
 
     function handleLogout() {
@@ -289,6 +310,9 @@
     function navAdmin(sec) {
       document.querySelectorAll('.admin-sec').forEach(el => el.classList.add('hidden'));
       document.getElementById(`sec-${sec}`).classList.remove('hidden');
+      if(window.innerWidth < 768) {
+        document.getElementById('adminSidebar').classList.add('hidden');
+      }
     }
 
     async function initDashboard() {
@@ -296,7 +320,6 @@
       await fetchPortalConfig();
     }
 
-    // PENDAFTAR MANAGEMENT
     async function fetchAdminData() {
       const res = await fetch(`${GAS_URL}?action=adminData`);
       const result = await res.json();
@@ -368,7 +391,6 @@
       const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'pendaftar-pesona-al-firdaus.csv'; a.click();
     }
 
-    // CABANG LOMBA MANAGEMENT
     async function fetchPortalConfig() {
       const res = await fetch(`${GAS_URL}?action=initPortal`);
       const result = await res.json();
@@ -393,12 +415,12 @@
                 <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded">${l.kategori}</span>
                 <span class="text-[10px] font-bold px-2 py-0.5 rounded ${l.statusLomba === 'TUTUP' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}">${l.statusLomba || 'BUKA'}</span>
               </div>
-              <h4 class="font-bold text-gray-800 mt-1">${l.judul}</h4>
+              <h4 class="font-bold text-gray-800 mt-1 text-sm">${l.judul}</h4>
               <p class="text-xs text-emerald-700 font-bold">${l.biaya}</p>
             </div>
-            <div class="flex gap-2">
-              <button onclick="editLomba('${l.id}')" class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-lg font-bold">Edit</button>
-              <button onclick="deleteLomba('${l.id}')" class="bg-red-600 text-white text-xs px-3 py-1.5 rounded-lg font-bold">Hapus</button>
+            <div class="flex gap-1.5">
+              <button onclick="editLomba('${l.id}')" class="bg-blue-600 text-white text-xs px-2.5 py-1.5 rounded-lg font-bold">Edit</button>
+              <button onclick="deleteLomba('${l.id}')" class="bg-red-600 text-white text-xs px-2.5 py-1.5 rounded-lg font-bold">Hapus</button>
             </div>
           </div>
         `;
@@ -456,7 +478,6 @@
       fetchPortalConfig();
     }
 
-    // SLIDERS & CONFIG MANAGEMENT
     function renderSlidersAdmin() {
       adminState.currentSliders = adminState.config.sliders || [
         { badge: "PENDAFTARAN DIBUKA", title: "Selamat Datang di Pesona Al Firdaus", desc: "Ajang Unjuk Bakat & Prestasi Generasi Islami Bergengsi." }
@@ -468,9 +489,9 @@
           <div class="bg-white p-4 rounded-xl border shadow-sm space-y-2 relative">
             <button type="button" onclick="removeSlideRow(${idx})" class="absolute top-3 right-3 text-red-600 font-bold text-xs">Hapus</button>
             <h5 class="font-bold text-xs text-gray-700">Slide Banner #${idx + 1}</h5>
-            <div class="grid grid-cols-3 gap-2">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
               <input type="text" value="${s.badge || ''}" placeholder="Badge Text" class="sld-badge border rounded px-2 py-1 text-xs">
-              <input type="text" value="${s.title || ''}" placeholder="Judul Banner" class="sld-title border rounded px-2 py-1 text-xs col-span-2">
+              <input type="text" value="${s.title || ''}" placeholder="Judul Banner" class="sld-title border rounded px-2 py-1 text-xs sm:col-span-2">
             </div>
             <input type="text" value="${s.desc || ''}" placeholder="Deskripsi Banner" class="sld-desc w-full border rounded px-2 py-1 text-xs">
           </div>
