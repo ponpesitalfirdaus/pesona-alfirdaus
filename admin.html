@@ -6,6 +6,7 @@
   <title>Admin Dashboard - PESONA AL FIRDAUS</title>
   <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1Ca6RhNsv0aFWD4EMdkr8uCcSuPDESTpv">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans min-h-screen flex flex-col">
@@ -34,7 +35,7 @@
   <!-- DASHBOARD MAIN LAYOUT -->
   <div id="dashboardSection" class="hidden flex-1 flex flex-col md:flex-row min-h-screen relative">
     
-    <!-- TOPBAR MOBILE WITH HAMBURGER TOGGLE -->
+    <!-- TOPBAR MOBILE -->
     <div class="md:hidden bg-emerald-950 text-white px-4 py-3 flex justify-between items-center sticky top-0 z-40 shadow-md">
       <div class="flex items-center gap-2">
         <img src="https://lh3.googleusercontent.com/d/1Ca6RhNsv0aFWD4EMdkr8uCcSuPDESTpv" class="w-7 h-7 object-contain rounded-full bg-white p-0.5">
@@ -45,10 +46,10 @@
       </button>
     </div>
 
-    <!-- MOBILE OVERLAY BACKDROP -->
+    <!-- MOBILE BACKDROP -->
     <div id="adminBackdrop" onclick="closeAdminSidebar()" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden transition-opacity"></div>
 
-    <!-- SIDEBAR DRAWER (SLIDE IN FROM LEFT ON MOBILE) -->
+    <!-- SIDEBAR DRAWER -->
     <aside id="adminSidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-emerald-950 text-emerald-100 flex flex-col justify-between p-4 transform -translate-x-full transition-transform duration-300 ease-in-out md:static md:translate-x-0 md:flex">
       <div>
         <div class="flex items-center gap-3 px-2 py-4 border-b border-emerald-900 mb-6">
@@ -105,7 +106,7 @@
           </div>
         </div>
 
-        <!-- STAT CARDS DENGAN ICON -->
+        <!-- STAT CARDS WITH ICON -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
           <div class="bg-white p-4 rounded-xl border shadow-sm flex items-center justify-between">
             <div>
@@ -136,7 +137,6 @@
           </div>
         </div>
 
-        <!-- FILTER & SORTIR DATA -->
         <div class="bg-white p-4 rounded-xl border shadow-sm flex flex-col sm:flex-row gap-3 justify-between">
           <input type="text" id="searchBox" onkeyup="applyFilter()" placeholder="Cari Nama / Kode / WA..." class="border rounded-lg px-3 py-2 text-xs w-full sm:w-1/3 focus:outline-emerald-700">
           <div class="flex flex-col sm:flex-row gap-2">
@@ -152,7 +152,6 @@
           </div>
         </div>
 
-        <!-- TABEL PENDAFTAR -->
         <div class="bg-white rounded-xl border shadow-sm overflow-hidden">
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
@@ -171,7 +170,7 @@
             </table>
           </div>
 
-          <!-- FOOTER TABEL DENGAN CONTROL PAGINATION -->
+          <!-- PAGINATION -->
           <div class="p-3 sm:p-4 border-t bg-gray-50 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs">
             <div class="flex items-center gap-2">
               <span class="text-gray-500 font-semibold">Tampilkan:</span>
@@ -197,12 +196,12 @@
         </div>
       </div>
 
-      <!-- 2. KELOLA CABANG LOMBA -->
+      <!-- 2. KELOLA CABANG LOMBA (UPLOAD GABAR FILE KE DRIVE) -->
       <div id="sec-lomba" class="admin-sec hidden space-y-6">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
           <div>
             <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Kelola Cabang Lomba</h1>
-            <p class="text-xs text-gray-500">Tambah, ubah detail, atau tutup pendaftaran lomba</p>
+            <p class="text-xs text-gray-500">Upload flyer gambar dan atur rincian lomba</p>
           </div>
           <button onclick="resetLombaForm()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded-lg text-xs font-bold shadow">
             + Tambah Lomba Baru
@@ -213,6 +212,7 @@
           <form id="formLomba" onsubmit="saveLomba(event)" class="lg:col-span-5 bg-white p-4 sm:p-5 rounded-xl border shadow-sm space-y-3">
             <h3 class="font-bold text-sm text-emerald-900 border-b pb-2" id="lombaFormHeader">Form Cabang Lomba</h3>
             <input type="hidden" id="lombaId">
+            <input type="hidden" id="existingFlyerUrl">
             <div>
               <label class="block text-[11px] font-bold text-gray-700 mb-1">Judul Perlombaan *</label>
               <input type="text" id="lombaJudul" required placeholder="MHQ (Musabaqah Hifzhil Qur'an)" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700">
@@ -235,8 +235,9 @@
               </select>
             </div>
             <div>
-              <label class="block text-[11px] font-bold text-gray-700 mb-1">URL Image Flyer *</label>
-              <input type="text" id="lombaFlyer" required placeholder="https://..." class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700">
+              <label class="block text-[11px] font-bold text-gray-700 mb-1">Upload Gambar Flyer (Otomatis Masuk Drive) *</label>
+              <input type="file" id="lombaFlyerFile" accept="image/*" class="w-full border rounded-lg p-1 text-xs">
+              <p class="text-[10px] text-gray-400 mt-1">Biarkan kosong jika tidak ingin mengganti gambar flyer saat ini.</p>
             </div>
             <div>
               <label class="block text-[11px] font-bold text-gray-700 mb-1">Deskripsi Lomba</label>
@@ -260,12 +261,12 @@
         </div>
       </div>
 
-      <!-- 3. SLIDER BANNER -->
+      <!-- 3. SLIDER BANNER WITH FILE UPLOADER -->
       <div id="sec-sliders" class="admin-sec hidden space-y-6">
         <div class="flex justify-between items-center">
           <div>
             <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Kelola Hero Slider Banner</h1>
-            <p class="text-xs text-gray-500">Atur konten banner slider utama di bagian atas halaman beranda</p>
+            <p class="text-xs text-gray-500">Atur konten & gambar banner slider utama</p>
           </div>
           <button onclick="addSlideRow()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-3 py-2 rounded-lg text-xs font-bold shadow">+ Tambah Slide</button>
         </div>
@@ -278,14 +279,53 @@
         </form>
       </div>
 
-      <!-- 4. PENGATURAN PORTAL -->
+      <!-- 4. PENGATURAN PORTAL & TOPBAR -->
       <div id="sec-config" class="admin-sec hidden space-y-6">
         <div>
-          <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Pengaturan Identitas Portal</h1>
-          <p class="text-xs text-gray-500">Atur judul website, teks header, kontak, dan nomor rekening panitia</p>
+          <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Pengaturan Portal & Topbar</h1>
+          <p class="text-xs text-gray-500">Atur judul website, kontak, lokasi, countdown timer, dan media sosial</p>
         </div>
 
         <form onsubmit="saveGlobalConfig(event)" class="bg-white p-4 sm:p-6 rounded-xl border shadow-sm space-y-4 text-xs max-w-2xl">
+          <h3 class="font-bold text-sm text-emerald-900 border-b pb-2">Top Bar Header Settings</h3>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-bold text-gray-700 mb-1">Teks Lokasi Kegiatan</label>
+              <input type="text" id="cfgLokasi" class="w-full border rounded-lg px-3 py-2 focus:outline-emerald-700" placeholder="Kompleks Pesantren Al Firdaus">
+            </div>
+            <div>
+              <label class="block font-bold text-gray-700 mb-1">Nomor WhatsApp Panitia</label>
+              <input type="text" id="cfgWaNumber" class="w-full border rounded-lg px-3 py-2 focus:outline-emerald-700" placeholder="081234567890">
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Target Tanggal Countdown Timer Acara</label>
+            <input type="datetime-local" id="cfgTargetDate" class="w-full border rounded-lg px-3 py-2 focus:outline-emerald-700">
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 border-t pt-3">
+            <div>
+              <label class="block font-semibold mb-1">Link Instagram</label>
+              <input type="text" id="cfgLinkIg" class="w-full border rounded px-2 py-1 text-xs" placeholder="https://instagram.com/...">
+            </div>
+            <div>
+              <label class="block font-semibold mb-1">Link YouTube</label>
+              <input type="text" id="cfgLinkYt" class="w-full border rounded px-2 py-1 text-xs" placeholder="https://youtube.com/...">
+            </div>
+            <div>
+              <label class="block font-semibold mb-1">Link TikTok</label>
+              <input type="text" id="cfgLinkTt" class="w-full border rounded px-2 py-1 text-xs" placeholder="https://tiktok.com/...">
+            </div>
+            <div>
+              <label class="block font-semibold mb-1">Link Threads</label>
+              <input type="text" id="cfgLinkTh" class="w-full border rounded px-2 py-1 text-xs" placeholder="https://threads.net/...">
+            </div>
+          </div>
+
+          <h3 class="font-bold text-sm text-emerald-900 border-b pb-2 pt-2">Identitas & Rekening Portal</h3>
+
           <div>
             <label class="block font-bold text-gray-700 mb-1">Judul Portal (Header Utama)</label>
             <input type="text" id="cfgHeaderTitle" class="w-full border rounded-lg px-3 py-2 focus:outline-emerald-700">
@@ -302,6 +342,7 @@
             <label class="block font-bold text-gray-700 mb-1">Informasi Kontak Footer</label>
             <input type="text" id="cfgContact" class="w-full border rounded-lg px-3 py-2 focus:outline-emerald-700">
           </div>
+          
           <button type="submit" class="bg-emerald-800 hover:bg-emerald-900 text-white font-bold px-6 py-2.5 rounded-xl text-xs shadow flex items-center gap-2">
             <i class="fa-solid fa-floppy-disk"></i> Simpan Pengaturan Portal
           </button>
@@ -312,16 +353,11 @@
   </div>
 
   <script>
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbw4APJqKIcWVgs1yk29KHmuIeArlCDcu0rruBauZkOOmUmGig9Wvqy2aIKq7_gaUPGkOg/exec";
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbx_GANTIKAN_DENGAN_URL_DEPLOY_ANDA/exec";
 
     let adminState = { 
-      pendaftar: [], 
-      filteredData: [],
-      lomba: [], 
-      config: {}, 
-      currentSliders: [],
-      currentPage: 1,
-      pageSize: 10
+      pendaftar: [], filteredData: [], lomba: [], config: {}, currentSliders: [],
+      currentPage: 1, pageSize: 10
     };
 
     window.onload = () => {
@@ -332,19 +368,15 @@
       }
     };
 
-    // HELPER: SAFE FETCH KE GOOGLE APPS SCRIPT TANPA TERKENA CORS BLOCK (FAILED TO FETCH)
     async function postToGAS(payload) {
       const res = await fetch(GAS_URL, {
-        method: 'POST',
-        mode: 'cors',
-        redirect: 'follow',
+        method: 'POST', mode: 'cors', redirect: 'follow',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify(payload)
       });
       return await res.json();
     }
 
-    // TOGGLE MOBILE SIDEBAR
     function toggleAdminSidebar() {
       const sidebar = document.getElementById('adminSidebar');
       const backdrop = document.getElementById('adminBackdrop');
@@ -379,20 +411,39 @@
 
       if(u === "pesona" && p === "alfirdaus2026") {
         localStorage.setItem('adminAuth', 'true');
-        document.getElementById('loginSection').classList.add('hidden');
-        document.getElementById('dashboardSection').classList.remove('hidden');
-        initDashboard();
+        Swal.fire({
+          icon: 'success',
+          title: 'Login Berhasil! 🎉',
+          text: 'Selamat datang kembali di Admin Portal Pesona Al Firdaus.',
+          timer: 1500,
+          showConfirmButton: false
+        }).then(() => {
+          document.getElementById('loginSection').classList.add('hidden');
+          document.getElementById('dashboardSection').classList.remove('hidden');
+          initDashboard();
+        });
       } else { 
-        alert("Username atau Password Admin salah!"); 
+        Swal.fire({ icon: 'error', title: 'Login Gagal', text: 'Username atau Password Admin salah!', confirmButtonColor: '#047857' });
       }
     }
 
     function handleLogout() {
-      localStorage.removeItem('adminAuth');
-      location.reload();
+      Swal.fire({
+        title: 'Keluar Admin Portal?',
+        text: 'Anda harus memasukkan kredensial lagi untuk masuk.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#047857',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, Keluar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          localStorage.removeItem('adminAuth');
+          location.reload();
+        }
+      });
     }
 
-    // NAVIGATION HIGHLIGHT MOVING BOX LOGIC
     function navAdmin(sec) {
       document.querySelectorAll('.admin-sec').forEach(el => el.classList.add('hidden'));
       document.getElementById(`sec-${sec}`).classList.remove('hidden');
@@ -400,15 +451,11 @@
       const menuKeys = ['pendaftar', 'lomba', 'sliders', 'config'];
       menuKeys.forEach(k => {
         const btn = document.getElementById(`m-${k}`);
-        if(btn) {
-          btn.className = "w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-emerald-900 text-emerald-300 transition";
-        }
+        if(btn) btn.className = "w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-emerald-900 text-emerald-300 transition";
       });
 
       const activeBtn = document.getElementById(`m-${sec}`);
-      if(activeBtn) {
-        activeBtn.className = "w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-emerald-800 text-white shadow font-bold transition";
-      }
+      if(activeBtn) activeBtn.className = "w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-emerald-800 text-white shadow font-bold transition";
 
       closeAdminSidebar();
     }
@@ -436,7 +483,6 @@
       document.getElementById('statPending').innerText = adminState.pendaftar.filter(x => x.status === 'MENUNGGU').length;
     }
 
-    // FILTER & PAGINATION LOGIC
     function applyFilter() {
       const q = document.getElementById('searchBox').value.toLowerCase();
       const lomba = document.getElementById('filterLomba').value;
@@ -459,18 +505,12 @@
     }
 
     function prevPage() {
-      if(adminState.currentPage > 1) {
-        adminState.currentPage--;
-        renderPendaftarTable();
-      }
+      if(adminState.currentPage > 1) { adminState.currentPage--; renderPendaftarTable(); }
     }
 
     function nextPage() {
       const totalPages = Math.ceil(adminState.filteredData.length / adminState.pageSize) || 1;
-      if(adminState.currentPage < totalPages) {
-        adminState.currentPage++;
-        renderPendaftarTable();
-      }
+      if(adminState.currentPage < totalPages) { adminState.currentPage++; renderPendaftarTable(); }
     }
 
     function renderPendaftarTable() {
@@ -479,16 +519,14 @@
 
       const totalItems = adminState.filteredData.length;
       const totalPages = Math.ceil(totalItems / adminState.pageSize) || 1;
-      
       if (adminState.currentPage > totalPages) adminState.currentPage = totalPages;
 
       const startIndex = (adminState.currentPage - 1) * adminState.pageSize;
       const endIndex = Math.min(startIndex + adminState.pageSize, totalItems);
-
       const pageData = adminState.filteredData.slice(startIndex, endIndex);
 
       if(pageData.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-gray-400 font-semibold">Tidak ada data pendaftar yang cocok.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-gray-400 font-semibold">Tidak ada data pendaftar.</td></tr>`;
       } else {
         pageData.forEach(item => {
           tbody.innerHTML += `
@@ -497,7 +535,7 @@
               <td class="p-3"><strong>${item.namaLengkap}</strong><br><span class="text-[10px] text-gray-500">${item.asalSekolah}</span></td>
               <td class="p-3">${item.cabangLomba}</td>
               <td class="p-3">${item.noWhatsapp}</td>
-              <td class="p-3">${item.linkBukti !== '-' ? `<a href="${item.linkBukti}" target="_blank" class="text-blue-600 font-bold underline">Lihat</a>` : '-'}</td>
+              <td class="p-3">${item.linkBukti !== '-' ? `<a href="${item.linkBukti}" target="_blank" class="text-blue-600 font-bold underline">Lihat File</a>` : '-'}</td>
               <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${item.status === 'TERVERIFIKASI' ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800'}">${item.status}</span></td>
               <td class="p-3 text-center space-x-1">
                 <button onclick="updateStatus('${item.kodeRegistrasi}', 'TERVERIFIKASI')" class="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-[10px] font-bold">Verifikasi</button>
@@ -509,29 +547,38 @@
         });
       }
 
-      // Update Info Pagination Controls
-      document.getElementById('paginationInfo').innerText = totalItems > 0 
-        ? `Menampilkan ${startIndex + 1} - ${endIndex} dari ${totalItems} data`
-        : "Menampilkan 0 data";
-
+      document.getElementById('paginationInfo').innerText = totalItems > 0 ? `Menampilkan ${startIndex + 1} - ${endIndex} dari ${totalItems} data` : "Menampilkan 0 data";
       document.getElementById('pageIndicator').innerText = `Hal ${adminState.currentPage} dari ${totalPages}`;
       document.getElementById('btnPrevPage').disabled = (adminState.currentPage <= 1);
       document.getElementById('btnNextPage').disabled = (adminState.currentPage >= totalPages);
     }
 
     async function updateStatus(kode, status) {
-      try {
-        const result = await postToGAS({ action: 'updateStatus', kodeRegistrasi: kode, newStatus: status });
-        if(result.status === "success") fetchAdminData();
-      } catch(e) { alert("Gagal update status."); }
+      const result = await postToGAS({ action: 'updateStatus', kodeRegistrasi: kode, newStatus: status });
+      if(result.status === "success") {
+        Swal.fire({ icon: 'success', title: 'Status Diperbarui', text: `Status ${kode} diubah menjadi ${status}`, timer: 1200, showConfirmButton: false });
+        fetchAdminData();
+      }
     }
 
     async function deleteRegistrant(kode) {
-      if(!confirm(`Hapus data ${kode}?`)) return;
-      try {
-        const result = await postToGAS({ action: 'deleteRegistrant', kodeRegistrasi: kode });
-        if(result.status === "success") fetchAdminData();
-      } catch(e) { alert("Gagal menghapus."); }
+      Swal.fire({
+        title: `Hapus pendaftar ${kode}?`,
+        text: "Data yang dihapus tidak dapat dikembalikan!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Ya, Hapus Data'
+      }).then(async (res) => {
+        if(res.isConfirmed) {
+          const result = await postToGAS({ action: 'deleteRegistrant', kodeRegistrasi: kode });
+          if(result.status === "success") {
+            Swal.fire({ icon: 'success', title: 'Terhapus', text: 'Data berhasil dihapus.', timer: 1200, showConfirmButton: false });
+            fetchAdminData();
+          }
+        }
+      });
     }
 
     function exportCSV() {
@@ -564,13 +611,16 @@
       adminState.lomba.forEach(l => {
         box.innerHTML += `
           <div class="bg-white p-4 rounded-xl border shadow-sm flex justify-between items-center">
-            <div>
-              <div class="flex items-center gap-2">
-                <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded">${l.kategori}</span>
-                <span class="text-[10px] font-bold px-2 py-0.5 rounded ${l.statusLomba === 'TUTUP' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}">${l.statusLomba || 'BUKA'}</span>
+            <div class="flex items-center gap-3">
+              <img src="${l.flyerUrl || 'https://via.placeholder.com/80'}" class="w-12 h-12 rounded-lg object-cover border">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded">${l.kategori}</span>
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded ${l.statusLomba === 'TUTUP' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}">${l.statusLomba || 'BUKA'}</span>
+                </div>
+                <h4 class="font-bold text-gray-800 mt-1 text-sm">${l.judul}</h4>
+                <p class="text-xs text-emerald-700 font-bold">${l.biaya}</p>
               </div>
-              <h4 class="font-bold text-gray-800 mt-1 text-sm">${l.judul}</h4>
-              <p class="text-xs text-emerald-700 font-bold">${l.biaya}</p>
             </div>
             <div class="flex gap-1.5">
               <button onclick="editLomba('${l.id}')" class="bg-blue-600 text-white text-xs px-2.5 py-1.5 rounded-lg font-bold">Edit</button>
@@ -591,11 +641,11 @@
       const item = adminState.lomba.find(x => x.id === id);
       if(!item) return;
       document.getElementById('lombaId').value = item.id;
+      document.getElementById('existingFlyerUrl').value = item.flyerUrl;
       document.getElementById('lombaJudul').value = item.judul;
       document.getElementById('lombaKategori').value = item.kategori;
       document.getElementById('lombaBiaya').value = item.biaya;
       document.getElementById('lombaStatus').value = item.statusLomba || "BUKA";
-      document.getElementById('lombaFlyer').value = item.flyerUrl;
       document.getElementById('lombaDeskripsi').value = item.deskripsi;
       document.getElementById('lombaSyarat').value = item.syarat;
       document.getElementById('lombaHadiah').value = item.hadiah;
@@ -604,16 +654,27 @@
     function resetLombaForm() {
       document.getElementById('formLomba').reset();
       document.getElementById('lombaId').value = "";
+      document.getElementById('existingFlyerUrl').value = "";
     }
 
-    // SAVE LOMBA FIX
+    // SAVE LOMBA WITH DRIVE UPLOAD
     async function saveLomba(e) {
       e.preventDefault();
       const btn = e.target.querySelector('button[type="submit"]');
       const oldText = btn.innerHTML;
-      btn.disabled = true; btn.innerText = "Menyimpan...";
+      btn.disabled = true; btn.innerText = "Mengunggah Gambar & Menyimpan...";
 
       try {
+        const fileInput = document.getElementById('lombaFlyerFile');
+        let flyerBase64 = null, flyerFileName = null, flyerFileType = null;
+
+        if (fileInput.files.length > 0) {
+          const file = fileInput.files[0];
+          flyerBase64 = await new Promise(r => { const rd = new FileReader(); rd.onload = () => r(rd.result); rd.readAsDataURL(file); });
+          flyerFileName = file.name;
+          flyerFileType = file.type;
+        }
+
         const payload = {
           action: 'saveLomba',
           id: document.getElementById('lombaId').value,
@@ -621,7 +682,10 @@
           kategori: document.getElementById('lombaKategori').value,
           biaya: document.getElementById('lombaBiaya').value,
           statusLomba: document.getElementById('lombaStatus').value,
-          flyerUrl: document.getElementById('lombaFlyer').value,
+          flyerUrl: document.getElementById('existingFlyerUrl').value,
+          flyerBase64: flyerBase64,
+          flyerFileName: flyerFileName,
+          flyerFileType: flyerFileType,
           deskripsi: document.getElementById('lombaDeskripsi').value,
           syarat: document.getElementById('lombaSyarat').value,
           hadiah: document.getElementById('lombaHadiah').value,
@@ -630,25 +694,30 @@
         const result = await postToGAS(payload);
 
         if(result.status === "success") {
-          alert("✅ Cabang Lomba Berhasil Disimpan!");
+          Swal.fire({ icon: 'success', title: 'Berhasil Disimpan! ✨', text: 'Data perlombaan dan flyer berhasil diunggah ke Google Drive.', confirmButtonColor: '#047857' });
           resetLombaForm();
           await fetchPortalConfig();
-        } else {
-          alert("❌ Gagal menyimpan lomba: " + (result.message || "Terjadi kesalahan"));
         }
       } catch(err) {
-        alert("❌ Terjadi kesalahan server: " + err.toString());
+        Swal.fire({ icon: 'error', title: 'Gagal Menyimpan', text: err.toString(), confirmButtonColor: '#047857' });
       } finally {
         btn.disabled = false; btn.innerHTML = oldText;
       }
     }
 
     async function deleteLomba(id) {
-      if(!confirm("Hapus lomba ini?")) return;
-      try {
-        await postToGAS({ action: 'deleteLomba', id: id });
-        fetchPortalConfig();
-      } catch(e) { alert("Gagal menghapus lomba."); }
+      Swal.fire({
+        title: 'Hapus cabang lomba ini?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        confirmButtonText: 'Ya, Hapus'
+      }).then(async (r) => {
+        if(r.isConfirmed) {
+          await postToGAS({ action: 'deleteLomba', id: id });
+          fetchPortalConfig();
+        }
+      });
     }
 
     function renderSlidersAdmin() {
@@ -663,18 +732,22 @@
             <button type="button" onclick="removeSlideRow(${idx})" class="absolute top-3 right-3 text-red-600 font-bold text-xs">Hapus</button>
             <h5 class="font-bold text-xs text-gray-700">Slide Banner #${idx + 1}</h5>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-              <input type="text" value="${s.badge || ''}" placeholder="Badge Text" class="sld-badge border rounded px-2 py-1 text-xs focus:outline-emerald-700">
-              <input type="text" value="${s.title || ''}" placeholder="Judul Banner" class="sld-title border rounded px-2 py-1 text-xs sm:col-span-2 focus:outline-emerald-700">
+              <input type="text" value="${s.badge || ''}" placeholder="Badge Text" class="sld-badge border rounded px-2 py-1 text-xs">
+              <input type="text" value="${s.title || ''}" placeholder="Judul Banner" class="sld-title border rounded px-2 py-1 text-xs sm:col-span-2">
             </div>
-            <input type="text" value="${s.desc || ''}" placeholder="Deskripsi Banner" class="sld-desc w-full border rounded px-2 py-1 text-xs focus:outline-emerald-700">
-            <input type="text" value="${s.bgUrl || ''}" placeholder="URL Gambar Background Slide (Opsional)" class="sld-bg w-full border rounded px-2 py-1 text-xs focus:outline-emerald-700">
+            <input type="text" value="${s.desc || ''}" placeholder="Deskripsi Banner" class="sld-desc w-full border rounded px-2 py-1 text-xs">
+            <div>
+              <label class="block text-[10px] text-gray-500 font-bold mb-0.5">Upload Background Slide Image:</label>
+              <input type="file" class="sld-file w-full border rounded px-2 py-1 text-xs" accept="image/*">
+              <input type="hidden" class="sld-bg-existing" value="${s.bgUrl || ''}">
+            </div>
           </div>
         `;
       });
     }
 
     function addSlideRow() {
-      adminState.currentSliders.push({ badge: "INFO", title: "Judul Banner Baru", desc: "Deskripsi singkat...", bgUrl: "" });
+      adminState.currentSliders.push({ badge: "INFO", title: "Judul Banner Baru", desc: "Deskripsi...", bgUrl: "" });
       renderSlidersAdmin();
     }
 
@@ -683,43 +756,53 @@
       renderSlidersAdmin();
     }
 
-    // SAVE SLIDERS FIX
+    // SAVE SLIDERS WITH DRIVE UPLOAD
     async function saveSliders(e) {
       e.preventDefault();
       const btn = e.target.querySelector('button[type="submit"]');
       const oldText = btn.innerHTML;
-      btn.disabled = true; btn.innerText = "Menyimpan...";
+      btn.disabled = true; btn.innerText = "Mengunggah Gambar & Menyimpan...";
 
       try {
         const badgeInputs = document.querySelectorAll('.sld-badge');
         const titleInputs = document.querySelectorAll('.sld-title');
         const descInputs = document.querySelectorAll('.sld-desc');
-        const bgInputs = document.querySelectorAll('.sld-bg');
-        
+        const fileInputs = document.querySelectorAll('.sld-file');
+        const bgExisting = document.querySelectorAll('.sld-bg-existing');
+
         const sliders = [];
-        badgeInputs.forEach((b, i) => {
+        for (let i = 0; i < badgeInputs.length; i++) {
           if (titleInputs[i].value.trim()) {
+            let bgBase64 = null, bgFileName = null, bgFileType = null;
+            if (fileInputs[i].files.length > 0) {
+              const file = fileInputs[i].files[0];
+              bgBase64 = await new Promise(r => { const rd = new FileReader(); rd.onload = () => r(rd.result); rd.readAsDataURL(file); });
+              bgFileName = file.name;
+              bgFileType = file.type;
+            }
+
             sliders.push({
-              badge: b.value.trim(),
+              badge: badgeInputs[i].value.trim(),
               title: titleInputs[i].value.trim(),
               desc: descInputs[i].value.trim(),
-              bgUrl: bgInputs[i] ? bgInputs[i].value.trim() : ""
+              bgUrl: bgExisting[i].value,
+              bgBase64: bgBase64,
+              bgFileName: bgFileName,
+              bgFileType: bgFileType
             });
           }
-        });
+        }
 
         adminState.config.sliders = sliders;
 
         const result = await postToGAS({ action: 'saveConfig', config: adminState.config });
 
         if(result.status === "success") {
-          alert("✅ Hero Slider Banner Berhasil Disimpan!");
+          Swal.fire({ icon: 'success', title: 'Berhasil Disimpan! 🎉', text: 'Slide banner dan gambar berhasil diperbarui.', confirmButtonColor: '#047857' });
           await fetchPortalConfig();
-        } else {
-          alert("❌ Gagal menyimpan slider.");
         }
       } catch(err) {
-        alert("❌ Terjadi kesalahan server: " + err.toString());
+        Swal.fire({ icon: 'error', title: 'Gagal', text: err.toString(), confirmButtonColor: '#047857' });
       } finally {
         btn.disabled = false; btn.innerHTML = oldText;
       }
@@ -731,9 +814,15 @@
       document.getElementById('cfgHeaderSub').value = cfg.headerSub || "Islamic Youth Festival 2026";
       document.getElementById('cfgRekening').value = cfg.rekening || "BSI: 7123-4567-89 a.n PESONA AL FIRDAUS";
       document.getElementById('cfgContact').value = cfg.contact || "Kontak Panitia: 0812-3456-7890";
+      document.getElementById('cfgLokasi').value = cfg.lokasi || "Kompleks Pesantren Al Firdaus";
+      document.getElementById('cfgWaNumber').value = cfg.waNumber || "081234567890";
+      document.getElementById('cfgTargetDate').value = cfg.targetDate || "2026-11-20T08:00";
+      document.getElementById('cfgLinkIg').value = cfg.linkIg || "#";
+      document.getElementById('cfgLinkYt').value = cfg.linkYt || "#";
+      document.getElementById('cfgLinkTt').value = cfg.linkTt || "#";
+      document.getElementById('cfgLinkTh').value = cfg.linkTh || "#";
     }
 
-    // SAVE CONFIG FIX
     async function saveGlobalConfig(e) {
       e.preventDefault();
       const btn = e.target.querySelector('button[type="submit"]');
@@ -745,17 +834,22 @@
         adminState.config.headerSub = document.getElementById('cfgHeaderSub').value;
         adminState.config.rekening = document.getElementById('cfgRekening').value;
         adminState.config.contact = document.getElementById('cfgContact').value;
+        adminState.config.lokasi = document.getElementById('cfgLokasi').value;
+        adminState.config.waNumber = document.getElementById('cfgWaNumber').value;
+        adminState.config.targetDate = document.getElementById('cfgTargetDate').value;
+        adminState.config.linkIg = document.getElementById('cfgLinkIg').value;
+        adminState.config.linkYt = document.getElementById('cfgLinkYt').value;
+        adminState.config.linkTt = document.getElementById('cfgLinkTt').value;
+        adminState.config.linkTh = document.getElementById('cfgLinkTh').value;
 
         const result = await postToGAS({ action: 'saveConfig', config: adminState.config });
 
         if(result.status === "success") {
-          alert("✅ Pengaturan Portal Berhasil Disimpan!");
+          Swal.fire({ icon: 'success', title: 'Pengaturan Disimpan! ✨', text: 'Perubahan portal dan topbar telah diterapkan.', confirmButtonColor: '#047857' });
           await fetchPortalConfig();
-        } else {
-          alert("❌ Gagal menyimpan pengaturan.");
         }
       } catch(err) {
-        alert("❌ Terjadi kesalahan server: " + err.toString());
+        Swal.fire({ icon: 'error', title: 'Gagal', text: err.toString(), confirmButtonColor: '#047857' });
       } finally {
         btn.disabled = false; btn.innerHTML = oldText;
       }
