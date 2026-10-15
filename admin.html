@@ -49,7 +49,7 @@
     <!-- MOBILE BACKDROP -->
     <div id="adminBackdrop" onclick="closeAdminSidebar()" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden transition-opacity"></div>
 
-    <!-- SIDEBAR DRAWER -->
+    <!-- SIDEBAR DRAWER TERPISAH -->
     <aside id="adminSidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-emerald-950 text-emerald-100 flex flex-col justify-between p-4 transform -translate-x-full transition-transform duration-300 ease-in-out md:static md:translate-x-0 md:flex">
       <div>
         <div class="flex items-center gap-3 px-2 py-4 border-b border-emerald-900 mb-6">
@@ -70,8 +70,20 @@
           <button onclick="navAdmin('sliders')" id="m-sliders" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
             <i class="fa-solid fa-images w-4"></i> Slider Banner
           </button>
-          <button onclick="navAdmin('config')" id="m-config" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
-            <i class="fa-solid fa-sliders w-4"></i> Pengaturan Portal
+          
+          <div class="pt-2 pb-1 border-t border-emerald-900 mt-2">
+            <p class="text-[10px] text-emerald-500 uppercase px-3 font-bold tracking-wider mb-1">Pengaturan Website</p>
+          </div>
+
+          <!-- MENU HASIL PECAHAN PENGATURAN PORTAL -->
+          <button onclick="navAdmin('navmenu')" id="m-navmenu" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
+            <i class="fa-solid fa-bars w-4"></i> Navigasi Menubar
+          </button>
+          <button onclick="navAdmin('topbar')" id="m-topbar" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
+            <i class="fa-solid fa-bullhorn w-4"></i> Topbar & Sosmed
+          </button>
+          <button onclick="navAdmin('identitas')" id="m-identitas" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
+            <i class="fa-solid fa-id-card w-4"></i> Identitas & Rekening
           </button>
         </nav>
       </div>
@@ -265,7 +277,7 @@
         </div>
       </div>
 
-      <!-- 3. SLIDER BANNER (HANYA URL / upload GITHUB BANNER) -->
+      <!-- 3. SLIDER BANNER -->
       <div id="sec-sliders" class="admin-sec hidden space-y-6">
         <div class="flex justify-between items-center">
           <div>
@@ -283,40 +295,55 @@
         </form>
       </div>
 
-      <!-- 4. PENGATURAN PORTAL & MENUBAR NAVIGASI -->
-      <div id="sec-config" class="admin-sec hidden space-y-6">
+      <!-- 4. MENU BARU: NAVIGASI MENUBAR -->
+      <div id="sec-navmenu" class="admin-sec hidden space-y-6">
         <div>
-          <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Pengaturan Portal & Menubar Navigasi</h1>
-          <p class="text-xs text-gray-500">Atur visibilitas menu website, lokasi Google Maps, timer, dan identitas portal</p>
+          <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Pengaturan Visibilitas Menubar</h1>
+          <p class="text-xs text-gray-500">Aktifkan atau sembunyikan menu navigasi pada portal pendaftaran utama</p>
         </div>
 
-        <form onsubmit="saveGlobalConfig(event)" class="bg-white p-4 sm:p-6 rounded-xl border shadow-sm space-y-4 text-xs max-w-2xl">
-          
+        <form onsubmit="saveNavMenuConfig(event)" class="bg-white p-5 rounded-xl border shadow-sm space-y-4 text-xs max-w-xl">
           <h3 class="font-bold text-sm text-emerald-900 border-b pb-2 flex items-center gap-2">
-            <i class="fa-solid fa-bars"></i> Pengaturan Menubar (Visibilitas Navigasi Web)
+            <i class="fa-solid fa-bars"></i> Pilih Menu Navigasi Yang Ditampilkan
           </h3>
-          <p class="text-[11px] text-gray-500">Centang menu yang ingin ditampilkan pada portal pendaftaran:</p>
 
-          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 bg-gray-50 p-3 rounded-lg border">
-            <label class="flex items-center gap-2 font-bold text-gray-800">
-              <input type="checkbox" id="mNavBeranda" checked class="w-4 h-4 accent-emerald-700"> Beranda
+          <div class="space-y-3 bg-gray-50 p-4 rounded-xl border">
+            <label class="flex items-center justify-between font-bold text-gray-800 p-2 bg-white rounded border">
+              <span class="flex items-center gap-2"><i class="fa-solid fa-house text-emerald-700"></i> Beranda</span>
+              <input type="checkbox" id="mNavBeranda" checked class="w-5 h-5 accent-emerald-700">
             </label>
-            <label class="flex items-center gap-2 font-bold text-gray-800">
-              <input type="checkbox" id="mNavLomba" checked class="w-4 h-4 accent-emerald-700"> Cabang Lomba
+            <label class="flex items-center justify-between font-bold text-gray-800 p-2 bg-white rounded border">
+              <span class="flex items-center gap-2"><i class="fa-solid fa-trophy text-emerald-700"></i> Cabang Lomba</span>
+              <input type="checkbox" id="mNavLomba" checked class="w-5 h-5 accent-emerald-700">
             </label>
-            <label class="flex items-center gap-2 font-bold text-gray-800">
-              <input type="checkbox" id="mNavCek" checked class="w-4 h-4 accent-emerald-700"> Cek Pendaftaran
+            <label class="flex items-center justify-between font-bold text-gray-800 p-2 bg-white rounded border">
+              <span class="flex items-center gap-2"><i class="fa-solid fa-magnifying-glass text-emerald-700"></i> Cek Pendaftaran</span>
+              <input type="checkbox" id="mNavCek" checked class="w-5 h-5 accent-emerald-700">
             </label>
-            <label class="flex items-center gap-2 font-bold text-gray-800">
-              <input type="checkbox" id="mNavUnggah" checked class="w-4 h-4 accent-emerald-700"> Unggahan Audio
+            <label class="flex items-center justify-between font-bold text-gray-800 p-2 bg-white rounded border">
+              <span class="flex items-center gap-2"><i class="fa-solid fa-cloud-arrow-up text-emerald-700"></i> Unggahan Audio</span>
+              <input type="checkbox" id="mNavUnggah" checked class="w-5 h-5 accent-emerald-700">
             </label>
-            <label class="flex items-center gap-2 font-bold text-gray-800">
-              <input type="checkbox" id="mNavSertifikat" checked class="w-4 h-4 accent-emerald-700"> Sertifikat
+            <label class="flex items-center justify-between font-bold text-gray-800 p-2 bg-white rounded border">
+              <span class="flex items-center gap-2"><i class="fa-solid fa-certificate text-emerald-700"></i> Sertifikat Digital</span>
+              <input type="checkbox" id="mNavSertifikat" checked class="w-5 h-5 accent-emerald-700">
             </label>
           </div>
 
-          <h3 class="font-bold text-sm text-emerald-900 border-b pb-2 pt-2">Top Bar Header Settings</h3>
-          
+          <button type="submit" class="bg-emerald-800 hover:bg-emerald-900 text-white font-bold px-6 py-2.5 rounded-xl text-xs shadow flex items-center gap-2">
+            <i class="fa-solid fa-floppy-disk"></i> Simpan Menubar Navigasi
+          </button>
+        </form>
+      </div>
+
+      <!-- 5. MENU BARU: TOPBAR & SOSIAL MEDIA -->
+      <div id="sec-topbar" class="admin-sec hidden space-y-6">
+        <div>
+          <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Pengaturan Topbar & Sosial Media</h1>
+          <p class="text-xs text-gray-500">Atur informasi lokasi, WhatsApp, target countdown, dan link sosial media</p>
+        </div>
+
+        <form onsubmit="saveTopbarConfig(event)" class="bg-white p-5 rounded-xl border shadow-sm space-y-4 text-xs max-w-xl">
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label class="block font-bold text-gray-700 mb-1">Teks Lokasi Kegiatan</label>
@@ -338,27 +365,40 @@
             <input type="datetime-local" id="cfgTargetDate" class="w-full border rounded-lg px-3 py-2 focus:outline-emerald-700">
           </div>
 
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 border-t pt-3">
+          <h4 class="font-bold text-gray-900 border-t pt-3">Link Sosial Media</h4>
+          <div class="grid grid-cols-2 gap-3">
             <div>
-              <label class="block font-semibold mb-1">Link Instagram</label>
-              <input type="text" id="cfgLinkIg" class="w-full border rounded px-2 py-1 text-xs" placeholder="https://instagram.com/...">
+              <label class="block font-semibold mb-1">Instagram</label>
+              <input type="text" id="cfgLinkIg" class="w-full border rounded px-3 py-1.5 text-xs" placeholder="https://instagram.com/...">
             </div>
             <div>
-              <label class="block font-semibold mb-1">Link YouTube</label>
-              <input type="text" id="cfgLinkYt" class="w-full border rounded px-2 py-1 text-xs" placeholder="https://youtube.com/...">
+              <label class="block font-semibold mb-1">YouTube</label>
+              <input type="text" id="cfgLinkYt" class="w-full border rounded px-3 py-1.5 text-xs" placeholder="https://youtube.com/...">
             </div>
             <div>
-              <label class="block font-semibold mb-1">Link TikTok</label>
-              <input type="text" id="cfgLinkTt" class="w-full border rounded px-2 py-1 text-xs" placeholder="https://tiktok.com/...">
+              <label class="block font-semibold mb-1">TikTok</label>
+              <input type="text" id="cfgLinkTt" class="w-full border rounded px-3 py-1.5 text-xs" placeholder="https://tiktok.com/...">
             </div>
             <div>
-              <label class="block font-semibold mb-1">Link Threads</label>
-              <input type="text" id="cfgLinkTh" class="w-full border rounded px-2 py-1 text-xs" placeholder="https://threads.net/...">
+              <label class="block font-semibold mb-1">Threads</label>
+              <input type="text" id="cfgLinkTh" class="w-full border rounded px-3 py-1.5 text-xs" placeholder="https://threads.net/...">
             </div>
           </div>
 
-          <h3 class="font-bold text-sm text-emerald-900 border-b pb-2 pt-2">Identitas & Rekening Portal</h3>
+          <button type="submit" class="bg-emerald-800 hover:bg-emerald-900 text-white font-bold px-6 py-2.5 rounded-xl text-xs shadow flex items-center gap-2">
+            <i class="fa-solid fa-floppy-disk"></i> Simpan Topbar & Sosmed
+          </button>
+        </form>
+      </div>
 
+      <!-- 6. MENU BARU: IDENTITAS & REKENING -->
+      <div id="sec-identitas" class="admin-sec hidden space-y-6">
+        <div>
+          <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Pengaturan Identitas & Rekening</h1>
+          <p class="text-xs text-gray-500">Atur judul portal, rekening pembayaran, dan kontak footer</p>
+        </div>
+
+        <form onsubmit="saveIdentitasConfig(event)" class="bg-white p-5 rounded-xl border shadow-sm space-y-4 text-xs max-w-xl">
           <div>
             <label class="block font-bold text-gray-700 mb-1">Judul Portal (Header Utama)</label>
             <input type="text" id="cfgHeaderTitle" class="w-full border rounded-lg px-3 py-2 focus:outline-emerald-700">
@@ -375,9 +415,9 @@
             <label class="block font-bold text-gray-700 mb-1">Informasi Kontak Footer</label>
             <input type="text" id="cfgContact" class="w-full border rounded-lg px-3 py-2 focus:outline-emerald-700">
           </div>
-          
+
           <button type="submit" class="bg-emerald-800 hover:bg-emerald-900 text-white font-bold px-6 py-2.5 rounded-xl text-xs shadow flex items-center gap-2">
-            <i class="fa-solid fa-floppy-disk"></i> Simpan Pengaturan Portal
+            <i class="fa-solid fa-floppy-disk"></i> Simpan Identitas & Rekening
           </button>
         </form>
       </div>
@@ -481,9 +521,10 @@
 
     function navAdmin(sec) {
       document.querySelectorAll('.admin-sec').forEach(el => el.classList.add('hidden'));
-      document.getElementById(`sec-${sec}`).classList.remove('hidden');
+      const targetSec = document.getElementById(`sec-${sec}`);
+      if(targetSec) targetSec.classList.remove('hidden');
 
-      const menuKeys = ['pendaftar', 'lomba', 'sliders', 'config'];
+      const menuKeys = ['pendaftar', 'lomba', 'sliders', 'navmenu', 'topbar', 'identitas'];
       menuKeys.forEach(k => {
         const btn = document.getElementById(`m-${k}`);
         if(btn) btn.className = "w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-emerald-900 text-emerald-300 transition";
@@ -830,34 +871,37 @@
       const cfg = adminState.config || {};
       const navs = cfg.menuNav || { beranda: true, lomba: true, cek: true, unggah: true, sertifikat: true };
 
-      document.getElementById('mNavBeranda').checked = navs.beranda !== false;
-      document.getElementById('mNavLomba').checked = navs.lomba !== false;
-      document.getElementById('mNavCek').checked = navs.cek !== false;
-      document.getElementById('mNavUnggah').checked = navs.unggah !== false;
-      document.getElementById('mNavSertifikat').checked = navs.sertifikat !== false;
+      // Menubar checkboxes
+      if(document.getElementById('mNavBeranda')) document.getElementById('mNavBeranda').checked = navs.beranda !== false;
+      if(document.getElementById('mNavLomba')) document.getElementById('mNavLomba').checked = navs.lomba !== false;
+      if(document.getElementById('mNavCek')) document.getElementById('mNavCek').checked = navs.cek !== false;
+      if(document.getElementById('mNavUnggah')) document.getElementById('mNavUnggah').checked = navs.unggah !== false;
+      if(document.getElementById('mNavSertifikat')) document.getElementById('mNavSertifikat').checked = navs.sertifikat !== false;
 
-      document.getElementById('cfgHeaderTitle').value = cfg.headerTitle || "PESONA AL FIRDAUS";
-      document.getElementById('cfgHeaderSub').value = cfg.headerSub || "Islamic Youth Festival 2026";
-      document.getElementById('cfgRekening').value = cfg.rekening || "BSI: 7123-4567-89 a.n PESONA AL FIRDAUS";
-      document.getElementById('cfgContact').value = cfg.contact || "Kontak Panitia: 0812-3456-7890";
-      document.getElementById('cfgLokasi').value = cfg.lokasi || "Kompleks Pesantren Al Firdaus";
-      document.getElementById('cfgMapUrl').value = cfg.mapUrl || "";
-      document.getElementById('cfgWaNumber').value = cfg.waNumber || "081234567890";
-      document.getElementById('cfgTargetDate').value = cfg.targetDate || "2026-11-20T08:00";
-      document.getElementById('cfgLinkIg').value = cfg.linkIg || "#";
-      document.getElementById('cfgLinkYt').value = cfg.linkYt || "#";
-      document.getElementById('cfgLinkTt').value = cfg.linkTt || "#";
-      document.getElementById('cfgLinkTh').value = cfg.linkTh || "#";
+      // Topbar
+      if(document.getElementById('cfgLokasi')) document.getElementById('cfgLokasi').value = cfg.lokasi || "Kompleks Pesantren Al Firdaus";
+      if(document.getElementById('cfgWaNumber')) document.getElementById('cfgWaNumber').value = cfg.waNumber || "081234567890";
+      if(document.getElementById('cfgMapUrl')) document.getElementById('cfgMapUrl').value = cfg.mapUrl || "";
+      if(document.getElementById('cfgTargetDate')) document.getElementById('cfgTargetDate').value = cfg.targetDate || "2026-11-20T08:00";
+      if(document.getElementById('cfgLinkIg')) document.getElementById('cfgLinkIg').value = cfg.linkIg || "#";
+      if(document.getElementById('cfgLinkYt')) document.getElementById('cfgLinkYt').value = cfg.linkYt || "#";
+      if(document.getElementById('cfgLinkTt')) document.getElementById('cfgLinkTt').value = cfg.linkTt || "#";
+      if(document.getElementById('cfgLinkTh')) document.getElementById('cfgLinkTh').value = cfg.linkTh || "#";
+
+      // Identitas
+      if(document.getElementById('cfgHeaderTitle')) document.getElementById('cfgHeaderTitle').value = cfg.headerTitle || "PESONA AL FIRDAUS";
+      if(document.getElementById('cfgHeaderSub')) document.getElementById('cfgHeaderSub').value = cfg.headerSub || "Islamic Youth Festival 2026";
+      if(document.getElementById('cfgRekening')) document.getElementById('cfgRekening').value = cfg.rekening || "BSI: 7123-4567-89 a.n PESONA AL FIRDAUS";
+      if(document.getElementById('cfgContact')) document.getElementById('cfgContact').value = cfg.contact || "Kontak Panitia: 0812-3456-7890";
     }
 
-    async function saveGlobalConfig(e) {
+    async function saveNavMenuConfig(e) {
       e.preventDefault();
       const btn = e.target.querySelector('button[type="submit"]');
       btn.disabled = true; btn.innerText = "Menyimpan...";
 
       try {
         if(!adminState.config) adminState.config = {};
-
         adminState.config.menuNav = {
           beranda: document.getElementById('mNavBeranda').checked,
           lomba: document.getElementById('mNavLomba').checked,
@@ -866,10 +910,25 @@
           sertifikat: document.getElementById('mNavSertifikat').checked
         };
 
-        adminState.config.headerTitle = document.getElementById('cfgHeaderTitle').value;
-        adminState.config.headerSub = document.getElementById('cfgHeaderSub').value;
-        adminState.config.rekening = document.getElementById('cfgRekening').value;
-        adminState.config.contact = document.getElementById('cfgContact').value;
+        const result = await postToGAS({ action: 'saveConfig', config: adminState.config });
+        if(result.status === "success") {
+          Swal.fire({ icon: 'success', title: 'Navigasi Disimpan! ✨', text: 'Pengaturan visibilitas menubar berhasil diperbarui.', confirmButtonColor: '#047857' });
+          await fetchPortalConfig();
+        }
+      } catch(err) {
+        Swal.fire({ icon: 'error', title: 'Gagal', text: err.toString(), confirmButtonColor: '#047857' });
+      } finally {
+        btn.disabled = false; btn.innerText = "Simpan Menubar Navigasi";
+      }
+    }
+
+    async function saveTopbarConfig(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('button[type="submit"]');
+      btn.disabled = true; btn.innerText = "Menyimpan...";
+
+      try {
+        if(!adminState.config) adminState.config = {};
         adminState.config.lokasi = document.getElementById('cfgLokasi').value;
         adminState.config.mapUrl = document.getElementById('cfgMapUrl').value;
         adminState.config.waNumber = document.getElementById('cfgWaNumber').value;
@@ -880,15 +939,38 @@
         adminState.config.linkTh = document.getElementById('cfgLinkTh').value;
 
         const result = await postToGAS({ action: 'saveConfig', config: adminState.config });
-
         if(result.status === "success") {
-          Swal.fire({ icon: 'success', title: 'Pengaturan Disimpan! ✨', text: 'Perubahan portal dan visibilitas menu navigasi telah diterapkan.', confirmButtonColor: '#047857' });
+          Swal.fire({ icon: 'success', title: 'Topbar Disimpan! ✨', text: 'Informasi topbar dan sosmed telah diperbarui.', confirmButtonColor: '#047857' });
           await fetchPortalConfig();
         }
       } catch(err) {
         Swal.fire({ icon: 'error', title: 'Gagal', text: err.toString(), confirmButtonColor: '#047857' });
       } finally {
-        btn.disabled = false; btn.innerText = "Simpan Pengaturan Portal";
+        btn.disabled = false; btn.innerText = "Simpan Topbar & Sosmed";
+      }
+    }
+
+    async function saveIdentitasConfig(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('button[type="submit"]');
+      btn.disabled = true; btn.innerText = "Menyimpan...";
+
+      try {
+        if(!adminState.config) adminState.config = {};
+        adminState.config.headerTitle = document.getElementById('cfgHeaderTitle').value;
+        adminState.config.headerSub = document.getElementById('cfgHeaderSub').value;
+        adminState.config.rekening = document.getElementById('cfgRekening').value;
+        adminState.config.contact = document.getElementById('cfgContact').value;
+
+        const result = await postToGAS({ action: 'saveConfig', config: adminState.config });
+        if(result.status === "success") {
+          Swal.fire({ icon: 'success', title: 'Identitas Disimpan! ✨', text: 'Identitas portal dan info rekening telah diperbarui.', confirmButtonColor: '#047857' });
+          await fetchPortalConfig();
+        }
+      } catch(err) {
+        Swal.fire({ icon: 'error', title: 'Gagal', text: err.toString(), confirmButtonColor: '#047857' });
+      } finally {
+        btn.disabled = false; btn.innerText = "Simpan Identitas & Rekening";
       }
     }
   </script>
