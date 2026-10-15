@@ -137,12 +137,14 @@
           </div>
         </div>
 
-        <!-- SEARCH BAR + PAGINATION VIEW DROPDOWN -->
+        <!-- SEARCH BAR + PAGINATION VIEW DROPDOWN (DI SEBELAH BARIS PENCARIAN) -->
         <div class="bg-white p-4 rounded-xl border shadow-sm flex flex-col xl:flex-row gap-3 justify-between items-stretch xl:items-center">
           
           <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 flex-1">
+            <!-- INPUT SEARCH -->
             <input type="text" id="searchBox" onkeyup="applyFilter()" placeholder="Cari Nama / Kode / WA..." class="border rounded-lg px-3 py-2 text-xs flex-1 min-w-[200px] focus:outline-emerald-700">
             
+            <!-- PAGINATION VIEW SEBELAH KOLOM PENCARIAN -->
             <div class="flex items-center gap-2 bg-gray-50 border px-3 py-1.5 rounded-lg text-xs shrink-0">
               <span class="text-gray-500 font-semibold whitespace-nowrap">Tampilkan:</span>
               <select id="pageSizeSelect" onchange="changePageSize()" class="border rounded px-2 py-1 bg-white font-bold focus:outline-emerald-700">
@@ -155,6 +157,7 @@
             </div>
           </div>
 
+          <!-- DROPDOWN FILTER LOMBA & STATUS -->
           <div class="flex flex-col sm:flex-row gap-2 shrink-0">
             <select id="filterLomba" onchange="applyFilter()" class="border rounded-lg px-3 py-2 text-xs bg-white focus:outline-emerald-700">
               <option value="">Semua Cabang Lomba</option>
