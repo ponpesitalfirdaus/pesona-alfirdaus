@@ -56,7 +56,7 @@
     </div>
   </div>
 
-  <!-- NAVBAR UTAMA -->
+  <!-- NAVBAR UTAMA DENGAN ICON -->
   <header class="bg-emerald-800 text-white shadow-md sticky top-0 z-40">
     <div class="container mx-auto px-4 py-2.5 flex justify-between items-center">
       
@@ -69,13 +69,13 @@
         </div>
       </div>
 
-      <!-- DESKTOP NAV MENU -->
-      <nav class="hidden md:flex items-center space-x-6 text-sm font-medium" id="desktopNav">
-        <button id="nav-beranda" onclick="switchView('beranda')" class="hover:text-yellow-300 transition">Beranda</button>
-        <button id="nav-lomba" onclick="switchView('lomba')" class="hover:text-yellow-300 transition">Cabang Lomba</button>
-        <button id="nav-cek" onclick="switchView('cek')" class="hover:text-yellow-300 transition">Cek Pendaftaran</button>
-        <button id="nav-unggah" onclick="switchView('unggah')" class="hover:text-yellow-300 transition flex items-center gap-1"><i class="fa-solid fa-cloud-arrow-up text-amber-300"></i> Unggahan Audio</button>
-        <button id="nav-sertifikat" onclick="switchView('sertifikat')" class="hover:text-yellow-300 transition flex items-center gap-1"><i class="fa-solid fa-certificate text-amber-300"></i> Sertifikat</button>
+      <!-- DESKTOP NAV MENU DENGAN ICON -->
+      <nav class="hidden md:flex items-center space-x-5 text-sm font-medium" id="desktopNav">
+        <button id="nav-beranda" onclick="switchView('beranda')" class="hover:text-yellow-300 transition inline-flex items-center gap-1.5"><i class="fa-solid fa-house text-amber-300"></i> Beranda</button>
+        <button id="nav-lomba" onclick="switchView('lomba')" class="hover:text-yellow-300 transition inline-flex items-center gap-1.5"><i class="fa-solid fa-trophy text-amber-300"></i> Cabang Lomba</button>
+        <button id="nav-cek" onclick="switchView('cek')" class="hover:text-yellow-300 transition inline-flex items-center gap-1.5"><i class="fa-solid fa-magnifying-glass text-amber-300"></i> Cek Pendaftaran</button>
+        <button id="nav-unggah" onclick="switchView('unggah')" class="hover:text-yellow-300 transition inline-flex items-center gap-1.5"><i class="fa-solid fa-cloud-arrow-up text-amber-300"></i> Unggahan Audio</button>
+        <button id="nav-sertifikat" onclick="switchView('sertifikat')" class="hover:text-yellow-300 transition inline-flex items-center gap-1.5"><i class="fa-solid fa-certificate text-amber-300"></i> Sertifikat</button>
       </nav>
 
       <!-- TOMBOL DAFTAR SEKARANG + HAMBURGER -->
@@ -91,22 +91,22 @@
 
     </div>
 
-    <!-- MOBILE MENU DROPDOWN -->
+    <!-- MOBILE MENU DROPDOWN DENGAN ICON -->
     <div id="mobileMenu" class="hidden md:hidden bg-emerald-900 border-t border-emerald-700 px-4 py-3 space-y-2 text-sm font-medium">
       <button id="mnav-beranda" onclick="switchView('beranda'); toggleMobileNav();" class="block w-full text-left py-2 px-3 rounded hover:bg-emerald-800 transition">
-        <i class="fa-solid fa-house w-5 text-yellow-300"></i> Beranda
+        <i class="fa-solid fa-house w-5 text-yellow-300 mr-1"></i> Beranda
       </button>
       <button id="mnav-lomba" onclick="switchView('lomba'); toggleMobileNav();" class="block w-full text-left py-2 px-3 rounded hover:bg-emerald-800 transition">
-        <i class="fa-solid fa-trophy w-5 text-yellow-300"></i> Cabang Lomba
+        <i class="fa-solid fa-trophy w-5 text-yellow-300 mr-1"></i> Cabang Lomba
       </button>
       <button id="mnav-cek" onclick="switchView('cek'); toggleMobileNav();" class="block w-full text-left py-2 px-3 rounded hover:bg-emerald-800 transition">
-        <i class="fa-solid fa-magnifying-glass w-5 text-yellow-300"></i> Cek Pendaftaran
+        <i class="fa-solid fa-magnifying-glass w-5 text-yellow-300 mr-1"></i> Cek Pendaftaran
       </button>
       <button id="mnav-unggah" onclick="switchView('unggah'); toggleMobileNav();" class="block w-full text-left py-2 px-3 rounded hover:bg-emerald-800 transition">
-        <i class="fa-solid fa-cloud-arrow-up w-5 text-yellow-300"></i> Unggahan Audio
+        <i class="fa-solid fa-cloud-arrow-up w-5 text-yellow-300 mr-1"></i> Unggahan Audio
       </button>
       <button id="mnav-sertifikat" onclick="switchView('sertifikat'); toggleMobileNav();" class="block w-full text-left py-2 px-3 rounded hover:bg-emerald-800 transition">
-        <i class="fa-solid fa-certificate w-5 text-yellow-300"></i> Sertifikat
+        <i class="fa-solid fa-certificate w-5 text-yellow-300 mr-1"></i> Sertifikat
       </button>
     </div>
   </header>
@@ -117,7 +117,7 @@
     <!-- 1. BERANDA (HOME) -->
     <section id="view-beranda" class="view-page container mx-auto px-4 py-6">
       
-      <!-- HERO SLIDER BANNER (FULL BROWSER COMPATIBLE) -->
+      <!-- HERO SLIDER BANNER -->
       <div class="relative group rounded-2xl overflow-hidden shadow-xl border border-gray-200 mb-10 bg-emerald-950">
         <div class="swiper heroSlider">
           <div class="swiper-wrapper" id="sliderWrapper">
@@ -219,7 +219,7 @@
       </div>
     </section>
 
-    <!-- 5. UNGGAHAN AUDIO KHUSUS (TARI KREASI & SOLOSONG) -->
+    <!-- 5. UNGGAHAN AUDIO KHUSUS -->
     <section id="view-unggah" class="view-page hidden container mx-auto px-4 py-8 max-w-xl">
       <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg border">
         <div class="text-center mb-6">
@@ -254,7 +254,7 @@
       </div>
     </section>
 
-    <!-- 6. SERTIFIKAT DIGITAL & VALIDASI -->
+    <!-- 6. SERTIFIKAT DIGITAL -->
     <section id="view-sertifikat" class="view-page hidden container mx-auto px-4 py-8 max-w-2xl">
       <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg border text-center">
         <div class="w-12 h-12 bg-yellow-100 text-yellow-800 rounded-full flex items-center justify-center mx-auto mb-2 text-xl font-bold">
