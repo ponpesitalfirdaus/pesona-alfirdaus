@@ -196,7 +196,7 @@
         </div>
       </div>
 
-      <!-- 2. KELOLA CABANG LOMBA (UPLOAD GABAR FILE KE DRIVE) -->
+      <!-- 2. KELOLA CABANG LOMBA -->
       <div id="sec-lomba" class="admin-sec hidden space-y-6">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
           <div>
@@ -235,7 +235,7 @@
               </select>
             </div>
             <div>
-              <label class="block text-[11px] font-bold text-gray-700 mb-1">Upload Gambar Flyer (Otomatis Masuk Drive) *</label>
+              <label class="block text-[11px] font-bold text-gray-700 mb-1">Upload Gambar Flyer (Otomatis Masuk Drive)</label>
               <input type="file" id="lombaFlyerFile" accept="image/*" class="w-full border rounded-lg p-1 text-xs">
               <p class="text-[10px] text-gray-400 mt-1">Biarkan kosong jika tidak ingin mengganti gambar flyer saat ini.</p>
             </div>
@@ -368,6 +368,46 @@
       }
     };
 
+    // FUNSI KOMPRESI GAMBAR OTOMATIS MEMPERKECIL FILE
+    function compressFileImage(file, maxWidth = 1200, quality = 0.8) {
+      return new Promise((resolve) => {
+        if (!file || !file.type.startsWith('image/')) {
+          resolve({ base64: null, fileName: null, fileType: null });
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            let width = img.width;
+            let height = img.height;
+
+            if (width > maxWidth) {
+              height = Math.round((height * maxWidth) / width);
+              width = maxWidth;
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+            resolve({
+              base64: compressedBase64,
+              fileName: file.name.replace(/\.[^/.]+$/, "") + ".jpg",
+              fileType: "image/jpeg"
+            });
+          };
+          img.onerror = () => resolve({ base64: null, fileName: null, fileType: null });
+          img.src = e.target.result;
+        };
+        reader.onerror = () => resolve({ base64: null, fileName: null, fileType: null });
+        reader.readAsDataURL(file);
+      });
+    }
+
     async function postToGAS(payload) {
       const res = await fetch(GAS_URL, {
         method: 'POST', mode: 'cors', redirect: 'follow',
@@ -412,11 +452,8 @@
       if(u === "pesona" && p === "alfirdaus2026") {
         localStorage.setItem('adminAuth', 'true');
         Swal.fire({
-          icon: 'success',
-          title: 'Login Berhasil! 🎉',
-          text: 'Selamat datang kembali di Admin Portal Pesona Al Firdaus.',
-          timer: 1500,
-          showConfirmButton: false
+          icon: 'success', title: 'Login Berhasil! 🎉', text: 'Selamat datang kembali di Admin Portal Pesona Al Firdaus.',
+          timer: 1500, showConfirmButton: false
         }).then(() => {
           document.getElementById('loginSection').classList.add('hidden');
           document.getElementById('dashboardSection').classList.remove('hidden');
@@ -429,13 +466,8 @@
 
     function handleLogout() {
       Swal.fire({
-        title: 'Keluar Admin Portal?',
-        text: 'Anda harus memasukkan kredensial lagi untuk masuk.',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonColor: '#047857',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Ya, Keluar'
+        title: 'Keluar Admin Portal?', text: 'Anda harus memasukkan kredensial lagi untuk masuk.', icon: 'question',
+        showCancelButton: true, confirmButtonColor: '#047857', cancelButtonColor: '#d33', confirmButtonText: 'Ya, Keluar'
       }).then((result) => {
         if (result.isConfirmed) {
           localStorage.removeItem('adminAuth');
@@ -563,13 +595,8 @@
 
     async function deleteRegistrant(kode) {
       Swal.fire({
-        title: `Hapus pendaftar ${kode}?`,
-        text: "Data yang dihapus tidak dapat dikembalikan!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Ya, Hapus Data'
+        title: `Hapus pendaftar ${kode}?`, text: "Data yang dihapus tidak dapat dikembalikan!", icon: 'warning',
+        showCancelButton: true, confirmButtonColor: '#d33', cancelButtonColor: '#3085d6', confirmButtonText: 'Ya, Hapus Data'
       }).then(async (res) => {
         if(res.isConfirmed) {
           const result = await postToGAS({ action: 'deleteRegistrant', kodeRegistrasi: kode });
@@ -657,22 +684,22 @@
       document.getElementById('existingFlyerUrl').value = "";
     }
 
-    // SAVE LOMBA WITH DRIVE UPLOAD
+    // SIMPAN LOMBA DENGAN KOMPRESI OTOMATIS
     async function saveLomba(e) {
       e.preventDefault();
       const btn = e.target.querySelector('button[type="submit"]');
       const oldText = btn.innerHTML;
-      btn.disabled = true; btn.innerText = "Mengunggah Gambar & Menyimpan...";
+      btn.disabled = true; btn.innerText = "Mengompres Gambar & Menyimpan...";
 
       try {
         const fileInput = document.getElementById('lombaFlyerFile');
         let flyerBase64 = null, flyerFileName = null, flyerFileType = null;
 
         if (fileInput.files.length > 0) {
-          const file = fileInput.files[0];
-          flyerBase64 = await new Promise(r => { const rd = new FileReader(); rd.onload = () => r(rd.result); rd.readAsDataURL(file); });
-          flyerFileName = file.name;
-          flyerFileType = file.type;
+          const comp = await compressFileImage(fileInput.files[0]);
+          flyerBase64 = comp.base64;
+          flyerFileName = comp.fileName;
+          flyerFileType = comp.fileType;
         }
 
         const payload = {
@@ -707,11 +734,7 @@
 
     async function deleteLomba(id) {
       Swal.fire({
-        title: 'Hapus cabang lomba ini?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        confirmButtonText: 'Ya, Hapus'
+        title: 'Hapus cabang lomba ini?', icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33', confirmButtonText: 'Ya, Hapus'
       }).then(async (r) => {
         if(r.isConfirmed) {
           await postToGAS({ action: 'deleteLomba', id: id });
@@ -756,12 +779,12 @@
       renderSlidersAdmin();
     }
 
-    // SAVE SLIDERS WITH DRIVE UPLOAD
+    // SIMPAN SLIDER DENGAN KOMPRESI OTOMATIS & ANTI-STUCK
     async function saveSliders(e) {
       e.preventDefault();
       const btn = e.target.querySelector('button[type="submit"]');
       const oldText = btn.innerHTML;
-      btn.disabled = true; btn.innerText = "Mengunggah Gambar & Menyimpan...";
+      btn.disabled = true; btn.innerText = "Mengompres Gambar & Menyimpan...";
 
       try {
         const badgeInputs = document.querySelectorAll('.sld-badge');
@@ -775,10 +798,10 @@
           if (titleInputs[i].value.trim()) {
             let bgBase64 = null, bgFileName = null, bgFileType = null;
             if (fileInputs[i].files.length > 0) {
-              const file = fileInputs[i].files[0];
-              bgBase64 = await new Promise(r => { const rd = new FileReader(); rd.onload = () => r(rd.result); rd.readAsDataURL(file); });
-              bgFileName = file.name;
-              bgFileType = file.type;
+              const comp = await compressFileImage(fileInputs[i].files[0]);
+              bgBase64 = comp.base64;
+              bgFileName = comp.fileName;
+              bgFileType = comp.fileType;
             }
 
             sliders.push({
@@ -793,6 +816,7 @@
           }
         }
 
+        if(!adminState.config) adminState.config = {};
         adminState.config.sliders = sliders;
 
         const result = await postToGAS({ action: 'saveConfig', config: adminState.config });
@@ -809,7 +833,7 @@
     }
 
     function populateConfigForm() {
-      const cfg = adminState.config;
+      const cfg = adminState.config || {};
       document.getElementById('cfgHeaderTitle').value = cfg.headerTitle || "PESONA AL FIRDAUS";
       document.getElementById('cfgHeaderSub').value = cfg.headerSub || "Islamic Youth Festival 2026";
       document.getElementById('cfgRekening').value = cfg.rekening || "BSI: 7123-4567-89 a.n PESONA AL FIRDAUS";
@@ -830,6 +854,7 @@
       btn.disabled = true; btn.innerText = "Menyimpan...";
 
       try {
+        if(!adminState.config) adminState.config = {};
         adminState.config.headerTitle = document.getElementById('cfgHeaderTitle').value;
         adminState.config.headerSub = document.getElementById('cfgHeaderSub').value;
         adminState.config.rekening = document.getElementById('cfgRekening').value;
