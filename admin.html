@@ -106,7 +106,7 @@
           </div>
         </div>
 
-        <!-- STAT CARDS WITH ICON -->
+        <!-- STAT CARDS -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
           <div class="bg-white p-4 rounded-xl border shadow-sm flex items-center justify-between">
             <div>
@@ -137,14 +137,11 @@
           </div>
         </div>
 
-        <!-- SEARCH BAR + PAGINATION VIEW DROPDOWN (DI SEBELAH BARIS PENCARIAN) -->
+        <!-- SEARCH BAR + PAGINATION VIEW -->
         <div class="bg-white p-4 rounded-xl border shadow-sm flex flex-col xl:flex-row gap-3 justify-between items-stretch xl:items-center">
-          
           <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 flex-1">
-            <!-- INPUT SEARCH -->
             <input type="text" id="searchBox" onkeyup="applyFilter()" placeholder="Cari Nama / Kode / WA..." class="border rounded-lg px-3 py-2 text-xs flex-1 min-w-[200px] focus:outline-emerald-700">
             
-            <!-- PAGINATION VIEW SEBELAH KOLOM PENCARIAN -->
             <div class="flex items-center gap-2 bg-gray-50 border px-3 py-1.5 rounded-lg text-xs shrink-0">
               <span class="text-gray-500 font-semibold whitespace-nowrap">Tampilkan:</span>
               <select id="pageSizeSelect" onchange="changePageSize()" class="border rounded px-2 py-1 bg-white font-bold focus:outline-emerald-700">
@@ -157,7 +154,6 @@
             </div>
           </div>
 
-          <!-- DROPDOWN FILTER LOMBA & STATUS -->
           <div class="flex flex-col sm:flex-row gap-2 shrink-0">
             <select id="filterLomba" onchange="applyFilter()" class="border rounded-lg px-3 py-2 text-xs bg-white focus:outline-emerald-700">
               <option value="">Semua Cabang Lomba</option>
@@ -169,7 +165,6 @@
               <option value="DITOLAK">DITOLAK</option>
             </select>
           </div>
-
         </div>
 
         <!-- TABEL PENDAFTAR -->
@@ -191,7 +186,7 @@
             </table>
           </div>
 
-          <!-- FOOTER TABEL: TOMBOL HALAMAN PREV / NEXT -->
+          <!-- FOOTER TABEL: PREV / NEXT -->
           <div class="p-3 sm:p-4 border-t bg-gray-50 flex justify-end items-center text-xs">
             <div class="flex items-center space-x-2">
               <button onclick="prevPage()" id="btnPrevPage" disabled class="px-3 py-1.5 border rounded-lg bg-white font-bold disabled:opacity-40 disabled:cursor-not-allowed hover:bg-emerald-50 text-emerald-900">
@@ -248,7 +243,7 @@
               <label class="block text-[11px] font-bold text-gray-700 mb-1">Upload Gambar Flyer (Otomatis Masuk Drive)</label>
               <input type="file" id="lombaFlyerFile" accept="image/*" class="w-full border rounded-lg p-1 text-xs bg-white">
               <p class="text-[10px] text-emerald-700 font-medium mt-1">
-                <i class="fa-solid fa-circle-info mr-0.5"></i> <strong>Catatan File:</strong> Maks. 2 MB | Resolusi disarankan: 800x1000px (Portrait). Gambar dikompresi otomatis.
+                <i class="fa-solid fa-circle-info mr-0.5"></i> <strong>Catatan File:</strong> Maks. 2 MB | Resolusi disarankan: 800x1000px. Gambar dikompresi otomatis.
               </p>
               <p class="text-[10px] text-gray-400 mt-0.5">Biarkan kosong jika tidak ingin mengganti gambar flyer saat ini.</p>
             </div>
@@ -274,7 +269,7 @@
         </div>
       </div>
 
-      <!-- 3. SLIDER BANNER WITH PREVIEW & FILE UPLOADER -->
+      <!-- 3. SLIDER BANNER -->
       <div id="sec-sliders" class="admin-sec hidden space-y-6">
         <div class="flex justify-between items-center">
           <div>
@@ -292,11 +287,11 @@
         </form>
       </div>
 
-      <!-- 4. PENGATURAN PORTAL & TOPBAR -->
+      <!-- 4. PENGATURAN PORTAL & TOPBAR (LOKASI & MAPS URL) -->
       <div id="sec-config" class="admin-sec hidden space-y-6">
         <div>
           <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Pengaturan Portal & Topbar</h1>
-          <p class="text-xs text-gray-500">Atur judul website, kontak, lokasi, countdown timer, dan media sosial</p>
+          <p class="text-xs text-gray-500">Atur judul website, kontak, lokasi, Google Maps, countdown timer, dan media sosial</p>
         </div>
 
         <form onsubmit="saveGlobalConfig(event)" class="bg-white p-4 sm:p-6 rounded-xl border shadow-sm space-y-4 text-xs max-w-2xl">
@@ -311,6 +306,13 @@
               <label class="block font-bold text-gray-700 mb-1">Nomor WhatsApp Panitia</label>
               <input type="text" id="cfgWaNumber" class="w-full border rounded-lg px-3 py-2 focus:outline-emerald-700" placeholder="081234567890">
             </div>
+          </div>
+
+          <!-- INPUT KHUSUS GOOGLE MAPS -->
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">URL Google Maps Lokasi (Link Map)</label>
+            <input type="text" id="cfgMapUrl" class="w-full border rounded-lg px-3 py-2 focus:outline-emerald-700" placeholder="https://maps.app.goo.gl/... atau https://google.com/maps/...">
+            <p class="text-[10px] text-gray-400 mt-1">Pengunjung di portal pendaftaran akan diarahkan ke link ini ketika mengeklik teks lokasi.</p>
           </div>
 
           <div>
@@ -651,7 +653,7 @@
         box.innerHTML += `
           <div class="bg-white p-4 rounded-xl border shadow-sm flex justify-between items-center">
             <div class="flex items-center gap-3">
-              <img src="${l.flyerUrl || 'https://via.placeholder.com/80'}" class="w-12 h-12 rounded-lg object-cover border">
+              <img src="${l.flyerUrl || 'https://via.placeholder.com/80'}" referrerpolicy="no-referrer" class="w-12 h-12 rounded-lg object-cover border">
               <div>
                 <div class="flex items-center gap-2">
                   <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded">${l.kategori}</span>
@@ -776,7 +778,7 @@
             <input type="text" value="${s.desc || ''}" placeholder="Deskripsi Banner" class="sld-desc w-full border rounded px-2.5 py-1.5 text-xs focus:outline-emerald-700">
             
             <div class="flex flex-col sm:flex-row gap-3 items-start sm:items-center bg-gray-50 p-2.5 rounded-lg border">
-              ${s.bgUrl ? `<img src="${s.bgUrl}" class="w-20 h-12 object-cover rounded border shadow-sm shrink-0" alt="Preview">` : `<div class="w-20 h-12 bg-gray-200 rounded border flex items-center justify-center text-[10px] text-gray-400 font-bold shrink-0">No Image</div>`}
+              ${s.bgUrl ? `<img src="${s.bgUrl}" referrerpolicy="no-referrer" class="w-20 h-12 object-cover rounded border shadow-sm shrink-0" alt="Preview">` : `<div class="w-20 h-12 bg-gray-200 rounded border flex items-center justify-center text-[10px] text-gray-400 font-bold shrink-0">No Image</div>`}
               <div class="flex-1 w-full">
                 <label class="block text-[10px] text-gray-600 font-bold mb-0.5">Upload / Ganti Gambar Background Slide:</label>
                 <input type="file" class="sld-file w-full border rounded px-2 py-1 text-xs bg-white" accept="image/*">
@@ -860,6 +862,7 @@
       document.getElementById('cfgRekening').value = cfg.rekening || "BSI: 7123-4567-89 a.n PESONA AL FIRDAUS";
       document.getElementById('cfgContact').value = cfg.contact || "Kontak Panitia: 0812-3456-7890";
       document.getElementById('cfgLokasi').value = cfg.lokasi || "Kompleks Pesantren Al Firdaus";
+      document.getElementById('cfgMapUrl').value = cfg.mapUrl || "";
       document.getElementById('cfgWaNumber').value = cfg.waNumber || "081234567890";
       document.getElementById('cfgTargetDate').value = cfg.targetDate || "2026-11-20T08:00";
       document.getElementById('cfgLinkIg').value = cfg.linkIg || "#";
@@ -881,6 +884,7 @@
         adminState.config.rekening = document.getElementById('cfgRekening').value;
         adminState.config.contact = document.getElementById('cfgContact').value;
         adminState.config.lokasi = document.getElementById('cfgLokasi').value;
+        adminState.config.mapUrl = document.getElementById('cfgMapUrl').value;
         adminState.config.waNumber = document.getElementById('cfgWaNumber').value;
         adminState.config.targetDate = document.getElementById('cfgTargetDate').value;
         adminState.config.linkIg = document.getElementById('cfgLinkIg').value;
