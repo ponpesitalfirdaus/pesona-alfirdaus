@@ -34,7 +34,7 @@
   <!-- DASHBOARD MAIN LAYOUT -->
   <div id="dashboardSection" class="hidden flex-1 flex flex-col md:flex-row min-h-screen relative">
     
-    <!-- TOPBAR MOBILE WITH HAMBURGER TO X TOGGLE -->
+    <!-- TOPBAR MOBILE WITH HAMBURGER TOGGLE -->
     <div class="md:hidden bg-emerald-950 text-white px-4 py-3 flex justify-between items-center sticky top-0 z-40 shadow-md">
       <div class="flex items-center gap-2">
         <img src="https://lh3.googleusercontent.com/d/1Ca6RhNsv0aFWD4EMdkr8uCcSuPDESTpv" class="w-7 h-7 object-contain rounded-full bg-white p-0.5">
@@ -51,7 +51,6 @@
     <!-- SIDEBAR DRAWER (SLIDE IN FROM LEFT ON MOBILE) -->
     <aside id="adminSidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-emerald-950 text-emerald-100 flex flex-col justify-between p-4 transform -translate-x-full transition-transform duration-300 ease-in-out md:static md:translate-x-0 md:flex">
       <div>
-        <!-- LOGO HEADER SIDEBAR -->
         <div class="flex items-center gap-3 px-2 py-4 border-b border-emerald-900 mb-6">
           <img src="https://lh3.googleusercontent.com/d/1Ca6RhNsv0aFWD4EMdkr8uCcSuPDESTpv" class="w-9 h-9 object-contain rounded-full bg-white p-0.5">
           <div>
@@ -60,18 +59,17 @@
           </div>
         </div>
 
-        <!-- NAV MENU WITH MOVING HIGHLIGHT BOX -->
         <nav class="space-y-1.5 text-xs font-semibold">
-          <button onclick="navAdmin('pendaftar')" id="m-pendaftar" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-emerald-800 text-white shadow font-bold transition">
+          <button onclick="navAdmin('pendaftar')" id="m-pendaftar" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-emerald-800 text-white shadow font-bold transition">
             <i class="fa-solid fa-users w-4"></i> Data Pendaftar
           </button>
-          <button onclick="navAdmin('lomba')" id="m-lomba" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
+          <button onclick="navAdmin('lomba')" id="m-lomba" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
             <i class="fa-solid fa-trophy w-4"></i> Kelola Lomba
           </button>
-          <button onclick="navAdmin('sliders')" id="m-sliders" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
+          <button onclick="navAdmin('sliders')" id="m-sliders" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
             <i class="fa-solid fa-images w-4"></i> Slider Banner
           </button>
-          <button onclick="navAdmin('config')" id="m-config" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
+          <button onclick="navAdmin('config')" id="m-config" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
             <i class="fa-solid fa-sliders w-4"></i> Pengaturan Portal
           </button>
         </nav>
@@ -99,7 +97,7 @@
           </div>
           <div class="flex gap-2 w-full sm:w-auto">
             <button onclick="exportCSV()" class="flex-1 sm:flex-none bg-emerald-700 hover:bg-emerald-800 text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 shadow">
-              <i class="fa-solid fa-file-excel"></i> CSV
+              <i class="fa-solid fa-file-excel"></i> Ekspor CSV
             </button>
             <button onclick="fetchAdminData()" class="bg-white border px-3 py-2 rounded-lg text-xs font-bold text-gray-600 hover:bg-gray-50">
               <i class="fa-solid fa-rotate"></i> Refresh
@@ -107,28 +105,45 @@
           </div>
         </div>
 
+        <!-- STAT CARDS DENGAN ICON -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-          <div class="bg-white p-4 rounded-xl border shadow-sm">
-            <p class="text-xs text-gray-500 font-semibold">Total Pendaftar</p>
-            <p class="text-xl sm:text-2xl font-extrabold text-emerald-900 mt-1" id="statTotal">0</p>
+          <div class="bg-white p-4 rounded-xl border shadow-sm flex items-center justify-between">
+            <div>
+              <p class="text-xs text-gray-500 font-semibold">Total Pendaftar</p>
+              <p class="text-xl sm:text-2xl font-extrabold text-emerald-900 mt-1" id="statTotal">0</p>
+            </div>
+            <div class="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-800">
+              <i class="fa-solid fa-users text-2xl"></i>
+            </div>
           </div>
-          <div class="bg-white p-4 rounded-xl border shadow-sm">
-            <p class="text-xs text-gray-500 font-semibold">Terverifikasi</p>
-            <p class="text-xl sm:text-2xl font-extrabold text-green-600 mt-1" id="statVerified">0</p>
+          <div class="bg-white p-4 rounded-xl border shadow-sm flex items-center justify-between">
+            <div>
+              <p class="text-xs text-gray-500 font-semibold">Terverifikasi</p>
+              <p class="text-xl sm:text-2xl font-extrabold text-green-600 mt-1" id="statVerified">0</p>
+            </div>
+            <div class="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center text-green-600">
+              <i class="fa-solid fa-circle-check text-2xl"></i>
+            </div>
           </div>
-          <div class="bg-white p-4 rounded-xl border shadow-sm">
-            <p class="text-xs text-gray-500 font-semibold">Menunggu Verifikasi</p>
-            <p class="text-xl sm:text-2xl font-extrabold text-amber-500 mt-1" id="statPending">0</p>
+          <div class="bg-white p-4 rounded-xl border shadow-sm flex items-center justify-between">
+            <div>
+              <p class="text-xs text-gray-500 font-semibold">Menunggu Verifikasi</p>
+              <p class="text-xl sm:text-2xl font-extrabold text-amber-500 mt-1" id="statPending">0</p>
+            </div>
+            <div class="w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center text-amber-500">
+              <i class="fa-solid fa-clock-rotate-left text-2xl"></i>
+            </div>
           </div>
         </div>
 
+        <!-- FILTER & SORTIR DATA -->
         <div class="bg-white p-4 rounded-xl border shadow-sm flex flex-col sm:flex-row gap-3 justify-between">
-          <input type="text" id="searchBox" onkeyup="applyFilter()" placeholder="Cari Nama / Kode / WA..." class="border rounded-lg px-3 py-2 text-xs w-full sm:w-1/3">
+          <input type="text" id="searchBox" onkeyup="applyFilter()" placeholder="Cari Nama / Kode / WA..." class="border rounded-lg px-3 py-2 text-xs w-full sm:w-1/3 focus:outline-emerald-700">
           <div class="flex flex-col sm:flex-row gap-2">
-            <select id="filterLomba" onchange="applyFilter()" class="border rounded-lg px-3 py-2 text-xs bg-white">
+            <select id="filterLomba" onchange="applyFilter()" class="border rounded-lg px-3 py-2 text-xs bg-white focus:outline-emerald-700">
               <option value="">Semua Cabang Lomba</option>
             </select>
-            <select id="filterStatus" onchange="applyFilter()" class="border rounded-lg px-3 py-2 text-xs bg-white">
+            <select id="filterStatus" onchange="applyFilter()" class="border rounded-lg px-3 py-2 text-xs bg-white focus:outline-emerald-700">
               <option value="">Semua Status</option>
               <option value="MENUNGGU">MENUNGGU</option>
               <option value="TERVERIFIKASI">TERVERIFIKASI</option>
@@ -137,6 +152,7 @@
           </div>
         </div>
 
+        <!-- TABEL PENDAFTAR -->
         <div class="bg-white rounded-xl border shadow-sm overflow-hidden">
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
@@ -153,6 +169,30 @@
               </thead>
               <tbody id="pendaftarTableBody" class="divide-y text-gray-700"></tbody>
             </table>
+          </div>
+
+          <!-- FOOTER TABEL DENGAN CONTROL PAGINATION -->
+          <div class="p-3 sm:p-4 border-t bg-gray-50 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs">
+            <div class="flex items-center gap-2">
+              <span class="text-gray-500 font-semibold">Tampilkan:</span>
+              <select id="pageSizeSelect" onchange="changePageSize()" class="border rounded px-2 py-1 bg-white font-bold focus:outline-emerald-700">
+                <option value="10">10 data</option>
+                <option value="25">25 data</option>
+                <option value="50">50 data</option>
+                <option value="100">100 data</option>
+              </select>
+              <span class="text-gray-500 ml-2" id="paginationInfo">Menampilkan 0 - 0 data</span>
+            </div>
+
+            <div class="flex items-center space-x-2">
+              <button onclick="prevPage()" id="btnPrevPage" disabled class="px-3 py-1.5 border rounded-lg bg-white font-bold disabled:opacity-40 disabled:cursor-not-allowed hover:bg-emerald-50 text-emerald-900">
+                <i class="fa-solid fa-chevron-left"></i> Sblm
+              </button>
+              <span class="font-bold text-gray-700 px-2" id="pageIndicator">Hal 1 dari 1</span>
+              <button onclick="nextPage()" id="btnNextPage" disabled class="px-3 py-1.5 border rounded-lg bg-white font-bold disabled:opacity-40 disabled:cursor-not-allowed hover:bg-emerald-50 text-emerald-900">
+                Slanjut <i class="fa-solid fa-chevron-right"></i>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -175,42 +215,43 @@
             <input type="hidden" id="lombaId">
             <div>
               <label class="block text-[11px] font-bold text-gray-700 mb-1">Judul Perlombaan *</label>
-              <input type="text" id="lombaJudul" required placeholder="Tahfizh Al-Qur'an" class="w-full border rounded-lg px-3 py-1.5 text-xs">
+              <input type="text" id="lombaJudul" required placeholder="MHQ (Musabaqah Hifzhil Qur'an)" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700">
             </div>
             <div class="grid grid-cols-2 gap-2">
               <div>
                 <label class="block text-[11px] font-bold text-gray-700 mb-1">Kategori *</label>
-                <input type="text" id="lombaKategori" required placeholder="SD/SMP" class="w-full border rounded-lg px-3 py-1.5 text-xs">
+                <input type="text" id="lombaKategori" required placeholder="SD/SMP" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700">
               </div>
               <div>
                 <label class="block text-[11px] font-bold text-gray-700 mb-1">Biaya *</label>
-                <input type="text" id="lombaBiaya" required placeholder="Rp 50.000" class="w-full border rounded-lg px-3 py-1.5 text-xs">
+                <input type="text" id="lombaBiaya" required placeholder="Rp 50.000" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700">
               </div>
             </div>
             <div>
               <label class="block text-[11px] font-bold text-gray-700 mb-1">Status Pendaftaran</label>
-              <select id="lombaStatus" class="w-full border rounded-lg px-3 py-1.5 text-xs">
+              <select id="lombaStatus" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700">
                 <option value="BUKA">BUKA</option>
                 <option value="TUTUP">TUTUP</option>
               </select>
             </div>
             <div>
               <label class="block text-[11px] font-bold text-gray-700 mb-1">URL Image Flyer *</label>
-              <input type="text" id="lombaFlyer" required placeholder="https://..." class="w-full border rounded-lg px-3 py-1.5 text-xs">
+              <input type="text" id="lombaFlyer" required placeholder="https://..." class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700">
             </div>
             <div>
               <label class="block text-[11px] font-bold text-gray-700 mb-1">Deskripsi Lomba</label>
-              <textarea id="lombaDeskripsi" rows="2" class="w-full border rounded-lg px-3 py-1.5 text-xs"></textarea>
+              <textarea id="lombaDeskripsi" rows="2" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700"></textarea>
             </div>
             <div>
               <label class="block text-[11px] font-bold text-gray-700 mb-1">Syarat & Ketentuan</label>
-              <textarea id="lombaSyarat" rows="2" class="w-full border rounded-lg px-3 py-1.5 text-xs"></textarea>
+              <textarea id="lombaSyarat" rows="2" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700"></textarea>
             </div>
             <div>
               <label class="block text-[11px] font-bold text-gray-700 mb-1">Hadiah & Fasilitas</label>
-              <textarea id="lombaHadiah" rows="2" class="w-full border rounded-lg px-3 py-1.5 text-xs"></textarea>
+              <textarea id="lombaHadiah" rows="2" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700"></textarea>
             </div>
-            <button type="submit" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2 rounded-lg text-xs shadow flex items-center justify-center gap-1">
+            <button type="submit" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2.5 rounded-lg text-xs shadow transition flex items-center justify-center gap-2">
+              <i class="fa-solid fa-floppy-disk"></i>
               <span>Simpan Data Lomba</span>
             </button>
           </form>
@@ -231,8 +272,8 @@
 
         <form onsubmit="saveSliders(event)" class="space-y-4">
           <div id="sliderListContainer" class="space-y-4"></div>
-          <button type="submit" class="bg-emerald-800 hover:bg-emerald-900 text-white px-6 py-2.5 rounded-xl font-bold text-xs shadow">
-            Simpan Perubahan Slider
+          <button type="submit" class="bg-emerald-800 hover:bg-emerald-900 text-white px-6 py-2.5 rounded-xl font-bold text-xs shadow flex items-center gap-2">
+            <i class="fa-solid fa-floppy-disk"></i> Simpan Perubahan Slider
           </button>
         </form>
       </div>
@@ -247,22 +288,22 @@
         <form onsubmit="saveGlobalConfig(event)" class="bg-white p-4 sm:p-6 rounded-xl border shadow-sm space-y-4 text-xs max-w-2xl">
           <div>
             <label class="block font-bold text-gray-700 mb-1">Judul Portal (Header Utama)</label>
-            <input type="text" id="cfgHeaderTitle" class="w-full border rounded-lg px-3 py-2">
+            <input type="text" id="cfgHeaderTitle" class="w-full border rounded-lg px-3 py-2 focus:outline-emerald-700">
           </div>
           <div>
             <label class="block font-bold text-gray-700 mb-1">Subjudul Portal</label>
-            <input type="text" id="cfgHeaderSub" class="w-full border rounded-lg px-3 py-2">
+            <input type="text" id="cfgHeaderSub" class="w-full border rounded-lg px-3 py-2 focus:outline-emerald-700">
           </div>
           <div>
             <label class="block font-bold text-gray-700 mb-1">Informasi Rekening Pembayaran</label>
-            <input type="text" id="cfgRekening" class="w-full border rounded-lg px-3 py-2" placeholder="BSI: 7123-4567-89 a.n PESONA AL FIRDAUS">
+            <input type="text" id="cfgRekening" class="w-full border rounded-lg px-3 py-2 focus:outline-emerald-700" placeholder="BSI: 7123-4567-89 a.n PESONA AL FIRDAUS">
           </div>
           <div>
             <label class="block font-bold text-gray-700 mb-1">Informasi Kontak Footer</label>
-            <input type="text" id="cfgContact" class="w-full border rounded-lg px-3 py-2">
+            <input type="text" id="cfgContact" class="w-full border rounded-lg px-3 py-2 focus:outline-emerald-700">
           </div>
-          <button type="submit" class="bg-emerald-800 hover:bg-emerald-900 text-white font-bold px-6 py-2.5 rounded-xl text-xs shadow">
-            Simpan Pengaturan Portal
+          <button type="submit" class="bg-emerald-800 hover:bg-emerald-900 text-white font-bold px-6 py-2.5 rounded-xl text-xs shadow flex items-center gap-2">
+            <i class="fa-solid fa-floppy-disk"></i> Simpan Pengaturan Portal
           </button>
         </form>
       </div>
@@ -271,8 +312,17 @@
   </div>
 
   <script>
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbx_GANTIKAN_DENGAN_URL_DEPLOY_ANDA/exec";
-    let adminState = { pendaftar: [], lomba: [], config: {}, currentSliders: [] };
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbw4APJqKIcWVgs1yk29KHmuIeArlCDcu0rruBauZkOOmUmGig9Wvqy2aIKq7_gaUPGkOg/exec";
+
+    let adminState = { 
+      pendaftar: [], 
+      filteredData: [],
+      lomba: [], 
+      config: {}, 
+      currentSliders: [],
+      currentPage: 1,
+      pageSize: 10
+    };
 
     window.onload = () => {
       if(localStorage.getItem('adminAuth') === 'true') {
@@ -282,7 +332,19 @@
       }
     };
 
-    // TOGGLE MOBILE SIDEBAR SLIDE IN & OUT
+    // HELPER: SAFE FETCH KE GOOGLE APPS SCRIPT TANPA TERKENA CORS BLOCK (FAILED TO FETCH)
+    async function postToGAS(payload) {
+      const res = await fetch(GAS_URL, {
+        method: 'POST',
+        mode: 'cors',
+        redirect: 'follow',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      });
+      return await res.json();
+    }
+
+    // TOGGLE MOBILE SIDEBAR
     function toggleAdminSidebar() {
       const sidebar = document.getElementById('adminSidebar');
       const backdrop = document.getElementById('adminBackdrop');
@@ -330,7 +392,7 @@
       location.reload();
     }
 
-    // MENU HIGHLIGHT MOVING LOGIC
+    // NAVIGATION HIGHLIGHT MOVING BOX LOGIC
     function navAdmin(sec) {
       document.querySelectorAll('.admin-sec').forEach(el => el.classList.add('hidden'));
       document.getElementById(`sec-${sec}`).classList.remove('hidden');
@@ -357,13 +419,15 @@
     }
 
     async function fetchAdminData() {
-      const res = await fetch(`${GAS_URL}?action=adminData`);
-      const result = await res.json();
-      if(result.status === "success") {
-        adminState.pendaftar = result.data || [];
-        renderPendaftarTable(adminState.pendaftar);
-        updateStats();
-      }
+      try {
+        const res = await fetch(`${GAS_URL}?action=adminData`);
+        const result = await res.json();
+        if(result.status === "success") {
+          adminState.pendaftar = result.data || [];
+          applyFilter();
+          updateStats();
+        }
+      } catch(e) { console.error(e); }
     }
 
     function updateStats() {
@@ -372,50 +436,102 @@
       document.getElementById('statPending').innerText = adminState.pendaftar.filter(x => x.status === 'MENUNGGU').length;
     }
 
-    function renderPendaftarTable(data) {
-      const tbody = document.getElementById('pendaftarTableBody');
-      tbody.innerHTML = "";
-      data.forEach(item => {
-        tbody.innerHTML += `
-          <tr class="hover:bg-gray-50 border-b">
-            <td class="p-3 font-mono font-bold text-emerald-900">${item.kodeRegistrasi}</td>
-            <td class="p-3"><strong>${item.namaLengkap}</strong><br><span class="text-[10px] text-gray-500">${item.asalSekolah}</span></td>
-            <td class="p-3">${item.cabangLomba}</td>
-            <td class="p-3">${item.noWhatsapp}</td>
-            <td class="p-3">${item.linkBukti !== '-' ? `<a href="${item.linkBukti}" target="_blank" class="text-blue-600 font-bold underline">Lihat</a>` : '-'}</td>
-            <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${item.status === 'TERVERIFIKASI' ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800'}">${item.status}</span></td>
-            <td class="p-3 text-center space-x-1">
-              <button onclick="updateStatus('${item.kodeRegistrasi}', 'TERVERIFIKASI')" class="bg-green-600 text-white px-2 py-1 rounded text-[10px] font-bold">Verifikasi</button>
-              <button onclick="updateStatus('${item.kodeRegistrasi}', 'DITOLAK')" class="bg-amber-600 text-white px-2 py-1 rounded text-[10px] font-bold">Tolak</button>
-              <button onclick="deleteRegistrant('${item.kodeRegistrasi}')" class="bg-red-600 text-white px-2 py-1 rounded text-[10px] font-bold"><i class="fa-solid fa-trash"></i></button>
-            </td>
-          </tr>
-        `;
-      });
-    }
-
-    async function updateStatus(kode, status) {
-      await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: 'updateStatus', kodeRegistrasi: kode, newStatus: status }) });
-      fetchAdminData();
-    }
-
-    async function deleteRegistrant(kode) {
-      if(!confirm(`Hapus data ${kode}?`)) return;
-      await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: 'deleteRegistrant', kodeRegistrasi: kode }) });
-      fetchAdminData();
-    }
-
+    // FILTER & PAGINATION LOGIC
     function applyFilter() {
       const q = document.getElementById('searchBox').value.toLowerCase();
       const lomba = document.getElementById('filterLomba').value;
       const status = document.getElementById('filterStatus').value;
 
-      const filtered = adminState.pendaftar.filter(x => 
+      adminState.filteredData = adminState.pendaftar.filter(x => 
         (x.namaLengkap.toLowerCase().includes(q) || x.kodeRegistrasi.toLowerCase().includes(q) || x.noWhatsapp.includes(q)) &&
         (lomba === "" || x.cabangLomba === lomba) &&
         (status === "" || x.status === status)
       );
-      renderPendaftarTable(filtered);
+
+      adminState.currentPage = 1;
+      renderPendaftarTable();
+    }
+
+    function changePageSize() {
+      adminState.pageSize = parseInt(document.getElementById('pageSizeSelect').value);
+      adminState.currentPage = 1;
+      renderPendaftarTable();
+    }
+
+    function prevPage() {
+      if(adminState.currentPage > 1) {
+        adminState.currentPage--;
+        renderPendaftarTable();
+      }
+    }
+
+    function nextPage() {
+      const totalPages = Math.ceil(adminState.filteredData.length / adminState.pageSize) || 1;
+      if(adminState.currentPage < totalPages) {
+        adminState.currentPage++;
+        renderPendaftarTable();
+      }
+    }
+
+    function renderPendaftarTable() {
+      const tbody = document.getElementById('pendaftarTableBody');
+      tbody.innerHTML = "";
+
+      const totalItems = adminState.filteredData.length;
+      const totalPages = Math.ceil(totalItems / adminState.pageSize) || 1;
+      
+      if (adminState.currentPage > totalPages) adminState.currentPage = totalPages;
+
+      const startIndex = (adminState.currentPage - 1) * adminState.pageSize;
+      const endIndex = Math.min(startIndex + adminState.pageSize, totalItems);
+
+      const pageData = adminState.filteredData.slice(startIndex, endIndex);
+
+      if(pageData.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-gray-400 font-semibold">Tidak ada data pendaftar yang cocok.</td></tr>`;
+      } else {
+        pageData.forEach(item => {
+          tbody.innerHTML += `
+            <tr class="hover:bg-gray-50 border-b">
+              <td class="p-3 font-mono font-bold text-emerald-900">${item.kodeRegistrasi}</td>
+              <td class="p-3"><strong>${item.namaLengkap}</strong><br><span class="text-[10px] text-gray-500">${item.asalSekolah}</span></td>
+              <td class="p-3">${item.cabangLomba}</td>
+              <td class="p-3">${item.noWhatsapp}</td>
+              <td class="p-3">${item.linkBukti !== '-' ? `<a href="${item.linkBukti}" target="_blank" class="text-blue-600 font-bold underline">Lihat</a>` : '-'}</td>
+              <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${item.status === 'TERVERIFIKASI' ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800'}">${item.status}</span></td>
+              <td class="p-3 text-center space-x-1">
+                <button onclick="updateStatus('${item.kodeRegistrasi}', 'TERVERIFIKASI')" class="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-[10px] font-bold">Verifikasi</button>
+                <button onclick="updateStatus('${item.kodeRegistrasi}', 'DITOLAK')" class="bg-amber-600 hover:bg-amber-700 text-white px-2 py-1 rounded text-[10px] font-bold">Tolak</button>
+                <button onclick="deleteRegistrant('${item.kodeRegistrasi}')" class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-[10px] font-bold"><i class="fa-solid fa-trash"></i></button>
+              </td>
+            </tr>
+          `;
+        });
+      }
+
+      // Update Info Pagination Controls
+      document.getElementById('paginationInfo').innerText = totalItems > 0 
+        ? `Menampilkan ${startIndex + 1} - ${endIndex} dari ${totalItems} data`
+        : "Menampilkan 0 data";
+
+      document.getElementById('pageIndicator').innerText = `Hal ${adminState.currentPage} dari ${totalPages}`;
+      document.getElementById('btnPrevPage').disabled = (adminState.currentPage <= 1);
+      document.getElementById('btnNextPage').disabled = (adminState.currentPage >= totalPages);
+    }
+
+    async function updateStatus(kode, status) {
+      try {
+        const result = await postToGAS({ action: 'updateStatus', kodeRegistrasi: kode, newStatus: status });
+        if(result.status === "success") fetchAdminData();
+      } catch(e) { alert("Gagal update status."); }
+    }
+
+    async function deleteRegistrant(kode) {
+      if(!confirm(`Hapus data ${kode}?`)) return;
+      try {
+        const result = await postToGAS({ action: 'deleteRegistrant', kodeRegistrasi: kode });
+        if(result.status === "success") fetchAdminData();
+      } catch(e) { alert("Gagal menghapus."); }
     }
 
     function exportCSV() {
@@ -428,16 +544,18 @@
     }
 
     async function fetchPortalConfig() {
-      const res = await fetch(`${GAS_URL}?action=initPortal`);
-      const result = await res.json();
-      if(result.status === "success") {
-        adminState.lomba = result.lombaList || [];
-        adminState.config = result.config || {};
-        renderLombaCards();
-        populateLombaFilter();
-        populateConfigForm();
-        renderSlidersAdmin();
-      }
+      try {
+        const res = await fetch(`${GAS_URL}?action=initPortal`);
+        const result = await res.json();
+        if(result.status === "success") {
+          adminState.lomba = result.lombaList || [];
+          adminState.config = result.config || {};
+          renderLombaCards();
+          populateLombaFilter();
+          populateConfigForm();
+          renderSlidersAdmin();
+        }
+      } catch(e) { console.error(e); }
     }
 
     function renderLombaCards() {
@@ -488,7 +606,7 @@
       document.getElementById('lombaId').value = "";
     }
 
-    // PROCESS SAVE LOMBA WITH EXPLICIT FEEDBACK POPUP
+    // SAVE LOMBA FIX
     async function saveLomba(e) {
       e.preventDefault();
       const btn = e.target.querySelector('button[type="submit"]');
@@ -509,8 +627,7 @@
           hadiah: document.getElementById('lombaHadiah').value,
         };
 
-        const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify(payload) });
-        const result = await res.json();
+        const result = await postToGAS(payload);
 
         if(result.status === "success") {
           alert("✅ Cabang Lomba Berhasil Disimpan!");
@@ -528,8 +645,10 @@
 
     async function deleteLomba(id) {
       if(!confirm("Hapus lomba ini?")) return;
-      await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: 'deleteLomba', id: id }) });
-      fetchPortalConfig();
+      try {
+        await postToGAS({ action: 'deleteLomba', id: id });
+        fetchPortalConfig();
+      } catch(e) { alert("Gagal menghapus lomba."); }
     }
 
     function renderSlidersAdmin() {
@@ -544,11 +663,11 @@
             <button type="button" onclick="removeSlideRow(${idx})" class="absolute top-3 right-3 text-red-600 font-bold text-xs">Hapus</button>
             <h5 class="font-bold text-xs text-gray-700">Slide Banner #${idx + 1}</h5>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-              <input type="text" value="${s.badge || ''}" placeholder="Badge Text" class="sld-badge border rounded px-2 py-1 text-xs">
-              <input type="text" value="${s.title || ''}" placeholder="Judul Banner" class="sld-title border rounded px-2 py-1 text-xs sm:col-span-2">
+              <input type="text" value="${s.badge || ''}" placeholder="Badge Text" class="sld-badge border rounded px-2 py-1 text-xs focus:outline-emerald-700">
+              <input type="text" value="${s.title || ''}" placeholder="Judul Banner" class="sld-title border rounded px-2 py-1 text-xs sm:col-span-2 focus:outline-emerald-700">
             </div>
-            <input type="text" value="${s.desc || ''}" placeholder="Deskripsi Banner" class="sld-desc w-full border rounded px-2 py-1 text-xs">
-            <input type="text" value="${s.bgUrl || ''}" placeholder="URL Gambar Background Slide (Opsional)" class="sld-bg w-full border rounded px-2 py-1 text-xs">
+            <input type="text" value="${s.desc || ''}" placeholder="Deskripsi Banner" class="sld-desc w-full border rounded px-2 py-1 text-xs focus:outline-emerald-700">
+            <input type="text" value="${s.bgUrl || ''}" placeholder="URL Gambar Background Slide (Opsional)" class="sld-bg w-full border rounded px-2 py-1 text-xs focus:outline-emerald-700">
           </div>
         `;
       });
@@ -564,7 +683,7 @@
       renderSlidersAdmin();
     }
 
-    // PROCESS SAVE SLIDERS WITH EXPLICIT FEEDBACK POPUP
+    // SAVE SLIDERS FIX
     async function saveSliders(e) {
       e.preventDefault();
       const btn = e.target.querySelector('button[type="submit"]');
@@ -591,14 +710,13 @@
 
         adminState.config.sliders = sliders;
 
-        const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: 'saveConfig', config: adminState.config }) });
-        const result = await res.json();
+        const result = await postToGAS({ action: 'saveConfig', config: adminState.config });
 
         if(result.status === "success") {
           alert("✅ Hero Slider Banner Berhasil Disimpan!");
           await fetchPortalConfig();
         } else {
-          alert("❌ Gagal menyimpan slider: " + (result.message || "Terjadi kesalahan"));
+          alert("❌ Gagal menyimpan slider.");
         }
       } catch(err) {
         alert("❌ Terjadi kesalahan server: " + err.toString());
@@ -615,6 +733,7 @@
       document.getElementById('cfgContact').value = cfg.contact || "Kontak Panitia: 0812-3456-7890";
     }
 
+    // SAVE CONFIG FIX
     async function saveGlobalConfig(e) {
       e.preventDefault();
       const btn = e.target.querySelector('button[type="submit"]');
@@ -627,8 +746,7 @@
         adminState.config.rekening = document.getElementById('cfgRekening').value;
         adminState.config.contact = document.getElementById('cfgContact').value;
 
-        const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: 'saveConfig', config: adminState.config }) });
-        const result = await res.json();
+        const result = await postToGAS({ action: 'saveConfig', config: adminState.config });
 
         if(result.status === "success") {
           alert("✅ Pengaturan Portal Berhasil Disimpan!");
