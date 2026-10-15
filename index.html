@@ -21,11 +21,13 @@
   <div class="bg-emerald-950 text-emerald-100 text-[11px] sm:text-xs py-2 px-3 sm:px-4 border-b border-emerald-900">
     <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-2 text-center md:text-left">
       
-      <!-- LEFT TOPBAR: LOKASI, WHATSAPP, & COUNTDOWN TIMER -->
+      <!-- LEFT TOPBAR: LOKASI (KLIK GOOGLE MAPS), WHATSAPP, & COUNTDOWN TIMER -->
       <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 sm:gap-4">
         <div class="flex items-center gap-1.5 text-yellow-300">
           <i class="fa-solid fa-location-dot"></i>
-          <span id="topbarLokasi" class="text-white font-medium">Kompleks Pesantren Al Firdaus</span>
+          <a id="topbarLokasiLink" href="https://maps.google.com" target="_blank" title="Buka Lokasi di Google Maps" class="text-white font-medium hover:underline hover:text-yellow-200 transition">
+            <span id="topbarLokasi">Kompleks Pesantren Al Firdaus</span>
+          </a>
         </div>
         <div class="flex items-center gap-1.5 text-green-400">
           <i class="fa-brands fa-whatsapp"></i>
@@ -39,16 +41,15 @@
         </div>
       </div>
 
-      <!-- RIGHT TOPBAR: SOSIAL MEDIA + LOGIN ADMIN -->
+      <!-- RIGHT TOPBAR: SOSIAL MEDIA + ICON LOGIN ADMIN (HANYA ICON) -->
       <div class="flex items-center justify-center space-x-3 text-sm">
         <a id="linkIg" href="#" target="_blank" title="Instagram" class="hover:text-yellow-300 transition"><i class="fa-brands fa-instagram"></i></a>
         <a id="linkYt" href="#" target="_blank" title="YouTube" class="hover:text-yellow-300 transition"><i class="fa-brands fa-youtube"></i></a>
         <a id="linkTt" href="#" target="_blank" title="TikTok" class="hover:text-yellow-300 transition"><i class="fa-brands fa-tiktok"></i></a>
         <a id="linkTh" href="#" target="_blank" title="Threads" class="hover:text-yellow-300 transition"><i class="fa-brands fa-threads"></i></a>
         <span class="text-emerald-700">|</span>
-        <a href="admin.html" target="_blank" title="Login Admin Portal" class="hover:text-yellow-300 transition text-emerald-200 font-bold text-xs flex items-center gap-1.5 bg-emerald-900/80 px-2.5 py-1 rounded-lg border border-emerald-700/60 shadow-sm">
-          <i class="fa-solid fa-user-lock text-yellow-400"></i>
-          <span>Admin Login</span>
+        <a href="admin.html" target="_blank" title="Login Admin Portal" class="hover:text-yellow-300 transition text-emerald-200 font-bold text-xs flex items-center justify-center bg-emerald-900/80 w-7 h-7 rounded-lg border border-emerald-700/60 shadow-sm hover:scale-105">
+          <i class="fa-solid fa-user-lock text-yellow-400 text-sm"></i>
         </a>
       </div>
 
@@ -108,12 +109,12 @@
     <!-- 1. BERANDA (HOME) -->
     <section id="view-beranda" class="view-page container mx-auto px-4 py-6">
       
-      <!-- HERO SLIDER BANNER -->
+      <!-- HERO SLIDER BANNER (DENGAN GAMBAR KHUSUS BROWSER COMPATIBILITY) -->
       <div class="relative group rounded-2xl overflow-hidden shadow-xl border border-gray-200 mb-10 bg-emerald-950">
         <div class="swiper heroSlider">
           <div class="swiper-wrapper" id="sliderWrapper">
             <div class="swiper-slide text-white p-6 sm:p-10 md:p-14 min-h-[260px] sm:min-h-[340px] flex flex-col justify-center relative rounded-2xl overflow-hidden bg-emerald-950">
-              <div class="absolute inset-0 bg-gradient-to-r from-emerald-950/90 via-emerald-900/80 to-emerald-950/90 z-0"></div>
+              <div class="absolute inset-0 bg-gradient-to-r from-emerald-950/85 via-emerald-950/40 to-transparent z-0"></div>
               <div class="relative z-10 max-w-2xl">
                 <span class="bg-yellow-400 text-emerald-950 text-[10px] sm:text-xs font-extrabold px-3 py-1 rounded-full w-fit mb-3 shadow inline-block">PENDAFTARAN DIBUKA</span>
                 <h2 class="text-xl sm:text-3xl md:text-4xl font-black mb-2 leading-tight">Selamat Datang di Pesona Al Firdaus 2026</h2>
@@ -169,7 +170,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
           <div class="lg:col-span-5 flex flex-col items-center">
             <div class="w-full bg-gray-100 rounded-xl overflow-hidden shadow-inner border mb-4">
-              <img id="detailFlyerImg" src="" alt="Flyer Lomba" class="w-full h-auto object-cover max-h-[450px]">
+              <img id="detailFlyerImg" src="" alt="Flyer Lomba" referrerpolicy="no-referrer" class="w-full h-auto object-cover max-h-[450px]">
             </div>
             <button id="btnDaftarSekarang" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold py-3.5 rounded-xl shadow-lg transition flex items-center justify-center gap-2 text-sm sm:text-base">
               <i class="fa-solid fa-pen-to-square"></i> Daftar Lomba Ini
@@ -258,7 +259,7 @@
           <label class="block text-xs font-bold text-gray-700 mb-1">Upload Bukti Transfer / Berkas *</label>
           <input type="file" id="fileBukti" accept="image/*" class="w-full text-xs text-gray-500 border rounded-lg p-1.5">
           <p class="text-[10px] text-emerald-700 font-medium mt-1">
-            <i class="fa-solid fa-circle-info mr-0.5"></i> <strong>Catatan File:</strong> Maksimal 2 MB (Disarankan JPG/PNG, resolusi 1080x1080px). File dikompresi otomatis.
+            <i class="fa-solid fa-circle-info mr-0.5"></i> <strong>Catatan File:</strong> Maksimal 2 MB (Disarankan JPG/PNG). File dikompresi otomatis.
           </p>
           <p class="text-[10px] text-gray-400 mt-1" id="rekInfoText">BSI: 7123-4567-89 a.n PESONA AL FIRDAUS</p>
         </div>
@@ -336,6 +337,12 @@
         if(cfg.rekening && document.getElementById('rekInfoText')) document.getElementById('rekInfoText').innerText = cfg.rekening;
 
         if(cfg.lokasi && document.getElementById('topbarLokasi')) document.getElementById('topbarLokasi').innerText = cfg.lokasi;
+        if(cfg.mapUrl && document.getElementById('topbarLokasiLink')) {
+          document.getElementById('topbarLokasiLink').href = cfg.mapUrl;
+        } else if(cfg.lokasi && document.getElementById('topbarLokasiLink')) {
+          document.getElementById('topbarLokasiLink').href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(cfg.lokasi)}`;
+        }
+
         if(cfg.waNumber) {
           const waClean = String(cfg.waNumber).replace(/[^0-9]/g, "");
           if(document.getElementById('topbarWaLink')) document.getElementById('topbarWaLink').href = `https://wa.me/${waClean}`;
@@ -357,8 +364,8 @@
               const bgImgUrl = slide.bgUrl ? slide.bgUrl.trim() : '';
               wrapper.innerHTML += `
                 <div class="swiper-slide text-white p-6 sm:p-10 md:p-14 min-h-[260px] sm:min-h-[340px] flex flex-col justify-center relative rounded-2xl overflow-hidden bg-emerald-950">
-                  ${bgImgUrl ? `<img src="${bgImgUrl}" class="absolute inset-0 w-full h-full object-cover z-0" alt="Banner Slide" onerror="this.style.display='none'">` : ''}
-                  <div class="absolute inset-0 bg-gradient-to-r from-emerald-950/90 via-emerald-900/80 to-emerald-950/90 z-0"></div>
+                  ${bgImgUrl ? `<img src="${bgImgUrl}" referrerpolicy="no-referrer" class="absolute inset-0 w-full h-full object-cover z-0" alt="Banner Slide">` : ''}
+                  <div class="absolute inset-0 bg-gradient-to-r from-emerald-950/85 via-emerald-950/40 to-transparent z-0"></div>
                   <div class="relative z-10 max-w-2xl">
                     <span class="bg-yellow-400 text-emerald-950 text-[10px] sm:text-xs font-extrabold px-3 py-1 rounded-full w-fit mb-3 shadow inline-block">${slide.badge || 'INFO'}</span>
                     <h2 class="text-xl sm:text-3xl md:text-4xl font-black mb-2 leading-tight">${slide.title || ''}</h2>
@@ -427,7 +434,7 @@
         const isBuka = item.statusLomba !== 'TUTUP';
         const cardHtml = `
           <div class="bg-white rounded-xl shadow border overflow-hidden flex flex-col hover:shadow-lg transition">
-            <img src="${item.flyerUrl || 'https://via.placeholder.com/400x250'}" class="h-44 sm:h-48 w-full object-cover">
+            <img src="${item.flyerUrl || 'https://via.placeholder.com/400x250'}" referrerpolicy="no-referrer" class="h-44 sm:h-48 w-full object-cover">
             <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between">
               <div>
                 <div class="flex justify-between items-center mb-2">
