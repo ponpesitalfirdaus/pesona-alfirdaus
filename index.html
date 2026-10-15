@@ -4,31 +4,60 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title id="siteTitle">PESONA AL FIRDAUS 2026</title>
-  <!-- Favicon Google Drive Direct Link -->
   <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1Ca6RhNsv0aFWD4EMdkr8uCcSuPDESTpv">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <style>
-    .swiper-button-next, .swiper-button-prev {
-      color: #facc15 !important;
-      transform: scale(0.6);
-    }
-    .swiper-pagination-bullet-active {
-      background: #facc15 !important;
-    }
+    .swiper-button-next, .swiper-button-prev { color: #facc15 !important; transform: scale(0.6); }
+    .swiper-pagination-bullet-active { background: #facc15 !important; }
   </style>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col">
 
+  <!-- TOP BAR BANNER -->
+  <div class="bg-emerald-950 text-emerald-100 text-[11px] sm:text-xs py-2 px-4 border-b border-emerald-900 sticky top-0 z-50">
+    <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-2">
+      
+      <!-- LEFT TOPBAR: LOKASI, WHATSAPP, & COUNTDOWN TIMER -->
+      <div class="flex flex-wrap items-center justify-center md:justify-start gap-3 sm:gap-4">
+        <!-- Lokasi -->
+        <div class="flex items-center gap-1.5 text-yellow-300">
+          <i class="fa-solid fa-location-dot"></i>
+          <span id="topbarLokasi" class="text-white font-medium">Kompleks Pesantren Al Firdaus</span>
+        </div>
+        <!-- WhatsApp -->
+        <div class="flex items-center gap-1.5 text-green-400">
+          <i class="fa-brands fa-whatsapp"></i>
+          <a id="topbarWaLink" href="https://wa.me/6281234567890" target="_blank" class="text-white hover:underline font-medium" id="topbarWaText">0812-3456-7890</a>
+        </div>
+        <!-- Countdown Timer / H-... Text -->
+        <div class="bg-emerald-900/90 border border-emerald-700/80 px-2.5 py-0.5 rounded-full flex items-center gap-1.5 text-yellow-300 shadow-inner font-bold">
+          <i class="fa-solid fa-clock text-amber-400 animate-pulse"></i>
+          <span id="topbarCountdown" class="text-white">Loading Timer...</span>
+        </div>
+      </div>
+
+      <!-- RIGHT TOPBAR: SOSIAL MEDIA -->
+      <div class="flex items-center space-x-3 text-sm">
+        <a id="linkIg" href="#" target="_blank" title="Instagram" class="hover:text-yellow-300 transition"><i class="fa-brands fa-instagram"></i></a>
+        <a id="linkYt" href="#" target="_blank" title="YouTube" class="hover:text-yellow-300 transition"><i class="fa-brands fa-youtube"></i></a>
+        <a id="linkTt" href="#" target="_blank" title="TikTok" class="hover:text-yellow-300 transition"><i class="fa-brands fa-tiktok"></i></a>
+        <a id="linkTh" href="#" target="_blank" title="Threads" class="hover:text-yellow-300 transition"><i class="fa-brands fa-threads"></i></a>
+      </div>
+
+    </div>
+  </div>
+
   <!-- NAVBAR UTAMA -->
-  <header class="bg-emerald-800 text-white sticky top-0 z-50 shadow-md">
+  <header class="bg-emerald-800 text-white shadow-md sticky top-[33px] z-40">
     <div class="container mx-auto px-4 py-2.5 flex justify-between items-center">
       
-      <!-- LOGO DENGAN GAMBAR GOOGLE DRIVE -->
+      <!-- LOGO -->
       <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('beranda')">
-        <img src="https://lh3.googleusercontent.com/d/1Ca6RhNsv0aFWD4EMdkr8uCcSuPDESTpv" alt="Logo Pesona Al Firdaus" class="w-10 h-10 object-contain rounded-full bg-white p-0.5 border border-yellow-400 shadow">
+        <img src="https://lh3.googleusercontent.com/d/1Ca6RhNsv0aFWD4EMdkr8uCcSuPDESTpv" alt="Logo" class="w-10 h-10 object-contain rounded-full bg-white p-0.5 border border-yellow-400 shadow">
         <div>
           <h1 class="font-bold text-base sm:text-lg leading-tight" id="portalHeaderTitle">PESONA AL FIRDAUS</h1>
           <p class="text-[10px] sm:text-xs text-emerald-200" id="portalHeaderSub">Islamic Youth Festival 2026</p>
@@ -44,18 +73,13 @@
 
       <!-- ACTION ICONS & HAMBURGER -->
       <div class="flex items-center space-x-2 sm:space-x-3">
-        <!-- ICON DAFTAR / CABANG LOMBA (HANYA ICON) -->
         <button onclick="switchView('lomba')" title="Cabang Lomba" class="w-9 h-9 bg-emerald-700 hover:bg-emerald-900 rounded-xl text-yellow-300 transition border border-emerald-600 flex items-center justify-center shadow-sm">
           <i class="fa-solid fa-trophy text-sm sm:text-base"></i>
         </button>
-
-        <!-- ICON LOGIN ADMIN (HANYA ICON) -->
         <a href="admin.html" target="_blank" title="Login Admin Portal" class="w-9 h-9 bg-emerald-900 hover:bg-emerald-950 rounded-xl text-white transition border border-emerald-700 flex items-center justify-center shadow-sm">
           <i class="fa-solid fa-user-lock text-sm sm:text-base"></i>
         </a>
-
-        <!-- HAMBURGER BUTTON MOBILE -->
-        <button onclick="toggleMobileNav()" class="md:hidden w-9 h-9 flex items-center justify-center text-white hover:text-yellow-300 focus:outline-none">
+        <button onclick="toggleMobileNav()" class="md:hidden w-9 h-9 flex items-center justify-center text-white hover:text-yellow-300">
           <i class="fa-solid fa-bars text-xl" id="hamburgerIcon"></i>
         </button>
       </div>
@@ -76,17 +100,16 @@
     </div>
   </header>
 
-  <!-- MAIN KONTEN -->
+  <!-- KONTEN UTAMA -->
   <main class="flex-1">
 
-    <!-- 1. BERANDA (MODERN HERO SLIDER) -->
+    <!-- 1. BERANDA (HOME) -->
     <section id="view-beranda" class="view-page container mx-auto px-4 py-6">
       
-      <!-- HERO SLIDER CONTAINER -->
-      <div class="relative group rounded-2xl overflow-hidden shadow-xl border border-gray-200 mb-8 bg-emerald-950">
+      <!-- HERO SLIDER BANNER -->
+      <div class="relative group rounded-2xl overflow-hidden shadow-xl border border-gray-200 mb-10 bg-emerald-950">
         <div class="swiper heroSlider">
           <div class="swiper-wrapper" id="sliderWrapper">
-            <!-- Slide Default 1 -->
             <div class="swiper-slide bg-gradient-to-r from-emerald-800 via-teal-900 to-emerald-950 text-white p-8 md:p-14 min-h-[260px] sm:min-h-[320px] flex flex-col justify-center relative">
               <div class="relative z-10 max-w-2xl">
                 <span class="bg-yellow-400 text-emerald-950 text-[10px] sm:text-xs font-extrabold px-3 py-1 rounded-full w-fit mb-3 shadow">PENDAFTARAN DIBUKA</span>
@@ -95,28 +118,36 @@
               </div>
             </div>
           </div>
-          <!-- Navigation Controls -->
           <div class="swiper-button-next hidden sm:block"></div>
           <div class="swiper-button-prev hidden sm:block"></div>
           <div class="swiper-pagination"></div>
         </div>
-
-        <!-- PAUSE / AUTOPLAY CONTROLLER BUTTON -->
-        <button onclick="toggleSliderAutoplay()" id="btnToggleAutoplay" title="Pause / Play Autoplay" class="absolute bottom-3 right-3 z-20 bg-black/50 hover:bg-black/70 text-white w-8 h-8 rounded-full flex items-center justify-center text-xs backdrop-blur border border-white/30 transition">
+        <button onclick="toggleSliderAutoplay()" id="btnToggleAutoplay" title="Pause / Play Autoplay" class="absolute bottom-3 right-3 z-20 bg-black/50 hover:bg-black/70 text-white w-8 h-8 rounded-full flex items-center justify-center text-xs border border-white/30 transition">
           <i class="fa-solid fa-pause" id="iconAutoplay"></i>
         </button>
       </div>
 
-      <div class="text-center my-8">
-        <h3 class="text-xl sm:text-2xl font-bold text-emerald-900">Raih Prestasi & Keberkahan Bersama Kami</h3>
-        <p class="text-gray-600 text-xs sm:text-sm mt-1">Pilih cabang perlombaan dan daftarkan diri Anda secara online.</p>
-        <button onclick="switchView('lomba')" class="mt-4 bg-emerald-700 hover:bg-emerald-800 text-white px-6 py-2.5 rounded-xl font-bold shadow-md text-xs sm:text-sm transition">
-          Lihat Cabang Lomba &rarr;
-        </button>
+      <!-- DAFTAR PREVIEW CABANG LOMBA DI BERANDA -->
+      <div class="mb-12">
+        <div class="text-center mb-8">
+          <span class="bg-emerald-100 text-emerald-800 font-bold text-xs px-3 py-1 rounded-full uppercase tracking-wider">Kompetisi Islami</span>
+          <h3 class="text-2xl sm:text-3xl font-extrabold text-emerald-900 mt-2">Cabang Perlombaan Unggulan</h3>
+          <p class="text-gray-600 text-xs sm:text-sm mt-1">Pilih kategori lomba terbaikmu dan tunjukkan potensi dirimu!</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="homeLombaGrid"></div>
+
+        <div class="text-center mt-8">
+          <button onclick="switchView('lomba')" class="inline-flex items-center gap-2 bg-emerald-800 hover:bg-emerald-900 text-white px-8 py-3 rounded-xl font-bold shadow-lg text-sm transition transform hover:-translate-y-0.5">
+            <span>Lihat Semua Cabang Lomba</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
       </div>
+
     </section>
 
-    <!-- 2. CABANG LOMBA -->
+    <!-- 2. CABANG LOMBA FULL PAGE -->
     <section id="view-lomba" class="view-page hidden container mx-auto px-4 py-8">
       <div class="text-center mb-8">
         <h2 class="text-2xl sm:text-3xl font-extrabold text-emerald-900">Daftar Cabang Perlombaan</h2>
@@ -125,7 +156,7 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="gridLombaContainer"></div>
     </section>
 
-    <!-- 3. DETAIL LOMBA (FLYER KIRI, DESKRIPSI KANAN) -->
+    <!-- 3. DETAIL LOMBA PAGE -->
     <section id="view-detail-lomba" class="view-page hidden container mx-auto px-4 py-6 sm:py-8">
       <button onclick="switchView('lomba')" class="mb-4 sm:mb-6 text-emerald-800 font-bold text-xs sm:text-sm flex items-center gap-2 hover:underline">
         <i class="fa-solid fa-arrow-left"></i> Kembali ke Daftar Lomba
@@ -233,6 +264,7 @@
   <script>
     const GAS_URL = "https://script.google.com/macros/s/AKfycbw4APJqKIcWVgs1yk29KHmuIeArlCDcu0rruBauZkOOmUmGig9Wvqy2aIKq7_gaUPGkOg/exec";
     let state = { lombaList: [], config: {}, swiperInstance: null, isAutoplayRunning: true };
+    let countdownInterval = null;
 
     window.onload = async () => {
       initSwiper();
@@ -295,6 +327,22 @@
       if(cfg.contact) document.getElementById('footerContactInfo').innerText = cfg.contact;
       if(cfg.rekening) document.getElementById('rekInfoText').innerText = cfg.rekening;
 
+      // Topbar Configurations
+      if(cfg.lokasi) document.getElementById('topbarLokasi').innerText = cfg.lokasi;
+      if(cfg.waNumber) {
+        const waClean = cfg.waNumber.replace(/[^0-9]/g, "");
+        document.getElementById('topbarWaLink').href = `https://wa.me/${waClean}`;
+        document.getElementById('topbarWaLink').innerText = cfg.waNumber;
+      }
+      if(cfg.linkIg) document.getElementById('linkIg').href = cfg.linkIg;
+      if(cfg.linkYt) document.getElementById('linkYt').href = cfg.linkYt;
+      if(cfg.linkTt) document.getElementById('linkTt').href = cfg.linkTt;
+      if(cfg.linkTh) document.getElementById('linkTh').href = cfg.linkTh;
+
+      // Start Countdown Timer
+      startCountdown(cfg.targetDate || "2026-11-20T08:00:00");
+
+      // Render Hero Sliders
       if(cfg.sliders && Array.isArray(cfg.sliders) && cfg.sliders.length > 0) {
         const wrapper = document.getElementById('sliderWrapper');
         wrapper.innerHTML = "";
@@ -314,12 +362,47 @@
       }
     }
 
+    // COUNTDOWN TIMER INTERAKTIF
+    function startCountdown(targetDateStr) {
+      const targetTime = new Date(targetDateStr).getTime();
+      const elem = document.getElementById('topbarCountdown');
+
+      if(countdownInterval) clearInterval(countdownInterval);
+
+      countdownInterval = setInterval(() => {
+        const now = new Date().getTime();
+        const diff = targetTime - now;
+
+        if (diff <= 0) {
+          elem.innerText = "🎉 Acara Sedang Berlangsung!";
+          return;
+        }
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+        // Dynamic State Toggle Every 4 Seconds
+        const isMotivational = Math.floor(now / 4000) % 2 === 1;
+
+        if (isMotivational) {
+          elem.innerText = `✨ H-${days} | Yuk Daftarkan Dirimu Sekarang!`;
+        } else {
+          elem.innerText = `⏳ ${days}Hari ${hours}Jam ${mins}Mnt ${secs}Dtk`;
+        }
+      }, 1000);
+    }
+
     function renderGridLomba() {
       const container = document.getElementById('gridLombaContainer');
+      const homeContainer = document.getElementById('homeLombaGrid');
       container.innerHTML = "";
+      homeContainer.innerHTML = "";
+
       state.lombaList.forEach(item => {
         const isBuka = item.statusLomba !== 'TUTUP';
-        container.innerHTML += `
+        const cardHtml = `
           <div class="bg-white rounded-xl shadow border overflow-hidden flex flex-col hover:shadow-lg transition">
             <img src="${item.flyerUrl || 'https://via.placeholder.com/400x250'}" class="h-44 sm:h-48 w-full object-cover">
             <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between">
@@ -332,11 +415,15 @@
               </div>
               <div class="mt-4 pt-4 border-t flex justify-between items-center">
                 <span class="font-bold text-emerald-700 text-xs sm:text-sm">${item.biaya}</span>
-                <button onclick="openDetailLomba('${item.id}')" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs px-3.5 py-2 rounded-lg font-bold">Detail Lomba</button>
+                <button onclick="openDetailLomba('${item.id}')" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs px-3.5 py-2 rounded-lg font-bold">
+                  Selengkapnya &rarr;
+                </button>
               </div>
             </div>
           </div>
         `;
+        container.innerHTML += cardHtml;
+        homeContainer.innerHTML += cardHtml;
       });
     }
 
@@ -399,14 +486,20 @@
         });
         const result = await res.json();
         if(result.status === "success") {
-          alert(`Pendaftaran Berhasil!\nKode Registrasi: ${result.kodeRegistrasi}`);
+          Swal.fire({
+            icon: 'success',
+            title: 'Pendaftaran Berhasil! 🎉',
+            html: `<p>Kode Registrasi Anda: <strong class="text-emerald-700 font-mono text-lg">${result.kodeRegistrasi}</strong></p><p class="text-xs text-gray-500 mt-2">Simpan kode ini untuk mengecek status pendaftaran Anda.</p>`,
+            confirmButtonColor: '#047857'
+          });
           closeForm();
           switchView('cek');
           document.getElementById('inputSearch').value = result.kodeRegistrasi;
           searchRegistration();
         }
-      } catch(err) { alert("Terjadi kesalahan sistem."); } 
-      finally { btn.disabled = false; btn.innerText = "Kirim Pendaftaran"; }
+      } catch(err) {
+        Swal.fire({ icon: 'error', title: 'Terjadi Kesalahan', text: 'Gagal mengirim data pendaftaran.', confirmButtonColor: '#047857' });
+      } finally { btn.disabled = false; btn.innerText = "Kirim Pendaftaran"; }
     }
 
     async function searchRegistration() {
