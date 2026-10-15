@@ -137,14 +137,12 @@
           </div>
         </div>
 
-        <!-- SEARCH BAR + PAGINATION VIEW DROPDOWN (DI SEBELAH BARIS PENCARIAN) -->
+        <!-- SEARCH BAR + PAGINATION VIEW DROPDOWN -->
         <div class="bg-white p-4 rounded-xl border shadow-sm flex flex-col xl:flex-row gap-3 justify-between items-stretch xl:items-center">
           
           <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 flex-1">
-            <!-- INPUT SEARCH -->
             <input type="text" id="searchBox" onkeyup="applyFilter()" placeholder="Cari Nama / Kode / WA..." class="border rounded-lg px-3 py-2 text-xs flex-1 min-w-[200px] focus:outline-emerald-700">
             
-            <!-- PAGINATION VIEW SEBELAH KOLOM PENCARIAN -->
             <div class="flex items-center gap-2 bg-gray-50 border px-3 py-1.5 rounded-lg text-xs shrink-0">
               <span class="text-gray-500 font-semibold whitespace-nowrap">Tampilkan:</span>
               <select id="pageSizeSelect" onchange="changePageSize()" class="border rounded px-2 py-1 bg-white font-bold focus:outline-emerald-700">
@@ -157,7 +155,6 @@
             </div>
           </div>
 
-          <!-- DROPDOWN FILTER LOMBA & STATUS -->
           <div class="flex flex-col sm:flex-row gap-2 shrink-0">
             <select id="filterLomba" onchange="applyFilter()" class="border rounded-lg px-3 py-2 text-xs bg-white focus:outline-emerald-700">
               <option value="">Semua Cabang Lomba</option>
@@ -246,9 +243,9 @@
             </div>
             <div>
               <label class="block text-[11px] font-bold text-gray-700 mb-1">Upload Gambar Flyer (Otomatis Masuk Drive)</label>
-              <input type="file" id="lombaFlyerFile" accept="image/*" class="w-full border rounded-lg p-1 text-xs">
+              <input type="file" id="lombaFlyerFile" accept="image/*" class="w-full border rounded-lg p-1 text-xs bg-white">
               <p class="text-[10px] text-emerald-700 font-medium mt-1">
-                <i class="fa-solid fa-circle-info mr-0.5"></i> <strong>Catatan Ukuran File:</strong> Maks. 2 MB | Resolusi disarankan: 800x1000px (Portrait) atau 1200x800px (JPG/PNG). Gambar dikompresi otomatis.
+                <i class="fa-solid fa-circle-info mr-0.5"></i> <strong>Catatan File:</strong> Maks. 2 MB | Resolusi disarankan: 800x1000px (Portrait). Gambar dikompresi otomatis.
               </p>
               <p class="text-[10px] text-gray-400 mt-0.5">Biarkan kosong jika tidak ingin mengganti gambar flyer saat ini.</p>
             </div>
@@ -274,7 +271,7 @@
         </div>
       </div>
 
-      <!-- 3. SLIDER BANNER WITH FILE UPLOADER -->
+      <!-- 3. SLIDER BANNER WITH PREVIEW & FILE UPLOADER -->
       <div id="sec-sliders" class="admin-sec hidden space-y-6">
         <div class="flex justify-between items-center">
           <div>
@@ -762,21 +759,29 @@
       box.innerHTML = "";
       adminState.currentSliders.forEach((s, idx) => {
         box.innerHTML += `
-          <div class="bg-white p-4 rounded-xl border shadow-sm space-y-2 relative">
-            <button type="button" onclick="removeSlideRow(${idx})" class="absolute top-3 right-3 text-red-600 font-bold text-xs">Hapus</button>
-            <h5 class="font-bold text-xs text-gray-700">Slide Banner #${idx + 1}</h5>
+          <div class="bg-white p-4 rounded-xl border shadow-sm space-y-3 relative">
+            <button type="button" onclick="removeSlideRow(${idx})" class="absolute top-3 right-3 text-red-600 font-bold text-xs hover:underline">
+              <i class="fa-solid fa-trash mr-1"></i> Hapus
+            </button>
+            <h5 class="font-bold text-xs text-gray-700 flex items-center gap-1.5">
+              <i class="fa-solid fa-image text-emerald-700"></i> Slide Banner #${idx + 1}
+            </h5>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-              <input type="text" value="${s.badge || ''}" placeholder="Badge Text" class="sld-badge border rounded px-2 py-1 text-xs">
-              <input type="text" value="${s.title || ''}" placeholder="Judul Banner" class="sld-title border rounded px-2 py-1 text-xs sm:col-span-2">
+              <input type="text" value="${s.badge || ''}" placeholder="Badge Text" class="sld-badge border rounded px-2.5 py-1.5 text-xs focus:outline-emerald-700">
+              <input type="text" value="${s.title || ''}" placeholder="Judul Banner" class="sld-title border rounded px-2.5 py-1.5 text-xs sm:col-span-2 focus:outline-emerald-700">
             </div>
-            <input type="text" value="${s.desc || ''}" placeholder="Deskripsi Banner" class="sld-desc w-full border rounded px-2 py-1 text-xs">
-            <div>
-              <label class="block text-[10px] text-gray-500 font-bold mb-0.5">Upload Background Slide Image:</label>
-              <input type="file" class="sld-file w-full border rounded px-2 py-1 text-xs" accept="image/*">
-              <p class="text-[10px] text-emerald-700 font-medium mt-0.5">
-                <i class="fa-solid fa-circle-info mr-0.5"></i> <strong>Catatan File:</strong> Maks. 2 MB | Resolusi disarankan: 1920x800px (Landscape 16:9 / 21:9). Gambar dikompresi otomatis.
-              </p>
-              <input type="hidden" class="sld-bg-existing" value="${s.bgUrl || ''}">
+            <input type="text" value="${s.desc || ''}" placeholder="Deskripsi Banner" class="sld-desc w-full border rounded px-2.5 py-1.5 text-xs focus:outline-emerald-700">
+            
+            <div class="flex flex-col sm:flex-row gap-3 items-start sm:items-center bg-gray-50 p-2.5 rounded-lg border">
+              ${s.bgUrl ? `<img src="${s.bgUrl}" class="w-20 h-12 object-cover rounded border shadow-sm shrink-0" alt="Preview">` : `<div class="w-20 h-12 bg-gray-200 rounded border flex items-center justify-center text-[10px] text-gray-400 font-bold shrink-0">No Image</div>`}
+              <div class="flex-1 w-full">
+                <label class="block text-[10px] text-gray-600 font-bold mb-0.5">Upload / Ganti Gambar Background Slide:</label>
+                <input type="file" class="sld-file w-full border rounded px-2 py-1 text-xs bg-white" accept="image/*">
+                <p class="text-[10px] text-emerald-700 font-medium mt-0.5">
+                  <i class="fa-solid fa-circle-info mr-0.5"></i> <strong>Catatan File:</strong> Maks. 2 MB | Resolusi disarankan: 1920x800px (Landscape 16:9). Gambar dikompresi otomatis.
+                </p>
+                <input type="hidden" class="sld-bg-existing" value="${s.bgUrl || ''}">
+              </div>
             </div>
           </div>
         `;
