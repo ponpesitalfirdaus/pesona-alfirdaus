@@ -4,20 +4,31 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title id="siteTitle">PESONA AL FIRDAUS 2026</title>
+  <!-- Favicon Google Drive Direct Link -->
+  <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1Ca6RhNsv0aFWD4EMdkr8uCcSuPDESTpv">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    .swiper-button-next, .swiper-button-prev {
+      color: #facc15 !important;
+      transform: scale(0.6);
+    }
+    .swiper-pagination-bullet-active {
+      background: #facc15 !important;
+    }
+  </style>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col">
 
   <!-- NAVBAR UTAMA -->
   <header class="bg-emerald-800 text-white sticky top-0 z-50 shadow-md">
-    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+    <div class="container mx-auto px-4 py-2.5 flex justify-between items-center">
       
-      <!-- LOGO PORTAL -->
+      <!-- LOGO DENGAN GAMBAR GOOGLE DRIVE -->
       <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('beranda')">
-        <div class="w-9 h-9 sm:w-10 sm:h-10 bg-yellow-400 rounded-full flex items-center justify-center font-bold text-emerald-900 text-lg sm:text-xl" id="portalLogoText">PAF</div>
+        <img src="https://lh3.googleusercontent.com/d/1Ca6RhNsv0aFWD4EMdkr8uCcSuPDESTpv" alt="Logo Pesona Al Firdaus" class="w-10 h-10 object-contain rounded-full bg-white p-0.5 border border-yellow-400 shadow">
         <div>
           <h1 class="font-bold text-base sm:text-lg leading-tight" id="portalHeaderTitle">PESONA AL FIRDAUS</h1>
           <p class="text-[10px] sm:text-xs text-emerald-200" id="portalHeaderSub">Islamic Youth Festival 2026</p>
@@ -31,19 +42,19 @@
         <button onclick="switchView('cek')" class="hover:text-yellow-300 transition">Cek Pendaftaran</button>
       </nav>
 
-      <!-- ACTION ICONS & HAMBURGER BUTTON -->
+      <!-- ACTION ICONS & HAMBURGER -->
       <div class="flex items-center space-x-2 sm:space-x-3">
-        <!-- ICON DAFTAR / CABANG LOMBA -->
-        <button onclick="switchView('lomba')" title="Daftar / Cabang Lomba" class="w-9 h-9 bg-emerald-700 hover:bg-emerald-900 rounded-lg text-yellow-300 transition border border-emerald-600 flex items-center justify-center">
+        <!-- ICON DAFTAR / CABANG LOMBA (HANYA ICON) -->
+        <button onclick="switchView('lomba')" title="Cabang Lomba" class="w-9 h-9 bg-emerald-700 hover:bg-emerald-900 rounded-xl text-yellow-300 transition border border-emerald-600 flex items-center justify-center shadow-sm">
           <i class="fa-solid fa-trophy text-sm sm:text-base"></i>
         </button>
 
-        <!-- ICON LOGIN ADMIN -->
-        <a href="admin.html" target="_blank" title="Login Admin" class="w-9 h-9 bg-emerald-900 hover:bg-emerald-950 rounded-lg text-white transition border border-emerald-700 flex items-center justify-center">
+        <!-- ICON LOGIN ADMIN (HANYA ICON) -->
+        <a href="admin.html" target="_blank" title="Login Admin Portal" class="w-9 h-9 bg-emerald-900 hover:bg-emerald-950 rounded-xl text-white transition border border-emerald-700 flex items-center justify-center shadow-sm">
           <i class="fa-solid fa-user-lock text-sm sm:text-base"></i>
         </a>
 
-        <!-- HAMBURGER BUTTON (MOBILE ONLY) -->
+        <!-- HAMBURGER BUTTON MOBILE -->
         <button onclick="toggleMobileNav()" class="md:hidden w-9 h-9 flex items-center justify-center text-white hover:text-yellow-300 focus:outline-none">
           <i class="fa-solid fa-bars text-xl" id="hamburgerIcon"></i>
         </button>
@@ -51,7 +62,7 @@
 
     </div>
 
-    <!-- MOBILE DROPDOWN MENU (HAMBURGER EXPANDABLE) -->
+    <!-- MOBILE MENU DROPDOWN -->
     <div id="mobileMenu" class="hidden md:hidden bg-emerald-900 border-t border-emerald-700 px-4 py-3 space-y-2 text-sm font-medium">
       <button onclick="switchView('beranda'); toggleMobileNav();" class="block w-full text-left py-2 px-3 rounded hover:bg-emerald-800 transition">
         <i class="fa-solid fa-house w-5 text-yellow-300"></i> Beranda
@@ -65,30 +76,47 @@
     </div>
   </header>
 
-  <!-- KONTEN UTAMA PORTAL -->
+  <!-- MAIN KONTEN -->
   <main class="flex-1">
 
-    <!-- 1. BERANDA -->
+    <!-- 1. BERANDA (MODERN HERO SLIDER) -->
     <section id="view-beranda" class="view-page container mx-auto px-4 py-6">
-      <div class="swiper heroSlider rounded-2xl overflow-hidden shadow-lg border border-gray-200 mb-8">
-        <div class="swiper-wrapper" id="sliderWrapper">
-          <div class="swiper-slide bg-gradient-to-r from-emerald-700 to-teal-900 text-white p-6 md:p-12 min-h-[220px] sm:min-h-[260px] flex flex-col justify-center">
-            <span class="bg-yellow-400 text-emerald-950 text-[10px] sm:text-xs font-bold px-3 py-1 rounded-full w-fit mb-2 sm:mb-3">PENDAFTARAN DIBUKA</span>
-            <h2 class="text-xl sm:text-3xl md:text-4xl font-extrabold mb-2">Selamat Datang di Pesona Al Firdaus</h2>
-            <p class="text-emerald-100 text-xs sm:text-sm md:text-base max-w-2xl">Ajang Unjuk Bakat & Prestasi Generasi Islami Bergengsi 2026.</p>
+      
+      <!-- HERO SLIDER CONTAINER -->
+      <div class="relative group rounded-2xl overflow-hidden shadow-xl border border-gray-200 mb-8 bg-emerald-950">
+        <div class="swiper heroSlider">
+          <div class="swiper-wrapper" id="sliderWrapper">
+            <!-- Slide Default 1 -->
+            <div class="swiper-slide bg-gradient-to-r from-emerald-800 via-teal-900 to-emerald-950 text-white p-8 md:p-14 min-h-[260px] sm:min-h-[320px] flex flex-col justify-center relative">
+              <div class="relative z-10 max-w-2xl">
+                <span class="bg-yellow-400 text-emerald-950 text-[10px] sm:text-xs font-extrabold px-3 py-1 rounded-full w-fit mb-3 shadow">PENDAFTARAN DIBUKA</span>
+                <h2 class="text-2xl sm:text-4xl font-black mb-2 leading-tight">Selamat Datang di Pesona Al Firdaus 2026</h2>
+                <p class="text-emerald-100 text-xs sm:text-sm md:text-base leading-relaxed">Ajang Unjuk Bakat, Seni & Prestasi Generasi Islami Bergengsi. Total Hadiah Puluhan Juta Rupiah!</p>
+              </div>
+            </div>
           </div>
+          <!-- Navigation Controls -->
+          <div class="swiper-button-next hidden sm:block"></div>
+          <div class="swiper-button-prev hidden sm:block"></div>
+          <div class="swiper-pagination"></div>
         </div>
-        <div class="swiper-pagination"></div>
+
+        <!-- PAUSE / AUTOPLAY CONTROLLER BUTTON -->
+        <button onclick="toggleSliderAutoplay()" id="btnToggleAutoplay" title="Pause / Play Autoplay" class="absolute bottom-3 right-3 z-20 bg-black/50 hover:bg-black/70 text-white w-8 h-8 rounded-full flex items-center justify-center text-xs backdrop-blur border border-white/30 transition">
+          <i class="fa-solid fa-pause" id="iconAutoplay"></i>
+        </button>
       </div>
 
-      <div class="text-center my-6 sm:my-10">
-        <h3 class="text-xl sm:text-2xl font-bold text-emerald-900">Raih Prestasi Bersama Kami</h3>
-        <p class="text-gray-600 text-xs sm:text-sm mt-1">Pilih cabang perlombaan dan daftarkan diri Anda sekarang.</p>
-        <button onclick="switchView('lomba')" class="mt-4 bg-emerald-700 hover:bg-emerald-800 text-white px-5 py-2.5 rounded-lg font-bold shadow text-xs sm:text-sm">Lihat Cabang Lomba &rarr;</button>
+      <div class="text-center my-8">
+        <h3 class="text-xl sm:text-2xl font-bold text-emerald-900">Raih Prestasi & Keberkahan Bersama Kami</h3>
+        <p class="text-gray-600 text-xs sm:text-sm mt-1">Pilih cabang perlombaan dan daftarkan diri Anda secara online.</p>
+        <button onclick="switchView('lomba')" class="mt-4 bg-emerald-700 hover:bg-emerald-800 text-white px-6 py-2.5 rounded-xl font-bold shadow-md text-xs sm:text-sm transition">
+          Lihat Cabang Lomba &rarr;
+        </button>
       </div>
     </section>
 
-    <!-- 2. CABANG LOMBA (GRID RESPONSIF) -->
+    <!-- 2. CABANG LOMBA -->
     <section id="view-lomba" class="view-page hidden container mx-auto px-4 py-8">
       <div class="text-center mb-8">
         <h2 class="text-2xl sm:text-3xl font-extrabold text-emerald-900">Daftar Cabang Perlombaan</h2>
@@ -204,22 +232,41 @@
 
   <script>
     const GAS_URL = "https://script.google.com/macros/s/AKfycbw4APJqKIcWVgs1yk29KHmuIeArlCDcu0rruBauZkOOmUmGig9Wvqy2aIKq7_gaUPGkOg/exec";
-    let state = { lombaList: [], config: {}, swiperInstance: null };
+    let state = { lombaList: [], config: {}, swiperInstance: null, isAutoplayRunning: true };
 
     window.onload = async () => {
-      state.swiperInstance = new Swiper('.heroSlider', { loop: true, autoplay: { delay: 4000 }, pagination: { el: '.swiper-pagination' } });
+      initSwiper();
       await loadPortalData();
     };
+
+    function initSwiper() {
+      state.swiperInstance = new Swiper('.heroSlider', {
+        loop: true,
+        autoplay: { delay: 4000, disableOnInteraction: false },
+        pagination: { el: '.swiper-pagination', clickable: true },
+        navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+      });
+    }
+
+    function toggleSliderAutoplay() {
+      if(!state.swiperInstance) return;
+      const icon = document.getElementById('iconAutoplay');
+      if(state.isAutoplayRunning) {
+        state.swiperInstance.autoplay.stop();
+        state.isAutoplayRunning = false;
+        icon.className = "fa-solid fa-play";
+      } else {
+        state.swiperInstance.autoplay.start();
+        state.isAutoplayRunning = true;
+        icon.className = "fa-solid fa-pause";
+      }
+    }
 
     function toggleMobileNav() {
       const menu = document.getElementById('mobileMenu');
       const icon = document.getElementById('hamburgerIcon');
       menu.classList.toggle('hidden');
-      if (menu.classList.contains('hidden')) {
-        icon.className = 'fa-solid fa-bars text-xl';
-      } else {
-        icon.className = 'fa-solid fa-xmark text-xl';
-      }
+      icon.className = menu.classList.contains('hidden') ? 'fa-solid fa-bars text-xl' : 'fa-solid fa-xmark text-xl';
     }
 
     function switchView(viewName) {
@@ -245,7 +292,6 @@
       const cfg = state.config;
       if(cfg.headerTitle) document.getElementById('portalHeaderTitle').innerText = cfg.headerTitle;
       if(cfg.headerSub) document.getElementById('portalHeaderSub').innerText = cfg.headerSub;
-      if(cfg.logoText) document.getElementById('portalLogoText').innerText = cfg.logoText;
       if(cfg.contact) document.getElementById('footerContactInfo').innerText = cfg.contact;
       if(cfg.rekening) document.getElementById('rekInfoText').innerText = cfg.rekening;
 
@@ -253,11 +299,14 @@
         const wrapper = document.getElementById('sliderWrapper');
         wrapper.innerHTML = "";
         cfg.sliders.forEach(slide => {
+          let bgStyle = slide.bgUrl ? `background: linear-gradient(rgba(6, 78, 59, 0.75), rgba(4, 47, 38, 0.85)), url('${slide.bgUrl}') center/cover;` : '';
           wrapper.innerHTML += `
-            <div class="swiper-slide bg-gradient-to-r from-emerald-700 to-teal-900 text-white p-6 md:p-12 min-h-[220px] sm:min-h-[260px] flex flex-col justify-center">
-              <span class="bg-yellow-400 text-emerald-950 text-[10px] sm:text-xs font-bold px-3 py-1 rounded-full w-fit mb-2 sm:mb-3">${slide.badge || 'INFO'}</span>
-              <h2 class="text-xl sm:text-3xl md:text-4xl font-extrabold mb-2">${slide.title}</h2>
-              <p class="text-emerald-100 text-xs sm:text-sm md:text-base max-w-2xl">${slide.desc}</p>
+            <div class="swiper-slide bg-gradient-to-r from-emerald-800 via-teal-900 to-emerald-950 text-white p-8 md:p-14 min-h-[260px] sm:min-h-[320px] flex flex-col justify-center relative" style="${bgStyle}">
+              <div class="relative z-10 max-w-2xl">
+                <span class="bg-yellow-400 text-emerald-950 text-[10px] sm:text-xs font-extrabold px-3 py-1 rounded-full w-fit mb-3 shadow">${slide.badge || 'INFO'}</span>
+                <h2 class="text-2xl sm:text-4xl font-black mb-2 leading-tight">${slide.title}</h2>
+                <p class="text-emerald-100 text-xs sm:text-sm md:text-base leading-relaxed">${slide.desc}</p>
+              </div>
             </div>
           `;
         });
@@ -356,7 +405,7 @@
           document.getElementById('inputSearch').value = result.kodeRegistrasi;
           searchRegistration();
         }
-      } catch(err) { alert("Terjadi kesalahan."); } 
+      } catch(err) { alert("Terjadi kesalahan sistem."); } 
       finally { btn.disabled = false; btn.innerText = "Kirim Pendaftaran"; }
     }
 
