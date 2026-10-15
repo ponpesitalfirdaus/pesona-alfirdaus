@@ -21,7 +21,7 @@
   <div class="bg-emerald-950 text-emerald-100 text-[11px] sm:text-xs py-2 px-3 sm:px-4 border-b border-emerald-900">
     <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-2 text-center md:text-left">
       
-      <!-- LEFT TOPBAR: LOKASI (KLIK GOOGLE MAPS), WHATSAPP, & COUNTDOWN TIMER -->
+      <!-- LEFT TOPBAR: LOKASI (GOOGLE MAPS LINK), WHATSAPP, & COUNTDOWN -->
       <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 sm:gap-4">
         <div class="flex items-center gap-1.5 text-yellow-300">
           <i class="fa-solid fa-location-dot"></i>
@@ -41,7 +41,7 @@
         </div>
       </div>
 
-      <!-- RIGHT TOPBAR: SOSIAL MEDIA + ICON LOGIN ADMIN (HANYA ICON) -->
+      <!-- RIGHT TOPBAR: SOSIAL MEDIA + ICON LOGIN ADMIN (HANYA ICON GEMBOK) -->
       <div class="flex items-center justify-center space-x-3 text-sm">
         <a id="linkIg" href="#" target="_blank" title="Instagram" class="hover:text-yellow-300 transition"><i class="fa-brands fa-instagram"></i></a>
         <a id="linkYt" href="#" target="_blank" title="YouTube" class="hover:text-yellow-300 transition"><i class="fa-brands fa-youtube"></i></a>
@@ -109,13 +109,13 @@
     <!-- 1. BERANDA (HOME) -->
     <section id="view-beranda" class="view-page container mx-auto px-4 py-6">
       
-      <!-- HERO SLIDER BANNER (DENGAN GAMBAR KHUSUS BROWSER COMPATIBILITY) -->
+      <!-- HERO SLIDER BANNER MODERN (TRANSPARENT OVERLAY + HIGH COMPATIBILITY) -->
       <div class="relative group rounded-2xl overflow-hidden shadow-xl border border-gray-200 mb-10 bg-emerald-950">
         <div class="swiper heroSlider">
           <div class="swiper-wrapper" id="sliderWrapper">
-            <div class="swiper-slide text-white p-6 sm:p-10 md:p-14 min-h-[260px] sm:min-h-[340px] flex flex-col justify-center relative rounded-2xl overflow-hidden bg-emerald-950">
-              <div class="absolute inset-0 bg-gradient-to-r from-emerald-950/85 via-emerald-950/40 to-transparent z-0"></div>
-              <div class="relative z-10 max-w-2xl">
+            <div class="swiper-slide text-white p-6 sm:p-10 md:p-14 min-h-[280px] sm:min-h-[360px] flex flex-col justify-center relative rounded-2xl overflow-hidden bg-emerald-950">
+              <div class="absolute inset-0 bg-gradient-to-r from-emerald-950/90 via-emerald-950/50 to-transparent z-10"></div>
+              <div class="relative z-20 max-w-2xl">
                 <span class="bg-yellow-400 text-emerald-950 text-[10px] sm:text-xs font-extrabold px-3 py-1 rounded-full w-fit mb-3 shadow inline-block">PENDAFTARAN DIBUKA</span>
                 <h2 class="text-xl sm:text-3xl md:text-4xl font-black mb-2 leading-tight">Selamat Datang di Pesona Al Firdaus 2026</h2>
                 <p class="text-emerald-100 text-xs sm:text-sm md:text-base leading-relaxed">Ajang Unjuk Bakat, Seni & Prestasi Generasi Islami Bergengsi. Total Hadiah Puluhan Juta Rupiah!</p>
@@ -126,7 +126,7 @@
           <div class="swiper-button-prev hidden sm:block"></div>
           <div class="swiper-pagination"></div>
         </div>
-        <button onclick="toggleSliderAutoplay()" id="btnToggleAutoplay" title="Pause / Play Autoplay" class="absolute bottom-3 right-3 z-20 bg-black/50 hover:bg-black/70 text-white w-8 h-8 rounded-full flex items-center justify-center text-xs border border-white/30 transition">
+        <button onclick="toggleSliderAutoplay()" id="btnToggleAutoplay" title="Pause / Play Autoplay" class="absolute bottom-3 right-3 z-30 bg-black/50 hover:bg-black/70 text-white w-8 h-8 rounded-full flex items-center justify-center text-xs border border-white/30 transition">
           <i class="fa-solid fa-pause" id="iconAutoplay"></i>
         </button>
       </div>
@@ -170,7 +170,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
           <div class="lg:col-span-5 flex flex-col items-center">
             <div class="w-full bg-gray-100 rounded-xl overflow-hidden shadow-inner border mb-4">
-              <img id="detailFlyerImg" src="" alt="Flyer Lomba" referrerpolicy="no-referrer" class="w-full h-auto object-cover max-h-[450px]">
+              <img id="detailFlyerImg" src="" alt="Flyer Lomba" class="w-full h-auto object-cover max-h-[450px]">
             </div>
             <button id="btnDaftarSekarang" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold py-3.5 rounded-xl shadow-lg transition flex items-center justify-center gap-2 text-sm sm:text-base">
               <i class="fa-solid fa-pen-to-square"></i> Daftar Lomba Ini
@@ -328,6 +328,16 @@
       renderGridLomba();
     }
 
+    function parseImageUrl(rawUrl) {
+      if (!rawUrl) return "";
+      let str = rawUrl.trim();
+      if (str.includes('/d/')) {
+        const match = str.match(/\/d\/([a-zA-Z0-9_-]+)/);
+        if (match && match[1]) return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w1600`;
+      }
+      return str;
+    }
+
     function applyPortalConfig() {
       try {
         const cfg = state.config || {};
@@ -361,12 +371,12 @@
           if(wrapper) {
             wrapper.innerHTML = "";
             cfg.sliders.forEach(slide => {
-              const bgImgUrl = slide.bgUrl ? slide.bgUrl.trim() : '';
+              const bgImgUrl = parseImageUrl(slide.bgUrl);
               wrapper.innerHTML += `
-                <div class="swiper-slide text-white p-6 sm:p-10 md:p-14 min-h-[260px] sm:min-h-[340px] flex flex-col justify-center relative rounded-2xl overflow-hidden bg-emerald-950">
-                  ${bgImgUrl ? `<img src="${bgImgUrl}" referrerpolicy="no-referrer" class="absolute inset-0 w-full h-full object-cover z-0" alt="Banner Slide">` : ''}
-                  <div class="absolute inset-0 bg-gradient-to-r from-emerald-950/85 via-emerald-950/40 to-transparent z-0"></div>
-                  <div class="relative z-10 max-w-2xl">
+                <div class="swiper-slide text-white p-6 sm:p-10 md:p-14 min-h-[280px] sm:min-h-[360px] flex flex-col justify-center relative rounded-2xl overflow-hidden bg-emerald-950">
+                  ${bgImgUrl ? `<img src="${bgImgUrl}" class="absolute inset-0 w-full h-full object-cover z-0" alt="Banner Slide" onerror="this.style.display='none'">` : ''}
+                  <div class="absolute inset-0 bg-gradient-to-r from-emerald-950/90 via-emerald-950/50 to-transparent z-10"></div>
+                  <div class="relative z-20 max-w-2xl">
                     <span class="bg-yellow-400 text-emerald-950 text-[10px] sm:text-xs font-extrabold px-3 py-1 rounded-full w-fit mb-3 shadow inline-block">${slide.badge || 'INFO'}</span>
                     <h2 class="text-xl sm:text-3xl md:text-4xl font-black mb-2 leading-tight">${slide.title || ''}</h2>
                     <p class="text-emerald-100 text-xs sm:text-sm md:text-base leading-relaxed">${slide.desc || ''}</p>
@@ -432,9 +442,10 @@
 
       state.lombaList.forEach(item => {
         const isBuka = item.statusLomba !== 'TUTUP';
+        const imgUrl = parseImageUrl(item.flyerUrl);
         const cardHtml = `
           <div class="bg-white rounded-xl shadow border overflow-hidden flex flex-col hover:shadow-lg transition">
-            <img src="${item.flyerUrl || 'https://via.placeholder.com/400x250'}" referrerpolicy="no-referrer" class="h-44 sm:h-48 w-full object-cover">
+            <img src="${imgUrl || 'https://via.placeholder.com/400x250'}" class="h-44 sm:h-48 w-full object-cover">
             <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between">
               <div>
                 <div class="flex justify-between items-center mb-2">
@@ -461,7 +472,7 @@
       const item = state.lombaList.find(x => x.id === id);
       if(!item) return;
 
-      document.getElementById('detailFlyerImg').src = item.flyerUrl || 'https://via.placeholder.com/400x500';
+      document.getElementById('detailFlyerImg').src = parseImageUrl(item.flyerUrl) || 'https://via.placeholder.com/400x500';
       document.getElementById('detailJudulLomba').innerText = item.judul;
       document.getElementById('detailBadgeKategori').innerText = item.kategori;
       document.getElementById('detailBiaya').innerText = item.biaya;
