@@ -137,7 +137,7 @@
           </div>
         </div>
 
-        <!-- SEARCH BAR + PAGINATION VIEW -->
+        <!-- SEARCH BAR + PAGINATION -->
         <div class="bg-white p-4 rounded-xl border shadow-sm flex flex-col xl:flex-row gap-3 justify-between items-stretch xl:items-center">
           <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 flex-1">
             <input type="text" id="searchBox" onkeyup="applyFilter()" placeholder="Cari Nama / Kode / WA..." class="border rounded-lg px-3 py-2 text-xs flex-1 min-w-[200px] focus:outline-emerald-700">
@@ -186,7 +186,6 @@
             </table>
           </div>
 
-          <!-- FOOTER TABEL: PREV / NEXT -->
           <div class="p-3 sm:p-4 border-t bg-gray-50 flex justify-end items-center text-xs">
             <div class="flex items-center space-x-2">
               <button onclick="prevPage()" id="btnPrevPage" disabled class="px-3 py-1.5 border rounded-lg bg-white font-bold disabled:opacity-40 disabled:cursor-not-allowed hover:bg-emerald-50 text-emerald-900">
@@ -240,12 +239,12 @@
               </select>
             </div>
             <div>
-              <label class="block text-[11px] font-bold text-gray-700 mb-1">Upload Gambar Flyer (Otomatis Masuk Drive)</label>
+              <label class="block text-[11px] font-bold text-gray-700 mb-1">Flyer URL / Nama File di GitHub</label>
+              <input type="text" id="lombaFlyerPathText" placeholder="Contoh: flyer1.jpg atau https://..." class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700 mb-1">
               <input type="file" id="lombaFlyerFile" accept="image/*" class="w-full border rounded-lg p-1 text-xs bg-white">
               <p class="text-[10px] text-emerald-700 font-medium mt-1">
-                <i class="fa-solid fa-circle-info mr-0.5"></i> <strong>Catatan File:</strong> Maks. 2 MB | Resolusi disarankan: 800x1000px. Gambar dikompresi otomatis.
+                <i class="fa-solid fa-circle-info mr-0.5"></i> Masukkan nama file yang sudah di-upload ke GitHub (misal <code>flyer1.jpg</code>) ATAU upload dari komputer.
               </p>
-              <p class="text-[10px] text-gray-400 mt-0.5">Biarkan kosong jika tidak ingin mengganti gambar flyer saat ini.</p>
             </div>
             <div>
               <label class="block text-[11px] font-bold text-gray-700 mb-1">Deskripsi Lomba</label>
@@ -269,7 +268,7 @@
         </div>
       </div>
 
-      <!-- 3. SLIDER BANNER -->
+      <!-- 3. SLIDER BANNER WITH DUAL INPUT (GITHUB FILE NAME / DRIVE / UPLOAD) -->
       <div id="sec-sliders" class="admin-sec hidden space-y-6">
         <div class="flex justify-between items-center">
           <div>
@@ -287,7 +286,7 @@
         </form>
       </div>
 
-      <!-- 4. PENGATURAN PORTAL & TOPBAR (LOKASI & MAPS URL) -->
+      <!-- 4. PENGATURAN PORTAL & TOPBAR -->
       <div id="sec-config" class="admin-sec hidden space-y-6">
         <div>
           <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Pengaturan Portal & Topbar</h1>
@@ -308,11 +307,9 @@
             </div>
           </div>
 
-          <!-- INPUT KHUSUS GOOGLE MAPS -->
           <div>
-            <label class="block font-bold text-gray-700 mb-1">URL Google Maps Lokasi (Link Map)</label>
-            <input type="text" id="cfgMapUrl" class="w-full border rounded-lg px-3 py-2 focus:outline-emerald-700" placeholder="https://maps.app.goo.gl/... atau https://google.com/maps/...">
-            <p class="text-[10px] text-gray-400 mt-1">Pengunjung di portal pendaftaran akan diarahkan ke link ini ketika mengeklik teks lokasi.</p>
+            <label class="block font-bold text-gray-700 mb-1">URL Google Maps Lokasi</label>
+            <input type="text" id="cfgMapUrl" class="w-full border rounded-lg px-3 py-2 focus:outline-emerald-700" placeholder="https://maps.app.goo.gl/...">
           </div>
 
           <div>
@@ -382,6 +379,16 @@
         initDashboard();
       }
     };
+
+    function parseImageUrl(rawUrl) {
+      if (!rawUrl) return "";
+      let str = rawUrl.trim();
+      if (str.includes('/d/')) {
+        const match = str.match(/\/d\/([a-zA-Z0-9_-]+)/);
+        if (match && match[1]) return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w1600`;
+      }
+      return str;
+    }
 
     function compressFileImage(file, maxWidth = 1200, quality = 0.8) {
       return new Promise((resolve) => {
@@ -650,10 +657,11 @@
       const box = document.getElementById('lombaCardsContainer');
       box.innerHTML = "";
       adminState.lomba.forEach(l => {
+        const imgUrl = parseImageUrl(l.flyerUrl);
         box.innerHTML += `
           <div class="bg-white p-4 rounded-xl border shadow-sm flex justify-between items-center">
             <div class="flex items-center gap-3">
-              <img src="${l.flyerUrl || 'https://via.placeholder.com/80'}" referrerpolicy="no-referrer" class="w-12 h-12 rounded-lg object-cover border">
+              <img src="${imgUrl || 'https://via.placeholder.com/80'}" class="w-12 h-12 rounded-lg object-cover border">
               <div>
                 <div class="flex items-center gap-2">
                   <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded">${l.kategori}</span>
@@ -683,6 +691,7 @@
       if(!item) return;
       document.getElementById('lombaId').value = item.id;
       document.getElementById('existingFlyerUrl').value = item.flyerUrl;
+      document.getElementById('lombaFlyerPathText').value = item.flyerUrl || '';
       document.getElementById('lombaJudul').value = item.judul;
       document.getElementById('lombaKategori').value = item.kategori;
       document.getElementById('lombaBiaya').value = item.biaya;
@@ -696,6 +705,7 @@
       document.getElementById('formLomba').reset();
       document.getElementById('lombaId').value = "";
       document.getElementById('existingFlyerUrl').value = "";
+      document.getElementById('lombaFlyerPathText').value = "";
     }
 
     async function saveLomba(e) {
@@ -706,7 +716,9 @@
 
       try {
         const fileInput = document.getElementById('lombaFlyerFile');
+        const pathInput = document.getElementById('lombaFlyerPathText').value.trim();
         let flyerBase64 = null, flyerFileName = null, flyerFileType = null;
+        let flyerUrl = pathInput || document.getElementById('existingFlyerUrl').value;
 
         if (fileInput.files.length > 0) {
           const comp = await compressFileImage(fileInput.files[0]);
@@ -722,7 +734,7 @@
           kategori: document.getElementById('lombaKategori').value,
           biaya: document.getElementById('lombaBiaya').value,
           statusLomba: document.getElementById('lombaStatus').value,
-          flyerUrl: document.getElementById('existingFlyerUrl').value,
+          flyerUrl: flyerUrl,
           flyerBase64: flyerBase64,
           flyerFileName: flyerFileName,
           flyerFileType: flyerFileType,
@@ -734,7 +746,7 @@
         const result = await postToGAS(payload);
 
         if(result.status === "success") {
-          Swal.fire({ icon: 'success', title: 'Berhasil Disimpan! ✨', text: 'Data perlombaan dan flyer berhasil diunggah ke Google Drive.', confirmButtonColor: '#047857' });
+          Swal.fire({ icon: 'success', title: 'Berhasil Disimpan! ✨', text: 'Data perlombaan berhasil diperbarui.', confirmButtonColor: '#047857' });
           resetLombaForm();
           await fetchPortalConfig();
         }
@@ -758,11 +770,12 @@
 
     function renderSlidersAdmin() {
       adminState.currentSliders = adminState.config.sliders || [
-        { badge: "PENDAFTARAN DIBUKA", title: "Selamat Datang di Pesona Al Firdaus 2026", desc: "Ajang Unjuk Bakat, Seni & Prestasi Generasi Islami Bergengsi.", bgUrl: "" }
+        { badge: "PENDAFTARAN DIBUKA", title: "Selamat Datang di Pesona Al Firdaus 2026", desc: "Ajang Unjuk Bakat, Seni & Prestasi Generasi Islami Bergengsi.", bgUrl: "banner1.jpg" }
       ];
       const box = document.getElementById('sliderListContainer');
       box.innerHTML = "";
       adminState.currentSliders.forEach((s, idx) => {
+        const imgUrl = parseImageUrl(s.bgUrl);
         box.innerHTML += `
           <div class="bg-white p-4 rounded-xl border shadow-sm space-y-3 relative">
             <button type="button" onclick="removeSlideRow(${idx})" class="absolute top-3 right-3 text-red-600 font-bold text-xs hover:underline">
@@ -772,20 +785,20 @@
               <i class="fa-solid fa-image text-emerald-700"></i> Slide Banner #${idx + 1}
             </h5>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-              <input type="text" value="${s.badge || ''}" placeholder="Badge Text" class="sld-badge border rounded px-2.5 py-1.5 text-xs focus:outline-emerald-700">
+              <input type="text" value="${s.badge || ''}" placeholder="Badge Text (misal: PENDAFTARAN DIBUKA)" class="sld-badge border rounded px-2.5 py-1.5 text-xs focus:outline-emerald-700">
               <input type="text" value="${s.title || ''}" placeholder="Judul Banner" class="sld-title border rounded px-2.5 py-1.5 text-xs sm:col-span-2 focus:outline-emerald-700">
             </div>
-            <input type="text" value="${s.desc || ''}" placeholder="Deskripsi Banner" class="sld-desc w-full border rounded px-2.5 py-1.5 text-xs focus:outline-emerald-700">
+            <input type="text" value="${s.desc || ''}" placeholder="Deskripsi Singkat Banner" class="sld-desc w-full border rounded px-2.5 py-1.5 text-xs focus:outline-emerald-700">
             
             <div class="flex flex-col sm:flex-row gap-3 items-start sm:items-center bg-gray-50 p-2.5 rounded-lg border">
-              ${s.bgUrl ? `<img src="${s.bgUrl}" referrerpolicy="no-referrer" class="w-20 h-12 object-cover rounded border shadow-sm shrink-0" alt="Preview">` : `<div class="w-20 h-12 bg-gray-200 rounded border flex items-center justify-center text-[10px] text-gray-400 font-bold shrink-0">No Image</div>`}
-              <div class="flex-1 w-full">
-                <label class="block text-[10px] text-gray-600 font-bold mb-0.5">Upload / Ganti Gambar Background Slide:</label>
-                <input type="file" class="sld-file w-full border rounded px-2 py-1 text-xs bg-white" accept="image/*">
-                <p class="text-[10px] text-emerald-700 font-medium mt-0.5">
-                  <i class="fa-solid fa-circle-info mr-0.5"></i> <strong>Catatan File:</strong> Maks. 2 MB | Resolusi disarankan: 1920x800px (Landscape 16:9). Gambar dikompresi otomatis.
-                </p>
-                <input type="hidden" class="sld-bg-existing" value="${s.bgUrl || ''}">
+              ${imgUrl ? `<img src="${imgUrl}" class="w-24 h-14 object-cover rounded border shadow-sm shrink-0" alt="Preview">` : `<div class="w-24 h-14 bg-gray-200 rounded border flex items-center justify-center text-[10px] text-gray-400 font-bold shrink-0">No Image</div>`}
+              <div class="flex-1 w-full space-y-1">
+                <label class="block text-[10px] text-gray-700 font-bold">Nama File GitHub ATAU Link Gambar:</label>
+                <input type="text" value="${s.bgUrl || ''}" placeholder="Contoh: banner1.jpg atau https://..." class="sld-url-input w-full border rounded px-2.5 py-1 text-xs focus:outline-emerald-700">
+                <div class="flex items-center gap-2 pt-1">
+                  <span class="text-[10px] text-gray-400 font-bold">Atau upload baru:</span>
+                  <input type="file" class="sld-file flex-1 border rounded px-2 py-0.5 text-xs bg-white" accept="image/*">
+                </div>
               </div>
             </div>
           </div>
@@ -807,19 +820,21 @@
       e.preventDefault();
       const btn = e.target.querySelector('button[type="submit"]');
       const oldText = btn.innerHTML;
-      btn.disabled = true; btn.innerText = "Mengompres Gambar & Menyimpan...";
+      btn.disabled = true; btn.innerText = "Menyimpan Slider...";
 
       try {
         const badgeInputs = document.querySelectorAll('.sld-badge');
         const titleInputs = document.querySelectorAll('.sld-title');
         const descInputs = document.querySelectorAll('.sld-desc');
+        const urlInputs = document.querySelectorAll('.sld-url-input');
         const fileInputs = document.querySelectorAll('.sld-file');
-        const bgExisting = document.querySelectorAll('.sld-bg-existing');
 
         const sliders = [];
         for (let i = 0; i < badgeInputs.length; i++) {
           if (titleInputs[i].value.trim()) {
             let bgBase64 = null, bgFileName = null, bgFileType = null;
+            let finalBgUrl = urlInputs[i].value.trim();
+
             if (fileInputs[i].files.length > 0) {
               const comp = await compressFileImage(fileInputs[i].files[0]);
               bgBase64 = comp.base64;
@@ -831,7 +846,7 @@
               badge: badgeInputs[i].value.trim(),
               title: titleInputs[i].value.trim(),
               desc: descInputs[i].value.trim(),
-              bgUrl: bgExisting[i].value,
+              bgUrl: finalBgUrl,
               bgBase64: bgBase64,
               bgFileName: bgFileName,
               bgFileType: bgFileType
@@ -845,7 +860,7 @@
         const result = await postToGAS({ action: 'saveConfig', config: adminState.config });
 
         if(result.status === "success") {
-          Swal.fire({ icon: 'success', title: 'Berhasil Disimpan! 🎉', text: 'Slide banner dan gambar berhasil diperbarui.', confirmButtonColor: '#047857' });
+          Swal.fire({ icon: 'success', title: 'Berhasil Disimpan! 🎉', text: 'Perubahan banner slider telah berhasil disimpan.', confirmButtonColor: '#047857' });
           await fetchPortalConfig();
         }
       } catch(err) {
