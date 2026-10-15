@@ -14,94 +14,123 @@
   <!-- NAVBAR UTAMA -->
   <header class="bg-emerald-800 text-white sticky top-0 z-50 shadow-md">
     <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      
+      <!-- LOGO PORTAL -->
       <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('beranda')">
-        <div class="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center font-bold text-emerald-900 text-xl" id="portalLogoText">PAF</div>
+        <div class="w-9 h-9 sm:w-10 sm:h-10 bg-yellow-400 rounded-full flex items-center justify-center font-bold text-emerald-900 text-lg sm:text-xl" id="portalLogoText">PAF</div>
         <div>
-          <h1 class="font-bold text-lg leading-tight" id="portalHeaderTitle">PESONA AL FIRDAUS</h1>
-          <p class="text-xs text-emerald-200" id="portalHeaderSub">Islamic Youth Festival 2026</p>
+          <h1 class="font-bold text-base sm:text-lg leading-tight" id="portalHeaderTitle">PESONA AL FIRDAUS</h1>
+          <p class="text-[10px] sm:text-xs text-emerald-200" id="portalHeaderSub">Islamic Youth Festival 2026</p>
         </div>
       </div>
-      <nav class="hidden md:flex space-x-6 text-sm font-medium">
+
+      <!-- DESKTOP NAV MENU -->
+      <nav class="hidden md:flex items-center space-x-6 text-sm font-medium">
         <button onclick="switchView('beranda')" class="hover:text-yellow-300 transition">Beranda</button>
         <button onclick="switchView('lomba')" class="hover:text-yellow-300 transition">Cabang Lomba</button>
         <button onclick="switchView('cek')" class="hover:text-yellow-300 transition">Cek Pendaftaran</button>
       </nav>
-      <!-- Navigasi Langsung ke Halaman Admin -->
-      <a href="admin.html" target="_blank" class="bg-emerald-900 hover:bg-emerald-950 px-4 py-2 rounded-lg text-xs font-semibold border border-emerald-700 flex items-center gap-1.5">
-        <i class="fa-solid fa-user-shield"></i> <span>Portal Admin</span>
-      </a>
+
+      <!-- ACTION ICONS & HAMBURGER BUTTON -->
+      <div class="flex items-center space-x-2 sm:space-x-3">
+        <!-- ICON DAFTAR / CABANG LOMBA -->
+        <button onclick="switchView('lomba')" title="Daftar / Cabang Lomba" class="w-9 h-9 bg-emerald-700 hover:bg-emerald-900 rounded-lg text-yellow-300 transition border border-emerald-600 flex items-center justify-center">
+          <i class="fa-solid fa-trophy text-sm sm:text-base"></i>
+        </button>
+
+        <!-- ICON LOGIN ADMIN -->
+        <a href="admin.html" target="_blank" title="Login Admin" class="w-9 h-9 bg-emerald-900 hover:bg-emerald-950 rounded-lg text-white transition border border-emerald-700 flex items-center justify-center">
+          <i class="fa-solid fa-user-lock text-sm sm:text-base"></i>
+        </a>
+
+        <!-- HAMBURGER BUTTON (MOBILE ONLY) -->
+        <button onclick="toggleMobileNav()" class="md:hidden w-9 h-9 flex items-center justify-center text-white hover:text-yellow-300 focus:outline-none">
+          <i class="fa-solid fa-bars text-xl" id="hamburgerIcon"></i>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- MOBILE DROPDOWN MENU (HAMBURGER EXPANDABLE) -->
+    <div id="mobileMenu" class="hidden md:hidden bg-emerald-900 border-t border-emerald-700 px-4 py-3 space-y-2 text-sm font-medium">
+      <button onclick="switchView('beranda'); toggleMobileNav();" class="block w-full text-left py-2 px-3 rounded hover:bg-emerald-800 transition">
+        <i class="fa-solid fa-house w-5 text-yellow-300"></i> Beranda
+      </button>
+      <button onclick="switchView('lomba'); toggleMobileNav();" class="block w-full text-left py-2 px-3 rounded hover:bg-emerald-800 transition">
+        <i class="fa-solid fa-trophy w-5 text-yellow-300"></i> Cabang Lomba
+      </button>
+      <button onclick="switchView('cek'); toggleMobileNav();" class="block w-full text-left py-2 px-3 rounded hover:bg-emerald-800 transition">
+        <i class="fa-solid fa-magnifying-glass w-5 text-yellow-300"></i> Cek Pendaftaran
+      </button>
     </div>
   </header>
 
-  <!-- KONTEN PORTAL UTAMA (SPA) -->
+  <!-- KONTEN UTAMA PORTAL -->
   <main class="flex-1">
 
-    <!-- 1. HALAMAN BERANDA -->
+    <!-- 1. BERANDA -->
     <section id="view-beranda" class="view-page container mx-auto px-4 py-6">
-      <!-- HERO SLIDER BANNER -->
       <div class="swiper heroSlider rounded-2xl overflow-hidden shadow-lg border border-gray-200 mb-8">
         <div class="swiper-wrapper" id="sliderWrapper">
-          <div class="swiper-slide bg-gradient-to-r from-emerald-700 to-teal-900 text-white p-8 md:p-12 min-h-[240px] flex flex-col justify-center">
-            <span class="bg-yellow-400 text-emerald-950 text-xs font-bold px-3 py-1 rounded-full w-fit mb-3">PENDAFTARAN DIBUKA</span>
-            <h2 class="text-2xl md:text-4xl font-extrabold mb-2">Selamat Datang di Pesona Al Firdaus</h2>
-            <p class="text-emerald-100 text-sm md:text-base max-w-2xl">Ajang Unjuk Bakat & Prestasi Generasi Islami Bergengsi 2026.</p>
+          <div class="swiper-slide bg-gradient-to-r from-emerald-700 to-teal-900 text-white p-6 md:p-12 min-h-[220px] sm:min-h-[260px] flex flex-col justify-center">
+            <span class="bg-yellow-400 text-emerald-950 text-[10px] sm:text-xs font-bold px-3 py-1 rounded-full w-fit mb-2 sm:mb-3">PENDAFTARAN DIBUKA</span>
+            <h2 class="text-xl sm:text-3xl md:text-4xl font-extrabold mb-2">Selamat Datang di Pesona Al Firdaus</h2>
+            <p class="text-emerald-100 text-xs sm:text-sm md:text-base max-w-2xl">Ajang Unjuk Bakat & Prestasi Generasi Islami Bergengsi 2026.</p>
           </div>
         </div>
         <div class="swiper-pagination"></div>
       </div>
 
-      <div class="text-center my-8">
-        <h3 class="text-2xl font-bold text-emerald-900">Raih Prestasi Bersama Kami</h3>
-        <p class="text-gray-600 text-sm mt-1">Pilih cabang perlombaan dan daftarkan diri Anda sekarang.</p>
-        <button onclick="switchView('lomba')" class="mt-4 bg-emerald-700 hover:bg-emerald-800 text-white px-6 py-2.5 rounded-lg font-bold shadow text-sm">Lihat Cabang Lomba &rarr;</button>
+      <div class="text-center my-6 sm:my-10">
+        <h3 class="text-xl sm:text-2xl font-bold text-emerald-900">Raih Prestasi Bersama Kami</h3>
+        <p class="text-gray-600 text-xs sm:text-sm mt-1">Pilih cabang perlombaan dan daftarkan diri Anda sekarang.</p>
+        <button onclick="switchView('lomba')" class="mt-4 bg-emerald-700 hover:bg-emerald-800 text-white px-5 py-2.5 rounded-lg font-bold shadow text-xs sm:text-sm">Lihat Cabang Lomba &rarr;</button>
       </div>
     </section>
 
-    <!-- 2. HALAMAN CABANG LOMBA (MURNI GRID) -->
+    <!-- 2. CABANG LOMBA (GRID RESPONSIF) -->
     <section id="view-lomba" class="view-page hidden container mx-auto px-4 py-8">
       <div class="text-center mb-8">
-        <h2 class="text-3xl font-extrabold text-emerald-900">Daftar Cabang Perlombaan</h2>
-        <p class="text-gray-600 text-sm mt-1">Pilih perlombaan untuk melihat detail syarat dan pendaftaran</p>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-emerald-900">Daftar Cabang Perlombaan</h2>
+        <p class="text-gray-600 text-xs sm:text-sm mt-1">Pilih perlombaan untuk melihat detail syarat dan pendaftaran</p>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="gridLombaContainer"></div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="gridLombaContainer"></div>
     </section>
 
-    <!-- 3. HALAMAN DETAIL LOMBA (2 KOLOM: FLYER KIRI, DETAIL KANAN) -->
-    <section id="view-detail-lomba" class="view-page hidden container mx-auto px-4 py-8">
-      <button onclick="switchView('lomba')" class="mb-6 text-emerald-800 font-bold text-sm flex items-center gap-2 hover:underline">
+    <!-- 3. DETAIL LOMBA (FLYER KIRI, DESKRIPSI KANAN) -->
+    <section id="view-detail-lomba" class="view-page hidden container mx-auto px-4 py-6 sm:py-8">
+      <button onclick="switchView('lomba')" class="mb-4 sm:mb-6 text-emerald-800 font-bold text-xs sm:text-sm flex items-center gap-2 hover:underline">
         <i class="fa-solid fa-arrow-left"></i> Kembali ke Daftar Lomba
       </button>
 
-      <div class="bg-white rounded-2xl shadow-xl border overflow-hidden p-6 md:p-8">
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
-          <!-- KIRI: FLYER & TOMBOL DAFTAR -->
-          <div class="md:col-span-5 flex flex-col items-center">
+      <div class="bg-white rounded-2xl shadow-xl border overflow-hidden p-4 sm:p-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+          <div class="lg:col-span-5 flex flex-col items-center">
             <div class="w-full bg-gray-100 rounded-xl overflow-hidden shadow-inner border mb-4">
               <img id="detailFlyerImg" src="" alt="Flyer Lomba" class="w-full h-auto object-cover max-h-[450px]">
             </div>
-            <button id="btnDaftarSekarang" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold py-3.5 rounded-xl shadow-lg transition flex items-center justify-center gap-2 text-base">
+            <button id="btnDaftarSekarang" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold py-3.5 rounded-xl shadow-lg transition flex items-center justify-center gap-2 text-sm sm:text-base">
               <i class="fa-solid fa-pen-to-square"></i> Daftar Lomba Ini
             </button>
           </div>
 
-          <!-- KANAN: DESKRIPSI LENGKAP -->
-          <div class="md:col-span-7 flex flex-col justify-between">
+          <div class="lg:col-span-7 flex flex-col justify-between">
             <div>
               <span id="detailBadgeKategori" class="bg-emerald-100 text-emerald-800 font-bold text-xs px-3 py-1 rounded-full"></span>
-              <h1 id="detailJudulLomba" class="text-3xl font-extrabold text-gray-900 mt-3 mb-2"></h1>
-              <p id="detailBiaya" class="text-2xl font-bold text-emerald-700 mb-6"></p>
+              <h1 id="detailJudulLomba" class="text-2xl sm:text-3xl font-extrabold text-gray-900 mt-3 mb-2"></h1>
+              <p id="detailBiaya" class="text-xl sm:text-2xl font-bold text-emerald-700 mb-4 sm:mb-6"></p>
 
-              <div class="space-y-6 text-sm text-gray-700 border-t pt-4">
+              <div class="space-y-4 sm:space-y-6 text-xs sm:text-sm text-gray-700 border-t pt-4">
                 <div>
-                  <h4 class="font-bold text-gray-900 text-base mb-1"><i class="fa-solid fa-circle-info text-emerald-700 mr-2"></i>Deskripsi Lomba</h4>
+                  <h4 class="font-bold text-gray-900 text-sm sm:text-base mb-1"><i class="fa-solid fa-circle-info text-emerald-700 mr-2"></i>Deskripsi Lomba</h4>
                   <p id="detailDeskripsi" class="whitespace-pre-line text-gray-600 leading-relaxed"></p>
                 </div>
                 <div>
-                  <h4 class="font-bold text-gray-900 text-base mb-1"><i class="fa-solid fa-list-check text-emerald-700 mr-2"></i>Syarat & Ketentuan</h4>
+                  <h4 class="font-bold text-gray-900 text-sm sm:text-base mb-1"><i class="fa-solid fa-list-check text-emerald-700 mr-2"></i>Syarat & Ketentuan</h4>
                   <p id="detailSyarat" class="whitespace-pre-line text-gray-600 leading-relaxed"></p>
                 </div>
                 <div>
-                  <h4 class="font-bold text-gray-900 text-base mb-1"><i class="fa-solid fa-trophy text-emerald-700 mr-2"></i>Hadiah & Fasilitas</h4>
+                  <h4 class="font-bold text-gray-900 text-sm sm:text-base mb-1"><i class="fa-solid fa-trophy text-emerald-700 mr-2"></i>Hadiah & Fasilitas</h4>
                   <p id="detailHadiah" class="whitespace-pre-line text-gray-600 leading-relaxed"></p>
                 </div>
               </div>
@@ -111,14 +140,14 @@
       </div>
     </section>
 
-    <!-- 4. HALAMAN CEK PENDAFTARAN -->
-    <section id="view-cek" class="view-page hidden container mx-auto px-4 py-12 max-w-xl">
-      <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg border text-center">
-        <h3 class="text-2xl font-bold text-emerald-900 mb-2">Cek Status Pendaftaran</h3>
-        <p class="text-gray-600 text-sm mb-6">Masukkan Kode Registrasi atau Nomor WhatsApp saat mendaftar.</p>
-        <div class="flex gap-2 mb-4">
-          <input type="text" id="inputSearch" placeholder="Kode Registrasi / Nomor WA..." class="flex-1 border rounded-lg px-4 py-2.5 text-sm focus:outline-emerald-600">
-          <button onclick="searchRegistration()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-5 py-2.5 rounded-lg font-bold text-sm">Cari Data</button>
+    <!-- 4. CEK PENDAFTARAN -->
+    <section id="view-cek" class="view-page hidden container mx-auto px-4 py-8 sm:py-12 max-w-xl">
+      <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg border text-center">
+        <h3 class="text-xl sm:text-2xl font-bold text-emerald-900 mb-2">Cek Status Pendaftaran</h3>
+        <p class="text-gray-600 text-xs sm:text-sm mb-6">Masukkan Kode Registrasi atau Nomor WhatsApp saat mendaftar.</p>
+        <div class="flex flex-col sm:flex-row gap-2 mb-4">
+          <input type="text" id="inputSearch" placeholder="Kode Registrasi / Nomor WA..." class="flex-1 border rounded-lg px-4 py-2.5 text-xs sm:text-sm focus:outline-emerald-600">
+          <button onclick="searchRegistration()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-5 py-2.5 rounded-lg font-bold text-xs sm:text-sm">Cari Data</button>
         </div>
         <div id="searchResult" class="hidden text-left border-t pt-4"></div>
       </div>
@@ -127,7 +156,7 @@
   </main>
 
   <footer class="bg-emerald-950 text-white py-6 border-t border-emerald-900">
-    <div class="container mx-auto px-4 text-center text-xs text-emerald-300 space-y-2">
+    <div class="container mx-auto px-4 text-center text-[11px] sm:text-xs text-emerald-300 space-y-2">
       <p id="footerContactInfo">Kontak Panitia: 0812-3456-7890 | Email: panitia@pesonaalfirdaus.id</p>
       <p>&copy; 2026 PESONA AL FIRDAUS. All rights reserved.</p>
     </div>
@@ -135,32 +164,32 @@
 
   <!-- MODAL FORM PENDAFTARAN -->
   <div id="formModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 relative shadow-2xl my-8">
+    <div class="bg-white rounded-2xl max-w-md w-full p-5 sm:p-6 relative shadow-2xl my-8">
       <button onclick="closeForm()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
-      <h3 class="text-xl font-bold text-emerald-900 mb-1">Form Pendaftaran Lomba</h3>
+      <h3 class="text-lg sm:text-xl font-bold text-emerald-900 mb-1">Form Pendaftaran Lomba</h3>
       <p class="text-xs text-gray-500 mb-4">Isi data calon peserta dengan benar.</p>
       
-      <form id="regForm" onsubmit="submitRegistration(event)" class="space-y-4">
+      <form id="regForm" onsubmit="submitRegistration(event)" class="space-y-3.5">
         <div>
           <label class="block text-xs font-bold text-gray-700 mb-1">Cabang Lomba</label>
-          <input type="text" id="cabangLombaInput" readonly class="w-full bg-gray-100 border rounded-lg px-3 py-2 text-sm font-bold text-emerald-800">
+          <input type="text" id="cabangLombaInput" readonly class="w-full bg-gray-100 border rounded-lg px-3 py-2 text-xs sm:text-sm font-bold text-emerald-800">
         </div>
         <div>
           <label class="block text-xs font-bold text-gray-700 mb-1">Nama Lengkap Peserta *</label>
-          <input type="text" id="namaLengkap" required class="w-full border rounded-lg px-3 py-2 text-sm">
+          <input type="text" id="namaLengkap" required class="w-full border rounded-lg px-3 py-2 text-xs sm:text-sm">
         </div>
         <div>
           <label class="block text-xs font-bold text-gray-700 mb-1">Asal Sekolah / Lembaga *</label>
-          <input type="text" id="asalSekolah" required class="w-full border rounded-lg px-3 py-2 text-sm">
+          <input type="text" id="asalSekolah" required class="w-full border rounded-lg px-3 py-2 text-xs sm:text-sm">
         </div>
-        <div class="grid grid-cols-2 gap-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label class="block text-xs font-bold text-gray-700 mb-1">No. WhatsApp *</label>
-            <input type="text" id="noWhatsapp" required class="w-full border rounded-lg px-3 py-2 text-sm">
+            <input type="text" id="noWhatsapp" required class="w-full border rounded-lg px-3 py-2 text-xs sm:text-sm">
           </div>
           <div>
             <label class="block text-xs font-bold text-gray-700 mb-1">Email *</label>
-            <input type="email" id="email" required class="w-full border rounded-lg px-3 py-2 text-sm">
+            <input type="email" id="email" required class="w-full border rounded-lg px-3 py-2 text-xs sm:text-sm">
           </div>
         </div>
         <div>
@@ -168,13 +197,12 @@
           <input type="file" id="fileBukti" accept="image/*" class="w-full text-xs text-gray-500 border rounded-lg p-1.5">
           <p class="text-[10px] text-gray-400 mt-1" id="rekInfoText">BSI: 7123-4567-89 a.n PESONA AL FIRDAUS</p>
         </div>
-        <button type="submit" id="btnSubmitForm" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2.5 rounded-lg text-sm shadow">Kirim Pendaftaran</button>
+        <button type="submit" id="btnSubmitForm" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2.5 rounded-lg text-xs sm:text-sm shadow">Kirim Pendaftaran</button>
       </form>
     </div>
   </div>
 
   <script>
-    // MASUKKAN URL GOOGLE APPS SCRIPT ANDA DI SINI
     const GAS_URL = "https://script.google.com/macros/s/AKfycbw4APJqKIcWVgs1yk29KHmuIeArlCDcu0rruBauZkOOmUmGig9Wvqy2aIKq7_gaUPGkOg/exec";
     let state = { lombaList: [], config: {}, swiperInstance: null };
 
@@ -182,6 +210,17 @@
       state.swiperInstance = new Swiper('.heroSlider', { loop: true, autoplay: { delay: 4000 }, pagination: { el: '.swiper-pagination' } });
       await loadPortalData();
     };
+
+    function toggleMobileNav() {
+      const menu = document.getElementById('mobileMenu');
+      const icon = document.getElementById('hamburgerIcon');
+      menu.classList.toggle('hidden');
+      if (menu.classList.contains('hidden')) {
+        icon.className = 'fa-solid fa-bars text-xl';
+      } else {
+        icon.className = 'fa-solid fa-xmark text-xl';
+      }
+    }
 
     function switchView(viewName) {
       document.querySelectorAll('.view-page').forEach(el => el.classList.add('hidden'));
@@ -215,10 +254,10 @@
         wrapper.innerHTML = "";
         cfg.sliders.forEach(slide => {
           wrapper.innerHTML += `
-            <div class="swiper-slide bg-gradient-to-r from-emerald-700 to-teal-900 text-white p-8 md:p-12 min-h-[240px] flex flex-col justify-center">
-              <span class="bg-yellow-400 text-emerald-950 text-xs font-bold px-3 py-1 rounded-full w-fit mb-3">${slide.badge || 'INFO'}</span>
-              <h2 class="text-2xl md:text-4xl font-extrabold mb-2">${slide.title}</h2>
-              <p class="text-emerald-100 text-sm md:text-base max-w-2xl">${slide.desc}</p>
+            <div class="swiper-slide bg-gradient-to-r from-emerald-700 to-teal-900 text-white p-6 md:p-12 min-h-[220px] sm:min-h-[260px] flex flex-col justify-center">
+              <span class="bg-yellow-400 text-emerald-950 text-[10px] sm:text-xs font-bold px-3 py-1 rounded-full w-fit mb-2 sm:mb-3">${slide.badge || 'INFO'}</span>
+              <h2 class="text-xl sm:text-3xl md:text-4xl font-extrabold mb-2">${slide.title}</h2>
+              <p class="text-emerald-100 text-xs sm:text-sm md:text-base max-w-2xl">${slide.desc}</p>
             </div>
           `;
         });
@@ -233,18 +272,18 @@
         const isBuka = item.statusLomba !== 'TUTUP';
         container.innerHTML += `
           <div class="bg-white rounded-xl shadow border overflow-hidden flex flex-col hover:shadow-lg transition">
-            <img src="${item.flyerUrl || 'https://via.placeholder.com/400x250'}" class="h-48 w-full object-cover">
-            <div class="p-5 flex-1 flex flex-col justify-between">
+            <img src="${item.flyerUrl || 'https://via.placeholder.com/400x250'}" class="h-44 sm:h-48 w-full object-cover">
+            <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between">
               <div>
                 <div class="flex justify-between items-center mb-2">
                   <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-0.5 rounded">${item.kategori}</span>
                   <span class="text-[10px] font-bold px-2 py-0.5 rounded ${isBuka ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">${isBuka ? 'BUKA' : 'TUTUP'}</span>
                 </div>
-                <h3 class="text-xl font-bold text-gray-800">${item.judul}</h3>
+                <h3 class="text-lg sm:text-xl font-bold text-gray-800">${item.judul}</h3>
               </div>
               <div class="mt-4 pt-4 border-t flex justify-between items-center">
-                <span class="font-bold text-emerald-700 text-sm">${item.biaya}</span>
-                <button onclick="openDetailLomba('${item.id}')" class="bg-emerald-700 text-white text-xs px-3.5 py-2 rounded-lg font-bold">Detail Lomba</button>
+                <span class="font-bold text-emerald-700 text-xs sm:text-sm">${item.biaya}</span>
+                <button onclick="openDetailLomba('${item.id}')" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs px-3.5 py-2 rounded-lg font-bold">Detail Lomba</button>
               </div>
             </div>
           </div>
