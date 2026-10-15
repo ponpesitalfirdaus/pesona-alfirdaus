@@ -39,12 +39,17 @@
         </div>
       </div>
 
-      <!-- RIGHT TOPBAR: SOSIAL MEDIA -->
+      <!-- RIGHT TOPBAR: SOSIAL MEDIA + LOGIN ADMIN -->
       <div class="flex items-center justify-center space-x-3 text-sm">
         <a id="linkIg" href="#" target="_blank" title="Instagram" class="hover:text-yellow-300 transition"><i class="fa-brands fa-instagram"></i></a>
         <a id="linkYt" href="#" target="_blank" title="YouTube" class="hover:text-yellow-300 transition"><i class="fa-brands fa-youtube"></i></a>
         <a id="linkTt" href="#" target="_blank" title="TikTok" class="hover:text-yellow-300 transition"><i class="fa-brands fa-tiktok"></i></a>
         <a id="linkTh" href="#" target="_blank" title="Threads" class="hover:text-yellow-300 transition"><i class="fa-brands fa-threads"></i></a>
+        <span class="text-emerald-700">|</span>
+        <a href="admin.html" target="_blank" title="Login Admin Portal" class="hover:text-yellow-300 transition text-emerald-200 font-bold text-xs flex items-center gap-1.5 bg-emerald-900/80 px-2.5 py-1 rounded-lg border border-emerald-700/60 shadow-sm">
+          <i class="fa-solid fa-user-lock text-yellow-400"></i>
+          <span>Admin Login</span>
+        </a>
       </div>
 
     </div>
@@ -70,15 +75,13 @@
         <button onclick="switchView('cek')" class="hover:text-yellow-300 transition">Cek Pendaftaran</button>
       </nav>
 
-      <!-- ACTION ICONS & HAMBURGER -->
+      <!-- TOMBOL DAFTAR SEKARANG + HAMBURGER -->
       <div class="flex items-center space-x-2 sm:space-x-3">
-        <button onclick="switchView('lomba')" title="Cabang Lomba" class="w-9 h-9 bg-emerald-700 hover:bg-emerald-900 rounded-xl text-yellow-300 transition border border-emerald-600 flex items-center justify-center shadow-sm">
-          <i class="fa-solid fa-trophy text-sm"></i>
+        <button onclick="switchView('lomba')" title="Daftar Sekarang" class="bg-yellow-400 hover:bg-yellow-500 text-emerald-950 font-extrabold px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl transition shadow-md flex items-center gap-2 text-xs sm:text-sm">
+          <i class="fa-solid fa-trophy text-emerald-900 text-sm"></i>
+          <span>Daftar Sekarang</span>
         </button>
-        <a href="admin.html" target="_blank" title="Login Admin Portal" class="w-9 h-9 bg-emerald-900 hover:bg-emerald-950 rounded-xl text-white transition border border-emerald-700 flex items-center justify-center shadow-sm">
-          <i class="fa-solid fa-user-lock text-sm"></i>
-        </a>
-        <button onclick="toggleMobileNav()" class="md:hidden w-9 h-9 flex items-center justify-center text-white hover:text-yellow-300">
+        <button onclick="toggleMobileNav()" class="md:hidden w-9 h-9 flex items-center justify-center text-white hover:text-yellow-300 focus:outline-none">
           <i class="fa-solid fa-bars text-xl" id="hamburgerIcon"></i>
         </button>
       </div>
@@ -109,7 +112,8 @@
       <div class="relative group rounded-2xl overflow-hidden shadow-xl border border-gray-200 mb-10 bg-emerald-950">
         <div class="swiper heroSlider">
           <div class="swiper-wrapper" id="sliderWrapper">
-            <div class="swiper-slide bg-gradient-to-r from-emerald-800 via-teal-900 to-emerald-950 text-white p-6 sm:p-10 md:p-14 min-h-[240px] sm:min-h-[320px] flex flex-col justify-center relative">
+            <div class="swiper-slide text-white p-6 sm:p-10 md:p-14 min-h-[260px] sm:min-h-[340px] flex flex-col justify-center relative rounded-2xl overflow-hidden bg-emerald-950">
+              <div class="absolute inset-0 bg-gradient-to-r from-emerald-950/90 via-emerald-900/80 to-emerald-950/90 z-0"></div>
               <div class="relative z-10 max-w-2xl">
                 <span class="bg-yellow-400 text-emerald-950 text-[10px] sm:text-xs font-extrabold px-3 py-1 rounded-full w-fit mb-3 shadow inline-block">PENDAFTARAN DIBUKA</span>
                 <h2 class="text-xl sm:text-3xl md:text-4xl font-black mb-2 leading-tight">Selamat Datang di Pesona Al Firdaus 2026</h2>
@@ -350,9 +354,11 @@
           if(wrapper) {
             wrapper.innerHTML = "";
             cfg.sliders.forEach(slide => {
-              let bgStyle = (slide.bgUrl && slide.bgUrl.trim() !== "") ? `background: linear-gradient(rgba(6, 78, 59, 0.75), rgba(4, 47, 38, 0.85)), url('${slide.bgUrl}') center/cover;` : '';
+              const bgImgUrl = slide.bgUrl ? slide.bgUrl.trim() : '';
               wrapper.innerHTML += `
-                <div class="swiper-slide bg-gradient-to-r from-emerald-800 via-teal-900 to-emerald-950 text-white p-6 sm:p-10 md:p-14 min-h-[240px] sm:min-h-[320px] flex flex-col justify-center relative rounded-2xl" style="${bgStyle}">
+                <div class="swiper-slide text-white p-6 sm:p-10 md:p-14 min-h-[260px] sm:min-h-[340px] flex flex-col justify-center relative rounded-2xl overflow-hidden bg-emerald-950">
+                  ${bgImgUrl ? `<img src="${bgImgUrl}" class="absolute inset-0 w-full h-full object-cover z-0" alt="Banner Slide" onerror="this.style.display='none'">` : ''}
+                  <div class="absolute inset-0 bg-gradient-to-r from-emerald-950/90 via-emerald-900/80 to-emerald-950/90 z-0"></div>
                   <div class="relative z-10 max-w-2xl">
                     <span class="bg-yellow-400 text-emerald-950 text-[10px] sm:text-xs font-extrabold px-3 py-1 rounded-full w-fit mb-3 shadow inline-block">${slide.badge || 'INFO'}</span>
                     <h2 class="text-xl sm:text-3xl md:text-4xl font-black mb-2 leading-tight">${slide.title || ''}</h2>
