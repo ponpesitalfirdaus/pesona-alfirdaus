@@ -4,17 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard - PESONA AL FIRDAUS</title>
+  <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1Ca6RhNsv0aFWD4EMdkr8uCcSuPDESTpv">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans min-h-screen flex flex-col">
 
-  <!-- FORM LOGIN ADMIN -->
+  <!-- LOGIN SECTION -->
   <div id="loginSection" class="fixed inset-0 bg-emerald-950 flex items-center justify-center p-4 z-50">
     <div class="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 max-w-sm w-full text-center">
-      <div class="w-14 h-14 sm:w-16 sm:h-16 bg-emerald-100 text-emerald-800 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-3">
-        <i class="fa-solid fa-user-gear"></i>
-      </div>
+      <img src="https://lh3.googleusercontent.com/d/1Ca6RhNsv0aFWD4EMdkr8uCcSuPDESTpv" class="w-16 h-16 object-contain rounded-full bg-emerald-50 p-1 border border-yellow-400 mx-auto mb-3 shadow">
       <h2 class="text-xl sm:text-2xl font-bold text-emerald-950">Admin Control Panel</h2>
       <p class="text-xs text-gray-500 mb-5">Portal Manajemen Pesona Al Firdaus</p>
       
@@ -33,41 +32,46 @@
   </div>
 
   <!-- DASHBOARD MAIN LAYOUT -->
-  <div id="dashboardSection" class="hidden flex-1 flex flex-col md:flex-row min-h-screen">
+  <div id="dashboardSection" class="hidden flex-1 flex flex-col md:flex-row min-h-screen relative">
     
-    <!-- TOPBAR HAMBURGER (UNTUK MOBILE HP) -->
-    <div class="md:hidden bg-emerald-950 text-white px-4 py-3 flex justify-between items-center sticky top-0 z-40">
+    <!-- TOPBAR MOBILE WITH HAMBURGER TO X TOGGLE -->
+    <div class="md:hidden bg-emerald-950 text-white px-4 py-3 flex justify-between items-center sticky top-0 z-40 shadow-md">
       <div class="flex items-center gap-2">
-        <div class="w-7 h-7 bg-yellow-400 text-emerald-950 rounded font-bold flex items-center justify-center text-xs">PAF</div>
+        <img src="https://lh3.googleusercontent.com/d/1Ca6RhNsv0aFWD4EMdkr8uCcSuPDESTpv" class="w-7 h-7 object-contain rounded-full bg-white p-0.5">
         <span class="font-bold text-sm">Admin Portal</span>
       </div>
-      <button onclick="toggleAdminSidebar()" class="text-white hover:text-yellow-300">
+      <button onclick="toggleAdminSidebar()" id="adminHamburgerBtn" class="text-white hover:text-yellow-300 w-8 h-8 flex items-center justify-center">
         <i class="fa-solid fa-bars text-xl" id="adminHamburgerIcon"></i>
       </button>
     </div>
 
-    <!-- SIDEBAR NAVIGASI ADMIN -->
-    <aside id="adminSidebar" class="hidden md:flex w-full md:w-64 bg-emerald-950 text-emerald-100 flex-col justify-between p-4 transition-all">
+    <!-- MOBILE OVERLAY BACKDROP -->
+    <div id="adminBackdrop" onclick="closeAdminSidebar()" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden transition-opacity"></div>
+
+    <!-- SIDEBAR DRAWER (SLIDE IN FROM LEFT ON MOBILE) -->
+    <aside id="adminSidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-emerald-950 text-emerald-100 flex flex-col justify-between p-4 transform -translate-x-full transition-transform duration-300 ease-in-out md:static md:translate-x-0 md:flex">
       <div>
-        <div class="hidden md:flex items-center gap-3 px-2 py-4 border-b border-emerald-900 mb-6">
-          <div class="w-8 h-8 bg-yellow-400 text-emerald-950 rounded-lg font-extrabold flex items-center justify-center">PAF</div>
+        <!-- LOGO HEADER SIDEBAR -->
+        <div class="flex items-center gap-3 px-2 py-4 border-b border-emerald-900 mb-6">
+          <img src="https://lh3.googleusercontent.com/d/1Ca6RhNsv0aFWD4EMdkr8uCcSuPDESTpv" class="w-9 h-9 object-contain rounded-full bg-white p-0.5">
           <div>
             <h2 class="font-bold text-sm leading-tight">Admin Portal</h2>
             <p class="text-[10px] text-emerald-400">Pesona Al Firdaus</p>
           </div>
         </div>
 
-        <nav class="space-y-1 text-xs font-semibold">
-          <button onclick="navAdmin('pendaftar')" id="m-pendaftar" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-emerald-800 text-white">
+        <!-- NAV MENU WITH MOVING HIGHLIGHT BOX -->
+        <nav class="space-y-1.5 text-xs font-semibold">
+          <button onclick="navAdmin('pendaftar')" id="m-pendaftar" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-emerald-800 text-white shadow font-bold transition">
             <i class="fa-solid fa-users w-4"></i> Data Pendaftar
           </button>
-          <button onclick="navAdmin('lomba')" id="m-lomba" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-900 text-emerald-300">
+          <button onclick="navAdmin('lomba')" id="m-lomba" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
             <i class="fa-solid fa-trophy w-4"></i> Kelola Lomba
           </button>
-          <button onclick="navAdmin('sliders')" id="m-sliders" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-900 text-emerald-300">
+          <button onclick="navAdmin('sliders')" id="m-sliders" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
             <i class="fa-solid fa-images w-4"></i> Slider Banner
           </button>
-          <button onclick="navAdmin('config')" id="m-config" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-900 text-emerald-300">
+          <button onclick="navAdmin('config')" id="m-config" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
             <i class="fa-solid fa-sliders w-4"></i> Pengaturan Portal
           </button>
         </nav>
@@ -86,7 +90,7 @@
     <!-- CONTENT AREA -->
     <main class="flex-1 bg-gray-50 p-4 sm:p-6 md:p-8 overflow-y-auto">
 
-      <!-- 1. REKAP PENDAFTAR -->
+      <!-- 1. DATA PENDAFTAR -->
       <div id="sec-pendaftar" class="admin-sec space-y-4 sm:space-y-6">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
           <div>
@@ -170,28 +174,28 @@
             <h3 class="font-bold text-sm text-emerald-900 border-b pb-2" id="lombaFormHeader">Form Cabang Lomba</h3>
             <input type="hidden" id="lombaId">
             <div>
-              <label class="block text-[11px] font-bold text-gray-700 mb-1">Judul Perlombaan</label>
+              <label class="block text-[11px] font-bold text-gray-700 mb-1">Judul Perlombaan *</label>
               <input type="text" id="lombaJudul" required placeholder="Tahfizh Al-Qur'an" class="w-full border rounded-lg px-3 py-1.5 text-xs">
             </div>
             <div class="grid grid-cols-2 gap-2">
               <div>
-                <label class="block text-[11px] font-bold text-gray-700 mb-1">Kategori</label>
+                <label class="block text-[11px] font-bold text-gray-700 mb-1">Kategori *</label>
                 <input type="text" id="lombaKategori" required placeholder="SD/SMP" class="w-full border rounded-lg px-3 py-1.5 text-xs">
               </div>
               <div>
-                <label class="block text-[11px] font-bold text-gray-700 mb-1">Biaya</label>
+                <label class="block text-[11px] font-bold text-gray-700 mb-1">Biaya *</label>
                 <input type="text" id="lombaBiaya" required placeholder="Rp 50.000" class="w-full border rounded-lg px-3 py-1.5 text-xs">
               </div>
             </div>
             <div>
-              <label class="block text-[11px] font-bold text-gray-700 mb-1">Status Pendaftaran Lomba</label>
+              <label class="block text-[11px] font-bold text-gray-700 mb-1">Status Pendaftaran</label>
               <select id="lombaStatus" class="w-full border rounded-lg px-3 py-1.5 text-xs">
                 <option value="BUKA">BUKA</option>
                 <option value="TUTUP">TUTUP</option>
               </select>
             </div>
             <div>
-              <label class="block text-[11px] font-bold text-gray-700 mb-1">URL Image Flyer</label>
+              <label class="block text-[11px] font-bold text-gray-700 mb-1">URL Image Flyer *</label>
               <input type="text" id="lombaFlyer" required placeholder="https://..." class="w-full border rounded-lg px-3 py-1.5 text-xs">
             </div>
             <div>
@@ -206,8 +210,8 @@
               <label class="block text-[11px] font-bold text-gray-700 mb-1">Hadiah & Fasilitas</label>
               <textarea id="lombaHadiah" rows="2" class="w-full border rounded-lg px-3 py-1.5 text-xs"></textarea>
             </div>
-            <button type="submit" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2 rounded-lg text-xs shadow">
-              Simpan Data Lomba
+            <button type="submit" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2 rounded-lg text-xs shadow flex items-center justify-center gap-1">
+              <span>Simpan Data Lomba</span>
             </button>
           </form>
 
@@ -220,14 +224,14 @@
         <div class="flex justify-between items-center">
           <div>
             <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Kelola Hero Slider Banner</h1>
-            <p class="text-xs text-gray-500">Atur konten banner slider utama di bagian atas halaman depan</p>
+            <p class="text-xs text-gray-500">Atur konten banner slider utama di bagian atas halaman beranda</p>
           </div>
-          <button onclick="addSlideRow()" class="bg-emerald-700 text-white px-3 py-2 rounded-lg text-xs font-bold shadow">+ Tambah Slide</button>
+          <button onclick="addSlideRow()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-3 py-2 rounded-lg text-xs font-bold shadow">+ Tambah Slide</button>
         </div>
 
         <form onsubmit="saveSliders(event)" class="space-y-4">
           <div id="sliderListContainer" class="space-y-4"></div>
-          <button type="submit" class="bg-emerald-800 text-white px-6 py-2.5 rounded-xl font-bold text-xs shadow">
+          <button type="submit" class="bg-emerald-800 hover:bg-emerald-900 text-white px-6 py-2.5 rounded-xl font-bold text-xs shadow">
             Simpan Perubahan Slider
           </button>
         </form>
@@ -250,10 +254,6 @@
             <input type="text" id="cfgHeaderSub" class="w-full border rounded-lg px-3 py-2">
           </div>
           <div>
-            <label class="block font-bold text-gray-700 mb-1">Teks Singkat Logo (Contoh: PAF)</label>
-            <input type="text" id="cfgLogoText" class="w-full border rounded-lg px-3 py-2">
-          </div>
-          <div>
             <label class="block font-bold text-gray-700 mb-1">Informasi Rekening Pembayaran</label>
             <input type="text" id="cfgRekening" class="w-full border rounded-lg px-3 py-2" placeholder="BSI: 7123-4567-89 a.n PESONA AL FIRDAUS">
           </div>
@@ -261,7 +261,7 @@
             <label class="block font-bold text-gray-700 mb-1">Informasi Kontak Footer</label>
             <input type="text" id="cfgContact" class="w-full border rounded-lg px-3 py-2">
           </div>
-          <button type="submit" class="bg-emerald-800 text-white font-bold px-6 py-2.5 rounded-xl text-xs shadow">
+          <button type="submit" class="bg-emerald-800 hover:bg-emerald-900 text-white font-bold px-6 py-2.5 rounded-xl text-xs shadow">
             Simpan Pengaturan Portal
           </button>
         </form>
@@ -282,9 +282,32 @@
       }
     };
 
+    // TOGGLE MOBILE SIDEBAR SLIDE IN & OUT
     function toggleAdminSidebar() {
       const sidebar = document.getElementById('adminSidebar');
-      sidebar.classList.toggle('hidden');
+      const backdrop = document.getElementById('adminBackdrop');
+      const icon = document.getElementById('adminHamburgerIcon');
+
+      const isHidden = sidebar.classList.contains('-translate-x-full');
+      if (isHidden) {
+        sidebar.classList.remove('-translate-x-full');
+        sidebar.classList.add('translate-x-0');
+        backdrop.classList.remove('hidden');
+        icon.className = 'fa-solid fa-xmark text-xl';
+      } else {
+        closeAdminSidebar();
+      }
+    }
+
+    function closeAdminSidebar() {
+      const sidebar = document.getElementById('adminSidebar');
+      const backdrop = document.getElementById('adminBackdrop');
+      const icon = document.getElementById('adminHamburgerIcon');
+
+      sidebar.classList.add('-translate-x-full');
+      sidebar.classList.remove('translate-x-0');
+      backdrop.classList.add('hidden');
+      if(icon) icon.className = 'fa-solid fa-bars text-xl';
     }
 
     function handleLogin(e) {
@@ -307,12 +330,25 @@
       location.reload();
     }
 
+    // MENU HIGHLIGHT MOVING LOGIC
     function navAdmin(sec) {
       document.querySelectorAll('.admin-sec').forEach(el => el.classList.add('hidden'));
       document.getElementById(`sec-${sec}`).classList.remove('hidden');
-      if(window.innerWidth < 768) {
-        document.getElementById('adminSidebar').classList.add('hidden');
+
+      const menuKeys = ['pendaftar', 'lomba', 'sliders', 'config'];
+      menuKeys.forEach(k => {
+        const btn = document.getElementById(`m-${k}`);
+        if(btn) {
+          btn.className = "w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-emerald-900 text-emerald-300 transition";
+        }
+      });
+
+      const activeBtn = document.getElementById(`m-${sec}`);
+      if(activeBtn) {
+        activeBtn.className = "w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-emerald-800 text-white shadow font-bold transition";
       }
+
+      closeAdminSidebar();
     }
 
     async function initDashboard() {
@@ -452,24 +488,42 @@
       document.getElementById('lombaId').value = "";
     }
 
+    // PROCESS SAVE LOMBA WITH EXPLICIT FEEDBACK POPUP
     async function saveLomba(e) {
       e.preventDefault();
-      const payload = {
-        action: 'saveLomba',
-        id: document.getElementById('lombaId').value,
-        judul: document.getElementById('lombaJudul').value,
-        kategori: document.getElementById('lombaKategori').value,
-        biaya: document.getElementById('lombaBiaya').value,
-        statusLomba: document.getElementById('lombaStatus').value,
-        flyerUrl: document.getElementById('lombaFlyer').value,
-        deskripsi: document.getElementById('lombaDeskripsi').value,
-        syarat: document.getElementById('lombaSyarat').value,
-        hadiah: document.getElementById('lombaHadiah').value,
-      };
-      await fetch(GAS_URL, { method: 'POST', body: JSON.stringify(payload) });
-      alert("Cabang Lomba Disimpan!");
-      resetLombaForm();
-      fetchPortalConfig();
+      const btn = e.target.querySelector('button[type="submit"]');
+      const oldText = btn.innerHTML;
+      btn.disabled = true; btn.innerText = "Menyimpan...";
+
+      try {
+        const payload = {
+          action: 'saveLomba',
+          id: document.getElementById('lombaId').value,
+          judul: document.getElementById('lombaJudul').value,
+          kategori: document.getElementById('lombaKategori').value,
+          biaya: document.getElementById('lombaBiaya').value,
+          statusLomba: document.getElementById('lombaStatus').value,
+          flyerUrl: document.getElementById('lombaFlyer').value,
+          deskripsi: document.getElementById('lombaDeskripsi').value,
+          syarat: document.getElementById('lombaSyarat').value,
+          hadiah: document.getElementById('lombaHadiah').value,
+        };
+
+        const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify(payload) });
+        const result = await res.json();
+
+        if(result.status === "success") {
+          alert("✅ Cabang Lomba Berhasil Disimpan!");
+          resetLombaForm();
+          await fetchPortalConfig();
+        } else {
+          alert("❌ Gagal menyimpan lomba: " + (result.message || "Terjadi kesalahan"));
+        }
+      } catch(err) {
+        alert("❌ Terjadi kesalahan server: " + err.toString());
+      } finally {
+        btn.disabled = false; btn.innerHTML = oldText;
+      }
     }
 
     async function deleteLomba(id) {
@@ -480,7 +534,7 @@
 
     function renderSlidersAdmin() {
       adminState.currentSliders = adminState.config.sliders || [
-        { badge: "PENDAFTARAN DIBUKA", title: "Selamat Datang di Pesona Al Firdaus", desc: "Ajang Unjuk Bakat & Prestasi Generasi Islami Bergengsi." }
+        { badge: "PENDAFTARAN DIBUKA", title: "Selamat Datang di Pesona Al Firdaus 2026", desc: "Ajang Unjuk Bakat, Seni & Prestasi Generasi Islami Bergengsi.", bgUrl: "" }
       ];
       const box = document.getElementById('sliderListContainer');
       box.innerHTML = "";
@@ -494,13 +548,14 @@
               <input type="text" value="${s.title || ''}" placeholder="Judul Banner" class="sld-title border rounded px-2 py-1 text-xs sm:col-span-2">
             </div>
             <input type="text" value="${s.desc || ''}" placeholder="Deskripsi Banner" class="sld-desc w-full border rounded px-2 py-1 text-xs">
+            <input type="text" value="${s.bgUrl || ''}" placeholder="URL Gambar Background Slide (Opsional)" class="sld-bg w-full border rounded px-2 py-1 text-xs">
           </div>
         `;
       });
     }
 
     function addSlideRow() {
-      adminState.currentSliders.push({ badge: "INFO", title: "Judul Banner Baru", desc: "Deskripsi singkat..." });
+      adminState.currentSliders.push({ badge: "INFO", title: "Judul Banner Baru", desc: "Deskripsi singkat...", bgUrl: "" });
       renderSlidersAdmin();
     }
 
@@ -509,43 +564,83 @@
       renderSlidersAdmin();
     }
 
+    // PROCESS SAVE SLIDERS WITH EXPLICIT FEEDBACK POPUP
     async function saveSliders(e) {
       e.preventDefault();
-      const badges = document.querySelectorAll('.sld-badge');
-      const titles = document.querySelectorAll('.sld-title');
-      const descs = document.querySelectorAll('.sld-desc');
-      
-      const sliders = [];
-      badges.forEach((b, i) => {
-        sliders.push({ badge: b.value, title: titles[i].value, desc: descs[i].value });
-      });
+      const btn = e.target.querySelector('button[type="submit"]');
+      const oldText = btn.innerHTML;
+      btn.disabled = true; btn.innerText = "Menyimpan...";
 
-      adminState.config.sliders = sliders;
-      await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: 'saveConfig', config: adminState.config }) });
-      alert("Hero Slider Berhasil Disimpan!");
-      fetchPortalConfig();
+      try {
+        const badgeInputs = document.querySelectorAll('.sld-badge');
+        const titleInputs = document.querySelectorAll('.sld-title');
+        const descInputs = document.querySelectorAll('.sld-desc');
+        const bgInputs = document.querySelectorAll('.sld-bg');
+        
+        const sliders = [];
+        badgeInputs.forEach((b, i) => {
+          if (titleInputs[i].value.trim()) {
+            sliders.push({
+              badge: b.value.trim(),
+              title: titleInputs[i].value.trim(),
+              desc: descInputs[i].value.trim(),
+              bgUrl: bgInputs[i] ? bgInputs[i].value.trim() : ""
+            });
+          }
+        });
+
+        adminState.config.sliders = sliders;
+
+        const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: 'saveConfig', config: adminState.config }) });
+        const result = await res.json();
+
+        if(result.status === "success") {
+          alert("✅ Hero Slider Banner Berhasil Disimpan!");
+          await fetchPortalConfig();
+        } else {
+          alert("❌ Gagal menyimpan slider: " + (result.message || "Terjadi kesalahan"));
+        }
+      } catch(err) {
+        alert("❌ Terjadi kesalahan server: " + err.toString());
+      } finally {
+        btn.disabled = false; btn.innerHTML = oldText;
+      }
     }
 
     function populateConfigForm() {
       const cfg = adminState.config;
       document.getElementById('cfgHeaderTitle').value = cfg.headerTitle || "PESONA AL FIRDAUS";
       document.getElementById('cfgHeaderSub').value = cfg.headerSub || "Islamic Youth Festival 2026";
-      document.getElementById('cfgLogoText').value = cfg.logoText || "PAF";
       document.getElementById('cfgRekening').value = cfg.rekening || "BSI: 7123-4567-89 a.n PESONA AL FIRDAUS";
       document.getElementById('cfgContact').value = cfg.contact || "Kontak Panitia: 0812-3456-7890";
     }
 
     async function saveGlobalConfig(e) {
       e.preventDefault();
-      adminState.config.headerTitle = document.getElementById('cfgHeaderTitle').value;
-      adminState.config.headerSub = document.getElementById('cfgHeaderSub').value;
-      adminState.config.logoText = document.getElementById('cfgLogoText').value;
-      adminState.config.rekening = document.getElementById('cfgRekening').value;
-      adminState.config.contact = document.getElementById('cfgContact').value;
+      const btn = e.target.querySelector('button[type="submit"]');
+      const oldText = btn.innerHTML;
+      btn.disabled = true; btn.innerText = "Menyimpan...";
 
-      await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: 'saveConfig', config: adminState.config }) });
-      alert("Pengaturan Portal Disimpan!");
-      fetchPortalConfig();
+      try {
+        adminState.config.headerTitle = document.getElementById('cfgHeaderTitle').value;
+        adminState.config.headerSub = document.getElementById('cfgHeaderSub').value;
+        adminState.config.rekening = document.getElementById('cfgRekening').value;
+        adminState.config.contact = document.getElementById('cfgContact').value;
+
+        const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: 'saveConfig', config: adminState.config }) });
+        const result = await res.json();
+
+        if(result.status === "success") {
+          alert("✅ Pengaturan Portal Berhasil Disimpan!");
+          await fetchPortalConfig();
+        } else {
+          alert("❌ Gagal menyimpan pengaturan.");
+        }
+      } catch(err) {
+        alert("❌ Terjadi kesalahan server: " + err.toString());
+      } finally {
+        btn.disabled = false; btn.innerHTML = oldText;
+      }
     }
   </script>
 </body>
