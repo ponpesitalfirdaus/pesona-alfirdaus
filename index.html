@@ -17,31 +17,30 @@
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col">
 
-  <!-- TOP BAR BANNER -->
-  <div class="bg-emerald-950 text-emerald-100 text-[11px] sm:text-xs py-2 px-4 border-b border-emerald-900 sticky top-0 z-50">
-    <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-2">
+  <!-- TOP BAR BANNER (RESPONSIF) -->
+  <div class="bg-emerald-950 text-emerald-100 text-[11px] sm:text-xs py-2 px-3 sm:px-4 border-b border-emerald-900">
+    <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-2 text-center md:text-left">
       
       <!-- LEFT TOPBAR: LOKASI, WHATSAPP, & COUNTDOWN TIMER -->
-      <div class="flex flex-wrap items-center justify-center md:justify-start gap-3 sm:gap-4">
-        <!-- Lokasi -->
+      <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 sm:gap-4">
         <div class="flex items-center gap-1.5 text-yellow-300">
           <i class="fa-solid fa-location-dot"></i>
           <span id="topbarLokasi" class="text-white font-medium">Kompleks Pesantren Al Firdaus</span>
         </div>
-        <!-- WhatsApp -->
         <div class="flex items-center gap-1.5 text-green-400">
           <i class="fa-brands fa-whatsapp"></i>
-          <a id="topbarWaLink" href="https://wa.me/6281234567890" target="_blank" class="text-white hover:underline font-medium" id="topbarWaText">0812-3456-7890</a>
+          <a id="topbarWaLink" href="https://wa.me/6281234567890" target="_blank" class="text-white hover:underline font-medium">
+            <span id="topbarWaText">0812-3456-7890</span>
+          </a>
         </div>
-        <!-- Countdown Timer / H-... Text -->
         <div class="bg-emerald-900/90 border border-emerald-700/80 px-2.5 py-0.5 rounded-full flex items-center gap-1.5 text-yellow-300 shadow-inner font-bold">
           <i class="fa-solid fa-clock text-amber-400 animate-pulse"></i>
-          <span id="topbarCountdown" class="text-white">Loading Timer...</span>
+          <span id="topbarCountdown" class="text-white">Menghitung Waktu...</span>
         </div>
       </div>
 
       <!-- RIGHT TOPBAR: SOSIAL MEDIA -->
-      <div class="flex items-center space-x-3 text-sm">
+      <div class="flex items-center justify-center space-x-3 text-sm">
         <a id="linkIg" href="#" target="_blank" title="Instagram" class="hover:text-yellow-300 transition"><i class="fa-brands fa-instagram"></i></a>
         <a id="linkYt" href="#" target="_blank" title="YouTube" class="hover:text-yellow-300 transition"><i class="fa-brands fa-youtube"></i></a>
         <a id="linkTt" href="#" target="_blank" title="TikTok" class="hover:text-yellow-300 transition"><i class="fa-brands fa-tiktok"></i></a>
@@ -52,14 +51,14 @@
   </div>
 
   <!-- NAVBAR UTAMA -->
-  <header class="bg-emerald-800 text-white shadow-md sticky top-[33px] z-40">
+  <header class="bg-emerald-800 text-white shadow-md sticky top-0 z-40">
     <div class="container mx-auto px-4 py-2.5 flex justify-between items-center">
       
       <!-- LOGO -->
       <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('beranda')">
-        <img src="https://lh3.googleusercontent.com/d/1Ca6RhNsv0aFWD4EMdkr8uCcSuPDESTpv" alt="Logo" class="w-10 h-10 object-contain rounded-full bg-white p-0.5 border border-yellow-400 shadow">
+        <img src="https://lh3.googleusercontent.com/d/1Ca6RhNsv0aFWD4EMdkr8uCcSuPDESTpv" alt="Logo" class="w-9 h-9 sm:w-10 sm:h-10 object-contain rounded-full bg-white p-0.5 border border-yellow-400 shadow">
         <div>
-          <h1 class="font-bold text-base sm:text-lg leading-tight" id="portalHeaderTitle">PESONA AL FIRDAUS</h1>
+          <h1 class="font-bold text-sm sm:text-lg leading-tight" id="portalHeaderTitle">PESONA AL FIRDAUS</h1>
           <p class="text-[10px] sm:text-xs text-emerald-200" id="portalHeaderSub">Islamic Youth Festival 2026</p>
         </div>
       </div>
@@ -74,10 +73,10 @@
       <!-- ACTION ICONS & HAMBURGER -->
       <div class="flex items-center space-x-2 sm:space-x-3">
         <button onclick="switchView('lomba')" title="Cabang Lomba" class="w-9 h-9 bg-emerald-700 hover:bg-emerald-900 rounded-xl text-yellow-300 transition border border-emerald-600 flex items-center justify-center shadow-sm">
-          <i class="fa-solid fa-trophy text-sm sm:text-base"></i>
+          <i class="fa-solid fa-trophy text-sm"></i>
         </button>
         <a href="admin.html" target="_blank" title="Login Admin Portal" class="w-9 h-9 bg-emerald-900 hover:bg-emerald-950 rounded-xl text-white transition border border-emerald-700 flex items-center justify-center shadow-sm">
-          <i class="fa-solid fa-user-lock text-sm sm:text-base"></i>
+          <i class="fa-solid fa-user-lock text-sm"></i>
         </a>
         <button onclick="toggleMobileNav()" class="md:hidden w-9 h-9 flex items-center justify-center text-white hover:text-yellow-300">
           <i class="fa-solid fa-bars text-xl" id="hamburgerIcon"></i>
@@ -110,10 +109,10 @@
       <div class="relative group rounded-2xl overflow-hidden shadow-xl border border-gray-200 mb-10 bg-emerald-950">
         <div class="swiper heroSlider">
           <div class="swiper-wrapper" id="sliderWrapper">
-            <div class="swiper-slide bg-gradient-to-r from-emerald-800 via-teal-900 to-emerald-950 text-white p-8 md:p-14 min-h-[260px] sm:min-h-[320px] flex flex-col justify-center relative">
+            <div class="swiper-slide bg-gradient-to-r from-emerald-800 via-teal-900 to-emerald-950 text-white p-6 sm:p-10 md:p-14 min-h-[240px] sm:min-h-[320px] flex flex-col justify-center relative">
               <div class="relative z-10 max-w-2xl">
-                <span class="bg-yellow-400 text-emerald-950 text-[10px] sm:text-xs font-extrabold px-3 py-1 rounded-full w-fit mb-3 shadow">PENDAFTARAN DIBUKA</span>
-                <h2 class="text-2xl sm:text-4xl font-black mb-2 leading-tight">Selamat Datang di Pesona Al Firdaus 2026</h2>
+                <span class="bg-yellow-400 text-emerald-950 text-[10px] sm:text-xs font-extrabold px-3 py-1 rounded-full w-fit mb-3 shadow inline-block">PENDAFTARAN DIBUKA</span>
+                <h2 class="text-xl sm:text-3xl md:text-4xl font-black mb-2 leading-tight">Selamat Datang di Pesona Al Firdaus 2026</h2>
                 <p class="text-emerald-100 text-xs sm:text-sm md:text-base leading-relaxed">Ajang Unjuk Bakat, Seni & Prestasi Generasi Islami Bergengsi. Total Hadiah Puluhan Juta Rupiah!</p>
               </div>
             </div>
@@ -311,65 +310,70 @@
       try {
         const res = await fetch(`${GAS_URL}?action=initPortal`);
         const result = await res.json();
-        if(result.status === "success") {
+        if(result && result.status === "success") {
           state.lombaList = result.lombaList || [];
           state.config = result.config || {};
-          applyPortalConfig();
-          renderGridLomba();
         }
-      } catch(e) { console.error(e); }
+      } catch(e) { console.error("Error loading portal data:", e); }
+      
+      applyPortalConfig();
+      renderGridLomba();
     }
 
     function applyPortalConfig() {
-      const cfg = state.config;
-      if(cfg.headerTitle) document.getElementById('portalHeaderTitle').innerText = cfg.headerTitle;
-      if(cfg.headerSub) document.getElementById('portalHeaderSub').innerText = cfg.headerSub;
-      if(cfg.contact) document.getElementById('footerContactInfo').innerText = cfg.contact;
-      if(cfg.rekening) document.getElementById('rekInfoText').innerText = cfg.rekening;
+      try {
+        const cfg = state.config || {};
+        if(cfg.headerTitle && document.getElementById('portalHeaderTitle')) document.getElementById('portalHeaderTitle').innerText = cfg.headerTitle;
+        if(cfg.headerSub && document.getElementById('portalHeaderSub')) document.getElementById('portalHeaderSub').innerText = cfg.headerSub;
+        if(cfg.contact && document.getElementById('footerContactInfo')) document.getElementById('footerContactInfo').innerText = cfg.contact;
+        if(cfg.rekening && document.getElementById('rekInfoText')) document.getElementById('rekInfoText').innerText = cfg.rekening;
 
-      // Topbar Configurations
-      if(cfg.lokasi) document.getElementById('topbarLokasi').innerText = cfg.lokasi;
-      if(cfg.waNumber) {
-        const waClean = cfg.waNumber.replace(/[^0-9]/g, "");
-        document.getElementById('topbarWaLink').href = `https://wa.me/${waClean}`;
-        document.getElementById('topbarWaLink').innerText = cfg.waNumber;
-      }
-      if(cfg.linkIg) document.getElementById('linkIg').href = cfg.linkIg;
-      if(cfg.linkYt) document.getElementById('linkYt').href = cfg.linkYt;
-      if(cfg.linkTt) document.getElementById('linkTt').href = cfg.linkTt;
-      if(cfg.linkTh) document.getElementById('linkTh').href = cfg.linkTh;
+        if(cfg.lokasi && document.getElementById('topbarLokasi')) document.getElementById('topbarLokasi').innerText = cfg.lokasi;
+        if(cfg.waNumber) {
+          const waClean = String(cfg.waNumber).replace(/[^0-9]/g, "");
+          if(document.getElementById('topbarWaLink')) document.getElementById('topbarWaLink').href = `https://wa.me/${waClean}`;
+          if(document.getElementById('topbarWaText')) document.getElementById('topbarWaText').innerText = cfg.waNumber;
+        }
 
-      // Start Countdown Timer
-      startCountdown(cfg.targetDate || "2026-11-20T08:00:00");
+        if(cfg.linkIg && document.getElementById('linkIg')) document.getElementById('linkIg').href = cfg.linkIg;
+        if(cfg.linkYt && document.getElementById('linkYt')) document.getElementById('linkYt').href = cfg.linkYt;
+        if(cfg.linkTt && document.getElementById('linkTt')) document.getElementById('linkTt').href = cfg.linkTt;
+        if(cfg.linkTh && document.getElementById('linkTh')) document.getElementById('linkTh').href = cfg.linkTh;
 
-      // Render Hero Sliders
-      if(cfg.sliders && Array.isArray(cfg.sliders) && cfg.sliders.length > 0) {
-        const wrapper = document.getElementById('sliderWrapper');
-        wrapper.innerHTML = "";
-        cfg.sliders.forEach(slide => {
-          let bgStyle = slide.bgUrl ? `background: linear-gradient(rgba(6, 78, 59, 0.75), rgba(4, 47, 38, 0.85)), url('${slide.bgUrl}') center/cover;` : '';
-          wrapper.innerHTML += `
-            <div class="swiper-slide bg-gradient-to-r from-emerald-800 via-teal-900 to-emerald-950 text-white p-8 md:p-14 min-h-[260px] sm:min-h-[320px] flex flex-col justify-center relative" style="${bgStyle}">
-              <div class="relative z-10 max-w-2xl">
-                <span class="bg-yellow-400 text-emerald-950 text-[10px] sm:text-xs font-extrabold px-3 py-1 rounded-full w-fit mb-3 shadow">${slide.badge || 'INFO'}</span>
-                <h2 class="text-2xl sm:text-4xl font-black mb-2 leading-tight">${slide.title}</h2>
-                <p class="text-emerald-100 text-xs sm:text-sm md:text-base leading-relaxed">${slide.desc}</p>
-              </div>
-            </div>
-          `;
-        });
-        state.swiperInstance.update();
-      }
+        startCountdown(cfg.targetDate || "2026-11-20T08:00:00");
+
+        if(cfg.sliders && Array.isArray(cfg.sliders) && cfg.sliders.length > 0) {
+          const wrapper = document.getElementById('sliderWrapper');
+          if(wrapper) {
+            wrapper.innerHTML = "";
+            cfg.sliders.forEach(slide => {
+              let bgStyle = (slide.bgUrl && slide.bgUrl.trim() !== "") ? `background: linear-gradient(rgba(6, 78, 59, 0.75), rgba(4, 47, 38, 0.85)), url('${slide.bgUrl}') center/cover;` : '';
+              wrapper.innerHTML += `
+                <div class="swiper-slide bg-gradient-to-r from-emerald-800 via-teal-900 to-emerald-950 text-white p-6 sm:p-10 md:p-14 min-h-[240px] sm:min-h-[320px] flex flex-col justify-center relative rounded-2xl" style="${bgStyle}">
+                  <div class="relative z-10 max-w-2xl">
+                    <span class="bg-yellow-400 text-emerald-950 text-[10px] sm:text-xs font-extrabold px-3 py-1 rounded-full w-fit mb-3 shadow inline-block">${slide.badge || 'INFO'}</span>
+                    <h2 class="text-xl sm:text-3xl md:text-4xl font-black mb-2 leading-tight">${slide.title || ''}</h2>
+                    <p class="text-emerald-100 text-xs sm:text-sm md:text-base leading-relaxed">${slide.desc || ''}</p>
+                  </div>
+                </div>
+              `;
+            });
+            if(state.swiperInstance) state.swiperInstance.update();
+          }
+        }
+      } catch(err) { console.error("Error applying config:", err); }
     }
 
-    // COUNTDOWN TIMER INTERAKTIF
     function startCountdown(targetDateStr) {
-      const targetTime = new Date(targetDateStr).getTime();
-      const elem = document.getElementById('topbarCountdown');
-
       if(countdownInterval) clearInterval(countdownInterval);
 
-      countdownInterval = setInterval(() => {
+      let targetTime = new Date(targetDateStr).getTime();
+      if(isNaN(targetTime)) targetTime = new Date("2026-11-20T08:00:00").getTime();
+
+      const elem = document.getElementById('topbarCountdown');
+      if(!elem) return;
+
+      function updateTimer() {
         const now = new Date().getTime();
         const diff = targetTime - now;
 
@@ -383,22 +387,32 @@
         const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         const secs = Math.floor((diff % (1000 * 60)) / 1000);
 
-        // Dynamic State Toggle Every 4 Seconds
         const isMotivational = Math.floor(now / 4000) % 2 === 1;
 
         if (isMotivational) {
           elem.innerText = `✨ H-${days} | Yuk Daftarkan Dirimu Sekarang!`;
         } else {
-          elem.innerText = `⏳ ${days}Hari ${hours}Jam ${mins}Mnt ${secs}Dtk`;
+          elem.innerText = `⏳ ${days}H ${hours}J ${mins}M ${secs}D`;
         }
-      }, 1000);
+      }
+
+      updateTimer();
+      countdownInterval = setInterval(updateTimer, 1000);
     }
 
     function renderGridLomba() {
       const container = document.getElementById('gridLombaContainer');
       const homeContainer = document.getElementById('homeLombaGrid');
+      if(!container || !homeContainer) return;
+
       container.innerHTML = "";
       homeContainer.innerHTML = "";
+
+      if(state.lombaList.length === 0) {
+        homeContainer.innerHTML = `<p class="col-span-full text-center text-gray-400 font-semibold py-8">Belum ada cabang lomba yang dibuka.</p>`;
+        container.innerHTML = homeContainer.innerHTML;
+        return;
+      }
 
       state.lombaList.forEach(item => {
         const isBuka = item.statusLomba !== 'TUTUP';
@@ -459,6 +473,34 @@
 
     function closeForm() { document.getElementById('formModal').classList.add('hidden'); }
 
+    // KOMPRES GAMBAR DULU SEBELUM SUBMIT PENDAFTARAN
+    function compressFileImage(file) {
+      return new Promise((resolve) => {
+        if (!file || !file.type.startsWith('image/')) {
+          resolve({ base64: null, fileName: null, fileType: null });
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            let width = img.width;
+            let height = img.height;
+            if (width > 1200) { height = Math.round((height * 1200) / width); width = 1200; }
+            canvas.width = width; canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            resolve({ base64: canvas.toDataURL('image/jpeg', 0.8), fileName: file.name.replace(/\.[^/.]+$/, "") + ".jpg", fileType: "image/jpeg" });
+          };
+          img.onerror = () => resolve({ base64: null, fileName: null, fileType: null });
+          img.src = e.target.result;
+        };
+        reader.onerror = () => resolve({ base64: null, fileName: null, fileType: null });
+        reader.readAsDataURL(file);
+      });
+    }
+
     async function submitRegistration(e) {
       e.preventDefault();
       const btn = document.getElementById('btnSubmitForm');
@@ -467,9 +509,8 @@
         const fileInput = document.getElementById('fileBukti');
         let buktiBase64 = null, fileName = null, fileType = null;
         if(fileInput.files.length > 0) {
-          const file = fileInput.files[0];
-          buktiBase64 = await new Promise(r => { const rd = new FileReader(); rd.onload = () => r(rd.result); rd.readAsDataURL(file); });
-          fileName = file.name; fileType = file.type;
+          const comp = await compressFileImage(fileInput.files[0]);
+          buktiBase64 = comp.base64; fileName = comp.fileName; fileType = comp.fileType;
         }
 
         const res = await fetch(GAS_URL, {
