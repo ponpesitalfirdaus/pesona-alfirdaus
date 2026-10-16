@@ -14,7 +14,6 @@
     .swiper-button-next, .swiper-button-prev { color: #facc15 !important; transform: scale(0.6); }
     .swiper-pagination-bullet-active { background: #facc15 !important; }
     
-    /* CETAK BUKTI PENDAFTARAN & SERTIFIKAT A4 */
     @media print {
       body > *:not(#printArea) { display: none !important; }
       #printArea { display: block !important; position: absolute; left: 0; top: 0; width: 100%; }
@@ -63,7 +62,7 @@
     </div>
   </div>
 
-  <!-- NAVBAR UTAMA DENGAN ICON -->
+  <!-- NAVBAR UTAMA -->
   <header class="bg-emerald-800 text-white shadow-md sticky top-0 z-40">
     <div class="container mx-auto px-4 py-2.5 flex justify-between items-center">
       
@@ -121,15 +120,15 @@
   <!-- KONTEN UTAMA -->
   <main class="flex-1">
 
-    <!-- 1. BERANDA (HOME) -->
+    <!-- 1. BERANDA -->
     <section id="view-beranda" class="view-page container mx-auto px-4 py-6">
       
-      <!-- HERO SLIDER BANNER (RESPONSIF MOBILE & DESKTOP) -->
+      <!-- HERO SLIDER BANNER (TINGGI IDEAL MAX 220PX MODERN) -->
       <div class="relative group rounded-2xl overflow-hidden shadow-md border border-gray-200 mb-8 bg-emerald-950 w-full">
         <div class="swiper heroSlider w-full">
           <div class="swiper-wrapper" id="sliderWrapper">
             <div class="swiper-slide w-full">
-              <img src="banner1.jpg" class="w-full h-auto max-h-[220px] sm:max-h-[320px] md:max-h-[380px] object-contain mx-auto block" alt="Banner 1" onerror="this.src='https://via.placeholder.com/1200x300?text=Pesona+Al+Firdaus+2026'">
+              <img src="banner1.jpg" class="w-full h-[150px] sm:h-[190px] md:h-[220px] object-cover mx-auto block rounded-2xl" alt="Banner 1" onerror="this.src='https://via.placeholder.com/1200x300?text=Pesona+Al+Firdaus+2026'">
             </div>
           </div>
           <div class="swiper-button-next hidden sm:block"></div>
@@ -141,7 +140,7 @@
         </button>
       </div>
 
-      <!-- DAFTAR CABANG LOMBA SLIDER / CAROUSEL -->
+      <!-- DAFTAR CABANG LOMBA SLIDER -->
       <div class="mb-12">
         <div class="text-center mb-8">
           <span class="bg-emerald-100 text-emerald-800 font-bold text-xs px-3 py-1 rounded-full uppercase tracking-wider">Kompetisi Islami</span>
@@ -149,7 +148,6 @@
           <p class="text-gray-600 text-xs sm:text-sm mt-1">Geser untuk memilih kategori lomba terbaikmu!</p>
         </div>
 
-        <!-- SWIPER LOMBA SLIDER -->
         <div class="swiper lombaSwiper pb-10">
           <div class="swiper-wrapper" id="homeLombaGrid"></div>
           <div class="swiper-pagination lomba-swiper-pagination"></div>
@@ -232,7 +230,7 @@
       </div>
     </section>
 
-    <!-- 5. UNGGAHAN AUDIO DENGAN AUTOCOMPLETE NAMA PESERTA -->
+    <!-- 5. UNGGAHAN AUDIO -->
     <section id="view-unggah" class="view-page hidden container mx-auto px-4 py-8 max-w-xl">
       <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg border">
         <div class="text-center mb-6">
@@ -249,7 +247,6 @@
             <input type="text" id="audioNamaInput" autocomplete="off" oninput="onAudioNamaInput(this.value)" required placeholder="Ketik min. 3 huruf nama peserta (misal: Ahmad)..." class="w-full border rounded-lg px-3 py-2 text-xs focus:outline-emerald-700">
             <input type="hidden" id="audioSelectedKode">
             
-            <!-- REKOMENDASI DROPDOWN SUGGESTIONS -->
             <div id="audioSuggestions" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-xl z-30 max-h-48 overflow-y-auto text-xs divide-y"></div>
           </div>
 
@@ -272,7 +269,7 @@
       </div>
     </section>
 
-    <!-- 6. SERTIFIKAT DIGITAL VERIFIKASI QR CODE -->
+    <!-- 6. SERTIFIKAT DIGITAL -->
     <section id="view-sertifikat" class="view-page hidden container mx-auto px-4 py-8 max-w-2xl">
       <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg border text-center">
         <div class="w-12 h-12 bg-yellow-100 text-yellow-800 rounded-full flex items-center justify-center mx-auto mb-2 text-xl font-bold">
@@ -344,7 +341,6 @@
 
   <script>
     const GAS_URL = "https://script.google.com/macros/s/AKfycbw4APJqKIcWVgs1yk29KHmuIeArlCDcu0rruBauZkOOmUmGig9Wvqy2aIKq7_gaUPGkOg/exec";
-    const PANITIA_WA = "085366685084";
     const PANITIA_WA_CLEAN = "6285366685084";
 
     let state = { lombaList: [], config: {}, swiperInstance: null, lombaSwiperInstance: null, isAutoplayRunning: true };
@@ -355,7 +351,6 @@
       initSwiper();
       await loadPortalData();
 
-      // CEK URL PARAMETER UNTUK DISCAN DARI BARCODE/QR CODE
       const urlParams = new URLSearchParams(window.location.search);
       const kodeScan = urlParams.get('kode') || urlParams.get('query');
       if (kodeScan) {
@@ -366,7 +361,6 @@
     };
 
     function initSwiper() {
-      // HERO BANNER SLIDER
       state.swiperInstance = new Swiper('.heroSlider', {
         loop: true,
         autoplay: { delay: 4000, disableOnInteraction: false },
@@ -374,7 +368,6 @@
         navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
       });
 
-      // CABANG LOMBA SWIPER (SLIDER UNTUK HP DAN DESKTOP)
       state.lombaSwiperInstance = new Swiper('.lombaSwiper', {
         slidesPerView: 1.15,
         spaceBetween: 16,
@@ -471,7 +464,6 @@
         if(cfg.linkTt && document.getElementById('linkTt')) document.getElementById('linkTt').href = cfg.linkTt;
         if(cfg.linkTh && document.getElementById('linkTh')) document.getElementById('linkTh').href = cfg.linkTh;
 
-        // MENUBAR VISIBILITY TOGGLE
         const navs = cfg.menuNav || { beranda: true, lomba: true, cek: true, unggah: true, sertifikat: true };
         toggleNavDisplay('nav-beranda', 'mnav-beranda', navs.beranda !== false);
         toggleNavDisplay('nav-lomba', 'mnav-lomba', navs.lomba !== false);
@@ -489,7 +481,7 @@
               const bgImgUrl = parseImageUrl(slide.bgUrl);
               wrapper.innerHTML += `
                 <div class="swiper-slide w-full">
-                  <img src="${bgImgUrl || 'banner1.jpg'}" class="w-full h-auto max-h-[220px] sm:max-h-[320px] md:max-h-[380px] object-contain mx-auto block" alt="Banner" onerror="this.src='https://via.placeholder.com/1200x300?text=Pesona+Al+Firdaus+2026'">
+                  <img src="${bgImgUrl || 'banner1.jpg'}" class="w-full h-[150px] sm:h-[190px] md:h-[220px] object-cover mx-auto block rounded-2xl" alt="Banner" onerror="this.src='https://via.placeholder.com/1200x300?text=Pesona+Al+Firdaus+2026'">
                 </div>
               `;
             });
@@ -560,7 +552,6 @@
         const isBuka = item.statusLomba !== 'TUTUP';
         const imgUrl = parseImageUrl(item.flyerUrl);
 
-        // SLIDER CARD BERANDA
         const homeSlideHtml = `
           <div class="swiper-slide h-auto">
             <div class="bg-white rounded-xl shadow border overflow-hidden flex flex-col h-full hover:shadow-lg transition">
@@ -584,7 +575,6 @@
           </div>
         `;
 
-        // GRID CARD HALAMAN LOMBA
         const gridCardHtml = `
           <div class="bg-white rounded-xl shadow border overflow-hidden flex flex-col hover:shadow-lg transition">
             <img src="${imgUrl || 'https://via.placeholder.com/400x250'}" class="h-44 sm:h-48 w-full object-cover">
@@ -645,7 +635,6 @@
 
     function closeForm() { document.getElementById('formModal').classList.add('hidden'); }
 
-    // AUTOCOMPLETE NAMA PESERTA UNTUK UPLOAD AUDIO
     function onAudioNamaInput(val) {
       const sugBox = document.getElementById('audioSuggestions');
       if (!val || val.trim().length < 3) {
@@ -849,7 +838,7 @@
                 Kode Registrasi Anda: <strong class="text-emerald-800 font-mono text-base block mt-0.5">${regKode}</strong>
               </p>
               <p class="text-gray-600">
-                Silakan lakukan konfirmasi ke Panitia melalui WhatsApp di <strong>${PANITIA_WA}</strong> agar status Anda segera di-<strong>Approved / Terverifikasi</strong>.
+                Silakan lakukan konfirmasi ke Panitia melalui WhatsApp di <strong>0853-6668-5084</strong> agar status Anda segera di-<strong>Approved / Terverifikasi</strong>.
               </p>
             </div>
           `,
@@ -907,7 +896,6 @@
       }
     }
 
-    // CETAK BUKTI PENDAFTARAN UKURAN A4 PORTRAIT 2 BAGIAN (ATAS PESERTA, BAWAH PANITIA)
     function printBuktiPendaftaran(encodedData) {
       const d = JSON.parse(decodeURIComponent(encodedData));
       const verifyUrl = `${window.location.origin}${window.location.pathname}?kode=${d.kodeRegistrasi}`;
@@ -916,7 +904,6 @@
       const htmlContent = `
         <div style="font-family: Arial, sans-serif; color: #111827; padding: 10px; box-sizing: border-box;">
           
-          <!-- BAGIAN ATAS: LEMBAR PESERTA -->
           <div style="border: 2px solid #047857; border-radius: 12px; padding: 16px; bg: #fff; position: relative;">
             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #047857; padding-bottom: 10px; margin-bottom: 12px;">
               <div style="display: flex; align-items: center; gap: 10px;">
@@ -955,14 +942,12 @@
             </div>
           </div>
 
-          <!-- PEMBATAS GUNTONG -->
           <div style="margin: 20px 0; text-align: center; border-bottom: 2px dashed #9ca3af; position: relative;">
             <span style="background: #fff; padding: 0 8px; font-size: 9px; font-weight: bold; color: #4b5563; position: relative; top: 7px;">
               ✂ GUNTING DI SINI (BAGIAN ATAS UNTUK PESERTA / BAGIAN BAWAH UNTUK PANITIA) ✂
             </span>
           </div>
 
-          <!-- BAGIAN BAWAH: LEMBAR PANITIA -->
           <div style="border: 2px solid #047857; border-radius: 12px; padding: 16px; bg: #fff; position: relative;">
             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #047857; padding-bottom: 10px; margin-bottom: 12px;">
               <div style="display: flex; align-items: center; gap: 10px;">
