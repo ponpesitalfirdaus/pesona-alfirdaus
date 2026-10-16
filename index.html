@@ -117,12 +117,12 @@
     <!-- 1. BERANDA (HOME) -->
     <section id="view-beranda" class="view-page container mx-auto px-4 py-6">
       
-      <!-- HERO SLIDER BANNER (UKURAN RAMPING - SETENGAH TINGGI) -->
+      <!-- HERO SLIDER BANNER (UTUH & TIDAK TERPOTONG) -->
       <div class="relative group rounded-2xl overflow-hidden shadow-md border border-gray-200 mb-8 bg-emerald-950">
         <div class="swiper heroSlider">
           <div class="swiper-wrapper" id="sliderWrapper">
-            <div class="swiper-slide min-h-[130px] sm:min-h-[190px] md:min-h-[220px] flex items-center justify-center relative bg-emerald-950">
-              <img src="banner1.jpg" class="w-full h-full object-cover max-h-[220px]" alt="Banner 1" onerror="this.src='https://via.placeholder.com/1200x220?text=Pesona+Al+Firdaus+2026'">
+            <div class="swiper-slide flex items-center justify-center relative bg-emerald-950">
+              <img src="banner1.jpg" class="w-full h-auto max-h-[280px] sm:max-h-[350px] object-contain mx-auto" alt="Banner 1" onerror="this.src='https://via.placeholder.com/1200x300?text=Pesona+Al+Firdaus+2026'">
             </div>
           </div>
           <div class="swiper-button-next hidden sm:block"></div>
@@ -444,8 +444,8 @@
             cfg.sliders.forEach(slide => {
               const bgImgUrl = parseImageUrl(slide.bgUrl);
               wrapper.innerHTML += `
-                <div class="swiper-slide min-h-[130px] sm:min-h-[190px] md:min-h-[220px] flex items-center justify-center relative bg-emerald-950">
-                  <img src="${bgImgUrl || 'banner1.jpg'}" class="w-full h-full object-cover max-h-[220px]" alt="Banner" onerror="this.src='https://via.placeholder.com/1200x220?text=Pesona+Al+Firdaus+2026'">
+                <div class="swiper-slide flex items-center justify-center relative bg-emerald-950">
+                  <img src="${bgImgUrl || 'banner1.jpg'}" class="w-full h-auto max-h-[280px] sm:max-h-[350px] object-contain mx-auto" alt="Banner" onerror="this.src='https://via.placeholder.com/1200x300?text=Pesona+Al+Firdaus+2026'">
                 </div>
               `;
             });
