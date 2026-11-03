@@ -188,7 +188,7 @@
           </div>
         </div>
 
-        <!-- TABEL PENDAFTAR -->
+        <!-- TABEL PENDAFTAR & LINK BUKTI TF PREVIEW -->
         <div class="bg-white rounded-xl border shadow-sm overflow-hidden">
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
@@ -197,7 +197,7 @@
                   <th class="p-3">Kode</th>
                   <th class="p-3">Peserta</th>
                   <th class="p-3">Lomba</th>
-                  <th class="p-3">Bukti TF</th>
+                  <th class="p-3">Bukti Pembayaran (TF)</th>
                   <th class="p-3">Status</th>
                   <th class="p-3 text-center">Aksi Verifikasi</th>
                 </tr>
@@ -220,16 +220,15 @@
         </div>
       </div>
 
-      <!-- 2. MENU KHUSUS UNGGAHAN AUDIO -->
+      <!-- 2. MENU UNGGAHAN AUDIO -->
       <div id="sec-audio" class="admin-sec hidden space-y-6">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
           <div>
             <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Monitoring & Pemutar Unggahan Audio</h1>
-            <p class="text-xs text-gray-500">Lacak, sortir, dan putar musik peserta lomba Tari Kreasi & Solosong</p>
+            <p class="text-xs text-gray-500">Lacak, menyortir, dan putar musik peserta lomba Tari Kreasi & Solosong</p>
           </div>
         </div>
 
-        <!-- STAT CARDS AUDIO -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
           <div class="bg-white p-4 rounded-xl border shadow-sm flex items-center justify-between">
             <div>
@@ -260,7 +259,6 @@
           </div>
         </div>
 
-        <!-- FILTER AUDIO -->
         <div class="bg-white p-4 rounded-xl border shadow-sm flex flex-col sm:flex-row gap-3 justify-between items-stretch sm:items-center">
           <input type="text" id="searchAudioBox" onkeyup="renderAudioTable()" placeholder="Cari Nama / Kode / Asal..." class="border rounded-lg px-3 py-2 text-xs flex-1 focus:outline-emerald-700">
           <select id="filterAudioStatus" onchange="renderAudioTable()" class="border rounded-lg px-3 py-2 text-xs bg-white focus:outline-emerald-700">
@@ -270,7 +268,6 @@
           </select>
         </div>
 
-        <!-- TABEL UNGGAHAN AUDIO -->
         <div class="bg-white rounded-xl border shadow-sm overflow-hidden">
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
@@ -289,7 +286,7 @@
         </div>
       </div>
 
-      <!-- 3. MENU KHUSUS SERTIFIKAT DIGITAL -->
+      <!-- 3. MENU SERTIFIKAT DIGITAL -->
       <div id="sec-sertifikat" class="admin-sec hidden space-y-6">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
           <div>
@@ -301,7 +298,6 @@
           </button>
         </div>
 
-        <!-- FORM TEMPLATE SERTIFIKAT -->
         <div class="bg-white p-5 rounded-xl border shadow-sm space-y-4 text-xs max-w-2xl">
           <h3 class="font-bold text-sm text-emerald-900 border-b pb-2 flex items-center gap-2">
             <i class="fa-solid fa-sliders"></i> Pengaturan Template Sertifikat Digital
@@ -310,7 +306,7 @@
             <div>
               <label class="block font-bold text-gray-700 mb-1">URL Template Gambar Background Sertifikat (Opsional)</label>
               <input type="text" id="certTemplateUrlInput" placeholder="https://... atau nama-file.jpg" class="w-full border rounded-lg px-3 py-2 focus:outline-emerald-700">
-              <p class="text-[10px] text-gray-400 mt-1">Kosongkan jika ingin menggunakan desain default eksklusif portal.</p>
+              <p class="text-[10px] text-gray-400 mt-1">Kosongkan jika ingin menggunakan desain default portal.</p>
             </div>
             <button type="submit" class="bg-emerald-800 hover:bg-emerald-900 text-white font-bold px-5 py-2 rounded-lg text-xs shadow flex items-center gap-1.5">
               <i class="fa-solid fa-floppy-disk"></i> Simpan Template Sertifikat
@@ -318,7 +314,6 @@
           </form>
         </div>
 
-        <!-- TABEL SERTIFIKAT PESERTA TERVERIFIKASI -->
         <div class="bg-white rounded-xl border shadow-sm overflow-hidden">
           <div class="p-4 border-b bg-gray-50 font-bold text-xs text-emerald-900">
             Daftar Peserta Terverifikasi Berhak Sertifikat
@@ -341,12 +336,12 @@
         </div>
       </div>
 
-      <!-- 4. KELOLA CABANG LOMBA -->
+      <!-- 4. KELOLA CABANG LOMBA (INPUT BIAYA SD, SMP, SMA) -->
       <div id="sec-lomba" class="admin-sec hidden space-y-6">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
           <div>
             <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Kelola Cabang Lomba</h1>
-            <p class="text-xs text-gray-500">Upload flyer gambar dan atur rincian lomba</p>
+            <p class="text-xs text-gray-500">Upload flyer gambar dan atur rincian biaya per tingkat (SD, SMP, SMA)</p>
           </div>
           <button onclick="resetLombaForm()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded-lg text-xs font-bold shadow">
             + Tambah Lomba Baru
@@ -358,20 +353,12 @@
             <h3 class="font-bold text-sm text-emerald-900 border-b pb-2" id="lombaFormHeader">Form Cabang Lomba</h3>
             <input type="hidden" id="lombaId">
             <input type="hidden" id="existingFlyerUrl">
+            
             <div>
               <label class="block text-[11px] font-bold text-gray-700 mb-1">Judul Perlombaan *</label>
               <input type="text" id="lombaJudul" required placeholder="MHQ / Tari Kreasi / Solosong" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700">
             </div>
-            <div class="grid grid-cols-2 gap-2">
-              <div>
-                <label class="block text-[11px] font-bold text-gray-700 mb-1">Kategori *</label>
-                <input type="text" id="lombaKategori" required placeholder="SD/SMP" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700">
-              </div>
-              <div>
-                <label class="block text-[11px] font-bold text-gray-700 mb-1">Biaya *</label>
-                <input type="text" id="lombaBiaya" required placeholder="Rp 50.000" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700">
-              </div>
-            </div>
+
             <div>
               <label class="block text-[11px] font-bold text-gray-700 mb-1">Status Pendaftaran</label>
               <select id="lombaStatus" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700">
@@ -379,22 +366,44 @@
                 <option value="TUTUP">TUTUP</option>
               </select>
             </div>
+
+            <!-- RINCIAN BIAYA 3 KATEGORI TINGKAT -->
+            <div class="bg-gray-50 p-3 rounded-lg border space-y-2">
+              <span class="block font-bold text-[11px] text-emerald-900 border-b pb-1">BIAYA REGISTRASI PER TINGKAT:</span>
+              <div>
+                <label class="block text-[10px] font-bold text-gray-600 mb-0.5">1. Biaya Tingkat SD / MI *</label>
+                <input type="text" id="lombaBiayaSD" required placeholder="Contoh: Rp 35.000" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700 bg-white">
+              </div>
+              <div>
+                <label class="block text-[10px] font-bold text-gray-600 mb-0.5">2. Biaya Tingkat SMP / MTs *</label>
+                <input type="text" id="lombaBiayaSMP" required placeholder="Contoh: Rp 45.000" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700 bg-white">
+              </div>
+              <div>
+                <label class="block text-[10px] font-bold text-gray-600 mb-0.5">3. Biaya Tingkat SMA / MA *</label>
+                <input type="text" id="lombaBiayaSMA" required placeholder="Contoh: Rp 50.000" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700 bg-white">
+              </div>
+            </div>
+
             <div>
               <label class="block text-[11px] font-bold text-gray-700 mb-1">Flyer URL / Nama File GitHub</label>
               <input type="text" id="lombaFlyerPathText" placeholder="Contoh: flyer1.jpg atau https://..." class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700 mb-1">
             </div>
+
             <div>
               <label class="block text-[11px] font-bold text-gray-700 mb-1">Deskripsi Lomba</label>
               <textarea id="lombaDeskripsi" rows="2" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700"></textarea>
             </div>
+
             <div>
               <label class="block text-[11px] font-bold text-gray-700 mb-1">Syarat & Ketentuan</label>
               <textarea id="lombaSyarat" rows="2" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700"></textarea>
             </div>
+
             <div>
               <label class="block text-[11px] font-bold text-gray-700 mb-1">Hadiah & Fasilitas</label>
               <textarea id="lombaHadiah" rows="2" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700"></textarea>
             </div>
+
             <button type="submit" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2.5 rounded-lg text-xs shadow transition flex items-center justify-center gap-2">
               <i class="fa-solid fa-floppy-disk"></i>
               <span>Simpan Data Lomba</span>
@@ -515,7 +524,7 @@
         </form>
       </div>
 
-      <!-- 8. MENU IDENTITAS & REKENING -->
+      <!-- 8. MENU IDENTITAS -->
       <div id="sec-identitas" class="admin-sec hidden space-y-6">
         <div>
           <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Pengaturan Identitas & Rekening</h1>
@@ -533,7 +542,7 @@
           </div>
           <div>
             <label class="block font-bold text-gray-700 mb-1">Informasi Rekening Pembayaran</label>
-            <input type="text" id="cfgRekening" class="w-full border rounded-lg px-3 py-2 focus:outline-emerald-700" placeholder="BSI: 7123-4567-89 a.n PESONA AL FIRDAUS">
+            <input type="text" id="cfgRekening" class="w-full border rounded-lg px-3 py-2 focus:outline-emerald-700" placeholder="BSI: 8500808806 a.n Yayasan Atmo Taruno Joyo">
           </div>
           <div>
             <label class="block font-bold text-gray-700 mb-1">Informasi Kontak Footer</label>
@@ -730,6 +739,26 @@
       if(adminState.currentPage < totalPages) { adminState.currentPage++; renderPendaftarTable(); }
     }
 
+    // MEMBUKA BUKTI TRANSFER PEMBAYARAN DENGAN BISA DIKLIK & DILIHAT (NEW TAB ATAU MODAL)
+    function viewBuktiTF(link) {
+      if(!link || link === '-') {
+        Swal.fire({ icon: 'info', title: 'Tidak Ada Bukti Transfer', text: 'Peserta belum mengunggah file bukti pembayaran.', confirmButtonColor: '#047857' });
+        return;
+      }
+
+      if(link.startsWith('data:image')) {
+        Swal.fire({
+          title: 'Preview Bukti Transfer',
+          imageUrl: link,
+          imageAlt: 'Bukti Pembayaran',
+          confirmButtonColor: '#047857',
+          confirmButtonText: 'Tutup'
+        });
+      } else {
+        window.open(link, '_blank');
+      }
+    }
+
     function renderPendaftarTable() {
       const tbody = document.getElementById('pendaftarTableBody');
       tbody.innerHTML = "";
@@ -747,12 +776,20 @@
       } else {
         pageData.forEach(item => {
           const isApproved = (item.status === 'TERVERIFIKASI' || item.status === 'APPROVED');
+          const hasBukti = (item.linkBukti && item.linkBukti !== '-');
+
           tbody.innerHTML += `
             <tr class="hover:bg-gray-50 border-b">
               <td class="p-3 font-mono font-bold text-emerald-900">${item.kodeRegistrasi}</td>
               <td class="p-3"><strong>${item.namaLengkap}</strong><br><span class="text-[10px] text-gray-500">${item.asalSekolah}</span></td>
-              <td class="p-3">${item.cabangLomba}</td>
-              <td class="p-3">${item.linkBukti !== '-' ? `<a href="${item.linkBukti}" target="_blank" class="text-blue-600 font-bold underline">Lihat Bukti</a>` : '-'}</td>
+              <td class="p-3 font-medium">${item.cabangLomba}</td>
+              <td class="p-3">
+                ${hasBukti ? `
+                  <button onclick="viewBuktiTF('${item.linkBukti}')" class="bg-blue-50 border border-blue-200 hover:bg-blue-100 text-blue-700 px-2.5 py-1 rounded text-[11px] font-bold flex items-center gap-1 shadow-sm transition">
+                    <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i> Lihat Bukti TF
+                  </button>
+                ` : `<span class="text-gray-400 text-[11px] italic">Belum Upload</span>`}
+              </td>
               <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${isApproved ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800'}">${item.status}</span></td>
               <td class="p-3 text-center space-x-1">
                 <button onclick="updateStatus('${item.kodeRegistrasi}', 'TERVERIFIKASI')" class="bg-green-600 hover:bg-green-700 text-white px-2.5 py-1 rounded text-[10px] font-bold">Approve</button>
@@ -769,7 +806,6 @@
       document.getElementById('btnNextPage').disabled = (adminState.currentPage >= totalPages);
     }
 
-    // MONITORNIG & PLAYER UNGGAHAN AUDIO
     function renderAudioTable() {
       const tbody = document.getElementById('audioTableBody');
       if(!tbody) return;
@@ -827,18 +863,17 @@
                 <div class="flex flex-col gap-1">
                   <audio controls class="h-8 w-48 sm:w-64">
                     <source src="${directAudioUrl}" type="audio/mpeg">
-                    Browser Anda tidak mendukung pemutar audio langsung.
+                    Browser Anda tidak mendukung pemutar audio.
                   </audio>
                   <a href="${item.linkAudio}" target="_blank" class="text-[10px] text-blue-600 font-bold underline"><i class="fa-solid fa-arrow-up-right-from-square"></i> Buka File Audio di Drive</a>
                 </div>
-              ` : `<span class="text-gray-400 text-[11px] italic">Peserta belum mengunggah file musik.</span>`}
+              ` : `<span class="text-gray-400 text-[11px] italic">Peserta belum mengunggah musik.</span>`}
             </td>
           </tr>
         `;
       });
     }
 
-    // TABEL SERTIFIKAT PESERTA TERVERIFIKASI
     function renderCertTable() {
       const tbody = document.getElementById('certTableBody');
       if(!tbody) return;
@@ -999,21 +1034,25 @@
       adminState.lomba.forEach(l => {
         const imgUrl = parseImageUrl(l.flyerUrl);
         box.innerHTML += `
-          <div class="bg-white p-4 rounded-xl border shadow-sm flex justify-between items-center">
+          <div class="bg-white p-4 rounded-xl border shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
             <div class="flex items-center gap-3">
-              <img src="${imgUrl || 'https://via.placeholder.com/80'}" class="w-12 h-12 rounded-lg object-cover border">
+              <img src="${imgUrl || 'https://via.placeholder.com/80'}" class="w-14 h-14 rounded-lg object-cover border shrink-0">
               <div>
                 <div class="flex items-center gap-2">
-                  <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded">${l.kategori}</span>
+                  <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded">${l.kategori || 'SD/SMP/SMA'}</span>
                   <span class="text-[10px] font-bold px-2 py-0.5 rounded ${l.statusLomba === 'TUTUP' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}">${l.statusLomba || 'BUKA'}</span>
                 </div>
-                <h4 class="font-bold text-gray-800 mt-1 text-sm">${l.judul}</h4>
-                <p class="text-xs text-emerald-700 font-bold">${l.biaya}</p>
+                <h4 class="font-bold text-gray-800 mt-1 text-sm sm:text-base">${l.judul}</h4>
+                <p class="text-[11px] text-gray-600 mt-0.5">
+                  <strong>SD:</strong> ${l.biayaSD || l.biaya || '-'} | 
+                  <strong>SMP:</strong> ${l.biayaSMP || l.biaya || '-'} | 
+                  <strong>SMA:</strong> ${l.biayaSMA || l.biaya || '-'}
+                </p>
               </div>
             </div>
-            <div class="flex gap-1.5">
-              <button onclick="editLomba('${l.id}')" class="bg-blue-600 text-white text-xs px-2.5 py-1.5 rounded-lg font-bold">Edit</button>
-              <button onclick="deleteLomba('${l.id}')" class="bg-red-600 text-white text-xs px-2.5 py-1.5 rounded-lg font-bold">Hapus</button>
+            <div class="flex gap-1.5 self-end sm:self-center">
+              <button onclick="editLomba('${l.id}')" class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-lg font-bold">Edit</button>
+              <button onclick="deleteLomba('${l.id}')" class="bg-red-600 text-white text-xs px-3 py-1.5 rounded-lg font-bold">Hapus</button>
             </div>
           </div>
         `;
@@ -1033,8 +1072,11 @@
       document.getElementById('existingFlyerUrl').value = item.flyerUrl;
       document.getElementById('lombaFlyerPathText').value = item.flyerUrl || '';
       document.getElementById('lombaJudul').value = item.judul;
-      document.getElementById('lombaKategori').value = item.kategori;
-      document.getElementById('lombaBiaya').value = item.biaya;
+      
+      document.getElementById('lombaBiayaSD').value = item.biayaSD || item.biaya || '';
+      document.getElementById('lombaBiayaSMP').value = item.biayaSMP || item.biaya || '';
+      document.getElementById('lombaBiayaSMA').value = item.biayaSMA || item.biaya || '';
+
       document.getElementById('lombaStatus').value = item.statusLomba || "BUKA";
       document.getElementById('lombaDeskripsi').value = item.deskripsi;
       document.getElementById('lombaSyarat').value = item.syarat;
@@ -1061,8 +1103,10 @@
           action: 'saveLomba',
           id: document.getElementById('lombaId').value,
           judul: document.getElementById('lombaJudul').value,
-          kategori: document.getElementById('lombaKategori').value,
-          biaya: document.getElementById('lombaBiaya').value,
+          kategori: 'SD / SMP / SMA',
+          biayaSD: document.getElementById('lombaBiayaSD').value,
+          biayaSMP: document.getElementById('lombaBiayaSMP').value,
+          biayaSMA: document.getElementById('lombaBiayaSMA').value,
           statusLomba: document.getElementById('lombaStatus').value,
           flyerUrl: flyerUrl,
           deskripsi: document.getElementById('lombaDeskripsi').value,
@@ -1073,7 +1117,7 @@
         const result = await postToGAS(payload);
 
         if(result.status === "success") {
-          Swal.fire({ icon: 'success', title: 'Berhasil Disimpan! ✨', text: 'Data perlombaan berhasil diperbarui.', confirmButtonColor: '#047857' });
+          Swal.fire({ icon: 'success', title: 'Berhasil Disimpan! ✨', text: 'Data perlombaan dan 3 kategori biaya berhasil diperbarui.', confirmButtonColor: '#047857' });
           resetLombaForm();
           await fetchPortalConfig();
         }
@@ -1183,7 +1227,7 @@
 
       if(document.getElementById('cfgHeaderTitle')) document.getElementById('cfgHeaderTitle').value = cfg.headerTitle || "PESONA AL FIRDAUS";
       if(document.getElementById('cfgHeaderSub')) document.getElementById('cfgHeaderSub').value = cfg.headerSub || "Islamic Youth Festival 2026";
-      if(document.getElementById('cfgRekening')) document.getElementById('cfgRekening').value = cfg.rekening || "BSI: 7123-4567-89 a.n PESONA AL FIRDAUS";
+      if(document.getElementById('cfgRekening')) document.getElementById('cfgRekening').value = cfg.rekening || "BSI: 8500808806 a.n Yayasan Atmo Taruno Joyo";
       if(document.getElementById('cfgContact')) document.getElementById('cfgContact').value = cfg.contact || "Kontak Panitia: 0853-6668-5084";
       if(document.getElementById('certTemplateUrlInput')) document.getElementById('certTemplateUrlInput').value = cfg.certTemplate || "";
     }
