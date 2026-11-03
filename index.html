@@ -123,7 +123,7 @@
     <!-- 1. BERANDA -->
     <section id="view-beranda" class="view-page container mx-auto px-4 py-6">
       
-      <!-- HERO SLIDER BANNER (TINGGI IDEAL MAX 220PX MODERN) -->
+      <!-- HERO SLIDER BANNER (TINGGI IDEAL MAX 220PX) -->
       <div class="relative group rounded-2xl overflow-hidden shadow-md border border-gray-200 mb-8 bg-emerald-950 w-full">
         <div class="swiper heroSlider w-full">
           <div class="swiper-wrapper" id="sliderWrapper">
@@ -140,7 +140,7 @@
         </button>
       </div>
 
-      <!-- DAFTAR CABANG LOMBA SLIDER -->
+      <!-- DAFTAR CABANG LOMBA SLIDER CAROUSEL -->
       <div class="mb-12">
         <div class="text-center mb-8">
           <span class="bg-emerald-100 text-emerald-800 font-bold text-xs px-3 py-1 rounded-full uppercase tracking-wider">Kompetisi Islami</span>
@@ -195,7 +195,23 @@
             <div>
               <span id="detailBadgeKategori" class="bg-emerald-100 text-emerald-800 font-bold text-xs px-3 py-1 rounded-full"></span>
               <h1 id="detailJudulLomba" class="text-2xl sm:text-3xl font-extrabold text-gray-900 mt-3 mb-2"></h1>
-              <p id="detailBiaya" class="text-xl sm:text-2xl font-bold text-emerald-700 mb-4 sm:mb-6"></p>
+              
+              <!-- RINCIAN 3 KATEGORI BIAYA (SD, SMP, SMA) -->
+              <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3 sm:p-4 mb-4 sm:mb-6 space-y-1.5 text-xs sm:text-sm">
+                <p class="font-bold text-emerald-900 text-xs uppercase tracking-wider mb-1"><i class="fa-solid fa-tags text-emerald-700 mr-1"></i> Rincian Biaya Pendaftaran Per Tingkat:</p>
+                <div class="flex justify-between items-center py-1 border-b border-emerald-200/60 font-medium">
+                  <span class="text-gray-700">• Tingkat SD / MI :</span>
+                  <span class="font-extrabold text-emerald-800 text-sm sm:text-base" id="detailBiayaSD">Rp 0</span>
+                </div>
+                <div class="flex justify-between items-center py-1 border-b border-emerald-200/60 font-medium">
+                  <span class="text-gray-700">• Tingkat SMP / MTs :</span>
+                  <span class="font-extrabold text-emerald-800 text-sm sm:text-base" id="detailBiayaSMP">Rp 0</span>
+                </div>
+                <div class="flex justify-between items-center py-1 font-medium">
+                  <span class="text-gray-700">• Tingkat SMA / MA :</span>
+                  <span class="font-extrabold text-emerald-800 text-sm sm:text-base" id="detailBiayaSMA">Rp 0</span>
+                </div>
+              </div>
 
               <div class="space-y-4 sm:space-y-6 text-xs sm:text-sm text-gray-700 border-t pt-4">
                 <div>
@@ -296,26 +312,38 @@
     </div>
   </footer>
 
-  <!-- MODAL FORM PENDAFTARAN -->
+  <!-- MODAL FORM PENDAFTARAN DENGAN FITUR COPY REKENING BSI & PILIHAN TINGKAT -->
   <div id="formModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
     <div class="bg-white rounded-2xl max-w-md w-full p-5 sm:p-6 relative shadow-2xl my-8">
       <button onclick="closeForm()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
       <h3 class="text-lg sm:text-xl font-bold text-emerald-900 mb-1">Form Pendaftaran Lomba</h3>
       <p class="text-xs text-gray-500 mb-4">Isi data calon peserta dengan benar.</p>
       
-      <form id="regForm" onsubmit="submitRegistration(event)" class="space-y-3.5">
+      <form id="regForm" onsubmit="submitRegistration(event)" class="space-y-3">
         <div>
           <label class="block text-xs font-bold text-gray-700 mb-1">Cabang Lomba</label>
           <input type="text" id="cabangLombaInput" readonly class="w-full bg-gray-100 border rounded-lg px-3 py-2 text-xs sm:text-sm font-bold text-emerald-800">
         </div>
+        
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">Tingkat Pendidikan Peserta *</label>
+          <select id="tingkatPesertaInput" required class="w-full border rounded-lg px-3 py-2 text-xs sm:text-sm focus:outline-emerald-700 bg-white font-semibold text-gray-800">
+            <option value="SD/MI">SD / MI</option>
+            <option value="SMP/MTs">SMP / MTs</option>
+            <option value="SMA/MA">SMA / MA</option>
+          </select>
+        </div>
+
         <div>
           <label class="block text-xs font-bold text-gray-700 mb-1">Nama Lengkap Peserta *</label>
           <input type="text" id="namaLengkap" required class="w-full border rounded-lg px-3 py-2 text-xs sm:text-sm">
         </div>
+
         <div>
           <label class="block text-xs font-bold text-gray-700 mb-1">Asal Sekolah / Lembaga *</label>
           <input type="text" id="asalSekolah" required class="w-full border rounded-lg px-3 py-2 text-xs sm:text-sm">
         </div>
+
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label class="block text-xs font-bold text-gray-700 mb-1">No. WhatsApp *</label>
@@ -326,14 +354,30 @@
             <input type="email" id="email" required class="w-full border rounded-lg px-3 py-2 text-xs sm:text-sm">
           </div>
         </div>
-        <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1">Upload Bukti Transfer / Berkas *</label>
-          <input type="file" id="fileBukti" accept="image/*" class="w-full text-xs text-gray-500 border rounded-lg p-1.5">
-          <p class="text-[10px] text-emerald-700 font-medium mt-1">
-            <i class="fa-solid fa-circle-info mr-0.5"></i> <strong>Catatan File:</strong> Maksimal 2 MB (Disarankan JPG/PNG).
-          </p>
-          <p class="text-[10px] text-gray-400 mt-1" id="rekInfoText">BSI: 7123-4567-89 a.n PESONA AL FIRDAUS</p>
+
+        <!-- REKENING BSI COPY BOX -->
+        <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs flex justify-between items-center my-2 shadow-sm">
+          <div>
+            <p class="font-bold text-amber-950 flex items-center gap-1.5 text-[11px]">
+              <i class="fa-solid fa-building-columns text-amber-700"></i> Bank Syariah Indonesia (BSI)
+            </p>
+            <p class="font-mono font-black text-sm text-emerald-900 tracking-wider my-0.5" id="bsiNorekText">8500808806</p>
+            <p class="text-[10px] text-gray-600">a.n. <strong>Yayasan Atmo Taruno Joyo</strong></p>
+          </div>
+          <button type="button" onclick="copyBsiNorek()" class="bg-amber-400 hover:bg-amber-500 text-amber-950 font-bold px-3 py-2 rounded-lg text-xs shadow flex items-center gap-1.5 shrink-0 transition active:scale-95">
+            <i class="fa-solid fa-copy"></i>
+            <span>Salin No. Rek</span>
+          </button>
         </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">Upload Bukti Transfer / Pembayaran *</label>
+          <input type="file" id="fileBukti" accept="image/*" class="w-full text-xs text-gray-500 border rounded-lg p-1.5 bg-gray-50">
+          <p class="text-[10px] text-emerald-700 font-medium mt-1">
+            <i class="fa-solid fa-circle-info mr-0.5"></i> File otomatis tersimpan aman di Google Drive Folder Panitia.
+          </p>
+        </div>
+        
         <button type="submit" id="btnSubmitForm" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2.5 rounded-lg text-xs sm:text-sm shadow">Kirim Pendaftaran</button>
       </form>
     </div>
@@ -341,6 +385,7 @@
 
   <script>
     const GAS_URL = "https://script.google.com/macros/s/AKfycbw4APJqKIcWVgs1yk29KHmuIeArlCDcu0rruBauZkOOmUmGig9Wvqy2aIKq7_gaUPGkOg/exec";
+    const DRIVE_FOLDER_ID = "1i0VnagJrNxjQRWgoO-qXZyrzIRX7l85WFZDw3ji6c0ncve_g9hrh811Wwd6l8sojQjbiH1eN";
     const PANITIA_WA_CLEAN = "6285366685084";
 
     let state = { lombaList: [], config: {}, swiperInstance: null, lombaSwiperInstance: null, isAutoplayRunning: true };
@@ -410,6 +455,29 @@
       window.scrollTo(0,0);
     }
 
+    // COPY NO REKENING BSI TO CLIPBOARD
+    function copyBsiNorek() {
+      const norek = "8500808806";
+      navigator.clipboard.writeText(norek).then(() => {
+        Swal.fire({
+          toast: true,
+          position: 'top-end',
+          icon: 'success',
+          title: 'No. Rekening BSI Berhasil Disalin! 📋',
+          showConfirmButton: false,
+          timer: 2000
+        });
+      }).catch(() => {
+        const input = document.createElement('input');
+        input.value = norek;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+        Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'No. Rekening BSI Berhasil Disalin!', showConfirmButton: false, timer: 2000 });
+      });
+    }
+
     async function loadPortalData() {
       try {
         const res = await fetch(`${GAS_URL}?action=initPortal`);
@@ -444,7 +512,6 @@
         if(cfg.headerTitle && document.getElementById('portalHeaderTitle')) document.getElementById('portalHeaderTitle').innerText = cfg.headerTitle;
         if(cfg.headerSub && document.getElementById('portalHeaderSub')) document.getElementById('portalHeaderSub').innerText = cfg.headerSub;
         if(cfg.contact && document.getElementById('footerContactInfo')) document.getElementById('footerContactInfo').innerText = cfg.contact;
-        if(cfg.rekening && document.getElementById('rekInfoText')) document.getElementById('rekInfoText').innerText = cfg.rekening;
 
         if(cfg.lokasi && document.getElementById('topbarLokasi')) document.getElementById('topbarLokasi').innerText = cfg.lokasi;
         if(cfg.mapUrl && document.getElementById('topbarLokasiLink')) {
@@ -552,22 +619,34 @@
         const isBuka = item.statusLomba !== 'TUTUP';
         const imgUrl = parseImageUrl(item.flyerUrl);
 
+        const bSD = item.biayaSD || item.biaya || 'Rp -';
+        const bSMP = item.biayaSMP || item.biaya || 'Rp -';
+        const bSMA = item.biayaSMA || item.biaya || 'Rp -';
+
+        const priceBlockHtml = `
+          <div class="bg-emerald-50 border border-emerald-100 rounded-lg p-2.5 my-3 text-xs space-y-1">
+            <div class="flex justify-between font-bold text-gray-700"><span>• SD/MI:</span> <span class="text-emerald-800 font-extrabold">${bSD}</span></div>
+            <div class="flex justify-between font-bold text-gray-700"><span>• SMP/MTs:</span> <span class="text-emerald-800 font-extrabold">${bSMP}</span></div>
+            <div class="flex justify-between font-bold text-gray-700"><span>• SMA/MA:</span> <span class="text-emerald-800 font-extrabold">${bSMA}</span></div>
+          </div>
+        `;
+
         const homeSlideHtml = `
           <div class="swiper-slide h-auto">
             <div class="bg-white rounded-xl shadow border overflow-hidden flex flex-col h-full hover:shadow-lg transition">
               <img src="${imgUrl || 'https://via.placeholder.com/400x250'}" class="h-44 sm:h-48 w-full object-cover">
               <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between">
                 <div>
-                  <div class="flex justify-between items-center mb-2">
-                    <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-0.5 rounded">${item.kategori}</span>
+                  <div class="flex justify-between items-center mb-1">
+                    <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-0.5 rounded">${item.kategori || 'SD/SMP/SMA'}</span>
                     <span class="text-[10px] font-bold px-2 py-0.5 rounded ${isBuka ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">${isBuka ? 'BUKA' : 'TUTUP'}</span>
                   </div>
                   <h3 class="text-lg sm:text-xl font-bold text-gray-800">${item.judul}</h3>
+                  ${priceBlockHtml}
                 </div>
-                <div class="mt-4 pt-4 border-t flex justify-between items-center">
-                  <span class="font-bold text-emerald-700 text-xs sm:text-sm">${item.biaya}</span>
-                  <button onclick="openDetailLomba('${item.id}')" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs px-3.5 py-2 rounded-lg font-bold">
-                    Selengkapnya &rarr;
+                <div class="pt-2 border-t flex justify-end items-center">
+                  <button onclick="openDetailLomba('${item.id}')" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white text-xs px-3.5 py-2.5 rounded-lg font-bold text-center">
+                    Detail & Daftar &rarr;
                   </button>
                 </div>
               </div>
@@ -580,16 +659,16 @@
             <img src="${imgUrl || 'https://via.placeholder.com/400x250'}" class="h-44 sm:h-48 w-full object-cover">
             <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between">
               <div>
-                <div class="flex justify-between items-center mb-2">
-                  <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-0.5 rounded">${item.kategori}</span>
+                <div class="flex justify-between items-center mb-1">
+                  <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-0.5 rounded">${item.kategori || 'SD/SMP/SMA'}</span>
                   <span class="text-[10px] font-bold px-2 py-0.5 rounded ${isBuka ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">${isBuka ? 'BUKA' : 'TUTUP'}</span>
                 </div>
                 <h3 class="text-lg sm:text-xl font-bold text-gray-800">${item.judul}</h3>
+                ${priceBlockHtml}
               </div>
-              <div class="mt-4 pt-4 border-t flex justify-between items-center">
-                <span class="font-bold text-emerald-700 text-xs sm:text-sm">${item.biaya}</span>
-                <button onclick="openDetailLomba('${item.id}')" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs px-3.5 py-2 rounded-lg font-bold">
-                  Selengkapnya &rarr;
+              <div class="pt-2 border-t flex justify-end items-center">
+                <button onclick="openDetailLomba('${item.id}')" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white text-xs px-3.5 py-2.5 rounded-lg font-bold text-center">
+                  Detail & Daftar &rarr;
                 </button>
               </div>
             </div>
@@ -609,8 +688,12 @@
 
       document.getElementById('detailFlyerImg').src = parseImageUrl(item.flyerUrl) || 'https://via.placeholder.com/400x500';
       document.getElementById('detailJudulLomba').innerText = item.judul;
-      document.getElementById('detailBadgeKategori').innerText = item.kategori;
-      document.getElementById('detailBiaya').innerText = item.biaya;
+      document.getElementById('detailBadgeKategori').innerText = item.kategori || 'SD / SMP / SMA';
+      
+      document.getElementById('detailBiayaSD').innerText = item.biayaSD || item.biaya || 'Rp -';
+      document.getElementById('detailBiayaSMP').innerText = item.biayaSMP || item.biaya || 'Rp -';
+      document.getElementById('detailBiayaSMA').innerText = item.biayaSMA || item.biaya || 'Rp -';
+
       document.getElementById('detailDeskripsi').innerText = item.deskripsi || '-';
       document.getElementById('detailSyarat').innerText = item.syarat || '-';
       document.getElementById('detailHadiah').innerText = item.hadiah || '-';
@@ -707,6 +790,7 @@
           const base64Str = event.target.result;
           const payload = {
             action: 'uploadAudio',
+            targetFolderId: DRIVE_FOLDER_ID,
             kodeRegistrasi: selectedKode,
             cabangLomba: document.getElementById('audioCabang').value,
             audioBase64: base64Str,
@@ -810,13 +894,15 @@
       const btn = document.getElementById('btnSubmitForm');
       const nama = document.getElementById('namaLengkap').value;
       const cabang = document.getElementById('cabangLombaInput').value;
+      const tingkat = document.getElementById('tingkatPesertaInput').value;
 
       const res = await fetch(GAS_URL, {
         method: 'POST',
         body: JSON.stringify({
           action: 'register',
+          targetFolderId: DRIVE_FOLDER_ID,
           namaLengkap: nama,
-          asalSekolah: document.getElementById('asalSekolah').value,
+          asalSekolah: `${document.getElementById('asalSekolah').value} (${tingkat})`,
           cabangLomba: cabang,
           noWhatsapp: document.getElementById('noWhatsapp').value,
           email: document.getElementById('email').value,
@@ -826,7 +912,7 @@
       const result = await res.json();
       if(result.status === "success") {
         const regKode = result.kodeRegistrasi;
-        const waText = `Halo Panitia PESONA AL FIRDAUS 2026,\n\nSaya telah mendaftar secara online:\n*Kode Registrasi:* ${regKode}\n*Nama Peserta:* ${nama}\n*Cabang Lomba:* ${cabang}\n\nMohon untuk diperiksa dan di-approve. Terima kasih!`;
+        const waText = `Halo Panitia PESONA AL FIRDAUS 2026,\n\nSaya telah mendaftar secara online:\n*Kode Registrasi:* ${regKode}\n*Nama Peserta:* ${nama}\n*Tingkat:* ${tingkat}\n*Cabang Lomba:* ${cabang}\n\nMohon untuk diperiksa dan di-approve. Terima kasih!`;
         const waUrl = `https://wa.me/${PANITIA_WA_CLEAN}?text=${encodeURIComponent(waText)}`;
 
         Swal.fire({
