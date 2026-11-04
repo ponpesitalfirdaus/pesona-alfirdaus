@@ -336,12 +336,12 @@
         </div>
       </div>
 
-      <!-- 4. KELOLA CABANG LOMBA (INPUT MANUAL 3 KATEGORI DI KIRI & 3 BIAYA DI KANAN) -->
+      <!-- 4. KELOLA CABANG LOMBA (3 BARIS KATEGORI + BIAYA + TOGGLE AKTIF/NON-AKTIF) -->
       <div id="sec-lomba" class="admin-sec hidden space-y-6">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
           <div>
             <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Kelola Cabang Lomba</h1>
-            <p class="text-xs text-gray-500">Atur rincian lomba, upload flyer, serta input manual 3 Kategori (Kiri) & Biaya (Kanan)</p>
+            <p class="text-xs text-gray-500">Input Kategori (Kiri), Biaya (Kanan), serta Aktifkan / Non-aktifkan setiap Kategori</p>
           </div>
           <button onclick="resetLombaForm()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded-lg text-xs font-bold shadow">
             + Tambah Lomba Baru
@@ -360,52 +360,74 @@
             </div>
 
             <div>
-              <label class="block text-[11px] font-bold text-gray-700 mb-1">Status Pendaftaran</label>
+              <label class="block text-[11px] font-bold text-gray-700 mb-1">Status Utama Lomba</label>
               <select id="lombaStatus" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700">
                 <option value="BUKA">BUKA</option>
                 <option value="TUTUP">TUTUP</option>
               </select>
             </div>
 
-            <!-- RINCIAN 3 KOLOM KATEGORI (KIRI) DAN BIAYA (KANAN) -->
-            <div class="bg-gray-50 p-3 rounded-lg border space-y-2.5">
-              <span class="block font-bold text-[11px] text-emerald-900 border-b pb-1">3 TINGKAT KATEGORI (KIRI) & BIAYA (KANAN):</span>
+            <!-- RINCIAN 3 BARIS KATEGORI (KIRI), BIAYA (KANAN), & STATUS AKTIF (CHECKBOX) -->
+            <div class="bg-gray-50 p-3 rounded-lg border space-y-3">
+              <span class="block font-bold text-[11px] text-emerald-900 border-b pb-1">3 KATEGORI (KIRI), BIAYA (KANAN) & STATUS AKTIF:</span>
               
-              <!-- TINGKAT 1 -->
-              <div class="grid grid-cols-12 gap-2 items-center">
-                <div class="col-span-6">
-                  <label class="block text-[10px] font-bold text-gray-600 mb-0.5">Kategori 1 (Kiri)</label>
-                  <input type="text" id="lombaKat1" required placeholder="SD / MI" class="w-full border rounded-lg px-2.5 py-1.5 text-xs focus:outline-emerald-700 bg-white font-semibold">
+              <!-- BARIS KATEGORI 1 -->
+              <div class="space-y-1 bg-white p-2.5 rounded-lg border">
+                <div class="flex justify-between items-center mb-1">
+                  <span class="text-[11px] font-bold text-emerald-800">Kategori & Biaya 1</span>
+                  <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                    <input type="checkbox" id="lombaActive1" checked class="w-4 h-4 accent-emerald-700">
+                    <span class="text-[10px] font-bold text-gray-700">Aktif</span>
+                  </label>
                 </div>
-                <div class="col-span-6">
-                  <label class="block text-[10px] font-bold text-gray-600 mb-0.5">Biaya 1 (Kanan)</label>
-                  <input type="text" id="lombaBiaya1" required placeholder="Rp 35.000" class="w-full border rounded-lg px-2.5 py-1.5 text-xs focus:outline-emerald-700 bg-white font-bold text-emerald-800">
-                </div>
-              </div>
-
-              <!-- TINGKAT 2 -->
-              <div class="grid grid-cols-12 gap-2 items-center">
-                <div class="col-span-6">
-                  <label class="block text-[10px] font-bold text-gray-600 mb-0.5">Kategori 2 (Kiri)</label>
-                  <input type="text" id="lombaKat2" required placeholder="SMP / MTs" class="w-full border rounded-lg px-2.5 py-1.5 text-xs focus:outline-emerald-700 bg-white font-semibold">
-                </div>
-                <div class="col-span-6">
-                  <label class="block text-[10px] font-bold text-gray-600 mb-0.5">Biaya 2 (Kanan)</label>
-                  <input type="text" id="lombaBiaya2" required placeholder="Rp 45.000" class="w-full border rounded-lg px-2.5 py-1.5 text-xs focus:outline-emerald-700 bg-white font-bold text-emerald-800">
+                <div class="grid grid-cols-12 gap-2">
+                  <div class="col-span-6">
+                    <input type="text" id="lombaKat1" required placeholder="SD / MI" class="w-full border rounded-lg px-2.5 py-1 text-xs focus:outline-emerald-700 font-semibold">
+                  </div>
+                  <div class="col-span-6">
+                    <input type="text" id="lombaBiaya1" required placeholder="Rp 35.000" class="w-full border rounded-lg px-2.5 py-1 text-xs focus:outline-emerald-700 font-bold text-emerald-800">
+                  </div>
                 </div>
               </div>
 
-              <!-- TINGKAT 3 -->
-              <div class="grid grid-cols-12 gap-2 items-center">
-                <div class="col-span-6">
-                  <label class="block text-[10px] font-bold text-gray-600 mb-0.5">Kategori 3 (Kiri)</label>
-                  <input type="text" id="lombaKat3" required placeholder="SMA / MA" class="w-full border rounded-lg px-2.5 py-1.5 text-xs focus:outline-emerald-700 bg-white font-semibold">
+              <!-- BARIS KATEGORI 2 -->
+              <div class="space-y-1 bg-white p-2.5 rounded-lg border">
+                <div class="flex justify-between items-center mb-1">
+                  <span class="text-[11px] font-bold text-emerald-800">Kategori & Biaya 2</span>
+                  <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                    <input type="checkbox" id="lombaActive2" checked class="w-4 h-4 accent-emerald-700">
+                    <span class="text-[10px] font-bold text-gray-700">Aktif</span>
+                  </label>
                 </div>
-                <div class="col-span-6">
-                  <label class="block text-[10px] font-bold text-gray-600 mb-0.5">Biaya 3 (Kanan)</label>
-                  <input type="text" id="lombaBiaya3" required placeholder="Rp 50.000" class="w-full border rounded-lg px-2.5 py-1.5 text-xs focus:outline-emerald-700 bg-white font-bold text-emerald-800">
+                <div class="grid grid-cols-12 gap-2">
+                  <div class="col-span-6">
+                    <input type="text" id="lombaKat2" placeholder="SMP / MTs" class="w-full border rounded-lg px-2.5 py-1 text-xs focus:outline-emerald-700 font-semibold">
+                  </div>
+                  <div class="col-span-6">
+                    <input type="text" id="lombaBiaya2" placeholder="Rp 45.000" class="w-full border rounded-lg px-2.5 py-1 text-xs focus:outline-emerald-700 font-bold text-emerald-800">
+                  </div>
                 </div>
               </div>
+
+              <!-- BARIS KATEGORI 3 -->
+              <div class="space-y-1 bg-white p-2.5 rounded-lg border">
+                <div class="flex justify-between items-center mb-1">
+                  <span class="text-[11px] font-bold text-emerald-800">Kategori & Biaya 3</span>
+                  <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                    <input type="checkbox" id="lombaActive3" checked class="w-4 h-4 accent-emerald-700">
+                    <span class="text-[10px] font-bold text-gray-700">Aktif</span>
+                  </label>
+                </div>
+                <div class="grid grid-cols-12 gap-2">
+                  <div class="col-span-6">
+                    <input type="text" id="lombaKat3" placeholder="SMA / MA" class="w-full border rounded-lg px-2.5 py-1 text-xs focus:outline-emerald-700 font-semibold">
+                  </div>
+                  <div class="col-span-6">
+                    <input type="text" id="lombaBiaya3" placeholder="Rp 50.000" class="w-full border rounded-lg px-2.5 py-1 text-xs focus:outline-emerald-700 font-bold text-emerald-800">
+                  </div>
+                </div>
+              </div>
+
             </div>
 
             <div>
@@ -1058,12 +1080,15 @@
         const imgUrl = parseImageUrl(l.flyerUrl);
         const kat1 = l.kat1 || l.katSD || 'SD / MI';
         const b1 = l.biaya1 || l.biayaSD || l.biaya || '-';
+        const act1 = l.active1 !== false && l.active1 !== 'false';
 
         const kat2 = l.kat2 || l.katSMP || 'SMP / MTs';
         const b2 = l.biaya2 || l.biayaSMP || l.biaya || '-';
+        const act2 = l.active2 !== false && l.active2 !== 'false';
 
         const kat3 = l.kat3 || l.katSMA || 'SMA / MA';
         const b3 = l.biaya3 || l.biayaSMA || l.biaya || '-';
+        const act3 = l.active3 !== false && l.active3 !== 'false';
 
         box.innerHTML += `
           <div class="bg-white p-4 rounded-xl border shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
@@ -1071,14 +1096,14 @@
               <img src="${imgUrl || 'https://via.placeholder.com/80'}" class="w-14 h-14 rounded-lg object-cover border shrink-0">
               <div>
                 <div class="flex items-center gap-2">
-                  <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded">${l.kategori || '3 Tingkat'}</span>
+                  <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded">${l.kategori || 'Multi Kategori'}</span>
                   <span class="text-[10px] font-bold px-2 py-0.5 rounded ${l.statusLomba === 'TUTUP' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}">${l.statusLomba || 'BUKA'}</span>
                 </div>
                 <h4 class="font-bold text-gray-800 mt-1 text-sm sm:text-base">${l.judul}</h4>
                 <p class="text-[11px] text-gray-600 mt-0.5">
-                  <strong>${kat1}:</strong> ${b1} | 
-                  <strong>${kat2}:</strong> ${b2} | 
-                  <strong>${kat3}:</strong> ${b3}
+                  <span class="${act1 ? 'font-semibold text-gray-800' : 'line-through text-gray-400'}"><strong>${kat1}:</strong> ${b1}</span> | 
+                  <span class="${act2 ? 'font-semibold text-gray-800' : 'line-through text-gray-400'}"><strong>${kat2}:</strong> ${b2}</span> | 
+                  <span class="${act3 ? 'font-semibold text-gray-800' : 'line-through text-gray-400'}"><strong>${kat3}:</strong> ${b3}</span>
                 </p>
               </div>
             </div>
@@ -1107,12 +1132,15 @@
       
       document.getElementById('lombaKat1').value = item.kat1 || item.katSD || 'SD / MI';
       document.getElementById('lombaBiaya1').value = item.biaya1 || item.biayaSD || item.biaya || '';
+      document.getElementById('lombaActive1').checked = (item.active1 !== false && item.active1 !== 'false');
 
       document.getElementById('lombaKat2').value = item.kat2 || item.katSMP || 'SMP / MTs';
       document.getElementById('lombaBiaya2').value = item.biaya2 || item.biayaSMP || item.biaya || '';
+      document.getElementById('lombaActive2').checked = (item.active2 !== false && item.active2 !== 'false');
 
       document.getElementById('lombaKat3').value = item.kat3 || item.katSMA || 'SMA / MA';
       document.getElementById('lombaBiaya3').value = item.biaya3 || item.biayaSMA || item.biaya || '';
+      document.getElementById('lombaActive3').checked = (item.active3 !== false && item.active3 !== 'false');
 
       document.getElementById('lombaStatus').value = item.statusLomba || "BUKA";
       document.getElementById('lombaDeskripsi').value = item.deskripsi || '';
@@ -1125,6 +1153,9 @@
       document.getElementById('lombaId').value = "";
       document.getElementById('existingFlyerUrl').value = "";
       document.getElementById('lombaFlyerPathText').value = "";
+      document.getElementById('lombaActive1').checked = true;
+      document.getElementById('lombaActive2').checked = true;
+      document.getElementById('lombaActive3').checked = true;
     }
 
     async function saveLomba(e) {
@@ -1141,12 +1172,24 @@
           id: document.getElementById('lombaId').value,
           judul: document.getElementById('lombaJudul').value,
           kategori: 'Multi Kategori',
+          
           kat1: document.getElementById('lombaKat1').value,
           biaya1: document.getElementById('lombaBiaya1').value,
+          active1: document.getElementById('lombaActive1').checked,
+
           kat2: document.getElementById('lombaKat2').value,
           biaya2: document.getElementById('lombaBiaya2').value,
+          active2: document.getElementById('lombaActive2').checked,
+
           kat3: document.getElementById('lombaKat3').value,
           biaya3: document.getElementById('lombaBiaya3').value,
+          active3: document.getElementById('lombaActive3').checked,
+
+          // Legacy fields compatibility
+          biayaSD: document.getElementById('lombaBiaya1').value,
+          biayaSMP: document.getElementById('lombaBiaya2').value,
+          biayaSMA: document.getElementById('lombaBiaya3').value,
+
           statusLomba: document.getElementById('lombaStatus').value,
           flyerUrl: flyerUrl,
           deskripsi: document.getElementById('lombaDeskripsi').value,
@@ -1157,7 +1200,7 @@
         const result = await postToGAS(payload);
 
         if(result.status === "success") {
-          Swal.fire({ icon: 'success', title: 'Berhasil Disimpan! ✨', text: 'Kategori (kiri) & Biaya (kanan) berhasil diperbarui.', confirmButtonColor: '#047857' });
+          Swal.fire({ icon: 'success', title: 'Berhasil Disimpan! ✨', text: 'Status Aktif/Non-aktif, Kategori, dan Biaya berhasil diperbarui.', confirmButtonColor: '#047857' });
           resetLombaForm();
           await fetchPortalConfig();
         }
