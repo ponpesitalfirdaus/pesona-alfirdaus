@@ -196,21 +196,10 @@
               <span id="detailBadgeKategori" class="bg-emerald-100 text-emerald-800 font-bold text-xs px-3 py-1 rounded-full"></span>
               <h1 id="detailJudulLomba" class="text-2xl sm:text-3xl font-extrabold text-gray-900 mt-3 mb-2"></h1>
               
-              <!-- RINCIAN 3 KATEGORI BIAYA (SD, SMP, SMA) -->
+              <!-- DINAMIS BIAYA PER KATEGORI -->
               <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3 sm:p-4 mb-4 sm:mb-6 space-y-1.5 text-xs sm:text-sm">
-                <p class="font-bold text-emerald-900 text-xs uppercase tracking-wider mb-1"><i class="fa-solid fa-tags text-emerald-700 mr-1"></i> Rincian Biaya Pendaftaran Per Tingkat:</p>
-                <div class="flex justify-between items-center py-1 border-b border-emerald-200/60 font-medium">
-                  <span class="text-gray-700">• Tingkat SD / MI :</span>
-                  <span class="font-extrabold text-emerald-800 text-sm sm:text-base" id="detailBiayaSD">Rp 0</span>
-                </div>
-                <div class="flex justify-between items-center py-1 border-b border-emerald-200/60 font-medium">
-                  <span class="text-gray-700">• Tingkat SMP / MTs :</span>
-                  <span class="font-extrabold text-emerald-800 text-sm sm:text-base" id="detailBiayaSMP">Rp 0</span>
-                </div>
-                <div class="flex justify-between items-center py-1 font-medium">
-                  <span class="text-gray-700">• Tingkat SMA / MA :</span>
-                  <span class="font-extrabold text-emerald-800 text-sm sm:text-base" id="detailBiayaSMA">Rp 0</span>
-                </div>
+                <p class="font-bold text-emerald-900 text-xs uppercase tracking-wider mb-1"><i class="fa-solid fa-tags text-emerald-700 mr-1"></i> Rincian Biaya Pendaftaran Per Kategori:</p>
+                <div id="detailBiayaContainer" class="space-y-1"></div>
               </div>
 
               <div class="space-y-4 sm:space-y-6 text-xs sm:text-sm text-gray-700 border-t pt-4">
@@ -312,7 +301,7 @@
     </div>
   </footer>
 
-  <!-- MODAL FORM PENDAFTARAN DENGAN FITUR COPY REKENING BSI & PILIHAN TINGKAT -->
+  <!-- MODAL FORM PENDAFTARAN DENGAN FITUR COPY REKENING BSI -->
   <div id="formModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
     <div class="bg-white rounded-2xl max-w-md w-full p-5 sm:p-6 relative shadow-2xl my-8">
       <button onclick="closeForm()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
@@ -326,11 +315,12 @@
         </div>
         
         <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1">Tingkat Pendidikan Peserta *</label>
+          <label class="block text-xs font-bold text-gray-700 mb-1">Pilih Kategori / Tingkat Peserta *</label>
           <select id="tingkatPesertaInput" required class="w-full border rounded-lg px-3 py-2 text-xs sm:text-sm focus:outline-emerald-700 bg-white font-semibold text-gray-800">
-            <option value="SD/MI">SD / MI</option>
-            <option value="SMP/MTs">SMP / MTs</option>
-            <option value="SMA/MA">SMA / MA</option>
+            <option value="SD / MI">SD / MI</option>
+            <option value="SMP / MTs">SMP / MTs</option>
+            <option value="SMA / MA">SMA / MA</option>
+            <option value="Umum / Lainnya">Umum / Lainnya</option>
           </select>
         </div>
 
@@ -455,17 +445,11 @@
       window.scrollTo(0,0);
     }
 
-    // COPY NO REKENING BSI TO CLIPBOARD
     function copyBsiNorek() {
       const norek = "8500808806";
       navigator.clipboard.writeText(norek).then(() => {
         Swal.fire({
-          toast: true,
-          position: 'top-end',
-          icon: 'success',
-          title: 'No. Rekening BSI Berhasil Disalin! 📋',
-          showConfirmButton: false,
-          timer: 2000
+          toast: true, position: 'top-end', icon: 'success', title: 'No. Rekening BSI Berhasil Disalin! 📋', showConfirmButton: false, timer: 2000
         });
       }).catch(() => {
         const input = document.createElement('input');
@@ -619,15 +603,20 @@
         const isBuka = item.statusLomba !== 'TUTUP';
         const imgUrl = parseImageUrl(item.flyerUrl);
 
-        const bSD = item.biayaSD || item.biaya || 'Rp -';
-        const bSMP = item.biayaSMP || item.biaya || 'Rp -';
-        const bSMA = item.biayaSMA || item.biaya || 'Rp -';
+        const kat1 = item.kat1 || item.katSD || 'SD / MI';
+        const biaya1 = item.biaya1 || item.biayaSD || item.biaya || 'Rp -';
+
+        const kat2 = item.kat2 || item.katSMP || 'SMP / MTs';
+        const biaya2 = item.biaya2 || item.biayaSMP || item.biaya || 'Rp -';
+
+        const kat3 = item.kat3 || item.katSMA || 'SMA / MA';
+        const biaya3 = item.biaya3 || item.biayaSMA || item.biaya || 'Rp -';
 
         const priceBlockHtml = `
           <div class="bg-emerald-50 border border-emerald-100 rounded-lg p-2.5 my-3 text-xs space-y-1">
-            <div class="flex justify-between font-bold text-gray-700"><span>• SD/MI:</span> <span class="text-emerald-800 font-extrabold">${bSD}</span></div>
-            <div class="flex justify-between font-bold text-gray-700"><span>• SMP/MTs:</span> <span class="text-emerald-800 font-extrabold">${bSMP}</span></div>
-            <div class="flex justify-between font-bold text-gray-700"><span>• SMA/MA:</span> <span class="text-emerald-800 font-extrabold">${bSMA}</span></div>
+            <div class="flex justify-between font-bold text-gray-700"><span>• ${kat1}:</span> <span class="text-emerald-800 font-extrabold">${biaya1}</span></div>
+            <div class="flex justify-between font-bold text-gray-700"><span>• ${kat2}:</span> <span class="text-emerald-800 font-extrabold">${biaya2}</span></div>
+            <div class="flex justify-between font-bold text-gray-700"><span>• ${kat3}:</span> <span class="text-emerald-800 font-extrabold">${biaya3}</span></div>
           </div>
         `;
 
@@ -638,7 +627,7 @@
               <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between">
                 <div>
                   <div class="flex justify-between items-center mb-1">
-                    <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-0.5 rounded">${item.kategori || 'SD/SMP/SMA'}</span>
+                    <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-0.5 rounded">${item.kategori || 'Multi Kategori'}</span>
                     <span class="text-[10px] font-bold px-2 py-0.5 rounded ${isBuka ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">${isBuka ? 'BUKA' : 'TUTUP'}</span>
                   </div>
                   <h3 class="text-lg sm:text-xl font-bold text-gray-800">${item.judul}</h3>
@@ -660,7 +649,7 @@
             <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between">
               <div>
                 <div class="flex justify-between items-center mb-1">
-                  <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-0.5 rounded">${item.kategori || 'SD/SMP/SMA'}</span>
+                  <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-0.5 rounded">${item.kategori || 'Multi Kategori'}</span>
                   <span class="text-[10px] font-bold px-2 py-0.5 rounded ${isBuka ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">${isBuka ? 'BUKA' : 'TUTUP'}</span>
                 </div>
                 <h3 class="text-lg sm:text-xl font-bold text-gray-800">${item.judul}</h3>
@@ -690,9 +679,30 @@
       document.getElementById('detailJudulLomba').innerText = item.judul;
       document.getElementById('detailBadgeKategori').innerText = item.kategori || 'SD / SMP / SMA';
       
-      document.getElementById('detailBiayaSD').innerText = item.biayaSD || item.biaya || 'Rp -';
-      document.getElementById('detailBiayaSMP').innerText = item.biayaSMP || item.biaya || 'Rp -';
-      document.getElementById('detailBiayaSMA').innerText = item.biayaSMA || item.biaya || 'Rp -';
+      const kat1 = item.kat1 || item.katSD || 'SD / MI';
+      const biaya1 = item.biaya1 || item.biayaSD || item.biaya || 'Rp -';
+
+      const kat2 = item.kat2 || item.katSMP || 'SMP / MTs';
+      const biaya2 = item.biaya2 || item.biayaSMP || item.biaya || 'Rp -';
+
+      const kat3 = item.kat3 || item.katSMA || 'SMA / MA';
+      const biaya3 = item.biaya3 || item.biayaSMA || item.biaya || 'Rp -';
+
+      const detailBiayaBox = document.getElementById('detailBiayaContainer');
+      detailBiayaBox.innerHTML = `
+        <div class="flex justify-between items-center py-1 border-b border-emerald-200/60 font-medium">
+          <span class="text-gray-700">• ${kat1} :</span>
+          <span class="font-extrabold text-emerald-800 text-sm sm:text-base">${biaya1}</span>
+        </div>
+        <div class="flex justify-between items-center py-1 border-b border-emerald-200/60 font-medium">
+          <span class="text-gray-700">• ${kat2} :</span>
+          <span class="font-extrabold text-emerald-800 text-sm sm:text-base">${biaya2}</span>
+        </div>
+        <div class="flex justify-between items-center py-1 font-medium">
+          <span class="text-gray-700">• ${kat3} :</span>
+          <span class="font-extrabold text-emerald-800 text-sm sm:text-base">${biaya3}</span>
+        </div>
+      `;
 
       document.getElementById('detailDeskripsi').innerText = item.deskripsi || '-';
       document.getElementById('detailSyarat').innerText = item.syarat || '-';
@@ -912,7 +922,7 @@
       const result = await res.json();
       if(result.status === "success") {
         const regKode = result.kodeRegistrasi;
-        const waText = `Halo Panitia PESONA AL FIRDAUS 2026,\n\nSaya telah mendaftar secara online:\n*Kode Registrasi:* ${regKode}\n*Nama Peserta:* ${nama}\n*Tingkat:* ${tingkat}\n*Cabang Lomba:* ${cabang}\n\nMohon untuk diperiksa dan di-approve. Terima kasih!`;
+        const waText = `Halo Panitia PESONA AL FIRDAUS 2026,\n\nSaya telah mendaftar secara online:\n*Kode Registrasi:* ${regKode}\n*Nama Peserta:* ${nama}\n*Tingkat/Kategori:* ${tingkat}\n*Cabang Lomba:* ${cabang}\n\nMohon untuk diperiksa dan di-approve. Terima kasih!`;
         const waUrl = `https://wa.me/${PANITIA_WA_CLEAN}?text=${encodeURIComponent(waText)}`;
 
         Swal.fire({
