@@ -123,7 +123,7 @@
     <!-- 1. BERANDA -->
     <section id="view-beranda" class="view-page container mx-auto px-4 py-6">
       
-      <!-- HERO SLIDER BANNER (TINGGI IDEAL MAX 220PX) -->
+      <!-- HERO SLIDER BANNER -->
       <div class="relative group rounded-2xl overflow-hidden shadow-md border border-gray-200 mb-8 bg-emerald-950 w-full">
         <div class="swiper heroSlider w-full">
           <div class="swiper-wrapper" id="sliderWrapper">
@@ -196,9 +196,9 @@
               <span id="detailBadgeKategori" class="bg-emerald-100 text-emerald-800 font-bold text-xs px-3 py-1 rounded-full"></span>
               <h1 id="detailJudulLomba" class="text-2xl sm:text-3xl font-extrabold text-gray-900 mt-3 mb-2"></h1>
               
-              <!-- DINAMIS BIAYA PER KATEGORI -->
+              <!-- DINAMIS BIAYA HANYA KATEGORI AKTIF -->
               <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3 sm:p-4 mb-4 sm:mb-6 space-y-1.5 text-xs sm:text-sm">
-                <p class="font-bold text-emerald-900 text-xs uppercase tracking-wider mb-1"><i class="fa-solid fa-tags text-emerald-700 mr-1"></i> Rincian Biaya Pendaftaran Per Kategori:</p>
+                <p class="font-bold text-emerald-900 text-xs uppercase tracking-wider mb-1"><i class="fa-solid fa-tags text-emerald-700 mr-1"></i> Rincian Biaya Pendaftaran Kategori Aktif:</p>
                 <div id="detailBiayaContainer" class="space-y-1"></div>
               </div>
 
@@ -249,9 +249,8 @@
         <form onsubmit="submitAudioUpload(event)" class="space-y-4 text-xs">
           <div class="relative">
             <label class="block font-bold text-gray-700 mb-1">Cari Nama Peserta Terdaftar *</label>
-            <input type="text" id="audioNamaInput" autocomplete="off" oninput="onAudioNamaInput(this.value)" required placeholder="Ketik min. 3 huruf nama peserta (misal: Ahmad)..." class="w-full border rounded-lg px-3 py-2 text-xs focus:outline-emerald-700">
+            <input type="text" id="audioNamaInput" autocomplete="off" oninput="onAudioNamaInput(this.value)" required placeholder="Ketik min. 3 huruf nama peserta..." class="w-full border rounded-lg px-3 py-2 text-xs focus:outline-emerald-700">
             <input type="hidden" id="audioSelectedKode">
-            
             <div id="audioSuggestions" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-xl z-30 max-h-48 overflow-y-auto text-xs divide-y"></div>
           </div>
 
@@ -301,7 +300,7 @@
     </div>
   </footer>
 
-  <!-- MODAL FORM PENDAFTARAN DENGAN FITUR COPY REKENING BSI -->
+  <!-- MODAL FORM PENDAFTARAN (DROPDOWN DINAMIS BERDASARKAN KATEGORI AKTIF) -->
   <div id="formModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
     <div class="bg-white rounded-2xl max-w-md w-full p-5 sm:p-6 relative shadow-2xl my-8">
       <button onclick="closeForm()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
@@ -316,12 +315,7 @@
         
         <div>
           <label class="block text-xs font-bold text-gray-700 mb-1">Pilih Kategori / Tingkat Peserta *</label>
-          <select id="tingkatPesertaInput" required class="w-full border rounded-lg px-3 py-2 text-xs sm:text-sm focus:outline-emerald-700 bg-white font-semibold text-gray-800">
-            <option value="SD / MI">SD / MI</option>
-            <option value="SMP / MTs">SMP / MTs</option>
-            <option value="SMA / MA">SMA / MA</option>
-            <option value="Umum / Lainnya">Umum / Lainnya</option>
-          </select>
+          <select id="tingkatPesertaInput" required class="w-full border rounded-lg px-3 py-2 text-xs sm:text-sm focus:outline-emerald-700 bg-white font-semibold text-gray-800"></select>
         </div>
 
         <div>
@@ -585,6 +579,7 @@
       countdownInterval = setInterval(updateTimer, 1000);
     }
 
+    // MEMFILTER HANYA KATEGORI YANG STATUSNYA AKTIF (ACTIVE != FALSE)
     function renderGridLomba() {
       const container = document.getElementById('gridLombaContainer');
       const homeContainer = document.getElementById('homeLombaGrid');
@@ -603,20 +598,39 @@
         const isBuka = item.statusLomba !== 'TUTUP';
         const imgUrl = parseImageUrl(item.flyerUrl);
 
+        let priceItemsHtml = "";
+        
+        // Kategori 1
+        const isAct1 = item.active1 !== false && item.active1 !== 'false';
         const kat1 = item.kat1 || item.katSD || 'SD / MI';
-        const biaya1 = item.biaya1 || item.biayaSD || item.biaya || 'Rp -';
+        const b1 = item.biaya1 || item.biayaSD || item.biaya;
+        if(isAct1 && b1) {
+          priceItemsHtml += `<div class="flex justify-between font-bold text-gray-700"><span>• ${kat1}:</span> <span class="text-emerald-800 font-extrabold">${b1}</span></div>`;
+        }
 
+        // Kategori 2
+        const isAct2 = item.active2 !== false && item.active2 !== 'false';
         const kat2 = item.kat2 || item.katSMP || 'SMP / MTs';
-        const biaya2 = item.biaya2 || item.biayaSMP || item.biaya || 'Rp -';
+        const b2 = item.biaya2 || item.biayaSMP || item.biaya;
+        if(isAct2 && b2) {
+          priceItemsHtml += `<div class="flex justify-between font-bold text-gray-700"><span>• ${kat2}:</span> <span class="text-emerald-800 font-extrabold">${b2}</span></div>`;
+        }
 
+        // Kategori 3
+        const isAct3 = item.active3 !== false && item.active3 !== 'false';
         const kat3 = item.kat3 || item.katSMA || 'SMA / MA';
-        const biaya3 = item.biaya3 || item.biayaSMA || item.biaya || 'Rp -';
+        const b3 = item.biaya3 || item.biayaSMA || item.biaya;
+        if(isAct3 && b3) {
+          priceItemsHtml += `<div class="flex justify-between font-bold text-gray-700"><span>• ${kat3}:</span> <span class="text-emerald-800 font-extrabold">${b3}</span></div>`;
+        }
+
+        if (!priceItemsHtml) {
+          priceItemsHtml = `<div class="text-gray-400 italic">Gratis / Hubungi Panitia</div>`;
+        }
 
         const priceBlockHtml = `
           <div class="bg-emerald-50 border border-emerald-100 rounded-lg p-2.5 my-3 text-xs space-y-1">
-            <div class="flex justify-between font-bold text-gray-700"><span>• ${kat1}:</span> <span class="text-emerald-800 font-extrabold">${biaya1}</span></div>
-            <div class="flex justify-between font-bold text-gray-700"><span>• ${kat2}:</span> <span class="text-emerald-800 font-extrabold">${biaya2}</span></div>
-            <div class="flex justify-between font-bold text-gray-700"><span>• ${kat3}:</span> <span class="text-emerald-800 font-extrabold">${biaya3}</span></div>
+            ${priceItemsHtml}
           </div>
         `;
 
@@ -627,7 +641,7 @@
               <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between">
                 <div>
                   <div class="flex justify-between items-center mb-1">
-                    <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-0.5 rounded">${item.kategori || 'Multi Kategori'}</span>
+                    <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-0.5 rounded">${item.kategori || 'Kompetisi'}</span>
                     <span class="text-[10px] font-bold px-2 py-0.5 rounded ${isBuka ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">${isBuka ? 'BUKA' : 'TUTUP'}</span>
                   </div>
                   <h3 class="text-lg sm:text-xl font-bold text-gray-800">${item.judul}</h3>
@@ -649,7 +663,7 @@
             <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between">
               <div>
                 <div class="flex justify-between items-center mb-1">
-                  <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-0.5 rounded">${item.kategori || 'Multi Kategori'}</span>
+                  <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-0.5 rounded">${item.kategori || 'Kompetisi'}</span>
                   <span class="text-[10px] font-bold px-2 py-0.5 rounded ${isBuka ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">${isBuka ? 'BUKA' : 'TUTUP'}</span>
                 </div>
                 <h3 class="text-lg sm:text-xl font-bold text-gray-800">${item.judul}</h3>
@@ -671,38 +685,76 @@
       if(state.lombaSwiperInstance) state.lombaSwiperInstance.update();
     }
 
+    function populateTingkatDropdown(item) {
+      const select = document.getElementById('tingkatPesertaInput');
+      if (!select) return;
+      select.innerHTML = '';
+
+      const list = [];
+      if (item) {
+        if (item.active1 !== false && item.active1 !== 'false' && item.kat1) list.push(item.kat1);
+        if (item.active2 !== false && item.active2 !== 'false' && item.kat2) list.push(item.kat2);
+        if (item.active3 !== false && item.active3 !== 'false' && item.kat3) list.push(item.kat3);
+      }
+
+      if (list.length === 0) {
+        list.push('SD / MI', 'SMP / MTs', 'SMA / MA', 'Umum / Lainnya');
+      }
+
+      list.forEach(kat => {
+        const opt = document.createElement('option');
+        opt.value = kat;
+        opt.textContent = kat;
+        select.appendChild(opt);
+      });
+    }
+
     function openDetailLomba(id) {
       const item = state.lombaList.find(x => x.id === id);
       if(!item) return;
 
       document.getElementById('detailFlyerImg').src = parseImageUrl(item.flyerUrl) || 'https://via.placeholder.com/400x500';
       document.getElementById('detailJudulLomba').innerText = item.judul;
-      document.getElementById('detailBadgeKategori').innerText = item.kategori || 'SD / SMP / SMA';
+      document.getElementById('detailBadgeKategori').innerText = item.kategori || 'Multi Kategori';
       
-      const kat1 = item.kat1 || item.katSD || 'SD / MI';
-      const biaya1 = item.biaya1 || item.biayaSD || item.biaya || 'Rp -';
-
-      const kat2 = item.kat2 || item.katSMP || 'SMP / MTs';
-      const biaya2 = item.biaya2 || item.biayaSMP || item.biaya || 'Rp -';
-
-      const kat3 = item.kat3 || item.katSMA || 'SMA / MA';
-      const biaya3 = item.biaya3 || item.biayaSMA || item.biaya || 'Rp -';
-
       const detailBiayaBox = document.getElementById('detailBiayaContainer');
-      detailBiayaBox.innerHTML = `
-        <div class="flex justify-between items-center py-1 border-b border-emerald-200/60 font-medium">
-          <span class="text-gray-700">• ${kat1} :</span>
-          <span class="font-extrabold text-emerald-800 text-sm sm:text-base">${biaya1}</span>
-        </div>
-        <div class="flex justify-between items-center py-1 border-b border-emerald-200/60 font-medium">
-          <span class="text-gray-700">• ${kat2} :</span>
-          <span class="font-extrabold text-emerald-800 text-sm sm:text-base">${biaya2}</span>
-        </div>
-        <div class="flex justify-between items-center py-1 font-medium">
-          <span class="text-gray-700">• ${kat3} :</span>
-          <span class="font-extrabold text-emerald-800 text-sm sm:text-base">${biaya3}</span>
-        </div>
-      `;
+      detailBiayaBox.innerHTML = "";
+
+      let activeCount = 0;
+      
+      if (item.active1 !== false && item.active1 !== 'false' && item.kat1) {
+        activeCount++;
+        detailBiayaBox.innerHTML += `
+          <div class="flex justify-between items-center py-1 border-b border-emerald-200/60 font-medium">
+            <span class="text-gray-700">• ${item.kat1} :</span>
+            <span class="font-extrabold text-emerald-800 text-sm sm:text-base">${item.biaya1 || item.biayaSD || '-'}</span>
+          </div>
+        `;
+      }
+
+      if (item.active2 !== false && item.active2 !== 'false' && item.kat2) {
+        activeCount++;
+        detailBiayaBox.innerHTML += `
+          <div class="flex justify-between items-center py-1 border-b border-emerald-200/60 font-medium">
+            <span class="text-gray-700">• ${item.kat2} :</span>
+            <span class="font-extrabold text-emerald-800 text-sm sm:text-base">${item.biaya2 || item.biayaSMP || '-'}</span>
+          </div>
+        `;
+      }
+
+      if (item.active3 !== false && item.active3 !== 'false' && item.kat3) {
+        activeCount++;
+        detailBiayaBox.innerHTML += `
+          <div class="flex justify-between items-center py-1 font-medium">
+            <span class="text-gray-700">• ${item.kat3} :</span>
+            <span class="font-extrabold text-emerald-800 text-sm sm:text-base">${item.biaya3 || item.biayaSMA || '-'}</span>
+          </div>
+        `;
+      }
+
+      if (activeCount === 0) {
+        detailBiayaBox.innerHTML = `<p class="text-gray-500 italic">Gratis / Biaya Pendaftaran Tidak Diatur.</p>`;
+      }
 
       document.getElementById('detailDeskripsi').innerText = item.deskripsi || '-';
       document.getElementById('detailSyarat').innerText = item.syarat || '-';
@@ -719,6 +771,7 @@
         btnDaftar.innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Daftar Lomba Ini`;
         btnDaftar.onclick = () => {
           document.getElementById('cabangLombaInput').value = item.judul;
+          populateTingkatDropdown(item);
           document.getElementById('formModal').classList.remove('hidden');
         };
       }
