@@ -195,7 +195,7 @@
               <thead class="bg-emerald-900 text-white font-bold uppercase">
                 <tr>
                   <th class="p-3">Kode</th>
-                  <th class="p-3">Peserta / Tim</th>
+                  <th class="p-3">Peserta</th>
                   <th class="p-3">Lomba</th>
                   <th class="p-3">Bukti Pembayaran (TF)</th>
                   <th class="p-3">Status</th>
@@ -323,7 +323,7 @@
               <thead class="bg-emerald-950 text-white font-bold uppercase">
                 <tr>
                   <th class="p-3">Kode</th>
-                  <th class="p-3">Nama Peserta / Tim</th>
+                  <th class="p-3">Nama Peserta</th>
                   <th class="p-3">Asal Sekolah</th>
                   <th class="p-3">Lomba</th>
                   <th class="p-3">Barcode Verification</th>
@@ -336,12 +336,12 @@
         </div>
       </div>
 
-      <!-- 4. KELOLA CABANG LOMBA (PILIHAN INDIVIDU / TEAM + 3 KATEGORI & BIAYA) -->
+      <!-- 4. KELOLA CABANG LOMBA (TIPE PESERTA INDIVIDU / TEAM + 3 BARIS KATEGORI/BIAYA) -->
       <div id="sec-lomba" class="admin-sec hidden space-y-6">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
           <div>
             <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Kelola Cabang Lomba</h1>
-            <p class="text-xs text-gray-500">Atur Tipe (Individu / Team), Kategori, Biaya, dan Toggle Aktif/Non-aktif</p>
+            <p class="text-xs text-gray-500">Atur Judul, Tipe Peserta (Individu/Team), Kategori, Biaya, dan Toggle Status</p>
           </div>
           <button onclick="resetLombaForm()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded-lg text-xs font-bold shadow">
             + Tambah Lomba Baru
@@ -359,17 +359,17 @@
               <input type="text" id="lombaJudul" required placeholder="MHQ / Tari Kreasi / Solosong / Futsal" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700">
             </div>
 
-            <div class="grid grid-cols-2 gap-3">
+            <!-- TIPE PESERTA: INDIVIDU ATAU TEAM -->
+            <div class="grid grid-cols-2 gap-2">
               <div>
                 <label class="block text-[11px] font-bold text-gray-700 mb-1">Tipe Peserta *</label>
-                <select id="lombaTipe" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700 font-bold text-purple-900 bg-purple-50">
-                  <option value="Individu">Individu</option>
-                  <option value="Team">Team / Berkelompok</option>
+                <select id="lombaTipe" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700 bg-white font-bold text-purple-900">
+                  <option value="Individu">👤 Individu</option>
+                  <option value="Team">👥 Team / Berkelompok</option>
                 </select>
               </div>
-
               <div>
-                <label class="block text-[11px] font-bold text-gray-700 mb-1">Status Lomba</label>
+                <label class="block text-[11px] font-bold text-gray-700 mb-1">Status Utama Lomba</label>
                 <select id="lombaStatus" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700">
                   <option value="BUKA">BUKA</option>
                   <option value="TUTUP">TUTUP</option>
@@ -377,7 +377,7 @@
               </div>
             </div>
 
-            <!-- RINCIAN 3 BARIS KATEGORI, BIAYA, & STATUS AKTIF -->
+            <!-- RINCIAN 3 BARIS KATEGORI (KIRI), BIAYA (KANAN), & STATUS AKTIF (CHECKBOX) -->
             <div class="bg-gray-50 p-3 rounded-lg border space-y-3">
               <span class="block font-bold text-[11px] text-emerald-900 border-b pb-1">3 KATEGORI (KIRI), BIAYA (KANAN) & STATUS AKTIF:</span>
               
@@ -1100,17 +1100,17 @@
         const b3 = l.biaya3 || l.biayaSMA || l.biaya || '-';
         const act3 = l.active3 !== false && l.active3 !== 'false';
 
-        const tipe = l.tipeLomba || 'Individu';
-        const isTeam = (tipe === 'Team');
+        const tipe = l.tipePeserta || 'Individu';
+        const isTeam = tipe === 'Team';
 
         box.innerHTML += `
           <div class="bg-white p-4 rounded-xl border shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
             <div class="flex items-center gap-3">
               <img src="${imgUrl || 'https://via.placeholder.com/80'}" class="w-14 h-14 rounded-lg object-cover border shrink-0">
               <div>
-                <div class="flex items-center gap-2 flex-wrap">
+                <div class="flex items-center gap-1.5 flex-wrap">
                   <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded">${l.kategori || 'Multi Kategori'}</span>
-                  <span class="text-xs ${isTeam ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'} font-bold px-2 py-0.5 rounded">${tipe}</span>
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded ${isTeam ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'}">${isTeam ? '👥 Team' : '👤 Individu'}</span>
                   <span class="text-[10px] font-bold px-2 py-0.5 rounded ${l.statusLomba === 'TUTUP' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}">${l.statusLomba || 'BUKA'}</span>
                 </div>
                 <h4 class="font-bold text-gray-800 mt-1 text-sm sm:text-base">${l.judul}</h4>
@@ -1143,8 +1143,9 @@
       document.getElementById('existingFlyerUrl').value = item.flyerUrl;
       document.getElementById('lombaFlyerPathText').value = item.flyerUrl || '';
       document.getElementById('lombaJudul').value = item.judul;
-      document.getElementById('lombaTipe').value = item.tipeLomba || 'Individu';
       
+      document.getElementById('lombaTipe').value = item.tipePeserta || 'Individu';
+
       document.getElementById('lombaKat1').value = item.kat1 || item.katSD || 'SD / MI';
       document.getElementById('lombaBiaya1').value = item.biaya1 || item.biayaSD || item.biaya || '';
       document.getElementById('lombaActive1').checked = (item.active1 !== false && item.active1 !== 'false');
@@ -1188,7 +1189,7 @@
           id: document.getElementById('lombaId').value,
           judul: document.getElementById('lombaJudul').value,
           kategori: 'Multi Kategori',
-          tipeLomba: document.getElementById('lombaTipe').value,
+          tipePeserta: document.getElementById('lombaTipe').value,
           
           kat1: document.getElementById('lombaKat1').value,
           biaya1: document.getElementById('lombaBiaya1').value,
@@ -1202,6 +1203,7 @@
           biaya3: document.getElementById('lombaBiaya3').value,
           active3: document.getElementById('lombaActive3').checked,
 
+          // Legacy fields compatibility
           biayaSD: document.getElementById('lombaBiaya1').value,
           biayaSMP: document.getElementById('lombaBiaya2').value,
           biayaSMA: document.getElementById('lombaBiaya3').value,
@@ -1216,7 +1218,7 @@
         const result = await postToGAS(payload);
 
         if(result.status === "success") {
-          Swal.fire({ icon: 'success', title: 'Berhasil Disimpan! ✨', text: 'Data cabang lomba, biaya, dan tipe peserta berhasil diperbarui.', confirmButtonColor: '#047857' });
+          Swal.fire({ icon: 'success', title: 'Berhasil Disimpan! ✨', text: 'Data Cabang Lomba dan Tipe Peserta berhasil diperbarui.', confirmButtonColor: '#047857' });
           resetLombaForm();
           await fetchPortalConfig();
         }
@@ -1321,4 +1323,115 @@
       if(document.getElementById('cfgTargetDate')) document.getElementById('cfgTargetDate').value = cfg.targetDate || "2026-11-20T08:00";
       if(document.getElementById('cfgLinkIg')) document.getElementById('cfgLinkIg').value = cfg.linkIg || "#";
       if(document.getElementById('cfgLinkYt')) document.getElementById('cfgLinkYt').value = cfg.linkYt || "#";
-      if(document.getElementById('cfg
+      if(document.getElementById('cfgLinkTt')) document.getElementById('cfgLinkTt').value = cfg.linkTt || "#";
+      if(document.getElementById('cfgLinkTh')) document.getElementById('cfgLinkTh').value = cfg.linkTh || "#";
+
+      if(document.getElementById('cfgHeaderTitle')) document.getElementById('cfgHeaderTitle').value = cfg.headerTitle || "PESONA AL FIRDAUS";
+      if(document.getElementById('cfgHeaderSub')) document.getElementById('cfgHeaderSub').value = cfg.headerSub || "Islamic Youth Festival 2026";
+      if(document.getElementById('cfgRekening')) document.getElementById('cfgRekening').value = cfg.rekening || "BSI: 8500808806 a.n Yayasan Atmo Taruno Joyo";
+      if(document.getElementById('cfgContact')) document.getElementById('cfgContact').value = cfg.contact || "Kontak Panitia: 0853-6668-5084";
+      if(document.getElementById('certTemplateUrlInput')) document.getElementById('certTemplateUrlInput').value = cfg.certTemplate || "";
+    }
+
+    async function saveCertTemplateConfig(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('button[type="submit"]');
+      btn.disabled = true; btn.innerText = "Menyimpan...";
+
+      try {
+        if(!adminState.config) adminState.config = {};
+        adminState.config.certTemplate = document.getElementById('certTemplateUrlInput').value;
+
+        const result = await postToGAS({ action: 'saveConfig', config: adminState.config });
+        if(result.status === "success") {
+          Swal.fire({ icon: 'success', title: 'Template Disimpan! ✨', text: 'URL background sertifikat berhasil diperbarui.', confirmButtonColor: '#047857' });
+          await fetchPortalConfig();
+        }
+      } catch(err) {
+        Swal.fire({ icon: 'error', title: 'Gagal', text: err.toString(), confirmButtonColor: '#047857' });
+      } finally {
+        btn.disabled = false; btn.innerText = "Simpan Template Sertifikat";
+      }
+    }
+
+    async function saveNavMenuConfig(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('button[type="submit"]');
+      btn.disabled = true; btn.innerText = "Menyimpan...";
+
+      try {
+        if(!adminState.config) adminState.config = {};
+        adminState.config.menuNav = {
+          beranda: document.getElementById('mNavBeranda').checked,
+          lomba: document.getElementById('mNavLomba').checked,
+          cek: document.getElementById('mNavCek').checked,
+          unggah: document.getElementById('mNavUnggah').checked,
+          sertifikat: document.getElementById('mNavSertifikat').checked
+        };
+
+        const result = await postToGAS({ action: 'saveConfig', config: adminState.config });
+        if(result.status === "success") {
+          Swal.fire({ icon: 'success', title: 'Navigasi Disimpan! ✨', text: 'Pengaturan visibilitas menubar berhasil diperbarui.', confirmButtonColor: '#047857' });
+          await fetchPortalConfig();
+        }
+      } catch(err) {
+        Swal.fire({ icon: 'error', title: 'Gagal', text: err.toString(), confirmButtonColor: '#047857' });
+      } finally {
+        btn.disabled = false; btn.innerText = "Simpan Menubar Navigasi";
+      }
+    }
+
+    async function saveTopbarConfig(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('button[type="submit"]');
+      btn.disabled = true; btn.innerText = "Menyimpan...";
+
+      try {
+        if(!adminState.config) adminState.config = {};
+        adminState.config.lokasi = document.getElementById('cfgLokasi').value;
+        adminState.config.mapUrl = document.getElementById('cfgMapUrl').value;
+        adminState.config.waNumber = document.getElementById('cfgWaNumber').value;
+        adminState.config.targetDate = document.getElementById('cfgTargetDate').value;
+        adminState.config.linkIg = document.getElementById('cfgLinkIg').value;
+        adminState.config.linkYt = document.getElementById('cfgLinkYt').value;
+        adminState.config.linkTt = document.getElementById('cfgLinkTt').value;
+        adminState.config.linkTh = document.getElementById('cfgLinkTh').value;
+
+        const result = await postToGAS({ action: 'saveConfig', config: adminState.config });
+        if(result.status === "success") {
+          Swal.fire({ icon: 'success', title: 'Topbar Disimpan! ✨', text: 'Informasi topbar dan sosmed telah diperbarui.', confirmButtonColor: '#047857' });
+          await fetchPortalConfig();
+        }
+      } catch(err) {
+        Swal.fire({ icon: 'error', title: 'Gagal', text: err.toString(), confirmButtonColor: '#047857' });
+      } finally {
+        btn.disabled = false; btn.innerText = "Simpan Topbar & Sosmed";
+      }
+    }
+
+    async function saveIdentitasConfig(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('button[type="submit"]');
+      btn.disabled = true; btn.innerText = "Menyimpan...";
+
+      try {
+        if(!adminState.config) adminState.config = {};
+        adminState.config.headerTitle = document.getElementById('cfgHeaderTitle').value;
+        adminState.config.headerSub = document.getElementById('cfgHeaderSub').value;
+        adminState.config.rekening = document.getElementById('cfgRekening').value;
+        adminState.config.contact = document.getElementById('cfgContact').value;
+
+        const result = await postToGAS({ action: 'saveConfig', config: adminState.config });
+        if(result.status === "success") {
+          Swal.fire({ icon: 'success', title: 'Identitas Disimpan! ✨', text: 'Identitas portal dan rekening telah diperbarui.', confirmButtonColor: '#047857' });
+          await fetchPortalConfig();
+        }
+      } catch(err) {
+        Swal.fire({ icon: 'error', title: 'Gagal', text: err.toString(), confirmButtonColor: '#047857' });
+      } finally {
+        btn.disabled = false; btn.innerText = "Simpan Identitas & Rekening";
+      }
+    }
+  </script>
+</body>
+</html>
