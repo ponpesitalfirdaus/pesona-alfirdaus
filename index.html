@@ -195,7 +195,7 @@
             <div>
               <div class="flex items-center gap-2 flex-wrap">
                 <span id="detailBadgeKategori" class="bg-emerald-100 text-emerald-800 font-bold text-xs px-3 py-1 rounded-full"></span>
-                <span id="detailBadgeTipe" class="bg-purple-100 text-purple-800 font-bold text-xs px-3 py-1 rounded-full"></span>
+                <span id="detailBadgeTipe" class="font-bold text-xs px-3 py-1 rounded-full"></span>
               </div>
               <h1 id="detailJudulLomba" class="text-2xl sm:text-3xl font-extrabold text-gray-900 mt-3 mb-2"></h1>
               
@@ -303,18 +303,15 @@
     </div>
   </footer>
 
-  <!-- MODAL FORM PENDAFTARAN (KATEGORI AKTIF + DUKUNGAN NAMA KETUA/ANGGOTA TEAM + FITUR TUTUP BACKDROP/X) -->
-  <div id="formModal" onclick="closeFormOnBackdrop(event)" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4 overflow-y-auto backdrop-blur-sm">
+  <!-- MODAL FORM PENDAFTARAN (CLOSE ON BACKDROP / BUTTON X & DINAMIS NAMA TEAM) -->
+  <div id="formModal" onclick="closeFormOnBackdrop(event)" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
     <div class="bg-white rounded-2xl max-w-md w-full p-5 sm:p-6 relative shadow-2xl my-8 transform transition-all">
       <!-- TOMBOL CLOSE X -->
-      <button type="button" onclick="closeForm()" class="absolute top-3.5 right-3.5 w-8 h-8 flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-500 hover:text-gray-800 rounded-full text-lg font-bold transition shadow-sm" title="Tutup Modal">
+      <button type="button" onclick="closeForm()" title="Tutup Modal" class="absolute top-3.5 right-3.5 bg-gray-100 hover:bg-red-100 text-gray-500 hover:text-red-600 w-8 h-8 rounded-full flex items-center justify-center font-bold text-lg transition shadow-sm border">
         &times;
       </button>
 
-      <div class="flex items-center gap-2 mb-1">
-        <h3 class="text-lg sm:text-xl font-bold text-emerald-900">Form Pendaftaran Lomba</h3>
-        <span id="formBadgeTipe" class="text-[10px] bg-purple-100 text-purple-800 font-bold px-2 py-0.5 rounded-full"></span>
-      </div>
+      <h3 class="text-lg sm:text-xl font-bold text-emerald-900 mb-1 pr-8">Form Pendaftaran Lomba</h3>
       <p class="text-xs text-gray-500 mb-4">Isi data calon peserta / tim dengan benar.</p>
       
       <form id="regForm" onsubmit="submitRegistration(event)" class="space-y-3">
@@ -328,22 +325,22 @@
           <select id="tingkatPesertaInput" required class="w-full border rounded-lg px-3 py-2 text-xs sm:text-sm focus:outline-emerald-700 bg-white font-semibold text-gray-800"></select>
         </div>
 
-        <!-- WADAH DINAMIS INPUT NAMA (INDIVIDU ATAU MULTI ANGGOTA TEAM) -->
-        <div id="namaPesertaContainer"></div>
+        <!-- DINAMIS INPUT NAMA PESERTA / TIM -->
+        <div id="namaPesertaContainer" class="space-y-2"></div>
 
         <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1">Asal Sekolah / Lembaga / Utusan *</label>
-          <input type="text" id="asalSekolah" required class="w-full border rounded-lg px-3 py-2 text-xs sm:text-sm" placeholder="Contoh: SMA Negeri 1 / Pesantren X">
+          <label class="block text-xs font-bold text-gray-700 mb-1">Asal Sekolah / Lembaga *</label>
+          <input type="text" id="asalSekolah" required class="w-full border rounded-lg px-3 py-2 text-xs sm:text-sm" placeholder="Contoh: SD IT Al Firdaus">
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label class="block text-xs font-bold text-gray-700 mb-1">No. WhatsApp *</label>
-            <input type="text" id="noWhatsapp" required class="w-full border rounded-lg px-3 py-2 text-xs sm:text-sm" placeholder="08xxxxxxxxxx">
+            <input type="text" id="noWhatsapp" required class="w-full border rounded-lg px-3 py-2 text-xs sm:text-sm" placeholder="08xxxxx">
           </div>
           <div>
             <label class="block text-xs font-bold text-gray-700 mb-1">Email *</label>
-            <input type="email" id="email" required class="w-full border rounded-lg px-3 py-2 text-xs sm:text-sm" placeholder="email@domain.com">
+            <input type="email" id="email" required class="w-full border rounded-lg px-3 py-2 text-xs sm:text-sm" placeholder="nama@email.com">
           </div>
         </div>
 
@@ -370,22 +367,19 @@
           </p>
         </div>
         
-        <button type="submit" id="btnSubmitForm" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2.5 rounded-lg text-xs sm:text-sm shadow flex items-center justify-center gap-2">
-          <span>Kirim Pendaftaran</span>
-        </button>
+        <button type="submit" id="btnSubmitForm" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2.5 rounded-lg text-xs sm:text-sm shadow">Kirim Pendaftaran</button>
       </form>
     </div>
   </div>
 
   <script>
     const GAS_URL = "https://script.google.com/macros/s/AKfycbw4APJqKIcWVgs1yk29KHmuIeArlCDcu0rruBauZkOOmUmGig9Wvqy2aIKq7_gaUPGkOg/exec";
-    const DRIVE_FOLDER_ID = "1i0VnagJrNxjQRWgoO-qXZyrzIRX7l85WFZDw3ji6c0ncve_g9hrh811Wwd6l8sojQjbiH1eN";
+    const DRIVE_FOLDER_ID = "1i0VnagJrNxjQRWgo-qXZyrzIRX7l85WFZDw3ji6c0ncve_g9hrh811Wwd6l8sojQjbiH1eN";
     const PANITIA_WA_CLEAN = "6285366685084";
 
-    let state = { lombaList: [], config: {}, swiperInstance: null, lombaSwiperInstance: null, isAutoplayRunning: true };
+    let state = { lombaList: [], config: {}, swiperInstance: null, lombaSwiperInstance: null, isAutoplayRunning: true, currentLombaType: 'Individu' };
     let countdownInterval = null;
     let searchTimeout = null;
-    let currentSelectedLombaTipe = 'Individu';
 
     window.onload = async () => {
       initSwiper();
@@ -590,6 +584,7 @@
       countdownInterval = setInterval(updateTimer, 1000);
     }
 
+    // MEMFILTER HANYA KATEGORI YANG STATUSNYA AKTIF (ACTIVE != FALSE) DAN MANAMPILKAN BADGE INDIVIDU / TEAM
     function renderGridLomba() {
       const container = document.getElementById('gridLombaContainer');
       const homeContainer = document.getElementById('homeLombaGrid');
@@ -607,8 +602,8 @@
       state.lombaList.forEach(item => {
         const isBuka = item.statusLomba !== 'TUTUP';
         const imgUrl = parseImageUrl(item.flyerUrl);
-        const tipe = item.tipeLomba || 'Individu';
-        const isTeam = (tipe === 'Team');
+        const tipe = item.tipePeserta || 'Individu';
+        const isTeam = tipe === 'Team';
 
         let priceItemsHtml = "";
         
@@ -646,12 +641,7 @@
           </div>
         `;
 
-        const badgesHtml = `
-          <div class="flex items-center gap-1.5 flex-wrap">
-            <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-0.5 rounded">${item.kategori || 'Multi Kategori'}</span>
-            <span class="text-xs ${isTeam ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'} font-bold px-2 py-0.5 rounded">${tipe}</span>
-          </div>
-        `;
+        const typeBadgeHtml = `<span class="text-[10px] font-bold px-2 py-0.5 rounded ${isTeam ? 'bg-purple-100 text-purple-800 border border-purple-300' : 'bg-blue-100 text-blue-800 border border-blue-300'}">${isTeam ? '👥 Team' : '👤 Individu'}</span>`;
 
         const homeSlideHtml = `
           <div class="swiper-slide h-auto">
@@ -659,8 +649,11 @@
               <img src="${imgUrl || 'https://via.placeholder.com/400x250'}" class="h-44 sm:h-48 w-full object-cover">
               <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between">
                 <div>
-                  <div class="flex justify-between items-center mb-1">
-                    ${badgesHtml}
+                  <div class="flex flex-wrap justify-between items-center gap-1 mb-1">
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                      <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-0.5 rounded">${item.kategori || 'Multi Kategori'}</span>
+                      ${typeBadgeHtml}
+                    </div>
                     <span class="text-[10px] font-bold px-2 py-0.5 rounded ${isBuka ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">${isBuka ? 'BUKA' : 'TUTUP'}</span>
                   </div>
                   <h3 class="text-lg sm:text-xl font-bold text-gray-800">${item.judul}</h3>
@@ -681,8 +674,11 @@
             <img src="${imgUrl || 'https://via.placeholder.com/400x250'}" class="h-44 sm:h-48 w-full object-cover">
             <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between">
               <div>
-                <div class="flex justify-between items-center mb-1">
-                  ${badgesHtml}
+                <div class="flex flex-wrap justify-between items-center gap-1 mb-1">
+                  <div class="flex items-center gap-1.5 flex-wrap">
+                    <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-0.5 rounded">${item.kategori || 'Multi Kategori'}</span>
+                    ${typeBadgeHtml}
+                  </div>
                   <span class="text-[10px] font-bold px-2 py-0.5 rounded ${isBuka ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">${isBuka ? 'BUKA' : 'TUTUP'}</span>
                 </div>
                 <h3 class="text-lg sm:text-xl font-bold text-gray-800">${item.judul}</h3>
@@ -728,15 +724,85 @@
       });
     }
 
+    // FORM DINAMIS UNTUK NAMA PESERTA INDIVIDU ATAU TEAM
+    function renderNamaPesertaFields(tipePeserta) {
+      const container = document.getElementById('namaPesertaContainer');
+      if (!container) return;
+      container.innerHTML = "";
+
+      if (tipePeserta === 'Team') {
+        container.innerHTML = `
+          <div class="bg-purple-50 p-3 rounded-xl border border-purple-200">
+            <div class="flex justify-between items-center mb-2">
+              <label class="block text-xs font-bold text-purple-900">
+                <i class="fa-solid fa-users text-purple-700 mr-1"></i> Daftar Nama Anggota Tim / Kelompok *
+              </label>
+              <button type="button" onclick="addTeamMemberField()" class="bg-purple-700 hover:bg-purple-800 text-white px-2.5 py-1 rounded-lg text-[10px] font-bold shadow flex items-center gap-1 transition">
+                <i class="fa-solid fa-plus"></i> Tambah Anggota
+              </button>
+            </div>
+            <div id="teamMemberList" class="space-y-2">
+              <div class="flex items-center gap-2">
+                <input type="text" class="input-nama-peserta flex-1 border rounded-lg px-3 py-1.5 text-xs focus:outline-purple-700" required placeholder="Peserta 1 (Ketua Tim) *">
+              </div>
+              <div class="flex items-center gap-2">
+                <input type="text" class="input-nama-peserta flex-1 border rounded-lg px-3 py-1.5 text-xs focus:outline-purple-700" required placeholder="Peserta 2 *">
+              </div>
+            </div>
+            <p class="text-[10px] text-purple-700 font-medium mt-2">Klik "+ Tambah Anggota" jika tim memiliki lebih dari 2 anggota.</p>
+          </div>
+        `;
+      } else {
+        container.innerHTML = `
+          <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">Nama Lengkap Peserta *</label>
+            <input type="text" class="input-nama-peserta w-full border rounded-lg px-3 py-2 text-xs sm:text-sm focus:outline-emerald-700" required placeholder="Masukkan nama lengkap peserta">
+          </div>
+        `;
+      }
+    }
+
+    function addTeamMemberField() {
+      const list = document.getElementById('teamMemberList');
+      if (!list) return;
+      const count = list.children.length + 1;
+
+      const div = document.createElement('div');
+      div.className = "flex items-center gap-2";
+      div.innerHTML = `
+        <input type="text" class="input-nama-peserta flex-1 border rounded-lg px-3 py-1.5 text-xs focus:outline-purple-700" required placeholder="Peserta ${count} *">
+        <button type="button" onclick="removeTeamMemberField(this)" title="Hapus Anggota" class="bg-red-500 hover:bg-red-600 text-white w-7 h-7 rounded-lg text-xs flex items-center justify-center shrink-0 shadow">
+          <i class="fa-solid fa-trash"></i>
+        </button>
+      `;
+      list.appendChild(div);
+    }
+
+    function removeTeamMemberField(btn) {
+      const row = btn.parentElement;
+      if (row) row.remove();
+    }
+
     function openDetailLomba(id) {
       const item = state.lombaList.find(x => x.id === id);
       if(!item) return;
 
+      const tipe = item.tipePeserta || 'Individu';
+      state.currentLombaType = tipe;
+
       document.getElementById('detailFlyerImg').src = parseImageUrl(item.flyerUrl) || 'https://via.placeholder.com/400x500';
       document.getElementById('detailJudulLomba').innerText = item.judul;
       document.getElementById('detailBadgeKategori').innerText = item.kategori || 'Multi Kategori';
-      document.getElementById('detailBadgeTipe').innerText = item.tipeLomba || 'Individu';
       
+      const badgeTipe = document.getElementById('detailBadgeTipe');
+      if(tipe === 'Team') {
+        badgeTipe.className = "bg-purple-100 text-purple-800 border border-purple-300 font-bold text-xs px-3 py-1 rounded-full";
+        badgeTipe.innerText = "👥 Team / Berkelompok";
+      } else {
+        badgeTipe.className = "bg-blue-100 text-blue-800 border border-blue-300 font-bold text-xs px-3 py-1 rounded-full";
+        badgeTipe.innerText = "👤 Individu";
+      }
+
       const detailBiayaBox = document.getElementById('detailBiayaContainer');
       detailBiayaBox.innerHTML = "";
 
@@ -792,7 +858,7 @@
         btnDaftar.onclick = () => {
           document.getElementById('cabangLombaInput').value = item.judul;
           populateTingkatDropdown(item);
-          setupParticipantFields(item.tipeLomba || 'Individu');
+          renderNamaPesertaFields(tipe);
           document.getElementById('formModal').classList.remove('hidden');
         };
       }
@@ -800,66 +866,13 @@
       switchView('detail-lomba');
     }
 
-    // PENANGANAN INPUT DINAMIS NAMA PESERTA INDIVIDU / TEAM
-    function setupParticipantFields(tipe) {
-      currentSelectedLombaTipe = tipe;
-      const container = document.getElementById('namaPesertaContainer');
-      const badgeTipe = document.getElementById('formBadgeTipe');
-      if(badgeTipe) badgeTipe.innerText = tipe;
-
-      container.innerHTML = '';
-      if (tipe === 'Team') {
-        container.innerHTML = `
-          <div class="space-y-2 bg-purple-50/60 border border-purple-200 p-3 rounded-xl">
-            <div class="flex justify-between items-center mb-1">
-              <label class="block text-xs font-bold text-purple-950">Nama Anggota Tim Peserta *</label>
-              <span class="text-[10px] bg-purple-200 text-purple-900 px-2 py-0.5 rounded font-bold">Lomba Tim / Berkelompok</span>
-            </div>
-            <div id="teamMembersList" class="space-y-2">
-              <div class="flex gap-2 items-center">
-                <input type="text" class="team-member-input w-full border border-purple-200 rounded-lg px-3 py-2 text-xs sm:text-sm focus:outline-purple-700" placeholder="Nama Ketua Tim *" required>
-                <span class="text-[10px] font-bold bg-purple-800 text-white px-2.5 py-2 rounded-lg shrink-0">Ketua</span>
-              </div>
-              <div class="flex gap-2 items-center">
-                <input type="text" class="team-member-input w-full border border-purple-200 rounded-lg px-3 py-2 text-xs sm:text-sm focus:outline-purple-700" placeholder="Nama Anggota 1 *" required>
-              </div>
-            </div>
-            <button type="button" onclick="addTeamMemberField()" class="mt-2 text-xs text-purple-900 bg-purple-200/80 hover:bg-purple-300 px-3 py-1.5 rounded-lg font-bold flex items-center gap-1.5 transition">
-              <i class="fa-solid fa-user-plus"></i>
-              <span>+ Tambah Anggota Team</span>
-            </button>
-          </div>
-        `;
-      } else {
-        container.innerHTML = `
-          <div>
-            <label class="block text-xs font-bold text-gray-700 mb-1">Nama Lengkap Peserta *</label>
-            <input type="text" id="namaLengkap" required class="w-full border rounded-lg px-3 py-2 text-xs sm:text-sm focus:outline-emerald-700" placeholder="Masukkan nama lengkap peserta">
-          </div>
-        `;
-      }
-    }
-
-    function addTeamMemberField() {
-      const list = document.getElementById('teamMembersList');
-      if(!list) return;
-      const count = list.querySelectorAll('.team-member-input').length;
-      const div = document.createElement('div');
-      div.className = "flex gap-2 items-center animate-fadeIn";
-      div.innerHTML = `
-        <input type="text" class="team-member-input w-full border border-purple-200 rounded-lg px-3 py-2 text-xs sm:text-sm focus:outline-purple-700" placeholder="Nama Anggota ${count}">
-        <button type="button" onclick="this.parentElement.remove()" class="text-red-500 hover:text-red-700 w-8 h-8 flex items-center justify-center text-lg font-bold rounded-lg hover:bg-red-50 shrink-0" title="Hapus Anggota">&times;</button>
-      `;
-      list.appendChild(div);
-    }
-
-    // METODE CLOSE FORMULIR (KLIK TOMBOL X DAN BISA KLIK AREA BEBAS OUTSIDE MODAL)
     function closeForm() { 
       document.getElementById('formModal').classList.add('hidden'); 
     }
 
+    // CLOSE POPUP KETIKA KLIK DI OUTSIDE (BACKDROP)
     function closeFormOnBackdrop(e) {
-      if (e.target.id === 'formModal') {
+      if(e.target === document.getElementById('formModal')) {
         closeForm();
       }
     }
@@ -1038,29 +1051,22 @@
 
     async function sendRegData(buktiBase64, fileName, fileType) {
       const btn = document.getElementById('btnSubmitForm');
-      let nama = "";
-
-      if (currentSelectedLombaTipe === 'Team') {
-        const inputs = document.querySelectorAll('.team-member-input');
-        const names = [];
-        inputs.forEach((inp, idx) => {
-          const val = inp.value.trim();
-          if (val) {
-            names.push(idx === 0 ? `Ketua: ${val}` : `Anggota ${idx}: ${val}`);
+      
+      // MENGUMPULKAN NAMA PESERTA / DENGAN FORMAT TEAM
+      const inputs = document.querySelectorAll('.input-nama-peserta');
+      const namaList = [];
+      inputs.forEach((inp, idx) => {
+        const val = inp.value.trim();
+        if(val) {
+          if(inputs.length > 1) {
+            namaList.push(idx === 0 ? `1. ${val} (Ketua)` : `${idx + 1}. ${val}`);
+          } else {
+            namaList.push(val);
           }
-        });
-        nama = names.join(", ");
-      } else {
-        const el = document.getElementById('namaLengkap');
-        nama = el ? el.value.trim() : "";
-      }
+        }
+      });
 
-      if (!nama) {
-        Swal.fire({ icon: 'warning', title: 'Nama Peserta Kosong', text: 'Harap isi nama peserta/anggota tim terlebih dahulu.', confirmButtonColor: '#047857' });
-        btn.disabled = false; btn.innerText = "Kirim Pendaftaran";
-        return;
-      }
-
+      const nama = namaList.join(", ");
       const cabang = document.getElementById('cabangLombaInput').value;
       const tingkat = document.getElementById('tingkatPesertaInput').value;
 
@@ -1080,7 +1086,7 @@
       const result = await res.json();
       if(result.status === "success") {
         const regKode = result.kodeRegistrasi;
-        const waText = `Halo Panitia PESONA AL FIRDAUS 2026,\n\nSaya telah mendaftar secara online:\n*Kode Registrasi:* ${regKode}\n*Nama Peserta / Tim:* ${nama}\n*Tingkat/Kategori:* ${tingkat}\n*Cabang Lomba:* ${cabang}\n\nMohon untuk diperiksa dan di-approve. Terima kasih!`;
+        const waText = `Halo Panitia PESONA AL FIRDAUS 2026,\n\nSaya telah mendaftar secara online:\n*Kode Registrasi:* ${regKode}\n*Nama Peserta/Tim:* ${nama}\n*Tingkat/Kategori:* ${tingkat}\n*Cabang Lomba:* ${cabang}\n\nMohon untuk diperiksa dan di-approve. Terima kasih!`;
         const waUrl = `https://wa.me/${PANITIA_WA_CLEAN}?text=${encodeURIComponent(waText)}`;
 
         Swal.fire({
