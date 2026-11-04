@@ -188,7 +188,7 @@
           </div>
         </div>
 
-        <!-- TABEL PENDAFTAR & LINK BUKTI TF PREVIEW -->
+        <!-- TABEL PENDAFTAR -->
         <div class="bg-white rounded-xl border shadow-sm overflow-hidden">
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
@@ -336,12 +336,12 @@
         </div>
       </div>
 
-      <!-- 4. KELOLA CABANG LOMBA (INPUT BIAYA SD, SMP, SMA) -->
+      <!-- 4. KELOLA CABANG LOMBA (INPUT MANUAL 3 KATEGORI DI KIRI & 3 BIAYA DI KANAN) -->
       <div id="sec-lomba" class="admin-sec hidden space-y-6">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
           <div>
             <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Kelola Cabang Lomba</h1>
-            <p class="text-xs text-gray-500">Upload flyer gambar dan atur rincian biaya per tingkat (SD, SMP, SMA)</p>
+            <p class="text-xs text-gray-500">Atur rincian lomba, upload flyer, serta input manual 3 Kategori (Kiri) & Biaya (Kanan)</p>
           </div>
           <button onclick="resetLombaForm()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded-lg text-xs font-bold shadow">
             + Tambah Lomba Baru
@@ -367,20 +367,44 @@
               </select>
             </div>
 
-            <!-- RINCIAN BIAYA 3 KATEGORI TINGKAT -->
-            <div class="bg-gray-50 p-3 rounded-lg border space-y-2">
-              <span class="block font-bold text-[11px] text-emerald-900 border-b pb-1">BIAYA REGISTRASI PER TINGKAT:</span>
-              <div>
-                <label class="block text-[10px] font-bold text-gray-600 mb-0.5">1. Biaya Tingkat SD / MI *</label>
-                <input type="text" id="lombaBiayaSD" required placeholder="Contoh: Rp 35.000" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700 bg-white">
+            <!-- RINCIAN 3 KOLOM KATEGORI (KIRI) DAN BIAYA (KANAN) -->
+            <div class="bg-gray-50 p-3 rounded-lg border space-y-2.5">
+              <span class="block font-bold text-[11px] text-emerald-900 border-b pb-1">3 TINGKAT KATEGORI (KIRI) & BIAYA (KANAN):</span>
+              
+              <!-- TINGKAT 1 -->
+              <div class="grid grid-cols-12 gap-2 items-center">
+                <div class="col-span-6">
+                  <label class="block text-[10px] font-bold text-gray-600 mb-0.5">Kategori 1 (Kiri)</label>
+                  <input type="text" id="lombaKat1" required placeholder="SD / MI" class="w-full border rounded-lg px-2.5 py-1.5 text-xs focus:outline-emerald-700 bg-white font-semibold">
+                </div>
+                <div class="col-span-6">
+                  <label class="block text-[10px] font-bold text-gray-600 mb-0.5">Biaya 1 (Kanan)</label>
+                  <input type="text" id="lombaBiaya1" required placeholder="Rp 35.000" class="w-full border rounded-lg px-2.5 py-1.5 text-xs focus:outline-emerald-700 bg-white font-bold text-emerald-800">
+                </div>
               </div>
-              <div>
-                <label class="block text-[10px] font-bold text-gray-600 mb-0.5">2. Biaya Tingkat SMP / MTs *</label>
-                <input type="text" id="lombaBiayaSMP" required placeholder="Contoh: Rp 45.000" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700 bg-white">
+
+              <!-- TINGKAT 2 -->
+              <div class="grid grid-cols-12 gap-2 items-center">
+                <div class="col-span-6">
+                  <label class="block text-[10px] font-bold text-gray-600 mb-0.5">Kategori 2 (Kiri)</label>
+                  <input type="text" id="lombaKat2" required placeholder="SMP / MTs" class="w-full border rounded-lg px-2.5 py-1.5 text-xs focus:outline-emerald-700 bg-white font-semibold">
+                </div>
+                <div class="col-span-6">
+                  <label class="block text-[10px] font-bold text-gray-600 mb-0.5">Biaya 2 (Kanan)</label>
+                  <input type="text" id="lombaBiaya2" required placeholder="Rp 45.000" class="w-full border rounded-lg px-2.5 py-1.5 text-xs focus:outline-emerald-700 bg-white font-bold text-emerald-800">
+                </div>
               </div>
-              <div>
-                <label class="block text-[10px] font-bold text-gray-600 mb-0.5">3. Biaya Tingkat SMA / MA *</label>
-                <input type="text" id="lombaBiayaSMA" required placeholder="Contoh: Rp 50.000" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700 bg-white">
+
+              <!-- TINGKAT 3 -->
+              <div class="grid grid-cols-12 gap-2 items-center">
+                <div class="col-span-6">
+                  <label class="block text-[10px] font-bold text-gray-600 mb-0.5">Kategori 3 (Kiri)</label>
+                  <input type="text" id="lombaKat3" required placeholder="SMA / MA" class="w-full border rounded-lg px-2.5 py-1.5 text-xs focus:outline-emerald-700 bg-white font-semibold">
+                </div>
+                <div class="col-span-6">
+                  <label class="block text-[10px] font-bold text-gray-600 mb-0.5">Biaya 3 (Kanan)</label>
+                  <input type="text" id="lombaBiaya3" required placeholder="Rp 50.000" class="w-full border rounded-lg px-2.5 py-1.5 text-xs focus:outline-emerald-700 bg-white font-bold text-emerald-800">
+                </div>
               </div>
             </div>
 
@@ -739,7 +763,6 @@
       if(adminState.currentPage < totalPages) { adminState.currentPage++; renderPendaftarTable(); }
     }
 
-    // MEMBUKA BUKTI TRANSFER PEMBAYARAN DENGAN BISA DIKLIK & DILIHAT (NEW TAB ATAU MODAL)
     function viewBuktiTF(link) {
       if(!link || link === '-') {
         Swal.fire({ icon: 'info', title: 'Tidak Ada Bukti Transfer', text: 'Peserta belum mengunggah file bukti pembayaran.', confirmButtonColor: '#047857' });
@@ -1033,20 +1056,29 @@
       box.innerHTML = "";
       adminState.lomba.forEach(l => {
         const imgUrl = parseImageUrl(l.flyerUrl);
+        const kat1 = l.kat1 || l.katSD || 'SD / MI';
+        const b1 = l.biaya1 || l.biayaSD || l.biaya || '-';
+
+        const kat2 = l.kat2 || l.katSMP || 'SMP / MTs';
+        const b2 = l.biaya2 || l.biayaSMP || l.biaya || '-';
+
+        const kat3 = l.kat3 || l.katSMA || 'SMA / MA';
+        const b3 = l.biaya3 || l.biayaSMA || l.biaya || '-';
+
         box.innerHTML += `
           <div class="bg-white p-4 rounded-xl border shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
             <div class="flex items-center gap-3">
               <img src="${imgUrl || 'https://via.placeholder.com/80'}" class="w-14 h-14 rounded-lg object-cover border shrink-0">
               <div>
                 <div class="flex items-center gap-2">
-                  <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded">${l.kategori || 'SD/SMP/SMA'}</span>
+                  <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded">${l.kategori || '3 Tingkat'}</span>
                   <span class="text-[10px] font-bold px-2 py-0.5 rounded ${l.statusLomba === 'TUTUP' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}">${l.statusLomba || 'BUKA'}</span>
                 </div>
                 <h4 class="font-bold text-gray-800 mt-1 text-sm sm:text-base">${l.judul}</h4>
                 <p class="text-[11px] text-gray-600 mt-0.5">
-                  <strong>SD:</strong> ${l.biayaSD || l.biaya || '-'} | 
-                  <strong>SMP:</strong> ${l.biayaSMP || l.biaya || '-'} | 
-                  <strong>SMA:</strong> ${l.biayaSMA || l.biaya || '-'}
+                  <strong>${kat1}:</strong> ${b1} | 
+                  <strong>${kat2}:</strong> ${b2} | 
+                  <strong>${kat3}:</strong> ${b3}
                 </p>
               </div>
             </div>
@@ -1073,14 +1105,19 @@
       document.getElementById('lombaFlyerPathText').value = item.flyerUrl || '';
       document.getElementById('lombaJudul').value = item.judul;
       
-      document.getElementById('lombaBiayaSD').value = item.biayaSD || item.biaya || '';
-      document.getElementById('lombaBiayaSMP').value = item.biayaSMP || item.biaya || '';
-      document.getElementById('lombaBiayaSMA').value = item.biayaSMA || item.biaya || '';
+      document.getElementById('lombaKat1').value = item.kat1 || item.katSD || 'SD / MI';
+      document.getElementById('lombaBiaya1').value = item.biaya1 || item.biayaSD || item.biaya || '';
+
+      document.getElementById('lombaKat2').value = item.kat2 || item.katSMP || 'SMP / MTs';
+      document.getElementById('lombaBiaya2').value = item.biaya2 || item.biayaSMP || item.biaya || '';
+
+      document.getElementById('lombaKat3').value = item.kat3 || item.katSMA || 'SMA / MA';
+      document.getElementById('lombaBiaya3').value = item.biaya3 || item.biayaSMA || item.biaya || '';
 
       document.getElementById('lombaStatus').value = item.statusLomba || "BUKA";
-      document.getElementById('lombaDeskripsi').value = item.deskripsi;
-      document.getElementById('lombaSyarat').value = item.syarat;
-      document.getElementById('lombaHadiah').value = item.hadiah;
+      document.getElementById('lombaDeskripsi').value = item.deskripsi || '';
+      document.getElementById('lombaSyarat').value = item.syarat || '';
+      document.getElementById('lombaHadiah').value = item.hadiah || '';
     }
 
     function resetLombaForm() {
@@ -1103,10 +1140,13 @@
           action: 'saveLomba',
           id: document.getElementById('lombaId').value,
           judul: document.getElementById('lombaJudul').value,
-          kategori: 'SD / SMP / SMA',
-          biayaSD: document.getElementById('lombaBiayaSD').value,
-          biayaSMP: document.getElementById('lombaBiayaSMP').value,
-          biayaSMA: document.getElementById('lombaBiayaSMA').value,
+          kategori: 'Multi Kategori',
+          kat1: document.getElementById('lombaKat1').value,
+          biaya1: document.getElementById('lombaBiaya1').value,
+          kat2: document.getElementById('lombaKat2').value,
+          biaya2: document.getElementById('lombaBiaya2').value,
+          kat3: document.getElementById('lombaKat3').value,
+          biaya3: document.getElementById('lombaBiaya3').value,
           statusLomba: document.getElementById('lombaStatus').value,
           flyerUrl: flyerUrl,
           deskripsi: document.getElementById('lombaDeskripsi').value,
@@ -1117,7 +1157,7 @@
         const result = await postToGAS(payload);
 
         if(result.status === "success") {
-          Swal.fire({ icon: 'success', title: 'Berhasil Disimpan! ✨', text: 'Data perlombaan dan 3 kategori biaya berhasil diperbarui.', confirmButtonColor: '#047857' });
+          Swal.fire({ icon: 'success', title: 'Berhasil Disimpan! ✨', text: 'Kategori (kiri) & Biaya (kanan) berhasil diperbarui.', confirmButtonColor: '#047857' });
           resetLombaForm();
           await fetchPortalConfig();
         }
