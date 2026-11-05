@@ -63,7 +63,7 @@
           <img src="https://lh3.googleusercontent.com/d/1Ca6RhNsv0aFWD4EMdkr8uCcSuPDESTpv" class="w-9 h-9 object-contain rounded-full bg-white p-0.5">
           <div>
             <h2 class="font-bold text-sm leading-tight">Admin Portal</h2>
-            <p class="text-[10px] text-emerald-400" id="userRoleBadge">Superadmin</p>
+            <p class="text-[10px] text-yellow-400 font-bold" id="userRoleBadge">Superadmin</p>
           </div>
         </div>
 
@@ -74,33 +74,37 @@
           <button onclick="navAdmin('audio')" id="m-audio" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
             <i class="fa-solid fa-music w-4"></i> Unggahan Audio
           </button>
-          <button onclick="navAdmin('sertifikat')" id="m-sertifikat" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
-            <i class="fa-solid fa-certificate w-4"></i> Sertifikat Digital
-          </button>
-          <button onclick="navAdmin('lomba')" id="m-lomba" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
-            <i class="fa-solid fa-trophy w-4"></i> Kelola Lomba
-          </button>
-          <button onclick="navAdmin('sliders')" id="m-sliders" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
-            <i class="fa-solid fa-images w-4"></i> Slider Banner
-          </button>
-          
-          <div class="pt-2 pb-1 border-t border-emerald-900 mt-2">
-            <p class="text-[10px] text-emerald-500 uppercase px-3 font-bold tracking-wider mb-1">Pengaturan Website</p>
-          </div>
 
-          <button onclick="navAdmin('navmenu')" id="m-navmenu" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
-            <i class="fa-solid fa-bars w-4"></i> Navigasi Menubar
-          </button>
-          <button onclick="navAdmin('topbar')" id="m-topbar" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
-            <i class="fa-solid fa-bullhorn w-4"></i> Topbar & Sosmed
-          </button>
-          <button onclick="navAdmin('identitas')" id="m-identitas" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
-            <i class="fa-solid fa-id-card w-4"></i> Identitas & Rekening
-          </button>
+          <!-- MENU UNTUK ADMIN & SUPERADMIN -->
+          <div id="adminMenuBlock" class="space-y-1">
+            <button onclick="navAdmin('sertifikat')" id="m-sertifikat" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
+              <i class="fa-solid fa-certificate w-4"></i> Sertifikat Digital
+            </button>
+            <button onclick="navAdmin('lomba')" id="m-lomba" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
+              <i class="fa-solid fa-trophy w-4"></i> Kelola Lomba
+            </button>
+            <button onclick="navAdmin('sliders')" id="m-sliders" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
+              <i class="fa-solid fa-images w-4"></i> Slider Banner
+            </button>
+            
+            <div class="pt-2 pb-1 border-t border-emerald-900 mt-2">
+              <p class="text-[10px] text-emerald-500 uppercase px-3 font-bold tracking-wider mb-1">Pengaturan Website</p>
+            </div>
+
+            <button onclick="navAdmin('navmenu')" id="m-navmenu" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
+              <i class="fa-solid fa-bars w-4"></i> Navigasi Menubar
+            </button>
+            <button onclick="navAdmin('topbar')" id="m-topbar" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
+              <i class="fa-solid fa-bullhorn w-4"></i> Topbar & Sosmed
+            </button>
+            <button onclick="navAdmin('identitas')" id="m-identitas" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
+              <i class="fa-solid fa-id-card w-4"></i> Identitas & Rekening
+            </button>
+          </div>
 
           <!-- MENU KHUSUS SUPERADMIN -->
           <div id="superadminMenuBlock" class="pt-2 pb-1 border-t border-emerald-900 mt-2">
-            <p class="text-[10px] text-yellow-400 uppercase px-3 font-bold tracking-wider mb-1">Superadmin</p>
+            <p class="text-[10px] text-yellow-400 uppercase px-3 font-bold tracking-wider mb-1">Manajemen Pengguna</p>
             <button onclick="navAdmin('users')" id="m-users" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-900 text-yellow-300 transition">
               <i class="fa-solid fa-user-gear w-4"></i> Kelola User & Hak Akses
             </button>
@@ -135,7 +139,6 @@
           </div>
         </div>
 
-        <!-- STAT CARDS -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
           <div class="bg-white p-4 rounded-xl border shadow-sm flex items-center justify-between">
             <div>
@@ -166,7 +169,6 @@
           </div>
         </div>
 
-        <!-- SEARCH BAR + PAGINATION -->
         <div class="bg-white p-4 rounded-xl border shadow-sm flex flex-col xl:flex-row gap-3 justify-between items-stretch xl:items-center">
           <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 flex-1">
             <input type="text" id="searchBox" onkeyup="applyFilter()" placeholder="Cari Nama / Kode / WA..." class="border rounded-lg px-3 py-2 text-xs flex-1 min-w-[200px] focus:outline-emerald-700">
@@ -196,7 +198,6 @@
           </div>
         </div>
 
-        <!-- TABEL PENDAFTAR -->
         <div class="bg-white rounded-xl border shadow-sm overflow-hidden">
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
@@ -610,8 +611,10 @@
 
           <div class="lg:col-span-8 bg-white rounded-xl border shadow-sm overflow-hidden">
             <div class="p-4 border-b bg-gray-50 font-bold text-xs text-emerald-900 flex justify-between items-center">
-              <span>Daftar Pengguna Sistem</span>
-              <button onclick="fetchUsers()" class="text-emerald-700 hover:underline text-xs"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
+              <span>Daftar Pengguna Sistem (Database Users)</span>
+              <button onclick="fetchUsers()" class="text-emerald-700 hover:underline text-xs font-bold flex items-center gap-1">
+                <i class="fa-solid fa-rotate-right"></i> Refresh
+              </button>
             </div>
             <div class="overflow-x-auto">
               <table class="w-full text-left text-xs">
@@ -620,7 +623,7 @@
                     <th class="p-3">Username</th>
                     <th class="p-3">Password</th>
                     <th class="p-3">Role</th>
-                    <th class="p-3 text-center">Aksi</th>
+                    <th class="p-3 text-center">Aksi Kelola</th>
                   </tr>
                 </thead>
                 <tbody id="userTableBody" class="divide-y text-gray-700"></tbody>
@@ -760,15 +763,10 @@
       document.getElementById('superadminMenuBlock').style.display = isSuperadmin ? 'block' : 'none';
 
       if(isJuri) {
-        ['lomba', 'sliders', 'navmenu', 'topbar', 'identitas'].forEach(m => {
-          const btn = document.getElementById(`m-${m}`);
-          if(btn) btn.style.display = 'none';
-        });
+        document.getElementById('adminMenuBlock').style.display = 'none';
+        navAdmin('pendaftar');
       } else {
-        ['lomba', 'sliders', 'navmenu', 'topbar', 'identitas'].forEach(m => {
-          const btn = document.getElementById(`m-${m}`);
-          if(btn) btn.style.display = 'flex';
-        });
+        document.getElementById('adminMenuBlock').style.display = 'block';
       }
     }
 
@@ -813,7 +811,7 @@
 
     async function fetchAdminData() {
       try {
-        const res = await fetch(`${GAS_URL}?action=adminData`);
+        const res = await fetch(`${GAS_URL}?action=adminData&_t=${Date.now()}`);
         const result = await res.json();
         if(result.status === "success") {
           adminState.pendaftar = result.data || [];
@@ -1122,7 +1120,7 @@
 
     async function fetchPortalConfig() {
       try {
-        const res = await fetch(`${GAS_URL}?action=initPortal`);
+        const res = await fetch(`${GAS_URL}?action=initPortal&_t=${Date.now()}`);
         const result = await res.json();
         if(result.status === "success") {
           adminState.lomba = result.lombaList || [];
@@ -1221,7 +1219,7 @@
 
         const result = await postToGAS(payload);
         if(result.status === "success") {
-          Swal.fire({ icon: 'success', title: 'Berhasil Disimpan! ✨', text: 'Data perlombaan telah diperbarui.', confirmButtonColor: '#047857' });
+          Swal.fire({ icon: 'success', title: 'Berhasil Disimpan! ✨', text: 'Data perlombaan telah diperbarui dan langsung tampil di web portal.', confirmButtonColor: '#047857' });
           resetLombaForm();
           await fetchPortalConfig();
         }
@@ -1416,7 +1414,7 @@
     // --- MANAJEMEN USER KHUSUS SUPERADMIN ---
     async function fetchUsers() {
       try {
-        const res = await fetch(`${GAS_URL}?action=getUsers`);
+        const res = await fetch(`${GAS_URL}?action=getUsers&_t=${Date.now()}`);
         const result = await res.json();
         if(result.status === "success") {
           adminState.users = result.users || [];
