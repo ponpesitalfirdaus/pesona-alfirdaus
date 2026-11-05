@@ -405,6 +405,9 @@
       initSwiper();
       await loadPortalData();
 
+      // AUTO-SYNC: memperbarui data dari backend secara otomatis setiap 30 detik tanpa mengganggu sesi pengguna
+      setInterval(loadPortalData, 30000);
+
       const urlParams = new URLSearchParams(window.location.search);
       const kodeScan = urlParams.get('kode') || urlParams.get('query');
       if (kodeScan) {
@@ -487,9 +490,10 @@
       });
     }
 
+    // LOAD DATA PORTAL DENGAN PENCEGAHAN CACHING BROWSER (_t=Timestamp)
     async function loadPortalData() {
       try {
-        const res = await fetch(`${GAS_URL}?action=initPortal`);
+        const res = await fetch(`${GAS_URL}?action=initPortal&_t=${Date.now()}`);
         const result = await res.json();
         if(result && result.status === "success") {
           state.lombaList = result.lombaList || [];
@@ -537,6 +541,29 @@
         if(cfg.linkYt && document.getElementById('linkYt')) document.getElementById('linkYt').href = cfg.linkYt;
         if(cfg.linkTt && document.getElementById('linkTt')) document.getElementById('linkTt').href = cfg.linkTt;
         if(cfg.linkTh && document.getElementById('linkTh')) document.getElementById('linkTh').href = cfg.linkTh;
+
+        // PENGATURAN VISIBILITAS MENU NAVIGASI HEADER
+        const navs = cfg.menuNav || {};
+        const toggleNavElem = (id, active) => {
+          const elem = document.getElementById(id);
+          if (elem) elem.style.display = (active === false) ? 'none' : 'inline-flex';
+        };
+        const toggleMobileNavElem = (id, active) => {
+          const elem = document.getElementById(id);
+          if (elem) elem.style.display = (active === false) ? 'none' : 'block';
+        };
+
+        toggleNavElem('nav-beranda', navs.beranda);
+        toggleNavElem('nav-lomba', navs.lomba);
+        toggleNavElem('nav-cek', navs.cek);
+        toggleNavElem('nav-unggah', navs.unggah);
+        toggleNavElem('nav-sertifikat', navs.sertifikat);
+
+        toggleMobileNavElem('mnav-beranda', navs.beranda);
+        toggleMobileNavElem('mnav-lomba', navs.lomba);
+        toggleMobileNavElem('mnav-cek', navs.cek);
+        toggleMobileNavElem('mnav-unggah', navs.unggah);
+        toggleMobileNavElem('mnav-sertifikat', navs.sertifikat);
 
         startCountdown(cfg.targetDate || "2026-11-20T08:00:00");
 
@@ -794,7 +821,7 @@
       searchTimeout = setTimeout(async () => {
         sugBox.classList.remove('hidden');
         sugBox.innerHTML = `<div class="p-2.5 text-center text-gray-400">Mencari...</div>`;
-        const res = await fetch(`${GAS_URL}?action=check&query=${encodeURIComponent(val.trim())}`);
+        const res = await fetch(`${GAS_URL}?action=check&query=${encodeURIComponent(val.trim())}&_t=${Date.now()}`);
         const result = await res.json();
         if (result.status === "success" && result.results) {
           sugBox.innerHTML = "";
@@ -844,7 +871,7 @@
       if(!q) return;
       box.classList.remove('hidden'); box.innerHTML = "<p class='text-xs text-center'>Mencari...</p>";
 
-      const res = await fetch(`${GAS_URL}?action=check&query=${encodeURIComponent(q)}`);
+      const res = await fetch(`${GAS_URL}?action=check&query=${encodeURIComponent(q)}&_t=${Date.now()}`);
       const result = await res.json();
       if(result.status === "success") {
         const d = result.data;
@@ -902,7 +929,7 @@
       const box = document.getElementById('searchResult');
       if(!q) return;
       box.classList.remove('hidden'); box.innerHTML = "<p class='text-xs'>Mencari...</p>";
-      const res = await fetch(`${GAS_URL}?action=check&query=${encodeURIComponent(q)}`);
+      const res = await fetch(`${GAS_URL}?action=check&query=${encodeURIComponent(q)}&_t=${Date.now()}`);
       const result = await res.json();
       if(result.status === "success") {
         const d = result.data;
