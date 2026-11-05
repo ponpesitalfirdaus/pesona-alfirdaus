@@ -75,32 +75,26 @@
             <i class="fa-solid fa-music w-4"></i> Unggahan Audio
           </button>
 
-          <!-- MENU UNTUK ADMIN & SUPERADMIN -->
-          <div id="adminMenuBlock" class="space-y-1">
-            <button onclick="navAdmin('sertifikat')" id="m-sertifikat" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
-              <i class="fa-solid fa-certificate w-4"></i> Sertifikat Digital
-            </button>
-            <button onclick="navAdmin('lomba')" id="m-lomba" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
-              <i class="fa-solid fa-trophy w-4"></i> Kelola Lomba
-            </button>
-            <button onclick="navAdmin('sliders')" id="m-sliders" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
-              <i class="fa-solid fa-images w-4"></i> Slider Banner
-            </button>
-            
-            <div class="pt-2 pb-1 border-t border-emerald-900 mt-2">
-              <p class="text-[10px] text-emerald-500 uppercase px-3 font-bold tracking-wider mb-1">Pengaturan Website</p>
-            </div>
+          <!-- MENU MODULAR UNTUK ADMIN & SUPERADMIN -->
+          <button onclick="navAdmin('sertifikat')" id="m-sertifikat" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
+            <i class="fa-solid fa-certificate w-4"></i> Sertifikat Digital
+          </button>
+          <button onclick="navAdmin('lomba')" id="m-lomba" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
+            <i class="fa-solid fa-trophy w-4"></i> Kelola Lomba
+          </button>
+          <button onclick="navAdmin('sliders')" id="m-sliders" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
+            <i class="fa-solid fa-images w-4"></i> Slider Banner
+          </button>
 
-            <button onclick="navAdmin('navmenu')" id="m-navmenu" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
-              <i class="fa-solid fa-bars w-4"></i> Navigasi Menubar
-            </button>
-            <button onclick="navAdmin('topbar')" id="m-topbar" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
-              <i class="fa-solid fa-bullhorn w-4"></i> Topbar & Sosmed
-            </button>
-            <button onclick="navAdmin('identitas')" id="m-identitas" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
-              <i class="fa-solid fa-id-card w-4"></i> Identitas & Rekening
-            </button>
-          </div>
+          <button onclick="navAdmin('navmenu')" id="m-navmenu" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
+            <i class="fa-solid fa-bars w-4"></i> Navigasi Menubar
+          </button>
+          <button onclick="navAdmin('topbar')" id="m-topbar" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
+            <i class="fa-solid fa-bullhorn w-4"></i> Topbar & Sosmed
+          </button>
+          <button onclick="navAdmin('identitas')" id="m-identitas" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
+            <i class="fa-solid fa-id-card w-4"></i> Identitas & Warna Tema
+          </button>
 
           <!-- MENU KHUSUS SUPERADMIN -->
           <div id="superadminMenuBlock" class="pt-2 pb-1 border-t border-emerald-900 mt-2">
@@ -233,7 +227,7 @@
       <div id="sec-audio" class="admin-sec hidden space-y-6">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
           <div>
-            <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Monitoring & Pemutar Unggahan Audio</h1>
+            <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Monitoring Unggahan Audio</h1>
             <p class="text-xs text-gray-500">Lacak, menyortir, dan putar musik peserta lomba Tari Kreasi & Solosong</p>
           </div>
         </div>
@@ -449,23 +443,23 @@
 
         <form onsubmit="saveNavMenuConfig(event)" class="bg-white p-5 rounded-xl border shadow-sm space-y-4 text-xs max-w-xl">
           <div class="space-y-3 bg-gray-50 p-4 rounded-xl border">
-            <label class="flex items-center justify-between font-bold text-gray-800 p-2 bg-white rounded border">
+            <label class="flex items-center justify-between font-bold text-gray-800 p-2 bg-white rounded border cursor-pointer">
               <span class="flex items-center gap-2"><i class="fa-solid fa-house text-emerald-700"></i> Beranda</span>
               <input type="checkbox" id="mNavBeranda" checked class="w-5 h-5 accent-emerald-700">
             </label>
-            <label class="flex items-center justify-between font-bold text-gray-800 p-2 bg-white rounded border">
+            <label class="flex items-center justify-between font-bold text-gray-800 p-2 bg-white rounded border cursor-pointer">
               <span class="flex items-center gap-2"><i class="fa-solid fa-trophy text-emerald-700"></i> Cabang Lomba</span>
               <input type="checkbox" id="mNavLomba" checked class="w-5 h-5 accent-emerald-700">
             </label>
-            <label class="flex items-center justify-between font-bold text-gray-800 p-2 bg-white rounded border">
+            <label class="flex items-center justify-between font-bold text-gray-800 p-2 bg-white rounded border cursor-pointer">
               <span class="flex items-center gap-2"><i class="fa-solid fa-magnifying-glass text-emerald-700"></i> Cek Pendaftaran</span>
               <input type="checkbox" id="mNavCek" checked class="w-5 h-5 accent-emerald-700">
             </label>
-            <label class="flex items-center justify-between font-bold text-gray-800 p-2 bg-white rounded border">
+            <label class="flex items-center justify-between font-bold text-gray-800 p-2 bg-white rounded border cursor-pointer">
               <span class="flex items-center gap-2"><i class="fa-solid fa-cloud-arrow-up text-emerald-700"></i> Unggahan Audio</span>
               <input type="checkbox" id="mNavUnggah" checked class="w-5 h-5 accent-emerald-700">
             </label>
-            <label class="flex items-center justify-between font-bold text-gray-800 p-2 bg-white rounded border">
+            <label class="flex items-center justify-between font-bold text-gray-800 p-2 bg-white rounded border cursor-pointer">
               <span class="flex items-center gap-2"><i class="fa-solid fa-certificate text-emerald-700"></i> Sertifikat Digital</span>
               <input type="checkbox" id="mNavSertifikat" checked class="w-5 h-5 accent-emerald-700">
             </label>
@@ -532,14 +526,45 @@
         </form>
       </div>
 
-      <!-- 8. MENU IDENTITAS -->
+      <!-- 8. MENU IDENTITAS & PENGATURAN TEMA WARNA PORTAL -->
       <div id="sec-identitas" class="admin-sec hidden space-y-6">
         <div>
-          <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Pengaturan Identitas & Rekening</h1>
-          <p class="text-xs text-gray-500">Atur judul portal, rekening, dan kontak footer</p>
+          <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Pengaturan Identitas & Tema Warna Portal</h1>
+          <p class="text-xs text-gray-500">Atur judul portal, rekening, serta skema warna tema utama (preset atau warna custom Hex)</p>
         </div>
 
         <form onsubmit="saveIdentitasConfig(event)" class="bg-white p-5 rounded-xl border shadow-sm space-y-4 text-xs max-w-xl">
+          
+          <!-- PENGATURAN WAKTU & TEMA WARNA -->
+          <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-200 space-y-3">
+            <h4 class="font-bold text-sm text-emerald-900 flex items-center gap-2">
+              <i class="fa-solid fa-palette text-emerald-700"></i> Skema Warna Tema Portal Pendaftaran
+            </h4>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block font-bold text-gray-700 mb-1">Pilih Preset Tema Warna</label>
+                <select id="cfgThemeColor" onchange="toggleCustomColorInput(this.value)" class="w-full border rounded-lg px-3 py-2 focus:outline-emerald-700 bg-white font-semibold">
+                  <option value="emerald">🟢 Emerald Green (Default)</option>
+                  <option value="indigo">🔵 Indigo Blue</option>
+                  <option value="blue">💙 Sky Blue</option>
+                  <option value="purple">💜 Royal Purple</option>
+                  <option value="rose">💖 Rose Red</option>
+                  <option value="amber">🟠 Amber Gold</option>
+                  <option value="custom">🎨 Custom Hex Color (Kode Warna Bebas)</option>
+                </select>
+              </div>
+
+              <div id="customColorBox" class="hidden">
+                <label class="block font-bold text-gray-700 mb-1">Warna Utama Custom (Hex Code)</label>
+                <div class="flex items-center gap-2">
+                  <input type="color" id="cfgCustomColorPicker" onchange="syncCustomColorInput(this.value)" class="w-10 h-9 rounded cursor-pointer border p-0.5">
+                  <input type="text" id="cfgCustomColor" placeholder="#047857" class="flex-1 border rounded-lg px-3 py-2 focus:outline-emerald-700 font-mono text-xs">
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div>
             <label class="block font-bold text-gray-700 mb-1">Judul Portal (Header Utama)</label>
             <input type="text" id="cfgHeaderTitle" class="w-full border rounded-lg px-3 py-2 focus:outline-emerald-700">
@@ -558,17 +583,17 @@
           </div>
 
           <button type="submit" class="bg-emerald-800 hover:bg-emerald-900 text-white font-bold px-6 py-2.5 rounded-xl text-xs shadow flex items-center gap-2">
-            <i class="fa-solid fa-floppy-disk"></i> Simpan Identitas & Rekening
+            <i class="fa-solid fa-floppy-disk"></i> Simpan Identitas & Warna Tema
           </button>
         </form>
       </div>
 
-      <!-- 9. MENU KELOLA USER & HAK AKSES (KHUSUS SUPERADMIN) -->
+      <!-- 9. MENU KELOLA USER & HAK AKSES DENGAN CEKLIST (SUPERADMIN) -->
       <div id="sec-users" class="admin-sec hidden space-y-6">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
           <div>
-            <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Kelola User & Hak Akses</h1>
-            <p class="text-xs text-gray-500">Tambah, edit username/password, dan tentukan tingkatan role pengguna (Superadmin, Admin, Juri)</p>
+            <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Kelola User & Hak Akses (Ceklist Permissions)</h1>
+            <p class="text-xs text-gray-500">Tambah, edit username/password, serta atur akses menu Admin secara modular menggunakan ceklist</p>
           </div>
           <button onclick="resetUserForm()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded-lg text-xs font-bold shadow flex items-center gap-1.5">
             <i class="fa-solid fa-user-plus"></i> + Tambah User Baru
@@ -576,27 +601,70 @@
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          <form id="formUser" onsubmit="saveUser(event)" class="lg:col-span-4 bg-white p-4 sm:p-5 rounded-xl border shadow-sm space-y-3">
+          <form id="formUser" onsubmit="saveUser(event)" class="lg:col-span-5 bg-white p-4 sm:p-5 rounded-xl border shadow-sm space-y-3">
             <h3 class="font-bold text-sm text-emerald-900 border-b pb-2" id="userFormHeader">Form Tambah User</h3>
             <input type="hidden" id="userOldUsername">
 
             <div>
               <label class="block text-xs font-bold text-gray-700 mb-1">Username *</label>
-              <input type="text" id="userUsername" required placeholder="Contoh: superadmin" class="w-full border rounded-lg px-3 py-2 text-xs focus:outline-emerald-700">
+              <input type="text" id="userUsername" required placeholder="Contoh: adminlomba" class="w-full border rounded-lg px-3 py-2 text-xs focus:outline-emerald-700">
             </div>
 
             <div>
               <label class="block text-xs font-bold text-gray-700 mb-1">Password *</label>
-              <input type="text" id="userPassword" required placeholder="Password login" class="w-full border rounded-lg px-3 py-2 text-xs focus:outline-emerald-700">
+              <input type="text" id="userPassword" required placeholder="Password login user" class="w-full border rounded-lg px-3 py-2 text-xs focus:outline-emerald-700">
             </div>
 
             <div>
               <label class="block text-xs font-bold text-gray-700 mb-1">Hak Akses / Role *</label>
-              <select id="userRole" required class="w-full border rounded-lg px-3 py-2 text-xs focus:outline-emerald-700 bg-white font-semibold">
-                <option value="Superadmin">Superadmin (Akses Penuh + Kelola User)</option>
-                <option value="Admin">Admin (Kelola Data & Content Portal)</option>
+              <select id="userRole" onchange="onRoleChange(this.value)" required class="w-full border rounded-lg px-3 py-2 text-xs focus:outline-emerald-700 bg-white font-semibold">
+                <option value="Superadmin">Superadmin (Akses Penuh 100% + Kelola User)</option>
+                <option value="Admin">Admin (Bisa Disesuaikan via Ceklist Menu)</option>
                 <option value="Juri">Juri (Khusus Penilaian Audio & Peserta)</option>
               </select>
+            </div>
+
+            <!-- CEKLIST HAK AKSES MENU MODULAR -->
+            <div id="permissionCheckboxesBlock" class="bg-gray-50 p-3 rounded-xl border space-y-2">
+              <span class="block text-xs font-bold text-emerald-900 border-b pb-1 flex justify-between items-center">
+                <span>Ceklist Hak Akses Menu Admin:</span>
+                <button type="button" onclick="toggleAllPermCheckboxes(true)" class="text-[10px] text-blue-600 font-bold hover:underline">Pilih Semua</button>
+              </span>
+              
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-xs">
+                <label class="flex items-center gap-2 p-1.5 bg-white rounded border cursor-pointer hover:bg-emerald-50">
+                  <input type="checkbox" value="pendaftar" class="user-perm-cb accent-emerald-700" checked>
+                  <span>Data Pendaftar</span>
+                </label>
+                <label class="flex items-center gap-2 p-1.5 bg-white rounded border cursor-pointer hover:bg-emerald-50">
+                  <input type="checkbox" value="audio" class="user-perm-cb accent-emerald-700" checked>
+                  <span>Unggahan Audio</span>
+                </label>
+                <label class="flex items-center gap-2 p-1.5 bg-white rounded border cursor-pointer hover:bg-emerald-50">
+                  <input type="checkbox" value="sertifikat" class="user-perm-cb accent-emerald-700" checked>
+                  <span>Sertifikat Digital</span>
+                </label>
+                <label class="flex items-center gap-2 p-1.5 bg-white rounded border cursor-pointer hover:bg-emerald-50">
+                  <input type="checkbox" value="lomba" class="user-perm-cb accent-emerald-700" checked>
+                  <span>Kelola Lomba</span>
+                </label>
+                <label class="flex items-center gap-2 p-1.5 bg-white rounded border cursor-pointer hover:bg-emerald-50">
+                  <input type="checkbox" value="sliders" class="user-perm-cb accent-emerald-700" checked>
+                  <span>Slider Banner</span>
+                </label>
+                <label class="flex items-center gap-2 p-1.5 bg-white rounded border cursor-pointer hover:bg-emerald-50">
+                  <input type="checkbox" value="navmenu" class="user-perm-cb accent-emerald-700" checked>
+                  <span>Navigasi Menubar</span>
+                </label>
+                <label class="flex items-center gap-2 p-1.5 bg-white rounded border cursor-pointer hover:bg-emerald-50">
+                  <input type="checkbox" value="topbar" class="user-perm-cb accent-emerald-700" checked>
+                  <span>Topbar & Sosmed</span>
+                </label>
+                <label class="flex items-center gap-2 p-1.5 bg-white rounded border cursor-pointer hover:bg-emerald-50">
+                  <input type="checkbox" value="identitas" class="user-perm-cb accent-emerald-700" checked>
+                  <span>Identitas & Rekening</span>
+                </label>
+              </div>
             </div>
 
             <div class="flex gap-2 pt-2">
@@ -609,9 +677,9 @@
             </div>
           </form>
 
-          <div class="lg:col-span-8 bg-white rounded-xl border shadow-sm overflow-hidden">
+          <div class="lg:col-span-7 bg-white rounded-xl border shadow-sm overflow-hidden">
             <div class="p-4 border-b bg-gray-50 font-bold text-xs text-emerald-900 flex justify-between items-center">
-              <span>Daftar Pengguna Sistem (Database Users)</span>
+              <span>Daftar User & Hak Akses Terdaftar</span>
               <button onclick="fetchUsers()" class="text-emerald-700 hover:underline text-xs font-bold flex items-center gap-1">
                 <i class="fa-solid fa-rotate-right"></i> Refresh
               </button>
@@ -620,10 +688,11 @@
               <table class="w-full text-left text-xs">
                 <thead class="bg-emerald-900 text-white font-bold uppercase">
                   <tr>
-                    <th class="p-3">Username</th>
+                    <th class="p-3">User</th>
                     <th class="p-3">Password</th>
                     <th class="p-3">Role</th>
-                    <th class="p-3 text-center">Aksi Kelola</th>
+                    <th class="p-3">Menu Terbuka</th>
+                    <th class="p-3 text-center">Aksi</th>
                   </tr>
                 </thead>
                 <tbody id="userTableBody" class="divide-y text-gray-700"></tbody>
@@ -729,6 +798,7 @@
           localStorage.setItem('adminAuth', 'true');
           localStorage.setItem('adminRole', res.role || 'Superadmin');
           localStorage.setItem('adminUser', res.username || u);
+          localStorage.setItem('adminPermissions', JSON.stringify(res.permissions || []));
 
           Swal.fire({
             icon: 'success', title: 'Login Berhasil! 🎉', text: `Selamat datang, ${res.username} (${res.role}).`,
@@ -753,6 +823,7 @@
     function applyRolePermissions() {
       const role = localStorage.getItem('adminRole') || 'Superadmin';
       const user = localStorage.getItem('adminUser') || 'admin';
+      const perms = JSON.parse(localStorage.getItem('adminPermissions') || '[]');
       
       const badge = document.getElementById('userRoleBadge');
       if(badge) badge.innerText = `${user} (${role})`;
@@ -762,11 +833,20 @@
 
       document.getElementById('superadminMenuBlock').style.display = isSuperadmin ? 'block' : 'none';
 
+      const menuKeys = ['pendaftar', 'audio', 'sertifikat', 'lomba', 'sliders', 'navmenu', 'topbar', 'identitas'];
+      menuKeys.forEach(key => {
+        const btn = document.getElementById(`m-${key}`);
+        if(btn) {
+          if(isSuperadmin || perms.includes(key) || (isJuri && (key === 'pendaftar' || key === 'audio'))) {
+            btn.style.display = 'flex';
+          } else {
+            btn.style.display = 'none';
+          }
+        }
+      });
+
       if(isJuri) {
-        document.getElementById('adminMenuBlock').style.display = 'none';
         navAdmin('pendaftar');
-      } else {
-        document.getElementById('adminMenuBlock').style.display = 'block';
       }
     }
 
@@ -779,6 +859,7 @@
           localStorage.removeItem('adminAuth');
           localStorage.removeItem('adminRole');
           localStorage.removeItem('adminUser');
+          localStorage.removeItem('adminPermissions');
           location.reload();
         }
       });
@@ -1219,7 +1300,7 @@
 
         const result = await postToGAS(payload);
         if(result.status === "success") {
-          Swal.fire({ icon: 'success', title: 'Berhasil Disimpan! ✨', text: 'Data perlombaan telah diperbarui dan langsung tampil di web portal.', confirmButtonColor: '#047857' });
+          Swal.fire({ icon: 'success', title: 'Berhasil Disimpan! ✨', text: 'Data perlombaan telah diperbarui.', confirmButtonColor: '#047857' });
           resetLombaForm();
           await fetchPortalConfig();
         }
@@ -1309,6 +1390,14 @@
       if(document.getElementById('mNavUnggah')) document.getElementById('mNavUnggah').checked = navs.unggah !== false;
       if(document.getElementById('mNavSertifikat')) document.getElementById('mNavSertifikat').checked = navs.sertifikat !== false;
 
+      if(document.getElementById('cfgThemeColor')) {
+        const tColor = cfg.themeColor || "emerald";
+        document.getElementById('cfgThemeColor').value = tColor;
+        toggleCustomColorInput(tColor);
+      }
+      if(document.getElementById('cfgCustomColor')) document.getElementById('cfgCustomColor').value = cfg.customColor || "#047857";
+      if(document.getElementById('cfgCustomColorPicker')) document.getElementById('cfgCustomColorPicker').value = cfg.customColor || "#047857";
+
       if(document.getElementById('cfgLokasi')) document.getElementById('cfgLokasi').value = cfg.lokasi || "Kompleks Pesantren Al Firdaus";
       if(document.getElementById('cfgWaNumber')) document.getElementById('cfgWaNumber').value = cfg.waNumber || "085366685084";
       if(document.getElementById('cfgMapUrl')) document.getElementById('cfgMapUrl').value = cfg.mapUrl || "";
@@ -1323,6 +1412,18 @@
       if(document.getElementById('cfgRekening')) document.getElementById('cfgRekening').value = cfg.rekening || "BSI: 8500808806 a.n Yayasan Atmo Taruno Joyo";
       if(document.getElementById('cfgContact')) document.getElementById('cfgContact').value = cfg.contact || "Kontak Panitia: 0853-6668-5084";
       if(document.getElementById('certTemplateUrlInput')) document.getElementById('certTemplateUrlInput').value = cfg.certTemplate || "";
+    }
+
+    function toggleCustomColorInput(val) {
+      const box = document.getElementById('customColorBox');
+      if (box) {
+        if(val === 'custom') box.classList.remove('hidden');
+        else box.classList.add('hidden');
+      }
+    }
+
+    function syncCustomColorInput(hexVal) {
+      if(document.getElementById('cfgCustomColor')) document.getElementById('cfgCustomColor').value = hexVal;
     }
 
     async function saveCertTemplateConfig(e) {
@@ -1400,18 +1501,20 @@
         adminState.config.headerSub = document.getElementById('cfgHeaderSub').value;
         adminState.config.rekening = document.getElementById('cfgRekening').value;
         adminState.config.contact = document.getElementById('cfgContact').value;
+        adminState.config.themeColor = document.getElementById('cfgThemeColor').value;
+        adminState.config.customColor = document.getElementById('cfgCustomColor').value || "#047857";
 
         const result = await postToGAS({ action: 'saveConfig', config: adminState.config });
         if(result.status === "success") {
-          Swal.fire({ icon: 'success', title: 'Identitas Disimpan! ✨', text: 'Identitas portal diperbarui.', confirmButtonColor: '#047857' });
+          Swal.fire({ icon: 'success', title: 'Identitas & Warna Disimpan! ✨', text: 'Pengaturan portal diperbarui secara otomatis.', confirmButtonColor: '#047857' });
           await fetchPortalConfig();
         }
       } catch(err) {
         Swal.fire({ icon: 'error', title: 'Gagal', text: err.toString(), confirmButtonColor: '#047857' });
-      } finally { btn.disabled = false; btn.innerText = "Simpan Identitas & Rekening"; }
+      } finally { btn.disabled = false; btn.innerText = "Simpan Identitas & Warna Tema"; }
     }
 
-    // --- MANAJEMEN USER KHUSUS SUPERADMIN ---
+    // --- MANAJEMEN USER & CEKLIST HAK AKSES KHUSUS SUPERADMIN ---
     async function fetchUsers() {
       try {
         const res = await fetch(`${GAS_URL}?action=getUsers&_t=${Date.now()}`);
@@ -1429,7 +1532,7 @@
       tbody.innerHTML = "";
 
       if(adminState.users.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-gray-400">Belum ada data user.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-gray-400">Belum ada data user.</td></tr>`;
         return;
       }
 
@@ -1438,13 +1541,16 @@
         if(u.role === 'Superadmin') badgeColor = "bg-yellow-100 text-amber-900 border border-yellow-300 font-black";
         else if(u.role === 'Juri') badgeColor = "bg-purple-100 text-purple-800";
 
+        const permsList = (u.permissions || []).join(", ") || "Akses Default";
+
         tbody.innerHTML += `
           <tr class="hover:bg-gray-50 border-b">
             <td class="p-3 font-bold text-gray-900">${u.username}</td>
             <td class="p-3 font-mono text-gray-500">${u.password}</td>
             <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${badgeColor}">${u.role}</span></td>
+            <td class="p-3 text-[10px] text-gray-600 max-w-[150px] truncate" title="${permsList}">${permsList}</td>
             <td class="p-3 text-center space-x-1">
-              <button onclick="editUser('${u.username}', '${u.password}', '${u.role}')" class="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded text-[10px] font-bold">
+              <button onclick="editUser('${u.username}', '${u.password}', '${u.role}', ${JSON.stringify(u.permissions || []).replace(/"/g, '&quot;')})" class="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded text-[10px] font-bold">
                 <i class="fa-solid fa-pen"></i> Edit
               </button>
               <button onclick="deleteUser('${u.username}')" class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-[10px] font-bold">
@@ -1456,18 +1562,41 @@
       });
     }
 
-    function editUser(u, p, r) {
+    function onRoleChange(role) {
+      const cbs = document.querySelectorAll('.user-perm-cb');
+      if(role === 'Superadmin') {
+        cbs.forEach(cb => { cb.checked = true; cb.disabled = true; });
+      } else if(role === 'Juri') {
+        cbs.forEach(cb => { cb.checked = (cb.value === 'pendaftar' || cb.value === 'audio'); cb.disabled = true; });
+      } else {
+        cbs.forEach(cb => { cb.disabled = false; });
+      }
+    }
+
+    function toggleAllPermCheckboxes(status) {
+      const cbs = document.querySelectorAll('.user-perm-cb');
+      cbs.forEach(cb => { if(!cb.disabled) cb.checked = status; });
+    }
+
+    function editUser(u, p, r, perms) {
       document.getElementById('userOldUsername').value = u;
       document.getElementById('userUsername').value = u;
       document.getElementById('userPassword').value = p;
       document.getElementById('userRole').value = r;
       document.getElementById('userFormHeader').innerText = `Edit User: ${u}`;
+
+      onRoleChange(r);
+      if(r === 'Admin' && Array.isArray(perms)) {
+        const cbs = document.querySelectorAll('.user-perm-cb');
+        cbs.forEach(cb => { cb.checked = perms.includes(cb.value); });
+      }
     }
 
     function resetUserForm() {
       document.getElementById('formUser').reset();
       document.getElementById('userOldUsername').value = "";
       document.getElementById('userFormHeader').innerText = "Form Tambah User";
+      onRoleChange('Superadmin');
     }
 
     async function saveUser(e) {
@@ -1476,17 +1605,24 @@
       btn.disabled = true; btn.innerText = "Menyimpan...";
 
       try {
+        const role = document.getElementById('userRole').value;
+        const selectedPerms = [];
+        document.querySelectorAll('.user-perm-cb').forEach(cb => {
+          if(cb.checked) selectedPerms.push(cb.value);
+        });
+
         const payload = {
           action: 'saveUser',
           oldUsername: document.getElementById('userOldUsername').value,
           username: document.getElementById('userUsername').value.trim(),
           password: document.getElementById('userPassword').value.trim(),
-          role: document.getElementById('userRole').value
+          role: role,
+          permissions: selectedPerms
         };
 
         const result = await postToGAS(payload);
         if(result.status === "success") {
-          Swal.fire({ icon: 'success', title: 'User Disimpan! 🎉', text: 'Data user berhasil diperbarui.', timer: 1500, showConfirmButton: false });
+          Swal.fire({ icon: 'success', title: 'User Disimpan! 🎉', text: 'Data user & hak akses berhasil diperbarui.', timer: 1500, showConfirmButton: false });
           resetUserForm();
           await fetchUsers();
         } else {
