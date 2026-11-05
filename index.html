@@ -3,15 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title id="siteTitle">PESONA IV AL FIRDAUS 2026</title>
+  <title id="siteTitle">PESONA AL FIRDAUS 2026</title>
   <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1Ca6RhNsv0aFWD4EMdkr8uCcSuPDESTpv">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
   <style>
     .swiper-button-next, .swiper-button-prev { color: #facc15 !important; transform: scale(0.6); }
     .swiper-pagination-bullet-active { background: #facc15 !important; }
@@ -29,10 +27,11 @@
   <div id="topbarBg" class="bg-emerald-950 text-emerald-100 text-[11px] sm:text-xs py-2 px-3 sm:px-4 border-b border-white/10 transition-colors">
     <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-2 text-center md:text-left">
       
+      <!-- LEFT TOPBAR -->
       <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 sm:gap-4">
         <div class="flex items-center gap-1.5 text-yellow-300">
           <i class="fa-solid fa-location-dot"></i>
-          <a id="topbarLokasiLink" href="https://maps.google.com" target="_blank" class="text-white font-medium hover:underline">
+          <a id="topbarLokasiLink" href="https://maps.google.com" target="_blank" title="Buka Lokasi di Google Maps" class="text-white font-medium hover:underline hover:text-yellow-200 transition">
             <span id="topbarLokasi">Kompleks Pesantren Al Firdaus</span>
           </a>
         </div>
@@ -42,19 +41,20 @@
             <span id="topbarWaText">0853-6668-5084</span>
           </a>
         </div>
-        <div class="bg-black/20 border border-white/20 px-2.5 py-0.5 rounded-full flex items-center gap-1.5 text-yellow-300 font-bold">
+        <div class="bg-black/20 border border-white/20 px-2.5 py-0.5 rounded-full flex items-center gap-1.5 text-yellow-300 shadow-inner font-bold">
           <i class="fa-solid fa-clock text-amber-400 animate-pulse"></i>
           <span id="topbarCountdown" class="text-white">Menghitung Waktu...</span>
         </div>
       </div>
 
+      <!-- RIGHT TOPBAR -->
       <div class="flex items-center justify-center space-x-3 text-sm">
-        <a id="linkIg" href="#" target="_blank" class="hover:text-yellow-300 transition"><i class="fa-brands fa-instagram"></i></a>
-        <a id="linkYt" href="#" target="_blank" class="hover:text-yellow-300 transition"><i class="fa-brands fa-youtube"></i></a>
-        <a id="linkTt" href="#" target="_blank" class="hover:text-yellow-300 transition"><i class="fa-brands fa-tiktok"></i></a>
-        <a id="linkTh" href="#" target="_blank" class="hover:text-yellow-300 transition"><i class="fa-brands fa-threads"></i></a>
+        <a id="linkIg" href="#" target="_blank" title="Instagram" class="hover:text-yellow-300 transition"><i class="fa-brands fa-instagram"></i></a>
+        <a id="linkYt" href="#" target="_blank" title="YouTube" class="hover:text-yellow-300 transition"><i class="fa-brands fa-youtube"></i></a>
+        <a id="linkTt" href="#" target="_blank" title="TikTok" class="hover:text-yellow-300 transition"><i class="fa-brands fa-tiktok"></i></a>
+        <a id="linkTh" href="#" target="_blank" title="Threads" class="hover:text-yellow-300 transition"><i class="fa-brands fa-threads"></i></a>
         <span class="text-white/40">|</span>
-        <a href="admin.html" target="_blank" title="Login Admin Portal" class="hover:text-yellow-300 text-white font-bold text-xs flex items-center justify-center bg-black/30 w-7 h-7 rounded-lg border border-white/30">
+        <a href="admin.html" target="_blank" title="Login Admin Portal" class="hover:text-yellow-300 transition text-white font-bold text-xs flex items-center justify-center bg-black/30 w-7 h-7 rounded-lg border border-white/30 shadow-sm hover:scale-105">
           <i class="fa-solid fa-user-lock text-yellow-400 text-sm"></i>
         </a>
       </div>
@@ -66,159 +66,180 @@
   <header id="mainHeader" class="bg-emerald-800 text-white shadow-md sticky top-0 z-40 transition-colors">
     <div class="container mx-auto px-4 py-2.5 flex justify-between items-center">
       
+      <!-- LOGO -->
       <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('beranda')">
         <img src="https://lh3.googleusercontent.com/d/1Ca6RhNsv0aFWD4EMdkr8uCcSuPDESTpv" alt="Logo" class="w-9 h-9 sm:w-10 sm:h-10 object-contain rounded-full bg-white p-0.5 border border-yellow-400 shadow">
         <div>
-          <h1 class="font-bold text-sm sm:text-lg leading-tight" id="portalHeaderTitle">PESONA IV AL FIRDAUS</h1>
+          <h1 class="font-bold text-sm sm:text-lg leading-tight" id="portalHeaderTitle">PESONA AL FIRDAUS</h1>
           <p class="text-[10px] sm:text-xs text-white/80" id="portalHeaderSub">Islamic Youth Festival 2026</p>
         </div>
       </div>
 
+      <!-- DESKTOP NAV MENU -->
       <nav class="hidden md:flex items-center space-x-5 text-sm font-medium" id="desktopNav">
-        <button id="nav-beranda" onclick="switchView('beranda')" class="hover:text-yellow-300 inline-flex items-center gap-1.5"><i class="fa-solid fa-house text-amber-300"></i> Beranda</button>
-        <button id="nav-lomba" onclick="switchView('lomba')" class="hover:text-yellow-300 inline-flex items-center gap-1.5"><i class="fa-solid fa-trophy text-amber-300"></i> Cabang Lomba</button>
-        <button id="nav-cek" onclick="switchView('cek')" class="hover:text-yellow-300 inline-flex items-center gap-1.5"><i class="fa-solid fa-magnifying-glass text-amber-300"></i> Cek Pendaftaran</button>
-        <button id="nav-unggah" onclick="switchView('unggah')" class="hover:text-yellow-300 inline-flex items-center gap-1.5"><i class="fa-solid fa-cloud-arrow-up text-amber-300"></i> Unggahan Audio</button>
-        <button id="nav-sertifikat" onclick="switchView('sertifikat')" class="hover:text-yellow-300 inline-flex items-center gap-1.5"><i class="fa-solid fa-certificate text-amber-300"></i> Sertifikat</button>
+        <button id="nav-beranda" onclick="switchView('beranda')" class="hover:text-yellow-300 transition inline-flex items-center gap-1.5"><i class="fa-solid fa-house text-amber-300"></i> Beranda</button>
+        <button id="nav-lomba" onclick="switchView('lomba')" class="hover:text-yellow-300 transition inline-flex items-center gap-1.5"><i class="fa-solid fa-trophy text-amber-300"></i> Cabang Lomba</button>
+        <button id="nav-cek" onclick="switchView('cek')" class="hover:text-yellow-300 transition inline-flex items-center gap-1.5"><i class="fa-solid fa-magnifying-glass text-amber-300"></i> Cek Pendaftaran</button>
+        <button id="nav-unggah" onclick="switchView('unggah')" class="hover:text-yellow-300 transition inline-flex items-center gap-1.5"><i class="fa-solid fa-cloud-arrow-up text-amber-300"></i> Unggahan Audio</button>
+        <button id="nav-sertifikat" onclick="switchView('sertifikat')" class="hover:text-yellow-300 transition inline-flex items-center gap-1.5"><i class="fa-solid fa-certificate text-amber-300"></i> Sertifikat</button>
       </nav>
 
+      <!-- TOMBOL DAFTAR SEKARANG + HAMBURGER -->
       <div class="flex items-center space-x-2 sm:space-x-3">
-        <button onclick="switchView('lomba')" title="Daftar Sekarang" class="bg-yellow-400 hover:bg-yellow-500 text-gray-950 font-extrabold px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl shadow-md flex items-center gap-2 text-xs sm:text-sm">
+        <button onclick="switchView('lomba')" title="Daftar Sekarang" class="bg-yellow-400 hover:bg-yellow-500 text-gray-950 font-extrabold px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl transition shadow-md flex items-center gap-2 text-xs sm:text-sm">
           <i class="fa-solid fa-trophy text-gray-900 text-sm"></i>
           <span>Daftar Sekarang</span>
         </button>
-        <button onclick="toggleMobileNav()" class="md:hidden w-9 h-9 flex items-center justify-center text-white hover:text-yellow-300">
+        <button onclick="toggleMobileNav()" class="md:hidden w-9 h-9 flex items-center justify-center text-white hover:text-yellow-300 focus:outline-none">
           <i class="fa-solid fa-bars text-xl" id="hamburgerIcon"></i>
         </button>
       </div>
 
     </div>
 
-    <!-- MOBILE MENU -->
+    <!-- MOBILE MENU DROPDOWN -->
     <div id="mobileMenu" class="hidden md:hidden bg-black/20 border-t border-white/20 px-4 py-3 space-y-2 text-sm font-medium">
-      <button onclick="switchView('beranda'); toggleMobileNav();" class="block w-full text-left py-2 px-3 rounded hover:bg-white/10"><i class="fa-solid fa-house w-5 text-yellow-300 mr-1"></i> Beranda</button>
-      <button onclick="switchView('lomba'); toggleMobileNav();" class="block w-full text-left py-2 px-3 rounded hover:bg-white/10"><i class="fa-solid fa-trophy w-5 text-yellow-300 mr-1"></i> Cabang Lomba</button>
-      <button onclick="switchView('cek'); toggleMobileNav();" class="block w-full text-left py-2 px-3 rounded hover:bg-white/10"><i class="fa-solid fa-magnifying-glass w-5 text-yellow-300 mr-1"></i> Cek Pendaftaran</button>
-      <button onclick="switchView('unggah'); toggleMobileNav();" class="block w-full text-left py-2 px-3 rounded hover:bg-white/10"><i class="fa-solid fa-cloud-arrow-up w-5 text-yellow-300 mr-1"></i> Unggahan Audio</button>
-      <button onclick="switchView('sertifikat'); toggleMobileNav();" class="block w-full text-left py-2 px-3 rounded hover:bg-white/10"><i class="fa-solid fa-certificate w-5 text-yellow-300 mr-1"></i> Sertifikat</button>
+      <button id="mnav-beranda" onclick="switchView('beranda'); toggleMobileNav();" class="block w-full text-left py-2 px-3 rounded hover:bg-white/10 transition">
+        <i class="fa-solid fa-house w-5 text-yellow-300 mr-1"></i> Beranda
+      </button>
+      <button id="mnav-lomba" onclick="switchView('lomba'); toggleMobileNav();" class="block w-full text-left py-2 px-3 rounded hover:bg-white/10 transition">
+        <i class="fa-solid fa-trophy w-5 text-yellow-300 mr-1"></i> Cabang Lomba
+      </button>
+      <button id="mnav-cek" onclick="switchView('cek'); toggleMobileNav();" class="block w-full text-left py-2 px-3 rounded hover:bg-white/10 transition">
+        <i class="fa-solid fa-magnifying-glass w-5 text-yellow-300 mr-1"></i> Cek Pendaftaran
+      </button>
+      <button id="mnav-unggah" onclick="switchView('unggah'); toggleMobileNav();" class="block w-full text-left py-2 px-3 rounded hover:bg-white/10 transition">
+        <i class="fa-solid fa-cloud-arrow-up w-5 text-yellow-300 mr-1"></i> Unggahan Audio
+      </button>
+      <button id="mnav-sertifikat" onclick="switchView('sertifikat'); toggleMobileNav();" class="block w-full text-left py-2 px-3 rounded hover:bg-white/10 transition">
+        <i class="fa-solid fa-certificate w-5 text-yellow-300 mr-1"></i> Sertifikat
+      </button>
     </div>
   </header>
 
   <!-- KONTEN UTAMA -->
   <main class="flex-1">
 
-    <!-- 0. HASIL SCAN VERIFIKASI QR CODE SERTIFIKAT (TAMPIL JIKA DI-SCAN) -->
-    <section id="view-scan-result" class="view-page hidden container mx-auto px-4 py-8 max-w-lg">
-      <div class="bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-200">
-        
-        <!-- HEADER KARTU SCAN -->
-        <div class="bg-gradient-to-r from-emerald-800 to-emerald-950 p-6 text-center text-white">
-          <div class="w-16 h-16 bg-white rounded-full mx-auto flex items-center justify-center p-1 shadow-lg mb-2">
-            <img src="https://lh3.googleusercontent.com/d/1Ca6RhNsv0aFWD4EMdkr8uCcSuPDESTpv" class="w-full h-full object-contain">
-          </div>
-          <h2 class="text-lg font-extrabold uppercase tracking-wider text-yellow-300">VERIFIKASI SERTIFIKAT</h2>
-          <p class="text-xs text-emerald-100 font-semibold">PESONA IV AL FIRDAUS</p>
-        </div>
-
-        <!-- RINCIAN RESMI PESONA IV AL FIRDAUS -->
-        <div class="p-6 space-y-3.5 text-xs text-gray-800">
-          
-          <div class="border-b pb-2">
-            <span class="font-bold text-emerald-900 flex items-center gap-1.5"><i class="fa-solid fa-file-lines"></i> No. Sertifikat</span>
-            <p class="font-mono font-bold text-gray-700 mt-0.5 pl-5" id="scanCertNo">0208-0247/PESONA-IV/AL-FIRDAUS/X/2026</p>
-          </div>
-
-          <div class="border-b pb-2">
-            <span class="font-bold text-emerald-900 flex items-center gap-1.5"><i class="fa-solid fa-calendar-days"></i> Kabupaten/Kota, Tanggal</span>
-            <p class="font-medium text-gray-600 mt-0.5 pl-5">Bandar Lampung, 31 Oktober 2026</p>
-          </div>
-
-          <div class="border-b pb-2">
-            <span class="font-bold text-emerald-900 flex items-center gap-1.5"><i class="fa-solid fa-house"></i> Nama Lembaga</span>
-            <p class="font-bold text-gray-800 mt-0.5 pl-5">Ponpes & SIT Al Firdaus</p>
-          </div>
-
-          <div class="border-b pb-2">
-            <span class="font-bold text-emerald-900 flex items-center gap-1.5"><i class="fa-solid fa-pen-nib"></i> Ditandatangani</span>
-            <p class="font-medium text-gray-600 mt-0.5 pl-5">Ketua Yayasan Atmo Taruno Joyo - Mudir Ponpes SIT Al Firdaus</p>
-          </div>
-
-          <div class="border-b pb-2">
-            <span class="font-bold text-emerald-900 flex items-center gap-1.5"><i class="fa-solid fa-envelope"></i> Perihal</span>
-            <p class="font-medium text-gray-600 mt-0.5 pl-5">Sertifikat Pesona IV Al Firdaus</p>
-          </div>
-
-          <!-- DETAIL PEMILIK -->
-          <div class="bg-emerald-50 rounded-xl p-4 border border-emerald-200 space-y-2">
-            <span class="font-bold text-emerald-950 flex items-center gap-1.5"><i class="fa-solid fa-user-check text-emerald-700"></i> Ditujukan Kepada Pemilik Sertifikat:</span>
-            <p class="text-sm font-extrabold text-gray-900 uppercase pl-5" id="scanName">-</p>
-            
-            <div class="pl-5 space-y-1">
-              <p class="text-gray-600"><i class="fa-solid fa-building-columns mr-1 text-gray-400"></i> <span id="scanSchool">-</span></p>
-              <p class="text-gray-600"><i class="fa-solid fa-trophy mr-1 text-amber-500"></i> Cabang Lomba: <strong id="scanLomba" class="text-gray-800">-</strong></p>
-            </div>
-
-            <div class="mt-2 pl-5">
-              <span id="scanStatusBadge" class="px-3 py-1 bg-amber-500 text-white text-[11px] font-extrabold rounded-md uppercase shadow-sm">JUARA 1</span>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- BANNER VERIFIKASI HIJAU -->
-        <div class="bg-emerald-100 border-t border-emerald-300 p-3.5 text-center flex items-center justify-center gap-2 text-emerald-800 text-xs font-bold">
-          <i class="fa-solid fa-circle-check text-emerald-600 text-base"></i>
-          <span>Sertifikat Terverifikasi Resmi Sistem SIT Al Firdaus</span>
-        </div>
-
-      </div>
-
-      <div class="mt-4 text-center">
-        <button onclick="switchView('beranda')" class="text-xs text-emerald-800 font-bold hover:underline">&larr; Kembali ke Portal Utama</button>
-      </div>
-    </section>
-
     <!-- 1. BERANDA -->
     <section id="view-beranda" class="view-page container mx-auto px-4 py-6">
+      
+      <!-- HERO SLIDER BANNER -->
       <div class="relative group rounded-2xl overflow-hidden shadow-md border border-gray-200 mb-8 bg-black w-full">
         <div class="swiper heroSlider w-full">
           <div class="swiper-wrapper" id="sliderWrapper">
             <div class="swiper-slide w-full">
-              <img src="banner1.jpg" class="w-full h-[150px] sm:h-[190px] md:h-[220px] object-cover mx-auto block rounded-2xl" alt="Banner 1">
+              <img src="banner1.jpg" class="w-full h-[150px] sm:h-[190px] md:h-[220px] object-cover mx-auto block rounded-2xl" alt="Banner 1" onerror="this.src='https://via.placeholder.com/1200x300?text=Pesona+Al+Firdaus+2026'">
             </div>
           </div>
           <div class="swiper-button-next hidden sm:block"></div>
           <div class="swiper-button-prev hidden sm:block"></div>
           <div class="swiper-pagination"></div>
         </div>
+        <button onclick="toggleSliderAutoplay()" id="btnToggleAutoplay" title="Pause / Play Autoplay" class="absolute bottom-2 right-2 z-30 bg-black/50 hover:bg-black/70 text-white w-7 h-7 rounded-full flex items-center justify-center text-[10px] border border-white/30 transition">
+          <i class="fa-solid fa-pause" id="iconAutoplay"></i>
+        </button>
       </div>
 
+      <!-- DAFTAR CABANG LOMBA CAROUSEL SLIDER -->
       <div class="mb-12">
-        <div class="text-center sm:text-left mb-6">
-          <span class="theme-badge font-bold text-xs px-3 py-1 rounded-full uppercase tracking-wider">Kompetisi Islami</span>
-          <h3 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mt-2">Cabang Perlombaan Unggulan</h3>
-          <p class="text-gray-600 text-xs sm:text-sm mt-1">Geser untuk memilih kategori lomba terbaikmu!</p>
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
+          <div class="text-center sm:text-left">
+            <span class="theme-badge font-bold text-xs px-3 py-1 rounded-full uppercase tracking-wider">Kompetisi Islami</span>
+            <h3 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mt-2">Cabang Perlombaan Unggulan</h3>
+            <p class="text-gray-600 text-xs sm:text-sm mt-1">Geser untuk memilih kategori lomba terbaikmu!</p>
+          </div>
         </div>
 
         <div class="swiper lombaSwiper pb-10">
           <div class="swiper-wrapper" id="homeLombaGrid"></div>
           <div class="swiper-pagination lomba-swiper-pagination"></div>
+          <div class="swiper-button-next lomba-swiper-button-next hidden sm:block"></div>
+          <div class="swiper-button-prev lomba-swiper-button-prev hidden sm:block"></div>
+        </div>
+
+        <div class="text-center mt-4">
+          <button onclick="switchView('lomba')" class="theme-btn text-white px-8 py-3 rounded-xl font-bold shadow-lg text-sm transition transform hover:-translate-y-0.5 inline-flex items-center gap-2">
+            <span>Lihat Semua Cabang Lomba</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
         </div>
       </div>
+
     </section>
 
-    <!-- 2. CABANG LOMBA PAGE -->
+    <!-- 2. CABANG LOMBA FULL PAGE GRID / LIST -->
     <section id="view-lomba" class="view-page hidden container mx-auto px-4 py-8">
       <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
         <div>
           <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-900">Daftar Cabang Perlombaan</h2>
           <p class="text-gray-600 text-xs sm:text-sm mt-1">Pilih perlombaan untuk melihat detail syarat dan pendaftaran</p>
         </div>
+
+        <!-- TOGGLE GRID / LIST SWITCH -->
+        <div class="bg-gray-200 p-1 rounded-xl flex items-center gap-1 shadow-inner shrink-0">
+          <button onclick="toggleViewMode('grid')" id="btnViewGrid" class="px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 shadow bg-white text-gray-900">
+            <i class="fa-solid fa-th-large text-amber-500"></i> Grid
+          </button>
+          <button onclick="toggleViewMode('list')" id="btnViewList" class="px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 text-gray-600 hover:text-gray-900">
+            <i class="fa-solid fa-list-ul"></i> List
+          </button>
+        </div>
       </div>
+
       <div id="gridLombaContainer"></div>
     </section>
 
-    <!-- 3. CEK PENDAFTARAN -->
+    <!-- 3. DETAIL LOMBA PAGE -->
+    <section id="view-detail-lomba" class="view-page hidden container mx-auto px-4 py-6 sm:py-8">
+      <button onclick="switchView('lomba')" class="mb-4 sm:mb-6 theme-text font-bold text-xs sm:text-sm flex items-center gap-2 hover:underline">
+        <i class="fa-solid fa-arrow-left"></i> Kembali ke Daftar Lomba
+      </button>
+
+      <div class="bg-white rounded-2xl shadow-xl border overflow-hidden p-4 sm:p-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+          <div class="lg:col-span-5 flex flex-col items-center">
+            <div class="w-full bg-gray-100 rounded-xl overflow-hidden shadow-inner border mb-4">
+              <img id="detailFlyerImg" src="" alt="Flyer Lomba" class="w-full h-auto object-cover max-h-[450px]">
+            </div>
+            <button id="btnDaftarSekarang" class="w-full theme-btn text-white font-extrabold py-3.5 rounded-xl shadow-lg transition flex items-center justify-center gap-2 text-sm sm:text-base">
+              <i class="fa-solid fa-pen-to-square"></i> Daftar Lomba Ini
+            </button>
+          </div>
+
+          <div class="lg:col-span-7 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center gap-2 flex-wrap">
+                <span id="detailBadgeKategori" class="theme-badge font-bold text-xs px-3 py-1 rounded-full"></span>
+                <span id="detailBadgeTipe" class="font-bold text-xs px-3 py-1 rounded-full"></span>
+              </div>
+              <h1 id="detailJudulLomba" class="text-2xl sm:text-3xl font-extrabold text-gray-900 mt-3 mb-2"></h1>
+              
+              <div class="theme-box border rounded-xl p-3 sm:p-4 mb-4 sm:mb-6 space-y-1.5 text-xs sm:text-sm">
+                <p class="font-bold theme-text text-xs uppercase tracking-wider mb-1"><i class="fa-solid fa-tags mr-1"></i> Rincian Biaya Pendaftaran Kategori Aktif:</p>
+                <div id="detailBiayaContainer" class="space-y-1"></div>
+              </div>
+
+              <div class="space-y-4 sm:space-y-6 text-xs sm:text-sm text-gray-700 border-t pt-4">
+                <div>
+                  <h4 class="font-bold text-gray-900 text-sm sm:text-base mb-1"><i class="fa-solid fa-circle-info theme-text mr-2"></i>Deskripsi Lomba</h4>
+                  <p id="detailDeskripsi" class="whitespace-pre-line text-gray-600 leading-relaxed"></p>
+                </div>
+                <div>
+                  <h4 class="font-bold text-gray-900 text-sm sm:text-base mb-1"><i class="fa-solid fa-list-check theme-text mr-2"></i>Syarat & Ketentuan</h4>
+                  <p id="detailSyarat" class="whitespace-pre-line text-gray-600 leading-relaxed"></p>
+                </div>
+                <div>
+                  <h4 class="font-bold text-gray-900 text-sm sm:text-base mb-1"><i class="fa-solid fa-trophy theme-text mr-2"></i>Hadiah & Fasilitas</h4>
+                  <p id="detailHadiah" class="whitespace-pre-line text-gray-600 leading-relaxed"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. CEK PENDAFTARAN -->
     <section id="view-cek" class="view-page hidden container mx-auto px-4 py-8 sm:py-12 max-w-xl">
       <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg border text-center">
         <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Cek Status Pendaftaran</h3>
@@ -231,14 +252,52 @@
       </div>
     </section>
 
-    <!-- 4. SERTIFIKAT DIGITAL -->
+    <!-- 5. UNGGAHAN AUDIO -->
+    <section id="view-unggah" class="view-page hidden container mx-auto px-4 py-8 max-w-xl">
+      <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg border">
+        <div class="text-center mb-6">
+          <div class="w-12 h-12 bg-amber-100 text-amber-800 rounded-full flex items-center justify-center mx-auto mb-2 text-xl font-bold">
+            <i class="fa-solid fa-music"></i>
+          </div>
+          <h3 class="text-xl sm:text-2xl font-bold text-gray-900">Unggah Audio Peserta</h3>
+          <p class="text-xs text-gray-500 mt-1">Khusus untuk Cabang Lomba <strong>Tari Kreasi</strong> dan <strong>Solosong</strong></p>
+        </div>
+
+        <form onsubmit="submitAudioUpload(event)" class="space-y-4 text-xs">
+          <div class="relative">
+            <label class="block font-bold text-gray-700 mb-1">Cari Nama Peserta Terdaftar *</label>
+            <input type="text" id="audioNamaInput" autocomplete="off" oninput="onAudioNamaInput(this.value)" required placeholder="Ketik min. 3 huruf nama peserta..." class="w-full border rounded-lg px-3 py-2 text-xs focus:outline-none">
+            <input type="hidden" id="audioSelectedKode">
+            <div id="audioSuggestions" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-xl z-30 max-h-48 overflow-y-auto text-xs divide-y"></div>
+          </div>
+
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Cabang Lomba *</label>
+            <select id="audioCabang" required class="w-full border rounded-lg px-3 py-2 text-xs focus:outline-none bg-white">
+              <option value="Tari Kreasi">Tari Kreasi</option>
+              <option value="Solosong">Solosong</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Pilih File Audio (MP3, WAV, M4A) *</label>
+            <input type="file" id="audioFile" accept="audio/*" required class="w-full border rounded-lg p-2 text-xs bg-gray-50">
+            <p class="text-[10px] text-gray-400 mt-1">Format: MP3/WAV/M4A. Ukuran disarankan maks. 10 MB.</p>
+          </div>
+          <button type="submit" id="btnAudioSubmit" class="w-full theme-btn text-white font-bold py-3 rounded-xl text-xs sm:text-sm shadow flex items-center justify-center gap-2">
+            <i class="fa-solid fa-cloud-arrow-up"></i> Unggah Musik / Audio Now
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- 6. SERTIFIKAT DIGITAL -->
     <section id="view-sertifikat" class="view-page hidden container mx-auto px-4 py-8 max-w-2xl">
       <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg border text-center">
         <div class="w-12 h-12 bg-yellow-100 text-yellow-800 rounded-full flex items-center justify-center mx-auto mb-2 text-xl font-bold">
           <i class="fa-solid fa-award"></i>
         </div>
         <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-1">Sertifikat Digital Peserta</h3>
-        <p class="text-xs text-gray-500 mb-6">Cari nama Anda dan verifikasi keaslian sertifikat via Barcode/QR Code.</p>
+        <p class="text-xs text-gray-500 mb-6">Unduh dan verifikasi keaslian sertifikat keikutsertaan Anda via Barcode/QR Code.</p>
 
         <div class="flex flex-col sm:flex-row gap-2 mb-6">
           <input type="text" id="inputSearchCert" placeholder="Kode Registrasi / Nama / No WA..." class="flex-1 border rounded-lg px-4 py-2.5 text-xs sm:text-sm focus:outline-none">
@@ -254,60 +313,149 @@
   <footer class="bg-gray-950 text-white py-6 border-t border-gray-800">
     <div class="container mx-auto px-4 text-center text-[11px] sm:text-xs text-gray-400 space-y-2">
       <p id="footerContactInfo">Kontak Panitia: 0853-6668-5084 | Email: panitia@pesonaalfirdaus.id</p>
-      <p>&copy; 2026 PESONA IV AL FIRDAUS. All rights reserved.</p>
+      <p>&copy; 2026 PESONA AL FIRDAUS. All rights reserved.</p>
     </div>
   </footer>
 
+  <!-- MODAL FORM PENDAFTARAN -->
+  <div id="formModal" onclick="closeFormOnBackdrop(event)" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-2xl max-w-md w-full p-5 sm:p-6 relative shadow-2xl my-8 transform transition-all">
+      <button type="button" onclick="closeForm()" title="Tutup Modal" class="absolute top-3.5 right-3.5 bg-gray-100 hover:bg-red-100 text-gray-500 hover:text-red-600 w-8 h-8 rounded-full flex items-center justify-center font-bold text-lg transition shadow-sm border">
+        &times;
+      </button>
+
+      <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-1 pr-8">Form Pendaftaran Lomba</h3>
+      <p class="text-xs text-gray-500 mb-4">Isi data calon peserta / tim dengan benar.</p>
+      
+      <form id="regForm" onsubmit="submitRegistration(event)" class="space-y-3">
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">Cabang Lomba</label>
+          <input type="text" id="cabangLombaInput" readonly class="w-full bg-gray-100 border rounded-lg px-3 py-2 text-xs sm:text-sm font-bold theme-text">
+        </div>
+        
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">Pilih Kategori / Tingkat Peserta *</label>
+          <select id="tingkatPesertaInput" required class="w-full border rounded-lg px-3 py-2 text-xs sm:text-sm focus:outline-none bg-white font-semibold text-gray-800"></select>
+        </div>
+
+        <div id="namaPesertaContainer" class="space-y-2"></div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">Asal Sekolah / Lembaga *</label>
+          <input type="text" id="asalSekolah" required class="w-full border rounded-lg px-3 py-2 text-xs sm:text-sm" placeholder="Contoh: SD IT Al Firdaus">
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">No. WhatsApp *</label>
+            <input type="text" id="noWhatsapp" required class="w-full border rounded-lg px-3 py-2 text-xs sm:text-sm" placeholder="08xxxxx">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">Email *</label>
+            <input type="email" id="email" required class="w-full border rounded-lg px-3 py-2 text-xs sm:text-sm" placeholder="nama@email.com">
+          </div>
+        </div>
+
+        <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs flex justify-between items-center my-2 shadow-sm">
+          <div>
+            <p class="font-bold text-amber-950 flex items-center gap-1.5 text-[11px]">
+              <i class="fa-solid fa-building-columns text-amber-700"></i> Bank Syariah Indonesia (BSI)
+            </p>
+            <p class="font-mono font-black text-sm theme-text tracking-wider my-0.5" id="bsiNorekText">8500808806</p>
+            <p class="text-[10px] text-gray-600">a.n. <strong>Yayasan Atmo Taruno Joyo</strong></p>
+          </div>
+          <button type="button" onclick="copyBsiNorek()" class="bg-amber-400 hover:bg-amber-500 text-amber-950 font-bold px-3 py-2 rounded-lg text-xs shadow flex items-center gap-1.5 shrink-0 transition active:scale-95">
+            <i class="fa-solid fa-copy"></i>
+            <span>Salin No. Rek</span>
+          </button>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">Upload Bukti Transfer / Pembayaran *</label>
+          <input type="file" id="fileBukti" accept="image/*" class="w-full text-xs text-gray-500 border rounded-lg p-1.5 bg-gray-50">
+          <p class="text-[10px] theme-text font-medium mt-1">
+            <i class="fa-solid fa-circle-info mr-0.5"></i> File otomatis tersimpan aman di Google Drive Folder Panitia.
+          </p>
+        </div>
+        
+        <button type="submit" id="btnSubmitForm" class="w-full theme-btn text-white font-bold py-2.5 rounded-lg text-xs sm:text-sm shadow">Kirim Pendaftaran</button>
+      </form>
+    </div>
+  </div>
+
   <script>
     const GAS_URL = "https://script.google.com/macros/s/AKfycbw4APJqKIcWVgs1yk29KHmuIeArlCDcu0rruBauZkOOmUmGig9Wvqy2aIKq7_gaUPGkOg/exec";
+    const DRIVE_FOLDER_ID = "1i0VnagJrNxjQRWgo-qXZyrzIRX7l85WFZDw3ji6c0ncve_g9hrh811Wwd6l8sojQjbiH1eN";
+    const PANITIA_WA_CLEAN = "6285366685084";
 
-    let state = { lombaList: [], config: {}, swiperInstance: null, lombaSwiperInstance: null };
+    let state = { lombaList: [], config: {}, swiperInstance: null, lombaSwiperInstance: null, isAutoplayRunning: true, viewMode: 'grid' };
+    let countdownInterval = null;
+    let searchTimeout = null;
+
+    const THEMES = {
+      emerald: { top: 'bg-emerald-950', header: 'bg-emerald-800', btn: 'bg-emerald-700 hover:bg-emerald-800', text: 'text-emerald-800', badge: 'bg-emerald-100 text-emerald-800', box: 'bg-emerald-50 border-emerald-200' },
+      indigo: { top: 'bg-indigo-950', header: 'bg-indigo-800', btn: 'bg-indigo-700 hover:bg-indigo-800', text: 'text-indigo-800', badge: 'bg-indigo-100 text-indigo-800', box: 'bg-indigo-50 border-indigo-200' },
+      blue: { top: 'bg-blue-950', header: 'bg-blue-800', btn: 'bg-blue-700 hover:bg-blue-800', text: 'text-blue-800', badge: 'bg-blue-100 text-blue-800', box: 'bg-blue-50 border-blue-200' },
+      purple: { top: 'bg-purple-950', header: 'bg-purple-800', btn: 'bg-purple-700 hover:bg-purple-800', text: 'text-purple-800', badge: 'bg-purple-100 text-purple-800', box: 'bg-purple-50 border-purple-200' },
+      rose: { top: 'bg-rose-950', header: 'bg-rose-800', btn: 'bg-rose-700 hover:bg-rose-800', text: 'text-rose-800', badge: 'bg-rose-100 text-rose-800', box: 'bg-rose-50 border-rose-200' },
+      amber: { top: 'bg-amber-950', header: 'bg-amber-800', btn: 'bg-amber-700 hover:bg-amber-800', text: 'text-amber-800', badge: 'bg-amber-100 text-amber-800', box: 'bg-amber-50 border-amber-200' }
+    };
 
     window.onload = async () => {
       initSwiper();
       await loadPortalData();
 
-      // Cek apakah di-scan QR Code dengan parameter n, s, l, st, kode
       const urlParams = new URLSearchParams(window.location.search);
-      const name = urlParams.get('n');
-      const school = urlParams.get('s');
-      const lomba = urlParams.get('l');
-      const status = urlParams.get('st');
-      const kode = urlParams.get('kode') || urlParams.get('no');
-
-      if (name || kode) {
-        showScanResultCard(name, school, lomba, status, kode);
+      const kodeScan = urlParams.get('kode') || urlParams.get('query');
+      if (kodeScan) {
+        switchView('cek');
+        document.getElementById('inputSearch').value = kodeScan;
+        searchRegistration();
       }
     };
 
-    function showScanResultCard(name, school, lomba, status, kode) {
-      switchView('scan-result');
-      if (name) document.getElementById('scanName').innerText = name;
-      if (school) document.getElementById('scanSchool').innerText = school;
-      if (lomba) document.getElementById('scanLomba').innerText = lomba;
-      if (kode) document.getElementById('scanCertNo').innerText = kode;
-      
-      if (status) {
-        const badge = document.getElementById('scanStatusBadge');
-        badge.innerText = status.toUpperCase();
-        if (status.toLowerCase().includes('peserta')) {
-          badge.className = "px-3 py-1 bg-emerald-700 text-white text-[11px] font-extrabold rounded-md uppercase shadow-sm";
-        } else {
-          badge.className = "px-3 py-1 bg-amber-500 text-white text-[11px] font-extrabold rounded-md uppercase shadow-sm";
-        }
-      }
+    function applyDynamicTheme(colorKey) {
+      const theme = THEMES[colorKey] || THEMES.emerald;
+      document.getElementById('topbarBg').className = `${theme.top} text-white text-[11px] sm:text-xs py-2 px-3 sm:px-4 border-b border-white/10 transition-colors`;
+      document.getElementById('mainHeader').className = `${theme.header} text-white shadow-md sticky top-0 z-40 transition-colors`;
+
+      document.querySelectorAll('.theme-btn').forEach(el => { el.className = el.className.replace(/bg-\w+-\d+|hover:bg-\w+-\d+/g, '').trim() + ' ' + theme.btn; });
+      document.querySelectorAll('.theme-text').forEach(el => { el.className = el.className.replace(/text-\w+-\d+/g, '').trim() + ' ' + theme.text; });
+      document.querySelectorAll('.theme-badge').forEach(el => { el.className = el.className.replace(/bg-\w+-\d+|text-\w+-\d+/g, '').trim() + ' ' + theme.badge; });
+      document.querySelectorAll('.theme-box').forEach(el => { el.className = el.className.replace(/bg-\w+-\d+|border-\w+-\d+/g, '').trim() + ' ' + theme.box; });
     }
 
     function initSwiper() {
       state.swiperInstance = new Swiper('.heroSlider', {
-        loop: true, autoplay: { delay: 4000 },
-        pagination: { el: '.swiper-pagination', clickable: true }
+        loop: true, autoplay: { delay: 4000, disableOnInteraction: false },
+        pagination: { el: '.swiper-pagination', clickable: true },
+        navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
       });
 
       state.lombaSwiperInstance = new Swiper('.lombaSwiper', {
-        slidesPerView: 1.15, spaceBetween: 16,
-        breakpoints: { 640: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }
+        slidesPerView: 1.15, spaceBetween: 16, loop: false,
+        autoplay: { delay: 3500, disableOnInteraction: false },
+        pagination: { el: '.lomba-swiper-pagination', clickable: true },
+        navigation: { nextEl: '.lomba-swiper-button-next', prevEl: '.lomba-swiper-button-prev' },
+        breakpoints: { 640: { slidesPerView: 2, spaceBetween: 20 }, 1024: { slidesPerView: 3, spaceBetween: 24 } }
       });
+    }
+
+    function toggleSliderAutoplay() {
+      if(!state.swiperInstance) return;
+      const icon = document.getElementById('iconAutoplay');
+      if(state.isAutoplayRunning) {
+        state.swiperInstance.autoplay.stop(); state.isAutoplayRunning = false; icon.className = "fa-solid fa-play";
+      } else {
+        state.swiperInstance.autoplay.start(); state.isAutoplayRunning = true; icon.className = "fa-solid fa-pause";
+      }
+    }
+
+    function toggleMobileNav() {
+      const menu = document.getElementById('mobileMenu');
+      const icon = document.getElementById('hamburgerIcon');
+      menu.classList.toggle('hidden');
+      icon.className = menu.classList.contains('hidden') ? 'fa-solid fa-bars text-xl' : 'fa-solid fa-xmark text-xl';
     }
 
     function switchView(viewName) {
@@ -317,8 +465,26 @@
       window.scrollTo(0,0);
     }
 
-    function toggleMobileNav() {
-      document.getElementById('mobileMenu').classList.toggle('hidden');
+    function toggleViewMode(mode) {
+      state.viewMode = mode;
+      const btnGrid = document.getElementById('btnViewGrid');
+      const btnList = document.getElementById('btnViewList');
+
+      if(mode === 'list') {
+        btnList.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 shadow bg-white text-gray-900";
+        btnGrid.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 text-gray-600 hover:text-gray-900";
+      } else {
+        btnGrid.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 shadow bg-white text-gray-900";
+        btnList.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 text-gray-600 hover:text-gray-900";
+      }
+      renderGridLomba();
+    }
+
+    function copyBsiNorek() {
+      const norek = "8500808806";
+      navigator.clipboard.writeText(norek).then(() => {
+        Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'No. Rekening BSI Berhasil Disalin! 📋', showConfirmButton: false, timer: 2000 });
+      });
     }
 
     async function loadPortalData() {
@@ -328,58 +494,407 @@
         if(result && result.status === "success") {
           state.lombaList = result.lombaList || [];
           state.config = result.config || {};
-          renderGridLomba();
         }
-      } catch(e) { console.error(e); }
+      } catch(e) { console.error("Error loading portal data:", e); }
+      
+      applyPortalConfig();
+      renderGridLomba();
     }
 
+    function parseImageUrl(rawUrl) {
+      if (!rawUrl) return "";
+      let str = rawUrl.trim();
+      if (str.includes('/d/')) {
+        const match = str.match(/\/d\/([a-zA-Z0-9_-]+)/);
+        if (match && match[1]) return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w1600`;
+      }
+      return str;
+    }
+
+    function getQrCodeUrl(text) {
+      return `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(text)}`;
+    }
+
+    function applyPortalConfig() {
+      try {
+        const cfg = state.config || {};
+        applyDynamicTheme(cfg.themeColor || 'emerald');
+
+        if(cfg.headerTitle && document.getElementById('portalHeaderTitle')) document.getElementById('portalHeaderTitle').innerText = cfg.headerTitle;
+        if(cfg.headerSub && document.getElementById('portalHeaderSub')) document.getElementById('portalHeaderSub').innerText = cfg.headerSub;
+        if(cfg.contact && document.getElementById('footerContactInfo')) document.getElementById('footerContactInfo').innerText = cfg.contact;
+
+        if(cfg.lokasi && document.getElementById('topbarLokasi')) document.getElementById('topbarLokasi').innerText = cfg.lokasi;
+        if(cfg.mapUrl && document.getElementById('topbarLokasiLink')) document.getElementById('topbarLokasiLink').href = cfg.mapUrl;
+
+        if(cfg.waNumber) {
+          const waClean = String(cfg.waNumber).replace(/[^0-9]/g, "");
+          if(document.getElementById('topbarWaLink')) document.getElementById('topbarWaLink').href = `https://wa.me/${waClean}`;
+          if(document.getElementById('topbarWaText')) document.getElementById('topbarWaText').innerText = cfg.waNumber;
+        }
+
+        if(cfg.linkIg && document.getElementById('linkIg')) document.getElementById('linkIg').href = cfg.linkIg;
+        if(cfg.linkYt && document.getElementById('linkYt')) document.getElementById('linkYt').href = cfg.linkYt;
+        if(cfg.linkTt && document.getElementById('linkTt')) document.getElementById('linkTt').href = cfg.linkTt;
+        if(cfg.linkTh && document.getElementById('linkTh')) document.getElementById('linkTh').href = cfg.linkTh;
+
+        startCountdown(cfg.targetDate || "2026-11-20T08:00:00");
+
+        if(cfg.sliders && Array.isArray(cfg.sliders) && cfg.sliders.length > 0) {
+          const wrapper = document.getElementById('sliderWrapper');
+          if(wrapper) {
+            wrapper.innerHTML = "";
+            cfg.sliders.forEach(slide => {
+              const bgImgUrl = parseImageUrl(slide.bgUrl);
+              wrapper.innerHTML += `<div class="swiper-slide w-full"><img src="${bgImgUrl || 'banner1.jpg'}" class="w-full h-[150px] sm:h-[190px] md:h-[220px] object-cover mx-auto block rounded-2xl"></div>`;
+            });
+            if(state.swiperInstance) state.swiperInstance.update();
+          }
+        }
+      } catch(err) { console.error(err); }
+    }
+
+    function startCountdown(targetDateStr) {
+      if(countdownInterval) clearInterval(countdownInterval);
+      let targetTime = new Date(targetDateStr).getTime();
+      if(isNaN(targetTime)) targetTime = new Date("2026-11-20T08:00:00").getTime();
+      const elem = document.getElementById('topbarCountdown');
+      if(!elem) return;
+
+      function updateTimer() {
+        const now = new Date().getTime();
+        const diff = targetTime - now;
+        if (diff <= 0) { elem.innerText = "🎉 Acara Sedang Berlangsung!"; return; }
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const secs = Math.floor((diff % (1000 * 60)) / 1000);
+        elem.innerText = Math.floor(now / 4000) % 2 === 1 ? `✨ H-${days} | Yuk Daftarkan Dirimu!` : `⏳ ${days}H ${hours}J ${mins}M ${secs}D`;
+      }
+      updateTimer(); countdownInterval = setInterval(updateTimer, 1000);
+    }
+
+    // RENDER CABANG LOMBA GRID / LIST DENGAN DUKUNGAN TOGGLE VIEW MODE
     function renderGridLomba() {
       const container = document.getElementById('gridLombaContainer');
       const homeContainer = document.getElementById('homeLombaGrid');
       if(!container || !homeContainer) return;
 
       container.innerHTML = ""; homeContainer.innerHTML = "";
+      if(state.lombaList.length === 0) {
+        homeContainer.innerHTML = `<div class="swiper-slide"><p class="text-center text-gray-400 font-semibold py-8">Belum ada cabang lomba yang dibuka.</p></div>`;
+        container.innerHTML = homeContainer.innerHTML; return;
+      }
+
+      container.className = state.viewMode === 'list' ? "space-y-4" : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6";
 
       state.lombaList.forEach(item => {
-        const cardHtml = `
-          <div class="bg-white rounded-xl shadow border p-4 space-y-2">
-            <h3 class="text-base font-bold text-gray-900">${item.judul}</h3>
-            <p class="text-xs text-gray-500">${item.kategori}</p>
+        const isBuka = item.statusLomba !== 'TUTUP';
+        const imgUrl = parseImageUrl(item.flyerUrl);
+        const tipe = item.tipePeserta || 'Individu';
+        const isTeam = tipe === 'Team';
+
+        let priceItemsHtml = "";
+        if((item.active1 !== false && item.active1 !== 'false') && item.biaya1) priceItemsHtml += `<div class="flex justify-between font-bold text-gray-700"><span>• ${item.kat1 || 'SD'}:</span> <span class="theme-text font-extrabold">${item.biaya1}</span></div>`;
+        if((item.active2 !== false && item.active2 !== 'false') && item.biaya2) priceItemsHtml += `<div class="flex justify-between font-bold text-gray-700"><span>• ${item.kat2 || 'SMP'}:</span> <span class="theme-text font-extrabold">${item.biaya2}</span></div>`;
+        if((item.active3 !== false && item.active3 !== 'false') && item.biaya3) priceItemsHtml += `<div class="flex justify-between font-bold text-gray-700"><span>• ${item.kat3 || 'SMA'}:</span> <span class="theme-text font-extrabold">${item.biaya3}</span></div>`;
+
+        if (!priceItemsHtml) priceItemsHtml = `<div class="text-gray-400 italic">Gratis / Hubungi Panitia</div>`;
+
+        const priceBlockHtml = `<div class="theme-box rounded-lg p-2.5 my-3 text-xs space-y-1">${priceItemsHtml}</div>`;
+        const typeBadgeHtml = `<span class="text-[10px] font-bold px-2 py-0.5 rounded ${isTeam ? 'bg-purple-100 text-purple-800 border border-purple-300' : 'bg-blue-100 text-blue-800 border border-blue-300'}">${isTeam ? '👥 Team' : '👤 Individu'}</span>`;
+
+        // SLIDER CAROUSEL HOMEPAGE
+        const homeSlideHtml = `
+          <div class="swiper-slide h-auto">
+            <div class="bg-white rounded-xl shadow border overflow-hidden flex flex-col h-full hover:shadow-lg transition">
+              <img src="${imgUrl || 'https://via.placeholder.com/400x250'}" class="h-44 sm:h-48 w-full object-cover">
+              <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between">
+                <div>
+                  <div class="flex flex-wrap justify-between items-center gap-1 mb-1">
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                      <span class="text-xs theme-badge font-bold px-2.5 py-0.5 rounded">${item.kategori || 'Multi Kategori'}</span>
+                      ${typeBadgeHtml}
+                    </div>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded ${isBuka ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">${isBuka ? 'BUKA' : 'TUTUP'}</span>
+                  </div>
+                  <h3 class="text-lg sm:text-xl font-bold text-gray-800">${item.judul}</h3>
+                  ${priceBlockHtml}
+                </div>
+                <div class="pt-2 border-t flex justify-end items-center">
+                  <button onclick="openDetailLomba('${item.id}')" class="w-full theme-btn text-white text-xs px-3.5 py-2.5 rounded-lg font-bold text-center">Detail & Daftar &rarr;</button>
+                </div>
+              </div>
+            </div>
           </div>
         `;
-        homeContainer.innerHTML += `<div class="swiper-slide">${cardHtml}</div>`;
+
+        // CABANG LOMBA GRID OR LIST VIEW CARD
+        let cardHtml = "";
+        if(state.viewMode === 'list') {
+          cardHtml = `
+            <div class="bg-white rounded-2xl shadow border overflow-hidden flex flex-col sm:flex-row hover:shadow-lg transition p-3 sm:p-4 gap-4 items-center">
+              <img src="${imgUrl || 'https://via.placeholder.com/400x250'}" class="w-full sm:w-48 h-36 object-cover rounded-xl border shrink-0">
+              <div class="flex-1 w-full flex flex-col justify-between">
+                <div>
+                  <div class="flex flex-wrap justify-between items-center gap-1 mb-1">
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                      <span class="text-xs theme-badge font-bold px-2.5 py-0.5 rounded">${item.kategori || 'Multi Kategori'}</span>
+                      ${typeBadgeHtml}
+                    </div>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded ${isBuka ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">${isBuka ? 'BUKA' : 'TUTUP'}</span>
+                  </div>
+                  <h3 class="text-lg font-extrabold text-gray-900">${item.judul}</h3>
+                  ${priceBlockHtml}
+                </div>
+                <button onclick="openDetailLomba('${item.id}')" class="theme-btn text-white text-xs px-4 py-2.5 rounded-lg font-bold self-end sm:self-start mt-2">Detail & Daftar &rarr;</button>
+              </div>
+            </div>
+          `;
+        } else {
+          cardHtml = `
+            <div class="bg-white rounded-xl shadow border overflow-hidden flex flex-col hover:shadow-lg transition">
+              <img src="${imgUrl || 'https://via.placeholder.com/400x250'}" class="h-44 sm:h-48 w-full object-cover">
+              <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between">
+                <div>
+                  <div class="flex flex-wrap justify-between items-center gap-1 mb-1">
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                      <span class="text-xs theme-badge font-bold px-2.5 py-0.5 rounded">${item.kategori || 'Multi Kategori'}</span>
+                      ${typeBadgeHtml}
+                    </div>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded ${isBuka ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">${isBuka ? 'BUKA' : 'TUTUP'}</span>
+                  </div>
+                  <h3 class="text-lg sm:text-xl font-bold text-gray-800">${item.judul}</h3>
+                  ${priceBlockHtml}
+                </div>
+                <div class="pt-2 border-t flex justify-end items-center">
+                  <button onclick="openDetailLomba('${item.id}')" class="w-full theme-btn text-white text-xs px-3.5 py-2.5 rounded-lg font-bold text-center">Detail & Daftar &rarr;</button>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
+        homeContainer.innerHTML += homeSlideHtml;
         container.innerHTML += cardHtml;
       });
+
+      if(state.lombaSwiperInstance) state.lombaSwiperInstance.update();
+      applyDynamicTheme(state.config.themeColor || 'emerald');
+    }
+
+    function populateTingkatDropdown(item) {
+      const select = document.getElementById('tingkatPesertaInput');
+      if (!select) return;
+      select.innerHTML = '';
+      const list = [];
+      if (item) {
+        if (item.active1 !== false && item.active1 !== 'false' && item.kat1) list.push(item.kat1);
+        if (item.active2 !== false && item.active2 !== 'false' && item.kat2) list.push(item.kat2);
+        if (item.active3 !== false && item.active3 !== 'false' && item.kat3) list.push(item.kat3);
+      }
+      if (list.length === 0) list.push('SD / MI', 'SMP / MTs', 'SMA / MA', 'Umum');
+      list.forEach(kat => {
+        const opt = document.createElement('option');
+        opt.value = kat; opt.textContent = kat;
+        select.appendChild(opt);
+      });
+    }
+
+    function renderNamaPesertaFields(tipePeserta) {
+      const container = document.getElementById('namaPesertaContainer');
+      if (!container) return;
+      container.innerHTML = "";
+
+      if (tipePeserta === 'Team') {
+        container.innerHTML = `
+          <div class="bg-purple-50 p-3 rounded-xl border border-purple-200">
+            <div class="flex justify-between items-center mb-2">
+              <label class="block text-xs font-bold text-purple-900"><i class="fa-solid fa-users text-purple-700 mr-1"></i> Daftar Nama Anggota Tim / Kelompok *</label>
+              <button type="button" onclick="addTeamMemberField()" class="bg-purple-700 hover:bg-purple-800 text-white px-2.5 py-1 rounded-lg text-[10px] font-bold shadow flex items-center gap-1 transition">
+                <i class="fa-solid fa-plus"></i> Tambah Anggota
+              </button>
+            </div>
+            <div id="teamMemberList" class="space-y-2">
+              <div class="flex items-center gap-2"><input type="text" class="input-nama-peserta flex-1 border rounded-lg px-3 py-1.5 text-xs focus:outline-none" required placeholder="Peserta 1 (Ketua Tim) *"></div>
+              <div class="flex items-center gap-2"><input type="text" class="input-nama-peserta flex-1 border rounded-lg px-3 py-1.5 text-xs focus:outline-none" required placeholder="Peserta 2 *"></div>
+            </div>
+          </div>
+        `;
+      } else {
+        container.innerHTML = `
+          <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">Nama Lengkap Peserta *</label>
+            <input type="text" class="input-nama-peserta w-full border rounded-lg px-3 py-2 text-xs sm:text-sm focus:outline-none" required placeholder="Masukkan nama lengkap peserta">
+          </div>
+        `;
+      }
+    }
+
+    function addTeamMemberField() {
+      const list = document.getElementById('teamMemberList');
+      if (!list) return;
+      const count = list.children.length + 1;
+      const div = document.createElement('div');
+      div.className = "flex items-center gap-2";
+      div.innerHTML = `
+        <input type="text" class="input-nama-peserta flex-1 border rounded-lg px-3 py-1.5 text-xs focus:outline-none" required placeholder="Peserta ${count} *">
+        <button type="button" onclick="this.parentElement.remove()" class="bg-red-500 hover:bg-red-600 text-white w-7 h-7 rounded-lg text-xs flex items-center justify-center shrink-0 shadow"><i class="fa-solid fa-trash"></i></button>
+      `;
+      list.appendChild(div);
+    }
+
+    function openDetailLomba(id) {
+      const item = state.lombaList.find(x => x.id === id);
+      if(!item) return;
+      const tipe = item.tipePeserta || 'Individu';
+
+      document.getElementById('detailFlyerImg').src = parseImageUrl(item.flyerUrl) || 'https://via.placeholder.com/400x500';
+      document.getElementById('detailJudulLomba').innerText = item.judul;
+      document.getElementById('detailBadgeKategori').innerText = item.kategori || 'Multi Kategori';
+      
+      const badgeTipe = document.getElementById('detailBadgeTipe');
+      badgeTipe.className = tipe === 'Team' ? "bg-purple-100 text-purple-800 border border-purple-300 font-bold text-xs px-3 py-1 rounded-full" : "bg-blue-100 text-blue-800 border border-blue-300 font-bold text-xs px-3 py-1 rounded-full";
+      badgeTipe.innerText = tipe === 'Team' ? "👥 Team / Berkelompok" : "👤 Individu";
+
+      const detailBiayaBox = document.getElementById('detailBiayaContainer');
+      detailBiayaBox.innerHTML = "";
+      if (item.active1 !== false && item.kat1) detailBiayaBox.innerHTML += `<div class="flex justify-between py-1 border-b font-medium"><span>• ${item.kat1} :</span><span class="font-bold theme-text">${item.biaya1 || '-'}</span></div>`;
+      if (item.active2 !== false && item.kat2) detailBiayaBox.innerHTML += `<div class="flex justify-between py-1 border-b font-medium"><span>• ${item.kat2} :</span><span class="font-bold theme-text">${item.biaya2 || '-'}</span></div>`;
+      if (item.active3 !== false && item.kat3) detailBiayaBox.innerHTML += `<div class="flex justify-between py-1 font-medium"><span>• ${item.kat3} :</span><span class="font-bold theme-text">${item.biaya3 || '-'}</span></div>`;
+
+      document.getElementById('detailDeskripsi').innerText = item.deskripsi || '-';
+      document.getElementById('detailSyarat').innerText = item.syarat || '-';
+      document.getElementById('detailHadiah').innerText = item.hadiah || '-';
+
+      const btnDaftar = document.getElementById('btnDaftarSekarang');
+      if(item.statusLomba === 'TUTUP') {
+        btnDaftar.disabled = true; btnDaftar.className = "w-full bg-gray-400 text-white font-extrabold py-3.5 rounded-xl cursor-not-allowed";
+        btnDaftar.innerText = "Pendaftaran Ditutup";
+      } else {
+        btnDaftar.disabled = false; btnDaftar.className = "w-full theme-btn text-white font-extrabold py-3.5 rounded-xl shadow-lg transition flex items-center justify-center gap-2";
+        btnDaftar.innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Daftar Lomba Ini`;
+        btnDaftar.onclick = () => {
+          document.getElementById('cabangLombaInput').value = item.judul;
+          populateTingkatDropdown(item); renderNamaPesertaFields(tipe);
+          document.getElementById('formModal').classList.remove('hidden');
+        };
+      }
+      switchView('detail-lomba');
+    }
+
+    function closeForm() { document.getElementById('formModal').classList.add('hidden'); }
+    function closeFormOnBackdrop(e) { if(e.target === document.getElementById('formModal')) closeForm(); }
+
+    function onAudioNamaInput(val) {
+      const sugBox = document.getElementById('audioSuggestions');
+      if (!val || val.trim().length < 3) { sugBox.classList.add('hidden'); return; }
+
+      if (searchTimeout) clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(async () => {
+        sugBox.classList.remove('hidden');
+        sugBox.innerHTML = `<div class="p-2.5 text-center text-gray-400">Mencari...</div>`;
+        const res = await fetch(`${GAS_URL}?action=check&query=${encodeURIComponent(val.trim())}`);
+        const result = await res.json();
+        if (result.status === "success" && result.results) {
+          sugBox.innerHTML = "";
+          result.results.forEach(item => {
+            const div = document.createElement('div');
+            div.className = "p-2.5 hover:bg-gray-100 cursor-pointer flex justify-between";
+            div.innerHTML = `<div><strong>${item.namaLengkap}</strong><br><span class="text-[10px] text-gray-500">${item.asalSekolah}</span></div><span class="font-mono text-xs font-bold theme-text">${item.kodeRegistrasi}</span>`;
+            div.onclick = () => {
+              document.getElementById('audioNamaInput').value = `${item.namaLengkap} (${item.asalSekolah})`;
+              document.getElementById('audioSelectedKode').value = item.kodeRegistrasi;
+              sugBox.classList.add('hidden');
+            };
+            sugBox.appendChild(div);
+          });
+        } else { sugBox.innerHTML = `<div class="p-2.5 text-center text-red-500">Tidak ditemukan.</div>`; }
+      }, 300);
+    }
+
+    async function submitAudioUpload(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btnAudioSubmit');
+      btn.disabled = true; btn.innerText = "Mengunggah Audio...";
+      const fileInput = document.getElementById('audioFile');
+      if(!fileInput.files.length) return;
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+      reader.onload = async (ev) => {
+        const payload = {
+          action: 'uploadAudio', targetFolderId: DRIVE_FOLDER_ID,
+          kodeRegistrasi: document.getElementById('audioSelectedKode').value || document.getElementById('audioNamaInput').value,
+          cabangLomba: document.getElementById('audioCabang').value, audioBase64: ev.target.result, fileName: file.name, fileType: file.type
+        };
+        const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify(payload) });
+        const result = await res.json();
+        if(result.status === 'success') {
+          Swal.fire({ icon: 'success', title: 'Audio Diunggah! 🎵', text: 'Audio tersimpan di Drive Panitia.' });
+          fileInput.value = ""; document.getElementById('audioNamaInput').value = "";
+        }
+        btn.disabled = false; btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Unggah Musik / Audio Now`;
+      };
+      reader.readAsDataURL(file);
     }
 
     async function searchCertificate() {
       const q = document.getElementById('inputSearchCert').value.trim();
       const box = document.getElementById('certResultBox');
       if(!q) return;
-      box.classList.remove('hidden'); box.innerHTML = "<p class='text-xs text-center'>Mencari data sertifikat...</p>";
+      box.classList.remove('hidden'); box.innerHTML = "<p class='text-xs text-center'>Mencari...</p>";
 
       const res = await fetch(`${GAS_URL}?action=check&query=${encodeURIComponent(q)}`);
       const result = await res.json();
       if(result.status === "success") {
         const d = result.data;
-        const scanUrl = `${window.location.origin}${window.location.pathname}?n=${encodeURIComponent(d.namaLengkap)}&s=${encodeURIComponent(d.asalSekolah)}&l=${encodeURIComponent(d.cabangLomba)}&st=${encodeURIComponent(d.statusJuara || 'PESERTA')}&no=${d.kodeRegistrasi}`;
-        
+        const qrUrl = getQrCodeUrl(`${window.location.origin}${window.location.pathname}?kode=${d.kodeRegistrasi}`);
         box.innerHTML = `
-          <div class="border-2 border-emerald-800 bg-emerald-950 text-white p-5 rounded-xl text-center space-y-3">
-            <p class="text-[10px] text-yellow-300 font-bold uppercase">SERTIFIKAT PESONA IV AL FIRDAUS</p>
-            <h2 class="text-lg font-black text-yellow-300">${d.namaLengkap}</h2>
-            <p class="text-xs text-gray-200">${d.asalSekolah} | ${d.cabangLomba}</p>
-            <span class="inline-block px-3 py-1 bg-amber-500 text-gray-950 font-extrabold text-xs rounded uppercase">${d.statusJuara || 'PESERTA'}</span>
-            <div class="pt-2 flex justify-center">
-              <a href="${scanUrl}" target="_blank" class="bg-yellow-400 text-gray-950 px-4 py-2 rounded-lg text-xs font-bold shadow hover:bg-yellow-500 transition">
-                <i class="fa-solid fa-eye mr-1"></i> Buka Tampilan Verifikasi QR Code
-              </a>
-            </div>
+          <div class="border-4 border-double border-yellow-500 bg-gray-900 text-white p-6 rounded-xl text-center">
+            <p class="text-[10px] text-yellow-300 font-bold uppercase">SERTIFIKAT APRESIASI RESMI</p>
+            <h2 class="text-xl font-black text-yellow-300 my-1">${d.namaLengkap}</h2>
+            <p class="text-xs text-gray-300">${d.asalSekolah} | Cabang: ${d.cabangLomba}</p>
+            <div class="mt-4 flex justify-center"><img src="${qrUrl}" class="w-16 h-16 bg-white p-1 rounded"></div>
           </div>
+          <button onclick="window.print()" class="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-950 font-bold py-3 rounded-xl mt-4 text-xs">Unduh Sertifikat</button>
         `;
-      } else {
-        box.innerHTML = `<p class="text-xs text-red-500 text-center">Data sertifikat tidak ditemukan.</p>`;
-      }
+      } else { box.innerHTML = `<p class="text-xs text-red-500 text-center">Data tidak ditemukan.</p>`; }
+    }
+
+    async function submitRegistration(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btnSubmitForm');
+      btn.disabled = true; btn.innerText = "Mengirim...";
+      const inputs = document.querySelectorAll('.input-nama-peserta');
+      const namaList = [];
+      inputs.forEach((inp, idx) => { if(inp.value.trim()) namaList.push(inputs.length > 1 ? `${idx+1}. ${inp.value.trim()}` : inp.value.trim()); });
+
+      const fileInput = document.getElementById('fileBukti');
+      let buktiBase64 = null, fileName = null, fileType = null;
+
+      const doSend = async (b64, fn, ft) => {
+        const res = await fetch(GAS_URL, {
+          method: 'POST',
+          body: JSON.stringify({
+            action: 'register', targetFolderId: DRIVE_FOLDER_ID, namaLengkap: namaList.join(", "),
+            asalSekolah: `${document.getElementById('asalSekolah').value} (${document.getElementById('tingkatPesertaInput').value})`,
+            cabangLomba: document.getElementById('cabangLombaInput').value, noWhatsapp: document.getElementById('noWhatsapp').value,
+            email: document.getElementById('email').value, buktiBase64: b64, fileName: fn, fileType: ft
+          })
+        });
+        const result = await res.json();
+        if(result.status === "success") {
+          Swal.fire({ icon: 'success', title: 'Pendaftaran Berhasil! 🎉', text: `Kode Registrasi: ${result.kodeRegistrasi}` });
+          closeForm(); switchView('cek'); document.getElementById('inputSearch').value = result.kodeRegistrasi; searchRegistration();
+        }
+        btn.disabled = false; btn.innerText = "Kirim Pendaftaran";
+      };
+
+      if(fileInput.files.length > 0) {
+        const reader = new FileReader();
+        reader.onload = (ev) => doSend(ev.target.result, fileInput.files[0].name, fileInput.files[0].type);
+        reader.readAsDataURL(fileInput.files[0]);
+      } else doSend(null, null, null);
     }
 
     async function searchRegistration() {
@@ -392,9 +907,9 @@
       if(result.status === "success") {
         const d = result.data;
         box.innerHTML = `
-          <div class="bg-emerald-50 rounded-xl p-4 text-xs space-y-2 border border-emerald-200">
+          <div class="theme-box rounded-xl p-4 text-xs space-y-2 border">
             <div class="flex justify-between font-bold"><span>${d.namaLengkap}</span><span class="px-2 py-0.5 rounded bg-green-100 text-green-800">${d.status}</span></div>
-            <p><strong>Kode Registrasi:</strong> <span class="font-mono font-bold text-emerald-900">${d.kodeRegistrasi}</span></p>
+            <p><strong>Kode:</strong> <span class="font-mono font-bold theme-text">${d.kodeRegistrasi}</span></p>
             <p><strong>Lomba:</strong> ${d.cabangLomba}</p>
             <p><strong>Asal Sekolah:</strong> ${d.asalSekolah}</p>
           </div>
