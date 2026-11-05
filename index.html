@@ -10,7 +10,7 @@
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <style>
+  <style id="customThemeStyles">
     .swiper-button-next, .swiper-button-prev { color: #facc15 !important; transform: scale(0.6); }
     .swiper-pagination-bullet-active { background: #facc15 !important; }
     
@@ -405,7 +405,7 @@
       initSwiper();
       await loadPortalData();
 
-      // AUTO-SYNC: memperbarui data dari backend secara otomatis setiap 30 detik tanpa mengganggu sesi pengguna
+      // AUTO-SYNC: memperbarui data dari backend secara otomatis setiap 30 detik tanpa me-refresh halaman
       setInterval(loadPortalData, 30000);
 
       const urlParams = new URLSearchParams(window.location.search);
@@ -417,7 +417,22 @@
       }
     };
 
-    function applyDynamicTheme(colorKey) {
+    function applyDynamicTheme(colorKey, customHex) {
+      const styleTag = document.getElementById('customThemeStyles');
+
+      if (colorKey === 'custom' && customHex) {
+        styleTag.innerHTML += `
+          .theme-btn { background-color: ${customHex} !important; }
+          .theme-btn:hover { filter: brightness(0.9); }
+          .theme-text { color: ${customHex} !important; }
+          .theme-badge { background-color: ${customHex}15 !important; color: ${customHex} !important; }
+          .theme-box { background-color: ${customHex}08 !important; border-color: ${customHex}30 !important; }
+          #mainHeader { background-color: ${customHex} !important; }
+          #topbarBg { background-color: #0f172a !important; }
+        `;
+        return;
+      }
+
       const theme = THEMES[colorKey] || THEMES.emerald;
       document.getElementById('topbarBg').className = `${theme.top} text-white text-[11px] sm:text-xs py-2 px-3 sm:px-4 border-b border-white/10 transition-colors`;
       document.getElementById('mainHeader').className = `${theme.header} text-white shadow-md sticky top-0 z-40 transition-colors`;
@@ -522,7 +537,7 @@
     function applyPortalConfig() {
       try {
         const cfg = state.config || {};
-        applyDynamicTheme(cfg.themeColor || 'emerald');
+        applyDynamicTheme(cfg.themeColor || 'emerald', cfg.customColor || '#047857');
 
         if(cfg.headerTitle && document.getElementById('portalHeaderTitle')) document.getElementById('portalHeaderTitle').innerText = cfg.headerTitle;
         if(cfg.headerSub && document.getElementById('portalHeaderSub')) document.getElementById('portalHeaderSub').innerText = cfg.headerSub;
@@ -707,7 +722,7 @@
       });
 
       if(state.lombaSwiperInstance) state.lombaSwiperInstance.update();
-      applyDynamicTheme(state.config.themeColor || 'emerald');
+      applyDynamicTheme(state.config.themeColor || 'emerald', state.config.customColor || '#047857');
     }
 
     function populateTingkatDropdown(item) {
