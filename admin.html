@@ -18,12 +18,12 @@
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans min-h-screen flex flex-col">
 
-  <!-- LOGIN SECTION MULTIUSER (SUPERADMIN / ADMIN / JURI) -->
-  <div id="loginSection" class="fixed inset-0 bg-gray-950 flex items-center justify-center p-4 z-50">
+  <!-- LOGIN SECTION -->
+  <div id="loginSection" class="fixed inset-0 bg-emerald-950 flex items-center justify-center p-4 z-50">
     <div class="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 max-w-sm w-full text-center">
       <img src="https://lh3.googleusercontent.com/d/1Ca6RhNsv0aFWD4EMdkr8uCcSuPDESTpv" class="w-16 h-16 object-contain rounded-full bg-emerald-50 p-1 border border-yellow-400 mx-auto mb-3 shadow">
-      <h2 class="text-xl sm:text-2xl font-bold text-gray-900">Portal Login Petugas</h2>
-      <p class="text-xs text-gray-500 mb-5">Superadmin / Admin / Dewan Juri</p>
+      <h2 class="text-xl sm:text-2xl font-bold text-emerald-950">Admin Control Panel</h2>
+      <p class="text-xs text-gray-500 mb-5">Portal Manajemen Pesona Al Firdaus</p>
       
       <form onsubmit="handleLogin(event)" class="space-y-3">
         <div>
@@ -43,36 +43,73 @@
   <div id="dashboardSection" class="hidden flex-1 flex flex-col md:flex-row min-h-screen relative">
     
     <!-- TOPBAR MOBILE -->
-    <div class="md:hidden bg-gray-950 text-white px-4 py-3 flex justify-between items-center sticky top-0 z-40 shadow-md">
+    <div class="md:hidden bg-emerald-950 text-white px-4 py-3 flex justify-between items-center sticky top-0 z-40 shadow-md">
       <div class="flex items-center gap-2">
         <img src="https://lh3.googleusercontent.com/d/1Ca6RhNsv0aFWD4EMdkr8uCcSuPDESTpv" class="w-7 h-7 object-contain rounded-full bg-white p-0.5">
-        <span class="font-bold text-sm" id="mobileUserTitle">Admin Portal</span>
+        <span class="font-bold text-sm">Admin Portal</span>
       </div>
-      <button onclick="toggleAdminSidebar()" class="text-white w-8 h-8 flex items-center justify-center">
-        <i class="fa-solid fa-bars text-xl"></i>
+      <button onclick="toggleAdminSidebar()" id="adminHamburgerBtn" class="text-white hover:text-yellow-300 w-8 h-8 flex items-center justify-center">
+        <i class="fa-solid fa-bars text-xl" id="adminHamburgerIcon"></i>
       </button>
     </div>
 
-    <div id="adminBackdrop" onclick="closeAdminSidebar()" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden"></div>
+    <!-- MOBILE BACKDROP -->
+    <div id="adminBackdrop" onclick="closeAdminSidebar()" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden transition-opacity"></div>
 
-    <!-- SIDEBAR DRAWER DENGAN HAK AKSES MULTIUSER -->
-    <aside id="adminSidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-gray-950 text-gray-100 flex flex-col justify-between p-4 transform -translate-x-full transition-transform duration-300 ease-in-out md:static md:translate-x-0 md:flex">
+    <!-- SIDEBAR DRAWER -->
+    <aside id="adminSidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-emerald-950 text-emerald-100 flex flex-col justify-between p-4 transform -translate-x-full transition-transform duration-300 ease-in-out md:static md:translate-x-0 md:flex">
       <div>
-        <div class="flex items-center gap-3 px-2 py-4 border-b border-gray-800 mb-6">
+        <div class="flex items-center gap-3 px-2 py-4 border-b border-emerald-900 mb-4">
           <img src="https://lh3.googleusercontent.com/d/1Ca6RhNsv0aFWD4EMdkr8uCcSuPDESTpv" class="w-9 h-9 object-contain rounded-full bg-white p-0.5">
           <div>
-            <h2 class="font-bold text-sm leading-tight" id="sidebarUserNama">Panitia Portal</h2>
-            <p class="text-[10px] text-amber-400 font-bold uppercase tracking-wider" id="sidebarUserRole">[Role]</p>
+            <h2 class="font-bold text-sm leading-tight">Admin Portal</h2>
+            <p class="text-[10px] text-emerald-400" id="userRoleBadge">Superadmin</p>
           </div>
         </div>
 
-        <nav class="space-y-1.5 text-xs font-semibold" id="sidebarNav">
-          <!-- MENU AKSES SECARA DINAMIS -->
+        <nav class="space-y-1 text-xs font-semibold">
+          <button onclick="navAdmin('pendaftar')" id="m-pendaftar" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl bg-emerald-800 text-white shadow font-bold transition">
+            <i class="fa-solid fa-users w-4"></i> Data Pendaftar
+          </button>
+          <button onclick="navAdmin('audio')" id="m-audio" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
+            <i class="fa-solid fa-music w-4"></i> Unggahan Audio
+          </button>
+          <button onclick="navAdmin('sertifikat')" id="m-sertifikat" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
+            <i class="fa-solid fa-certificate w-4"></i> Sertifikat Digital
+          </button>
+          <button onclick="navAdmin('lomba')" id="m-lomba" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
+            <i class="fa-solid fa-trophy w-4"></i> Kelola Lomba
+          </button>
+          <button onclick="navAdmin('sliders')" id="m-sliders" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
+            <i class="fa-solid fa-images w-4"></i> Slider Banner
+          </button>
+          
+          <div class="pt-2 pb-1 border-t border-emerald-900 mt-2">
+            <p class="text-[10px] text-emerald-500 uppercase px-3 font-bold tracking-wider mb-1">Pengaturan Website</p>
+          </div>
+
+          <button onclick="navAdmin('navmenu')" id="m-navmenu" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
+            <i class="fa-solid fa-bars w-4"></i> Navigasi Menubar
+          </button>
+          <button onclick="navAdmin('topbar')" id="m-topbar" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
+            <i class="fa-solid fa-bullhorn w-4"></i> Topbar & Sosmed
+          </button>
+          <button onclick="navAdmin('identitas')" id="m-identitas" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
+            <i class="fa-solid fa-id-card w-4"></i> Identitas & Rekening
+          </button>
+
+          <!-- MENU KHUSUS SUPERADMIN -->
+          <div id="superadminMenuBlock" class="pt-2 pb-1 border-t border-emerald-900 mt-2">
+            <p class="text-[10px] text-yellow-400 uppercase px-3 font-bold tracking-wider mb-1">Superadmin</p>
+            <button onclick="navAdmin('users')" id="m-users" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-900 text-yellow-300 transition">
+              <i class="fa-solid fa-user-gear w-4"></i> Kelola User & Hak Akses
+            </button>
+          </div>
         </nav>
       </div>
 
-      <div class="pt-4 border-t border-gray-800 mt-6 md:mt-0">
-        <a href="index.html" target="_blank" class="w-full mb-2 bg-gray-900 hover:bg-gray-800 text-gray-200 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-2">
+      <div class="pt-4 border-t border-emerald-900 mt-6 md:mt-0">
+        <a href="index.html" target="_blank" class="w-full mb-2 bg-emerald-900 hover:bg-emerald-800 text-emerald-200 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-2">
           <i class="fa-solid fa-globe"></i> Buka Web Portal
         </a>
         <button onclick="handleLogout()" class="w-full bg-red-800/80 hover:bg-red-800 text-white py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-2">
@@ -91,59 +128,165 @@
             <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Rekapitulasi Pendaftar</h1>
             <p class="text-xs text-gray-500">Kelola pendaftaran dan status verifikasi peserta</p>
           </div>
-          <button onclick="exportCSV()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-3.5 py-2 rounded-lg text-xs font-bold shadow flex items-center gap-1.5">
-            <i class="fa-solid fa-file-excel"></i> Ekspor CSV
-          </button>
+          <div class="flex flex-wrap gap-2 w-full sm:w-auto">
+            <button onclick="exportCSV()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-3.5 py-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 shadow">
+              <i class="fa-solid fa-file-excel"></i> Ekspor CSV
+            </button>
+          </div>
         </div>
 
+        <!-- STAT CARDS -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
           <div class="bg-white p-4 rounded-xl border shadow-sm flex items-center justify-between">
-            <div><p class="text-xs text-gray-500 font-semibold">Total Pendaftar</p><p class="text-2xl font-extrabold text-emerald-900" id="statTotal">0</p></div>
-            <i class="fa-solid fa-users text-2xl text-emerald-800"></i>
+            <div>
+              <p class="text-xs text-gray-500 font-semibold">Total Pendaftar</p>
+              <p class="text-xl sm:text-2xl font-extrabold text-emerald-900 mt-1" id="statTotal">0</p>
+            </div>
+            <div class="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-800">
+              <i class="fa-solid fa-users text-2xl"></i>
+            </div>
           </div>
           <div class="bg-white p-4 rounded-xl border shadow-sm flex items-center justify-between">
-            <div><p class="text-xs text-gray-500 font-semibold">Terverifikasi (Approved)</p><p class="text-2xl font-extrabold text-green-600" id="statVerified">0</p></div>
-            <i class="fa-solid fa-circle-check text-2xl text-green-600"></i>
+            <div>
+              <p class="text-xs text-gray-500 font-semibold">Terverifikasi (Approved)</p>
+              <p class="text-xl sm:text-2xl font-extrabold text-green-600 mt-1" id="statVerified">0</p>
+            </div>
+            <div class="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center text-green-600">
+              <i class="fa-solid fa-circle-check text-2xl"></i>
+            </div>
           </div>
           <div class="bg-white p-4 rounded-xl border shadow-sm flex items-center justify-between">
-            <div><p class="text-xs text-gray-500 font-semibold">Menunggu Verifikasi</p><p class="text-2xl font-extrabold text-amber-500" id="statPending">0</p></div>
-            <i class="fa-solid fa-clock-rotate-left text-2xl text-amber-500"></i>
+            <div>
+              <p class="text-xs text-gray-500 font-semibold">Menunggu Verifikasi</p>
+              <p class="text-xl sm:text-2xl font-extrabold text-amber-500 mt-1" id="statPending">0</p>
+            </div>
+            <div class="w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center text-amber-500">
+              <i class="fa-solid fa-clock-rotate-left text-2xl"></i>
+            </div>
           </div>
         </div>
 
-        <div class="bg-white p-4 rounded-xl border shadow-sm flex flex-col sm:flex-row gap-2 justify-between">
-          <input type="text" id="searchBox" onkeyup="applyFilter()" placeholder="Cari Nama / Kode / WA..." class="border rounded-lg px-3 py-2 text-xs flex-1">
-          <select id="filterLomba" onchange="applyFilter()" class="border rounded-lg px-3 py-2 text-xs bg-white"></select>
+        <!-- SEARCH BAR + PAGINATION -->
+        <div class="bg-white p-4 rounded-xl border shadow-sm flex flex-col xl:flex-row gap-3 justify-between items-stretch xl:items-center">
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 flex-1">
+            <input type="text" id="searchBox" onkeyup="applyFilter()" placeholder="Cari Nama / Kode / WA..." class="border rounded-lg px-3 py-2 text-xs flex-1 min-w-[200px] focus:outline-emerald-700">
+            
+            <div class="flex items-center gap-2 bg-gray-50 border px-3 py-1.5 rounded-lg text-xs shrink-0">
+              <span class="text-gray-500 font-semibold whitespace-nowrap">Tampilkan:</span>
+              <select id="pageSizeSelect" onchange="changePageSize()" class="border rounded px-2 py-1 bg-white font-bold focus:outline-emerald-700">
+                <option value="10">10 data</option>
+                <option value="25">25 data</option>
+                <option value="50">50 data</option>
+                <option value="100">100 data</option>
+              </select>
+              <span class="text-gray-500 font-medium whitespace-nowrap ml-1" id="paginationInfo">Menampilkan 0 - 0 data</span>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row gap-2 shrink-0">
+            <select id="filterLomba" onchange="applyFilter()" class="border rounded-lg px-3 py-2 text-xs bg-white focus:outline-emerald-700">
+              <option value="">Semua Cabang Lomba</option>
+            </select>
+            <select id="filterStatus" onchange="applyFilter()" class="border rounded-lg px-3 py-2 text-xs bg-white focus:outline-emerald-700">
+              <option value="">Semua Status</option>
+              <option value="MENUNGGU">MENUNGGU</option>
+              <option value="TERVERIFIKASI">TERVERIFIKASI</option>
+              <option value="DITOLAK">DITOLAK</option>
+            </select>
+          </div>
         </div>
 
+        <!-- TABEL PENDAFTAR -->
         <div class="bg-white rounded-xl border shadow-sm overflow-hidden">
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
-              <thead class="bg-gray-900 text-white font-bold uppercase">
-                <tr><th class="p-3">Kode</th><th class="p-3">Peserta</th><th class="p-3">Lomba</th><th class="p-3">Bukti TF</th><th class="p-3">Status</th><th class="p-3 text-center">Aksi</th></tr>
+              <thead class="bg-emerald-900 text-white font-bold uppercase">
+                <tr>
+                  <th class="p-3">Kode</th>
+                  <th class="p-3">Peserta</th>
+                  <th class="p-3">Lomba</th>
+                  <th class="p-3">Bukti Pembayaran (TF)</th>
+                  <th class="p-3">Status</th>
+                  <th class="p-3 text-center">Aksi Verifikasi</th>
+                </tr>
               </thead>
               <tbody id="pendaftarTableBody" class="divide-y text-gray-700"></tbody>
             </table>
           </div>
+
+          <div class="p-3 sm:p-4 border-t bg-gray-50 flex justify-end items-center text-xs">
+            <div class="flex items-center space-x-2">
+              <button onclick="prevPage()" id="btnPrevPage" disabled class="px-3 py-1.5 border rounded-lg bg-white font-bold disabled:opacity-40 disabled:cursor-not-allowed hover:bg-emerald-50 text-emerald-900">
+                <i class="fa-solid fa-chevron-left"></i> Sblm
+              </button>
+              <span class="font-bold text-gray-700 px-2" id="pageIndicator">Hal 1 dari 1</span>
+              <button onclick="nextPage()" id="btnNextPage" disabled class="px-3 py-1.5 border rounded-lg bg-white font-bold disabled:opacity-40 disabled:cursor-not-allowed hover:bg-emerald-50 text-emerald-900">
+                Slanjut <i class="fa-solid fa-chevron-right"></i>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- 2. UNGGAHAN AUDIO (ACCESSIBLE BY JURI) -->
+      <!-- 2. MENU UNGGAHAN AUDIO -->
       <div id="sec-audio" class="admin-sec hidden space-y-6">
-        <div>
-          <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Pemutar Unggahan Audio Peserta</h1>
-          <p class="text-xs text-gray-500">Putar dan nilai musik peserta lomba Tari Kreasi & Solosong</p>
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+          <div>
+            <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Monitoring & Pemutar Unggahan Audio</h1>
+            <p class="text-xs text-gray-500">Lacak, menyortir, dan putar musik peserta lomba Tari Kreasi & Solosong</p>
+          </div>
         </div>
 
-        <div class="bg-white p-4 rounded-xl border shadow-sm flex gap-3">
-          <input type="text" id="searchAudioBox" onkeyup="renderAudioTable()" placeholder="Cari Nama / Kode / Asal..." class="border rounded-lg px-3 py-2 text-xs flex-1">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+          <div class="bg-white p-4 rounded-xl border shadow-sm flex items-center justify-between">
+            <div>
+              <p class="text-xs text-gray-500 font-semibold">Total Wajib Audio</p>
+              <p class="text-xl sm:text-2xl font-extrabold text-emerald-900 mt-1" id="statAudioTotal">0</p>
+            </div>
+            <div class="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-800">
+              <i class="fa-solid fa-music text-2xl"></i>
+            </div>
+          </div>
+          <div class="bg-white p-4 rounded-xl border shadow-sm flex items-center justify-between">
+            <div>
+              <p class="text-xs text-gray-500 font-semibold">Sudah Mengirim Audio</p>
+              <p class="text-xl sm:text-2xl font-extrabold text-green-600 mt-1" id="statAudioDone">0</p>
+            </div>
+            <div class="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center text-green-600">
+              <i class="fa-solid fa-circle-check text-2xl"></i>
+            </div>
+          </div>
+          <div class="bg-white p-4 rounded-xl border shadow-sm flex items-center justify-between">
+            <div>
+              <p class="text-xs text-gray-500 font-semibold">Belum Mengirim Audio</p>
+              <p class="text-xl sm:text-2xl font-extrabold text-red-500 mt-1" id="statAudioPending">0</p>
+            </div>
+            <div class="w-12 h-12 bg-red-50 rounded-xl flex items-center justify-center text-red-500">
+              <i class="fa-solid fa-triangle-exclamation text-2xl"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl border shadow-sm flex flex-col sm:flex-row gap-3 justify-between items-stretch sm:items-center">
+          <input type="text" id="searchAudioBox" onkeyup="renderAudioTable()" placeholder="Cari Nama / Kode / Asal..." class="border rounded-lg px-3 py-2 text-xs flex-1 focus:outline-emerald-700">
+          <select id="filterAudioStatus" onchange="renderAudioTable()" class="border rounded-lg px-3 py-2 text-xs bg-white focus:outline-emerald-700">
+            <option value="">Semua Status Unggahan Audio</option>
+            <option value="SUDUH">Sudah Mengirim Audio</option>
+            <option value="BELUM">Belum Mengirim Audio</option>
+          </select>
         </div>
 
         <div class="bg-white rounded-xl border shadow-sm overflow-hidden">
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
-              <thead class="bg-gray-900 text-white font-bold uppercase">
-                <tr><th class="p-3">Kode</th><th class="p-3">Peserta</th><th class="p-3">Lomba</th><th class="p-3">Status Audio</th><th class="p-3">Pemutar Audio</th></tr>
+              <thead class="bg-emerald-900 text-white font-bold uppercase">
+                <tr>
+                  <th class="p-3">Kode</th>
+                  <th class="p-3">Peserta</th>
+                  <th class="p-3">Cabang Lomba</th>
+                  <th class="p-3">Status Audio</th>
+                  <th class="p-3">Pemutar Audio / File</th>
+                </tr>
               </thead>
               <tbody id="audioTableBody" class="divide-y text-gray-700"></tbody>
             </table>
@@ -151,151 +294,340 @@
         </div>
       </div>
 
-      <!-- 3. KELOLA LOMBA -->
-      <div id="sec-lomba" class="admin-sec hidden space-y-6">
-        <div class="flex justify-between items-center">
-          <div><h1 class="text-xl sm:text-2xl font-bold text-gray-900">Kelola Cabang Lomba</h1><p class="text-xs text-gray-500">Atur Judul, Tipe, Kategori, Biaya & Status</p></div>
-          <button onclick="resetLombaForm()" class="bg-emerald-700 text-white px-4 py-2 rounded-lg text-xs font-bold">+ Tambah Lomba</button>
+      <!-- 3. MENU SERTIFIKAT DIGITAL -->
+      <div id="sec-sertifikat" class="admin-sec hidden space-y-6">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+          <div>
+            <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Kelola Sertifikat Digital</h1>
+            <p class="text-xs text-gray-500">Atur template, cetak batch, dan kelola sertifikat terverifikasi</p>
+          </div>
+          <button onclick="batchGenerateCertificates()" class="bg-amber-500 hover:bg-amber-600 text-emerald-950 px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 shadow">
+            <i class="fa-solid fa-print"></i> Cetak Batch Semua Sertifikat (A4)
+          </button>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          <form id="formLomba" onsubmit="saveLomba(event)" class="lg:col-span-5 bg-white p-5 rounded-xl border shadow-sm space-y-3">
-            <input type="hidden" id="lombaId"><input type="hidden" id="existingFlyerUrl">
-            <div><label class="block text-xs font-bold mb-1">Judul Lomba *</label><input type="text" id="lombaJudul" required class="w-full border rounded-lg px-3 py-1.5 text-xs"></div>
-            
-            <div class="grid grid-cols-2 gap-2">
-              <div>
-                <label class="block text-xs font-bold mb-1">Tipe Peserta *</label>
-                <select id="lombaTipe" class="w-full border rounded-lg px-3 py-1.5 text-xs font-bold text-purple-900 bg-white">
-                  <option value="Individu">👤 Individu</option>
-                  <option value="Team">👥 Team / Kelompok</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-xs font-bold mb-1">Status Lomba</label>
-                <select id="lombaStatus" class="w-full border rounded-lg px-3 py-1.5 text-xs bg-white"><option value="BUKA">BUKA</option><option value="TUTUP">TUTUP</option></select>
-              </div>
-            </div>
-
-            <div class="bg-gray-50 p-3 rounded-lg border space-y-2">
-              <span class="block font-bold text-xs text-gray-800">Kategori & Biaya:</span>
-              <div class="grid grid-cols-12 gap-2 bg-white p-2 border rounded">
-                <input type="text" id="lombaKat1" placeholder="SD/MI" class="col-span-5 border rounded px-2 py-1 text-xs font-bold">
-                <input type="text" id="lombaBiaya1" placeholder="Rp 35.000" class="col-span-5 border rounded px-2 py-1 text-xs font-bold text-emerald-800">
-                <label class="col-span-2 flex items-center gap-1 text-[10px]"><input type="checkbox" id="lombaActive1" checked> Aktif</label>
-              </div>
-              <div class="grid grid-cols-12 gap-2 bg-white p-2 border rounded">
-                <input type="text" id="lombaKat2" placeholder="SMP/MTs" class="col-span-5 border rounded px-2 py-1 text-xs font-bold">
-                <input type="text" id="lombaBiaya2" placeholder="Rp 45.000" class="col-span-5 border rounded px-2 py-1 text-xs font-bold text-emerald-800">
-                <label class="col-span-2 flex items-center gap-1 text-[10px]"><input type="checkbox" id="lombaActive2" checked> Aktif</label>
-              </div>
-              <div class="grid grid-cols-12 gap-2 bg-white p-2 border rounded">
-                <input type="text" id="lombaKat3" placeholder="SMA/MA" class="col-span-5 border rounded px-2 py-1 text-xs font-bold">
-                <input type="text" id="lombaBiaya3" placeholder="Rp 50.000" class="col-span-5 border rounded px-2 py-1 text-xs font-bold text-emerald-800">
-                <label class="col-span-2 flex items-center gap-1 text-[10px]"><input type="checkbox" id="lombaActive3" checked> Aktif</label>
-              </div>
-            </div>
-
-            <div><label class="block text-xs font-bold mb-1">Flyer URL</label><input type="text" id="lombaFlyerPathText" class="w-full border rounded-lg px-3 py-1.5 text-xs"></div>
-            <div><label class="block text-xs font-bold mb-1">Deskripsi Lomba</label><textarea id="lombaDeskripsi" rows="2" class="w-full border rounded-lg px-3 py-1.5 text-xs"></textarea></div>
-            <button type="submit" class="w-full bg-emerald-800 text-white font-bold py-2.5 rounded-lg text-xs shadow">Simpan Data Lomba</button>
-          </form>
-          <div class="lg:col-span-7 space-y-3" id="lombaCardsContainer"></div>
-        </div>
-      </div>
-
-      <!-- 4. KELOLA USER & HAK AKSES (SUPERADMIN ONLY) -->
-      <div id="sec-users" class="admin-sec hidden space-y-6">
-        <div>
-          <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Kelola Multiuser & Hak Akses</h1>
-          <p class="text-xs text-gray-500">Tambah akun baru dengan hak akses Superadmin, Admin, atau Juri</p>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          <form onsubmit="saveUserSubmit(event)" class="lg:col-span-5 bg-white p-5 rounded-xl border shadow-sm space-y-3">
-            <h3 class="font-bold text-sm border-b pb-2 text-gray-800">Form Akun Pengguna</h3>
+        <div class="bg-white p-5 rounded-xl border shadow-sm space-y-4 text-xs max-w-2xl">
+          <h3 class="font-bold text-sm text-emerald-900 border-b pb-2 flex items-center gap-2">
+            <i class="fa-solid fa-sliders"></i> Pengaturan Template Sertifikat Digital
+          </h3>
+          <form onsubmit="saveCertTemplateConfig(event)" class="space-y-3">
             <div>
-              <label class="block text-xs font-bold mb-1">Nama Petugas *</label>
-              <input type="text" id="uNama" required placeholder="Contoh: Ustadz Ahmad" class="w-full border rounded-lg px-3 py-2 text-xs focus:outline-emerald-700">
+              <label class="block font-bold text-gray-700 mb-1">URL Template Gambar Background Sertifikat (Opsional)</label>
+              <input type="text" id="certTemplateUrlInput" placeholder="https://... atau nama-file.jpg" class="w-full border rounded-lg px-3 py-2 focus:outline-emerald-700">
+              <p class="text-[10px] text-gray-400 mt-1">Kosongkan jika ingin menggunakan desain default portal.</p>
             </div>
-            <div>
-              <label class="block text-xs font-bold mb-1">Username *</label>
-              <input type="text" id="uUsername" required placeholder="username_login" class="w-full border rounded-lg px-3 py-2 text-xs focus:outline-emerald-700">
-            </div>
-            <div>
-              <label class="block text-xs font-bold mb-1">Password *</label>
-              <input type="password" id="uPassword" required class="w-full border rounded-lg px-3 py-2 text-xs focus:outline-emerald-700">
-            </div>
-            <div>
-              <label class="block text-xs font-bold mb-1">Role / Hak Akses *</label>
-              <select id="uRole" required class="w-full border rounded-lg px-3 py-2 text-xs font-bold bg-white">
-                <option value="superadmin">👑 Superadmin (Akses Penuh + Kelola User)</option>
-                <option value="admin">🛠 Admin Panitia (Akses Kelola Data & Lomba)</option>
-                <option value="juri">⚖ Dewan Juri (Hanya Penilaian & Audio)</option>
-              </select>
-            </div>
-            <button type="submit" class="w-full bg-emerald-800 hover:bg-emerald-900 text-white font-bold py-2.5 rounded-lg text-xs shadow">
-              <i class="fa-solid fa-user-plus mr-1"></i> Simpan Akun User
+            <button type="submit" class="bg-emerald-800 hover:bg-emerald-900 text-white font-bold px-5 py-2 rounded-lg text-xs shadow flex items-center gap-1.5">
+              <i class="fa-solid fa-floppy-disk"></i> Simpan Template Sertifikat
             </button>
           </form>
+        </div>
 
-          <div class="lg:col-span-7 bg-white rounded-xl border shadow-sm overflow-hidden">
-            <div class="p-3.5 bg-gray-900 text-white font-bold text-xs">Daftar Akun Pengguna Terdaftar</div>
+        <div class="bg-white rounded-xl border shadow-sm overflow-hidden">
+          <div class="p-4 border-b bg-gray-50 font-bold text-xs text-emerald-900">
+            Daftar Peserta Terverifikasi Berhak Sertifikat
+          </div>
+          <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
-              <thead class="bg-gray-100 border-b">
-                <tr><th class="p-3">Nama</th><th class="p-3">Username</th><th class="p-3">Role</th><th class="p-3 text-center">Aksi</th></tr>
+              <thead class="bg-emerald-950 text-white font-bold uppercase">
+                <tr>
+                  <th class="p-3">Kode</th>
+                  <th class="p-3">Nama Peserta</th>
+                  <th class="p-3">Asal Sekolah</th>
+                  <th class="p-3">Lomba</th>
+                  <th class="p-3">Barcode Verification</th>
+                  <th class="p-3 text-center">Cetak Sertifikat</th>
+                </tr>
               </thead>
-              <tbody id="userTableBody" class="divide-y"></tbody>
+              <tbody id="certTableBody" class="divide-y text-gray-700"></tbody>
             </table>
           </div>
         </div>
       </div>
 
-      <!-- 5. TEMA & IDENTITAS WEBSITE -->
-      <div id="sec-identitas" class="admin-sec hidden space-y-6">
-        <div>
-          <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Pengaturan Identitas & Tema Warna Website</h1>
-          <p class="text-xs text-gray-500">Ubah judul portal, rekening, serta warna utama tampilan web</p>
+      <!-- 4. KELOLA CABANG LOMBA -->
+      <div id="sec-lomba" class="admin-sec hidden space-y-6">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+          <div>
+            <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Kelola Cabang Lomba</h1>
+            <p class="text-xs text-gray-500">Upload flyer gambar dan atur rincian biaya per tingkat (SD, SMP, SMA)</p>
+          </div>
+          <button onclick="resetLombaForm()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded-lg text-xs font-bold shadow">
+            + Tambah Lomba Baru
+          </button>
         </div>
 
-        <form onsubmit="saveIdentitasConfig(event)" class="bg-white p-5 rounded-xl border shadow-sm space-y-4 text-xs max-w-xl">
-          <!-- OPSI PILIH WRNA TEMA WEBSITE -->
-          <div class="bg-gray-50 p-3.5 rounded-xl border space-y-2">
-            <label class="block font-bold text-gray-800"><i class="fa-solid fa-palette text-amber-500 mr-1"></i> Pilih Warna Utama Tema Website:</label>
-            <div class="grid grid-cols-3 gap-2">
-              <label class="flex items-center gap-2 border p-2 rounded-lg bg-white cursor-pointer hover:border-emerald-500">
-                <input type="radio" name="themeColor" value="emerald" checked class="accent-emerald-700">
-                <span class="w-4 h-4 rounded-full bg-emerald-700 inline-block"></span> Emerald
-              </label>
-              <label class="flex items-center gap-2 border p-2 rounded-lg bg-white cursor-pointer hover:border-indigo-500">
-                <input type="radio" name="themeColor" value="indigo" class="accent-indigo-700">
-                <span class="w-4 h-4 rounded-full bg-indigo-700 inline-block"></span> Indigo
-              </label>
-              <label class="flex items-center gap-2 border p-2 rounded-lg bg-white cursor-pointer hover:border-blue-500">
-                <input type="radio" name="themeColor" value="blue" class="accent-blue-700">
-                <span class="w-4 h-4 rounded-full bg-blue-700 inline-block"></span> Blue
-              </label>
-              <label class="flex items-center gap-2 border p-2 rounded-lg bg-white cursor-pointer hover:border-purple-500">
-                <input type="radio" name="themeColor" value="purple" class="accent-purple-700">
-                <span class="w-4 h-4 rounded-full bg-purple-700 inline-block"></span> Purple
-              </label>
-              <label class="flex items-center gap-2 border p-2 rounded-lg bg-white cursor-pointer hover:border-rose-500">
-                <input type="radio" name="themeColor" value="rose" class="accent-rose-700">
-                <span class="w-4 h-4 rounded-full bg-rose-700 inline-block"></span> Rose
-              </label>
-              <label class="flex items-center gap-2 border p-2 rounded-lg bg-white cursor-pointer hover:border-amber-500">
-                <input type="radio" name="themeColor" value="amber" class="accent-amber-700">
-                <span class="w-4 h-4 rounded-full bg-amber-700 inline-block"></span> Amber
-              </label>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <form id="formLomba" onsubmit="saveLomba(event)" class="lg:col-span-5 bg-white p-4 sm:p-5 rounded-xl border shadow-sm space-y-3">
+            <h3 class="font-bold text-sm text-emerald-900 border-b pb-2" id="lombaFormHeader">Form Cabang Lomba</h3>
+            <input type="hidden" id="lombaId">
+            <input type="hidden" id="existingFlyerUrl">
+            
+            <div>
+              <label class="block text-[11px] font-bold text-gray-700 mb-1">Judul Perlombaan *</label>
+              <input type="text" id="lombaJudul" required placeholder="MHQ / Tari Kreasi / Solosong" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700">
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-gray-700 mb-1">Status Pendaftaran</label>
+              <select id="lombaStatus" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700">
+                <option value="BUKA">BUKA</option>
+                <option value="TUTUP">TUTUP</option>
+              </select>
+            </div>
+
+            <div class="bg-gray-50 p-3 rounded-lg border space-y-2">
+              <span class="block font-bold text-[11px] text-emerald-900 border-b pb-1">BIAYA REGISTRASI PER TINGKAT:</span>
+              <div>
+                <label class="block text-[10px] font-bold text-gray-600 mb-0.5">1. Biaya Tingkat SD / MI *</label>
+                <input type="text" id="lombaBiayaSD" required placeholder="Contoh: Rp 35.000" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700 bg-white">
+              </div>
+              <div>
+                <label class="block text-[10px] font-bold text-gray-600 mb-0.5">2. Biaya Tingkat SMP / MTs *</label>
+                <input type="text" id="lombaBiayaSMP" required placeholder="Contoh: Rp 45.000" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700 bg-white">
+              </div>
+              <div>
+                <label class="block text-[10px] font-bold text-gray-600 mb-0.5">3. Biaya Tingkat SMA / MA *</label>
+                <input type="text" id="lombaBiayaSMA" required placeholder="Contoh: Rp 50.000" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700 bg-white">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-gray-700 mb-1">Flyer URL / Nama File GitHub</label>
+              <input type="text" id="lombaFlyerPathText" placeholder="Contoh: flyer1.jpg atau https://..." class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700 mb-1">
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-gray-700 mb-1">Deskripsi Lomba</label>
+              <textarea id="lombaDeskripsi" rows="2" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700"></textarea>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-gray-700 mb-1">Syarat & Ketentuan</label>
+              <textarea id="lombaSyarat" rows="2" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700"></textarea>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-gray-700 mb-1">Hadiah & Fasilitas</label>
+              <textarea id="lombaHadiah" rows="2" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700"></textarea>
+            </div>
+
+            <button type="submit" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2.5 rounded-lg text-xs shadow transition flex items-center justify-center gap-2">
+              <i class="fa-solid fa-floppy-disk"></i>
+              <span>Simpan Data Lomba</span>
+            </button>
+          </form>
+
+          <div class="lg:col-span-7 space-y-3" id="lombaCardsContainer"></div>
+        </div>
+      </div>
+
+      <!-- 5. SLIDER BANNER -->
+      <div id="sec-sliders" class="admin-sec hidden space-y-6">
+        <div class="flex justify-between items-center">
+          <div>
+            <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Kelola Hero Slider Banner</h1>
+            <p class="text-xs text-gray-500">Atur gambar banner slider utama web portal pendaftaran</p>
+          </div>
+          <button onclick="addSlideRow()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-3 py-2 rounded-lg text-xs font-bold shadow">+ Tambah Banner</button>
+        </div>
+
+        <form onsubmit="saveSliders(event)" class="space-y-4">
+          <div id="sliderListContainer" class="space-y-4"></div>
+          <button type="submit" class="bg-emerald-800 hover:bg-emerald-900 text-white px-6 py-2.5 rounded-xl font-bold text-xs shadow flex items-center gap-2">
+            <i class="fa-solid fa-floppy-disk"></i> Simpan Perubahan Slider
+          </button>
+        </form>
+      </div>
+
+      <!-- 6. MENU NAVIGASI MENUBAR -->
+      <div id="sec-navmenu" class="admin-sec hidden space-y-6">
+        <div>
+          <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Pengaturan Visibilitas Menubar</h1>
+          <p class="text-xs text-gray-500">Aktifkan atau sembunyikan menu navigasi pada portal pendaftaran utama</p>
+        </div>
+
+        <form onsubmit="saveNavMenuConfig(event)" class="bg-white p-5 rounded-xl border shadow-sm space-y-4 text-xs max-w-xl">
+          <div class="space-y-3 bg-gray-50 p-4 rounded-xl border">
+            <label class="flex items-center justify-between font-bold text-gray-800 p-2 bg-white rounded border">
+              <span class="flex items-center gap-2"><i class="fa-solid fa-house text-emerald-700"></i> Beranda</span>
+              <input type="checkbox" id="mNavBeranda" checked class="w-5 h-5 accent-emerald-700">
+            </label>
+            <label class="flex items-center justify-between font-bold text-gray-800 p-2 bg-white rounded border">
+              <span class="flex items-center gap-2"><i class="fa-solid fa-trophy text-emerald-700"></i> Cabang Lomba</span>
+              <input type="checkbox" id="mNavLomba" checked class="w-5 h-5 accent-emerald-700">
+            </label>
+            <label class="flex items-center justify-between font-bold text-gray-800 p-2 bg-white rounded border">
+              <span class="flex items-center gap-2"><i class="fa-solid fa-magnifying-glass text-emerald-700"></i> Cek Pendaftaran</span>
+              <input type="checkbox" id="mNavCek" checked class="w-5 h-5 accent-emerald-700">
+            </label>
+            <label class="flex items-center justify-between font-bold text-gray-800 p-2 bg-white rounded border">
+              <span class="flex items-center gap-2"><i class="fa-solid fa-cloud-arrow-up text-emerald-700"></i> Unggahan Audio</span>
+              <input type="checkbox" id="mNavUnggah" checked class="w-5 h-5 accent-emerald-700">
+            </label>
+            <label class="flex items-center justify-between font-bold text-gray-800 p-2 bg-white rounded border">
+              <span class="flex items-center gap-2"><i class="fa-solid fa-certificate text-emerald-700"></i> Sertifikat Digital</span>
+              <input type="checkbox" id="mNavSertifikat" checked class="w-5 h-5 accent-emerald-700">
+            </label>
+          </div>
+
+          <button type="submit" class="bg-emerald-800 hover:bg-emerald-900 text-white font-bold px-6 py-2.5 rounded-xl text-xs shadow flex items-center gap-2">
+            <i class="fa-solid fa-floppy-disk"></i> Simpan Menubar Navigasi
+          </button>
+        </form>
+      </div>
+
+      <!-- 7. MENU TOPBAR & SOSIAL MEDIA -->
+      <div id="sec-topbar" class="admin-sec hidden space-y-6">
+        <div>
+          <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Pengaturan Topbar & Sosial Media</h1>
+          <p class="text-xs text-gray-500">Atur informasi lokasi, WhatsApp, target countdown, dan link sosial media</p>
+        </div>
+
+        <form onsubmit="saveTopbarConfig(event)" class="bg-white p-5 rounded-xl border shadow-sm space-y-4 text-xs max-w-xl">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-bold text-gray-700 mb-1">Teks Lokasi Kegiatan</label>
+              <input type="text" id="cfgLokasi" class="w-full border rounded-lg px-3 py-2 focus:outline-emerald-700" placeholder="Kompleks Pesantren Al Firdaus">
+            </div>
+            <div>
+              <label class="block font-bold text-gray-700 mb-1">Nomor WhatsApp Panitia</label>
+              <input type="text" id="cfgWaNumber" class="w-full border rounded-lg px-3 py-2 focus:outline-emerald-700" placeholder="085366685084">
             </div>
           </div>
 
-          <div><label class="block font-bold mb-1">Judul Header Portal</label><input type="text" id="cfgHeaderTitle" class="w-full border rounded-lg px-3 py-2"></div>
-          <div><label class="block font-bold mb-1">Subjudul Header Portal</label><input type="text" id="cfgHeaderSub" class="w-full border rounded-lg px-3 py-2"></div>
-          <div><label class="block font-bold mb-1">Informasi Rekening Pembayaran</label><input type="text" id="cfgRekening" class="w-full border rounded-lg px-3 py-2"></div>
-          <div><label class="block font-bold mb-1">Kontak Footer</label><input type="text" id="cfgContact" class="w-full border rounded-lg px-3 py-2"></div>
-          <button type="submit" class="bg-emerald-800 text-white font-bold px-6 py-2.5 rounded-xl text-xs shadow">Simpan Identitas & Tema Warna</button>
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">URL Google Maps Lokasi</label>
+            <input type="text" id="cfgMapUrl" class="w-full border rounded-lg px-3 py-2 focus:outline-emerald-700" placeholder="https://maps.app.goo.gl/...">
+          </div>
+
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Target Tanggal Countdown Timer Acara</label>
+            <input type="datetime-local" id="cfgTargetDate" class="w-full border rounded-lg px-3 py-2 focus:outline-emerald-700">
+          </div>
+
+          <h4 class="font-bold text-gray-900 border-t pt-3">Link Sosial Media</h4>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block font-semibold mb-1">Instagram</label>
+              <input type="text" id="cfgLinkIg" class="w-full border rounded px-3 py-1.5 text-xs" placeholder="https://instagram.com/...">
+            </div>
+            <div>
+              <label class="block font-semibold mb-1">YouTube</label>
+              <input type="text" id="cfgLinkYt" class="w-full border rounded px-3 py-1.5 text-xs" placeholder="https://youtube.com/...">
+            </div>
+            <div>
+              <label class="block font-semibold mb-1">TikTok</label>
+              <input type="text" id="cfgLinkTt" class="w-full border rounded px-3 py-1.5 text-xs" placeholder="https://tiktok.com/...">
+            </div>
+            <div>
+              <label class="block font-semibold mb-1">Threads</label>
+              <input type="text" id="cfgLinkTh" class="w-full border rounded px-3 py-1.5 text-xs" placeholder="https://threads.net/...">
+            </div>
+          </div>
+
+          <button type="submit" class="bg-emerald-800 hover:bg-emerald-900 text-white font-bold px-6 py-2.5 rounded-xl text-xs shadow flex items-center gap-2">
+            <i class="fa-solid fa-floppy-disk"></i> Simpan Topbar & Sosmed
+          </button>
         </form>
+      </div>
+
+      <!-- 8. MENU IDENTITAS -->
+      <div id="sec-identitas" class="admin-sec hidden space-y-6">
+        <div>
+          <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Pengaturan Identitas & Rekening</h1>
+          <p class="text-xs text-gray-500">Atur judul portal, rekening, dan kontak footer</p>
+        </div>
+
+        <form onsubmit="saveIdentitasConfig(event)" class="bg-white p-5 rounded-xl border shadow-sm space-y-4 text-xs max-w-xl">
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Judul Portal (Header Utama)</label>
+            <input type="text" id="cfgHeaderTitle" class="w-full border rounded-lg px-3 py-2 focus:outline-emerald-700">
+          </div>
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Subjudul Portal</label>
+            <input type="text" id="cfgHeaderSub" class="w-full border rounded-lg px-3 py-2 focus:outline-emerald-700">
+          </div>
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Informasi Rekening Pembayaran</label>
+            <input type="text" id="cfgRekening" class="w-full border rounded-lg px-3 py-2 focus:outline-emerald-700" placeholder="BSI: 8500808806 a.n Yayasan Atmo Taruno Joyo">
+          </div>
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Informasi Kontak Footer</label>
+            <input type="text" id="cfgContact" class="w-full border rounded-lg px-3 py-2 focus:outline-emerald-700">
+          </div>
+
+          <button type="submit" class="bg-emerald-800 hover:bg-emerald-900 text-white font-bold px-6 py-2.5 rounded-xl text-xs shadow flex items-center gap-2">
+            <i class="fa-solid fa-floppy-disk"></i> Simpan Identitas & Rekening
+          </button>
+        </form>
+      </div>
+
+      <!-- 9. MENU KELOLA USER & HAK AKSES (KHUSUS SUPERADMIN) -->
+      <div id="sec-users" class="admin-sec hidden space-y-6">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+          <div>
+            <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Kelola User & Hak Akses</h1>
+            <p class="text-xs text-gray-500">Tambah, edit username/password, dan tentukan tingkatan role pengguna (Superadmin, Admin, Juri)</p>
+          </div>
+          <button onclick="resetUserForm()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded-lg text-xs font-bold shadow flex items-center gap-1.5">
+            <i class="fa-solid fa-user-plus"></i> + Tambah User Baru
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <form id="formUser" onsubmit="saveUser(event)" class="lg:col-span-4 bg-white p-4 sm:p-5 rounded-xl border shadow-sm space-y-3">
+            <h3 class="font-bold text-sm text-emerald-900 border-b pb-2" id="userFormHeader">Form Tambah User</h3>
+            <input type="hidden" id="userOldUsername">
+
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1">Username *</label>
+              <input type="text" id="userUsername" required placeholder="Contoh: superadmin" class="w-full border rounded-lg px-3 py-2 text-xs focus:outline-emerald-700">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1">Password *</label>
+              <input type="text" id="userPassword" required placeholder="Password login" class="w-full border rounded-lg px-3 py-2 text-xs focus:outline-emerald-700">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1">Hak Akses / Role *</label>
+              <select id="userRole" required class="w-full border rounded-lg px-3 py-2 text-xs focus:outline-emerald-700 bg-white font-semibold">
+                <option value="Superadmin">Superadmin (Akses Penuh + Kelola User)</option>
+                <option value="Admin">Admin (Kelola Data & Content Portal)</option>
+                <option value="Juri">Juri (Khusus Penilaian Audio & Peserta)</option>
+              </select>
+            </div>
+
+            <div class="flex gap-2 pt-2">
+              <button type="submit" id="btnSaveUser" class="flex-1 bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2.5 rounded-lg text-xs shadow flex items-center justify-center gap-2">
+                <i class="fa-solid fa-floppy-disk"></i> Simpan User
+              </button>
+              <button type="button" onclick="resetUserForm()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold px-3 py-2.5 rounded-lg text-xs">
+                Batal
+              </button>
+            </div>
+          </form>
+
+          <div class="lg:col-span-8 bg-white rounded-xl border shadow-sm overflow-hidden">
+            <div class="p-4 border-b bg-gray-50 font-bold text-xs text-emerald-900 flex justify-between items-center">
+              <span>Daftar Pengguna Sistem</span>
+              <button onclick="fetchUsers()" class="text-emerald-700 hover:underline text-xs"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-emerald-900 text-white font-bold uppercase">
+                  <tr>
+                    <th class="p-3">Username</th>
+                    <th class="p-3">Password</th>
+                    <th class="p-3">Role</th>
+                    <th class="p-3 text-center">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="userTableBody" class="divide-y text-gray-700"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
 
     </main>
@@ -304,235 +636,889 @@
   <script>
     const GAS_URL = "https://script.google.com/macros/s/AKfycbw4APJqKIcWVgs1yk29KHmuIeArlCDcu0rruBauZkOOmUmGig9Wvqy2aIKq7_gaUPGkOg/exec";
 
-    let currentUser = null;
-    let adminState = { pendaftar: [], lomba: [], config: {}, users: [] };
+    let adminState = { 
+      pendaftar: [], filteredData: [], lomba: [], config: {}, currentSliders: [], users: [],
+      currentPage: 1, pageSize: 10
+    };
 
     window.onload = () => {
-      const savedUser = localStorage.getItem('userAuth');
-      if(savedUser) {
-        currentUser = JSON.parse(savedUser);
-        setupDashboardRoleView();
+      if(localStorage.getItem('adminAuth') === 'true') {
+        document.getElementById('loginSection').classList.add('hidden');
+        document.getElementById('dashboardSection').classList.remove('hidden');
+        applyRolePermissions();
+        initDashboard();
       }
     };
 
+    function parseImageUrl(rawUrl) {
+      if (!rawUrl) return "";
+      let str = rawUrl.trim();
+      if (str.includes('/d/')) {
+        const match = str.match(/\/d\/([a-zA-Z0-9_-]+)/);
+        if (match && match[1]) return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w1600`;
+      }
+      return str;
+    }
+
+    function parseAudioDirectUrl(url) {
+      if (!url || url === '-') return "";
+      if (url.includes('drive.google.com')) {
+        const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+        if (match && match[1]) {
+          return `https://docs.google.com/uc?export=download&id=${match[1]}`;
+        }
+      }
+      return url;
+    }
+
+    function getQrCodeUrl(text) {
+      return `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(text)}`;
+    }
+
     async function postToGAS(payload) {
       const res = await fetch(GAS_URL, {
-        method: 'POST', mode: 'cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        method: 'POST', mode: 'cors', redirect: 'follow',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify(payload)
       });
       return await res.json();
     }
 
+    function toggleAdminSidebar() {
+      const sidebar = document.getElementById('adminSidebar');
+      const backdrop = document.getElementById('adminBackdrop');
+      const icon = document.getElementById('adminHamburgerIcon');
+
+      const isHidden = sidebar.classList.contains('-translate-x-full');
+      if (isHidden) {
+        sidebar.classList.remove('-translate-x-full');
+        sidebar.classList.add('translate-x-0');
+        backdrop.classList.remove('hidden');
+        icon.className = 'fa-solid fa-xmark text-xl';
+      } else {
+        closeAdminSidebar();
+      }
+    }
+
+    function closeAdminSidebar() {
+      const sidebar = document.getElementById('adminSidebar');
+      const backdrop = document.getElementById('adminBackdrop');
+      const icon = document.getElementById('adminHamburgerIcon');
+
+      sidebar.classList.add('-translate-x-full');
+      sidebar.classList.remove('translate-x-0');
+      backdrop.classList.add('hidden');
+      if(icon) icon.className = 'fa-solid fa-bars text-xl';
+    }
+
     async function handleLogin(e) {
       e.preventDefault();
-      const btn = document.getElementById('btnLoginSubmit');
-      btn.disabled = true; btn.innerText = "Memeriksa Akun...";
-
       const u = document.getElementById('userInput').value.trim();
       const p = document.getElementById('passInput').value.trim();
+      const btn = document.getElementById('btnLoginSubmit');
+
+      btn.disabled = true;
+      btn.innerText = "Memeriksa...";
 
       try {
-        const result = await postToGAS({ action: 'login', username: u, password: p });
-        if(result.status === "success" && result.user) {
-          currentUser = result.user;
-          localStorage.setItem('userAuth', JSON.stringify(currentUser));
-          Swal.fire({ icon: 'success', title: `Selamat Datang, ${currentUser.nama}! 👋`, timer: 1500, showConfirmButton: false });
-          setupDashboardRoleView();
+        const res = await postToGAS({ action: 'login', username: u, password: p });
+        if(res.status === "success") {
+          localStorage.setItem('adminAuth', 'true');
+          localStorage.setItem('adminRole', res.role || 'Superadmin');
+          localStorage.setItem('adminUser', res.username || u);
+
+          Swal.fire({
+            icon: 'success', title: 'Login Berhasil! 🎉', text: `Selamat datang, ${res.username} (${res.role}).`,
+            timer: 1500, showConfirmButton: false
+          }).then(() => {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('dashboardSection').classList.remove('hidden');
+            applyRolePermissions();
+            initDashboard();
+          });
         } else {
-          Swal.fire({ icon: 'error', title: 'Login Gagal', text: result.message || 'Username/Password Salah.' });
+          Swal.fire({ icon: 'error', title: 'Login Gagal', text: res.message || 'Username atau Password salah!', confirmButtonColor: '#047857' });
         }
       } catch(err) {
-        Swal.fire({ icon: 'error', title: 'Terjadi Error', text: err.toString() });
+        Swal.fire({ icon: 'error', title: 'Koneksi Gagal', text: 'Gagal terhubung ke backend server.', confirmButtonColor: '#047857' });
       } finally {
-        btn.disabled = false; btn.innerText = "Masuk Dashboard";
+        btn.disabled = false;
+        btn.innerText = "Masuk Dashboard";
+      }
+    }
+
+    function applyRolePermissions() {
+      const role = localStorage.getItem('adminRole') || 'Superadmin';
+      const user = localStorage.getItem('adminUser') || 'admin';
+      
+      const badge = document.getElementById('userRoleBadge');
+      if(badge) badge.innerText = `${user} (${role})`;
+
+      const isSuperadmin = (role === 'Superadmin');
+      const isJuri = (role === 'Juri');
+
+      document.getElementById('superadminMenuBlock').style.display = isSuperadmin ? 'block' : 'none';
+
+      if(isJuri) {
+        ['lomba', 'sliders', 'navmenu', 'topbar', 'identitas'].forEach(m => {
+          const btn = document.getElementById(`m-${m}`);
+          if(btn) btn.style.display = 'none';
+        });
+      } else {
+        ['lomba', 'sliders', 'navmenu', 'topbar', 'identitas'].forEach(m => {
+          const btn = document.getElementById(`m-${m}`);
+          if(btn) btn.style.display = 'flex';
+        });
       }
     }
 
     function handleLogout() {
-      localStorage.removeItem('userAuth');
-      location.reload();
-    }
-
-    // ATUR TAMPILAN SIDEBAR DENGAN ROLE-BASED PERMISSION
-    function setupDashboardRoleView() {
-      document.getElementById('loginSection').classList.add('hidden');
-      document.getElementById('dashboardSection').classList.remove('hidden');
-
-      document.getElementById('sidebarUserNama').innerText = currentUser.nama;
-      document.getElementById('sidebarUserRole').innerText = `[ ${currentUser.role.toUpperCase()} ]`;
-
-      const nav = document.getElementById('sidebarNav');
-      nav.innerHTML = "";
-
-      if(currentUser.role === 'juri') {
-        nav.innerHTML = `
-          <button onclick="navAdmin('audio')" id="m-audio" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-emerald-800 text-white font-bold"><i class="fa-solid fa-music w-4"></i> Monitoring Unggahan Audio</button>
-          <button onclick="navAdmin('pendaftar')" id="m-pendaftar" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-gray-800 text-gray-300"><i class="fa-solid fa-users w-4"></i> Lihat Data Peserta</button>
-        `;
-        navAdmin('audio');
-      } else {
-        nav.innerHTML = `
-          <button onclick="navAdmin('pendaftar')" id="m-pendaftar" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-emerald-800 text-white font-bold"><i class="fa-solid fa-users w-4"></i> Data Pendaftar</button>
-          <button onclick="navAdmin('audio')" id="m-audio" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-gray-800 text-gray-300"><i class="fa-solid fa-music w-4"></i> Unggahan Audio</button>
-          <button onclick="navAdmin('lomba')" id="m-lomba" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-gray-800 text-gray-300"><i class="fa-solid fa-trophy w-4"></i> Kelola Cabang Lomba</button>
-        `;
-
-        if(currentUser.role === 'superadmin') {
-          nav.innerHTML += `
-            <div class="pt-2 border-t border-gray-800 mt-2"><p class="text-[10px] text-gray-500 uppercase px-3 font-bold">Menu Superadmin</p></div>
-            <button onclick="navAdmin('users')" id="m-users" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-gray-800 text-amber-400 font-bold"><i class="fa-solid fa-user-shield w-4"></i> Kelola User & Hak Akses</button>
-            <button onclick="navAdmin('identitas')" id="m-identitas" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-gray-800 text-gray-300"><i class="fa-solid fa-palette w-4"></i> Identitas & Tema Warna</button>
-          `;
+      Swal.fire({
+        title: 'Keluar Admin Portal?', text: 'Anda harus memasukkan kredensial lagi untuk masuk.', icon: 'question',
+        showCancelButton: true, confirmButtonColor: '#047857', cancelButtonColor: '#d33', confirmButtonText: 'Ya, Keluar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          localStorage.removeItem('adminAuth');
+          localStorage.removeItem('adminRole');
+          localStorage.removeItem('adminUser');
+          location.reload();
         }
-        navAdmin('pendaftar');
-      }
-
-      initDashboard();
+      });
     }
 
     function navAdmin(sec) {
       document.querySelectorAll('.admin-sec').forEach(el => el.classList.add('hidden'));
       const targetSec = document.getElementById(`sec-${sec}`);
       if(targetSec) targetSec.classList.remove('hidden');
+
+      const menuKeys = ['pendaftar', 'audio', 'sertifikat', 'lomba', 'sliders', 'navmenu', 'topbar', 'identitas', 'users'];
+      menuKeys.forEach(k => {
+        const btn = document.getElementById(`m-${k}`);
+        if(btn) btn.className = (k === 'users') 
+          ? "w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-900 text-yellow-300 transition" 
+          : "w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-900 text-emerald-300 transition";
+      });
+
+      const activeBtn = document.getElementById(`m-${sec}`);
+      if(activeBtn) activeBtn.className = "w-full flex items-center gap-3 px-3.5 py-2 rounded-xl bg-emerald-800 text-white shadow font-bold transition";
+
+      if(sec === 'users') fetchUsers();
+      closeAdminSidebar();
     }
 
     async function initDashboard() {
-      fetchAdminData();
-      fetchPortalConfig();
-      if(currentUser.role === 'superadmin') fetchUsersList();
+      await fetchAdminData();
+      await fetchPortalConfig();
     }
 
     async function fetchAdminData() {
-      const res = await fetch(`${GAS_URL}?action=adminData`);
-      const result = await res.json();
-      if(result.status === "success") {
-        adminState.pendaftar = result.data || [];
-        renderPendaftarTable(); renderAudioTable();
+      try {
+        const res = await fetch(`${GAS_URL}?action=adminData`);
+        const result = await res.json();
+        if(result.status === "success") {
+          adminState.pendaftar = result.data || [];
+          applyFilter();
+          updateStats();
+          renderAudioTable();
+          renderCertTable();
+        }
+      } catch(e) { console.error(e); }
+    }
+
+    function updateStats() {
+      document.getElementById('statTotal').innerText = adminState.pendaftar.length;
+      document.getElementById('statVerified').innerText = adminState.pendaftar.filter(x => (x.status === 'TERVERIFIKASI' || x.status === 'APPROVED')).length;
+      document.getElementById('statPending').innerText = adminState.pendaftar.filter(x => x.status === 'MENUNGGU').length;
+    }
+
+    function applyFilter() {
+      const q = document.getElementById('searchBox').value.toLowerCase();
+      const lomba = document.getElementById('filterLomba').value;
+      const status = document.getElementById('filterStatus').value;
+
+      adminState.filteredData = adminState.pendaftar.filter(x => 
+        (x.namaLengkap.toLowerCase().includes(q) || x.kodeRegistrasi.toLowerCase().includes(q) || x.noWhatsapp.includes(q)) &&
+        (lomba === "" || x.cabangLomba === lomba) &&
+        (status === "" || x.status === status)
+      );
+
+      adminState.currentPage = 1;
+      renderPendaftarTable();
+    }
+
+    function changePageSize() {
+      adminState.pageSize = parseInt(document.getElementById('pageSizeSelect').value);
+      adminState.currentPage = 1;
+      renderPendaftarTable();
+    }
+
+    function prevPage() {
+      if(adminState.currentPage > 1) { adminState.currentPage--; renderPendaftarTable(); }
+    }
+
+    function nextPage() {
+      const totalPages = Math.ceil(adminState.filteredData.length / adminState.pageSize) || 1;
+      if(adminState.currentPage < totalPages) { adminState.currentPage++; renderPendaftarTable(); }
+    }
+
+    function viewBuktiTF(link) {
+      if(!link || link === '-') {
+        Swal.fire({ icon: 'info', title: 'Tidak Ada Bukti Transfer', text: 'Peserta belum mengunggah file bukti pembayaran.', confirmButtonColor: '#047857' });
+        return;
+      }
+      if(link.startsWith('data:image')) {
+        Swal.fire({ title: 'Preview Bukti Transfer', imageUrl: link, confirmButtonColor: '#047857' });
+      } else {
+        window.open(link, '_blank');
       }
     }
 
     function renderPendaftarTable() {
       const tbody = document.getElementById('pendaftarTableBody');
       tbody.innerHTML = "";
-      adminState.pendaftar.forEach(item => {
+
+      const totalItems = adminState.filteredData.length;
+      const totalPages = Math.ceil(totalItems / adminState.pageSize) || 1;
+      if (adminState.currentPage > totalPages) adminState.currentPage = totalPages;
+
+      const startIndex = (adminState.currentPage - 1) * adminState.pageSize;
+      const endIndex = Math.min(startIndex + adminState.pageSize, totalItems);
+      const pageData = adminState.filteredData.slice(startIndex, endIndex);
+
+      if(pageData.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-gray-400 font-semibold">Tidak ada data pendaftar.</td></tr>`;
+      } else {
+        pageData.forEach(item => {
+          const isApproved = (item.status === 'TERVERIFIKASI' || item.status === 'APPROVED');
+          const hasBukti = (item.linkBukti && item.linkBukti !== '-');
+
+          tbody.innerHTML += `
+            <tr class="hover:bg-gray-50 border-b">
+              <td class="p-3 font-mono font-bold text-emerald-900">${item.kodeRegistrasi}</td>
+              <td class="p-3"><strong>${item.namaLengkap}</strong><br><span class="text-[10px] text-gray-500">${item.asalSekolah}</span></td>
+              <td class="p-3 font-medium">${item.cabangLomba}</td>
+              <td class="p-3">
+                ${hasBukti ? `
+                  <button onclick="viewBuktiTF('${item.linkBukti}')" class="bg-blue-50 border border-blue-200 hover:bg-blue-100 text-blue-700 px-2.5 py-1 rounded text-[11px] font-bold flex items-center gap-1 shadow-sm transition">
+                    <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i> Lihat Bukti TF
+                  </button>
+                ` : `<span class="text-gray-400 text-[11px] italic">Belum Upload</span>`}
+              </td>
+              <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${isApproved ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800'}">${item.status}</span></td>
+              <td class="p-3 text-center space-x-1">
+                <button onclick="updateStatus('${item.kodeRegistrasi}', 'TERVERIFIKASI')" class="bg-green-600 hover:bg-green-700 text-white px-2.5 py-1 rounded text-[10px] font-bold">Approve</button>
+                <button onclick="deleteRegistrant('${item.kodeRegistrasi}')" class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-[10px] font-bold"><i class="fa-solid fa-trash"></i></button>
+              </td>
+            </tr>
+          `;
+        });
+      }
+
+      document.getElementById('paginationInfo').innerText = totalItems > 0 ? `Menampilkan ${startIndex + 1} - ${endIndex} dari ${totalItems} data` : "Menampilkan 0 data";
+      document.getElementById('pageIndicator').innerText = `Hal ${adminState.currentPage} dari ${totalPages}`;
+      document.getElementById('btnPrevPage').disabled = (adminState.currentPage <= 1);
+      document.getElementById('btnNextPage').disabled = (adminState.currentPage >= totalPages);
+    }
+
+    function renderAudioTable() {
+      const tbody = document.getElementById('audioTableBody');
+      if(!tbody) return;
+      tbody.innerHTML = "";
+
+      const q = (document.getElementById('searchAudioBox') ? document.getElementById('searchAudioBox').value.toLowerCase() : "");
+      const filterStatus = (document.getElementById('filterAudioStatus') ? document.getElementById('filterAudioStatus').value : "");
+
+      const audioReqList = adminState.pendaftar.filter(x => {
+        const c = (x.cabangLomba || "").toLowerCase();
+        return c.includes('tari') || c.includes('solo') || c.includes('musik');
+      });
+
+      let countDone = 0, countPending = 0;
+      audioReqList.forEach(item => {
+        if(item.linkAudio && item.linkAudio !== '-') countDone++; else countPending++;
+      });
+
+      document.getElementById('statAudioTotal').innerText = audioReqList.length;
+      document.getElementById('statAudioDone').innerText = countDone;
+      document.getElementById('statAudioPending').innerText = countPending;
+
+      const filtered = audioReqList.filter(item => {
+        const hasAudio = (item.linkAudio && item.linkAudio !== '-');
+        const matchesSearch = (item.namaLengkap.toLowerCase().includes(q) || item.kodeRegistrasi.toLowerCase().includes(q) || item.asalSekolah.toLowerCase().includes(q));
+        if (filterStatus === "SUDUH") return matchesSearch && hasAudio;
+        if (filterStatus === "BELUM") return matchesSearch && !hasAudio;
+        return matchesSearch;
+      });
+
+      if(filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-gray-400 font-semibold">Tidak ada data unggahan audio yang cocok.</td></tr>`;
+        return;
+      }
+
+      filtered.forEach(item => {
+        const hasAudio = (item.linkAudio && item.linkAudio !== '-');
+        const directAudioUrl = parseAudioDirectUrl(item.linkAudio);
+
         tbody.innerHTML += `
           <tr class="hover:bg-gray-50 border-b">
             <td class="p-3 font-mono font-bold text-emerald-900">${item.kodeRegistrasi}</td>
             <td class="p-3"><strong>${item.namaLengkap}</strong><br><span class="text-[10px] text-gray-500">${item.asalSekolah}</span></td>
-            <td class="p-3 font-medium">${item.cabangLomba}</td>
-            <td class="p-3">${item.linkBukti !== '-' ? `<a href="${item.linkBukti}" target="_blank" class="text-blue-600 font-bold underline">Lihat Bukti</a>` : '-'}</td>
-            <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-green-100 text-green-800">${item.status}</span></td>
-            <td class="p-3 text-center">
-              ${currentUser.role !== 'juri' ? `<button onclick="updateStatus('${item.kodeRegistrasi}', 'TERVERIFIKASI')" class="bg-green-600 text-white px-2 py-1 rounded text-[10px] font-bold">Approve</button>` : `<span class="text-gray-400 italic">Read-Only</span>`}
+            <td class="p-3 font-bold text-emerald-800">${item.cabangLomba}</td>
+            <td class="p-3">
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold ${hasAudio ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                ${hasAudio ? '✔ Sudah Upload' : '❌ Belum Upload'}
+              </span>
+            </td>
+            <td class="p-3">
+              ${hasAudio ? `
+                <div class="flex flex-col gap-1">
+                  <audio controls class="h-8 w-48 sm:w-64">
+                    <source src="${directAudioUrl}" type="audio/mpeg">
+                    Browser Anda tidak mendukung pemutar audio.
+                  </audio>
+                  <a href="${item.linkAudio}" target="_blank" class="text-[10px] text-blue-600 font-bold underline"><i class="fa-solid fa-arrow-up-right-from-square"></i> Buka File Audio di Drive</a>
+                </div>
+              ` : `<span class="text-gray-400 text-[11px] italic">Peserta belum mengunggah musik.</span>`}
             </td>
           </tr>
         `;
       });
     }
 
-    function renderAudioTable() {
-      const tbody = document.getElementById('audioTableBody');
+    function renderCertTable() {
+      const tbody = document.getElementById('certTableBody');
+      if(!tbody) return;
       tbody.innerHTML = "";
-      adminState.pendaftar.filter(x => (x.cabangLomba||'').toLowerCase().includes('tari') || (x.cabangLomba||'').toLowerCase().includes('solo')).forEach(item => {
-        const hasAudio = (item.linkAudio && item.linkAudio !== '-');
+
+      const approvedList = adminState.pendaftar.filter(x => (x.status === 'TERVERIFIKASI' || x.status === 'APPROVED'));
+
+      if(approvedList.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-gray-400 font-semibold">Belum ada peserta terverifikasi untuk sertifikat.</td></tr>`;
+        return;
+      }
+
+      approvedList.forEach(item => {
+        const verifyUrl = `${window.location.origin}${window.location.pathname}?kode=${item.kodeRegistrasi}`;
+        const qrUrl = getQrCodeUrl(verifyUrl);
+
         tbody.innerHTML += `
           <tr class="hover:bg-gray-50 border-b">
-            <td class="p-3 font-mono font-bold">${item.kodeRegistrasi}</td>
-            <td class="p-3"><strong>${item.namaLengkap}</strong><br><span class="text-[10px] text-gray-500">${item.asalSekolah}</span></td>
-            <td class="p-3 font-bold">${item.cabangLomba}</td>
-            <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${hasAudio ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">${hasAudio ? '✔ Ada' : '❌ Belum'}</span></td>
-            <td class="p-3">${hasAudio ? `<a href="${item.linkAudio}" target="_blank" class="text-blue-600 font-bold underline">Putar Audio</a>` : '-'}</td>
+            <td class="p-3 font-mono font-bold text-emerald-900">${item.kodeRegistrasi}</td>
+            <td class="p-3 font-bold text-gray-900">${item.namaLengkap}</td>
+            <td class="p-3">${item.asalSekolah}</td>
+            <td class="p-3 font-semibold text-emerald-800">${item.cabangLomba}</td>
+            <td class="p-3"><img src="${qrUrl}" class="w-10 h-10 border rounded p-0.5 bg-white shadow-sm" alt="QR"></td>
+            <td class="p-3 text-center">
+              <button onclick="previewCertAdmin('${item.kodeRegistrasi}')" class="bg-yellow-500 hover:bg-yellow-600 text-emerald-950 px-3 py-1.5 rounded-lg text-xs font-bold shadow">
+                <i class="fa-solid fa-print"></i> Cetak Single
+              </button>
+            </td>
           </tr>
         `;
       });
     }
 
-    async function fetchUsersList() {
-      const result = await postToGAS({ action: 'getUsers' });
+    function previewCertAdmin(kode) {
+      const item = adminState.pendaftar.find(x => x.kodeRegistrasi === kode);
+      if(!item) return;
+
+      const verifyUrl = `${window.location.origin}${window.location.pathname}?kode=${item.kodeRegistrasi}`;
+      const qrUrl = getQrCodeUrl(verifyUrl);
+
+      Swal.fire({
+        title: 'Sertifikat Digital Peserta',
+        html: `
+          <div class="border-4 border-double border-yellow-500 bg-emerald-950 text-white p-5 rounded-xl shadow text-center my-2">
+            <p class="text-[9px] uppercase tracking-widest text-yellow-300 font-bold">SERTIFIKAT APRESIASI RESMI</p>
+            <h3 class="text-lg font-black text-yellow-300 mt-2">${item.namaLengkap}</h3>
+            <p class="text-xs text-emerald-200">${item.asalSekolah}</p>
+            <p class="text-xs text-emerald-100 mt-2">Lomba: <strong>${item.cabangLomba}</strong></p>
+            <div class="mt-4 flex justify-center">
+              <img src="${qrUrl}" class="w-20 h-20 bg-white p-1 rounded shadow border border-yellow-400">
+            </div>
+            <p class="text-[9px] text-emerald-300 mt-1 font-mono">Kode: ${item.kodeRegistrasi}</p>
+          </div>
+        `,
+        confirmButtonColor: '#047857', confirmButtonText: 'Tutup Preview'
+      });
+    }
+
+    function batchGenerateCertificates() {
+      const approvedList = adminState.pendaftar.filter(x => (x.status === 'TERVERIFIKASI' || x.status === 'APPROVED'));
+      if(approvedList.length === 0) {
+        Swal.fire({ icon: 'warning', title: 'Tidak Ada Data', text: 'Belum ada peserta terverifikasi.', confirmButtonColor: '#047857' });
+        return;
+      }
+
+      let certsHtml = "";
+      approvedList.forEach((item) => {
+        const verifyUrl = `${window.location.origin}${window.location.pathname}?kode=${item.kodeRegistrasi}`;
+        const qrUrl = getQrCodeUrl(verifyUrl);
+
+        certsHtml += `
+          <div style="page-break-after: always; padding: 20px; border: 4px double #d97706; background: #064e3b; color: #fff; text-align: center; border-radius: 12px; margin-bottom: 20px;">
+            <p style="font-size: 11px; font-weight: bold; color: #fde047; letter-spacing: 2px;">SERTIFIKAT APRESIASI RESMI</p>
+            <h2 style="font-size: 14px; margin: 5px 0; color: #a7f3d0;">PESONA AL FIRDAUS 2026</h2>
+            <div style="border-top: 1px solid #fde047; border-bottom: 1px solid #fde047; padding: 15px 0; margin: 15px 0;">
+              <p style="font-size: 12px; margin: 0;">Diberikan Kepada Peserta:</p>
+              <h1 style="font-size: 24px; color: #fde047; margin: 5px 0; font-weight: 900;">${item.namaLengkap}</h1>
+              <p style="font-size: 13px; font-weight: bold; margin: 0;">${item.asalSekolah}</p>
+            </div>
+            <p style="font-size: 12px; margin-bottom: 15px;">Atas partisipasi aktif pada cabang lomba <strong>${item.cabangLomba}</strong></p>
+            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+              <div style="text-align: left; font-family: monospace; font-size: 10px;">
+                <span>Kode: ${item.kodeRegistrasi}</span><br>
+                <span style="color: #4ade80; font-weight: bold;">✔ Verified Certificate</span>
+              </div>
+              <div style="text-align: center;">
+                <img src="${qrUrl}" style="width: 70px; height: 70px; background: #fff; padding: 2px; border-radius: 6px;">
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      let printArea = document.getElementById('printArea');
+      if (!printArea) {
+        printArea = document.createElement('div');
+        printArea.id = 'printArea';
+        document.body.appendChild(printArea);
+      }
+      printArea.innerHTML = certsHtml;
+      window.print();
+    }
+
+    async function updateStatus(kode, status) {
+      const result = await postToGAS({ action: 'updateStatus', kodeRegistrasi: kode, newStatus: status });
       if(result.status === "success") {
-        adminState.users = result.users || [];
-        const tbody = document.getElementById('userTableBody');
-        tbody.innerHTML = "";
-        adminState.users.forEach(u => {
-          tbody.innerHTML += `
-            <tr class="hover:bg-gray-50 border-b">
-              <td class="p-3 font-bold">${u.nama}</td>
-              <td class="p-3 font-mono">${u.username}</td>
-              <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-100 text-purple-800">${u.role.toUpperCase()}</span></td>
-              <td class="p-3 text-center">
-                <button onclick="deleteUser('${u.username}')" class="bg-red-600 text-white px-2 py-1 rounded text-[10px] font-bold"><i class="fa-solid fa-trash"></i></button>
-              </td>
-            </tr>
-          `;
-        });
+        Swal.fire({ icon: 'success', title: 'Status Diperbarui', text: `Status ${kode} diubah menjadi ${status}`, timer: 1200, showConfirmButton: false });
+        fetchAdminData();
       }
     }
 
-    async function saveUserSubmit(e) {
-      e.preventDefault();
-      const payload = {
-        action: 'saveUser', nama: document.getElementById('uNama').value, username: document.getElementById('uUsername').value,
-        password: document.getElementById('uPassword').value, role: document.getElementById('uRole').value
-      };
-      const res = await postToGAS(payload);
-      if(res.status === "success") {
-        Swal.fire({ icon: 'success', title: 'User Disimpan! ✨' });
-        fetchUsersList();
-      }
+    async function deleteRegistrant(kode) {
+      Swal.fire({
+        title: `Hapus pendaftar ${kode}?`, text: "Data tidak dapat dikembalikan!", icon: 'warning',
+        showCancelButton: true, confirmButtonColor: '#d33', cancelButtonColor: '#3085d6', confirmButtonText: 'Ya, Hapus Data'
+      }).then(async (res) => {
+        if(res.isConfirmed) {
+          const result = await postToGAS({ action: 'deleteRegistrant', kodeRegistrasi: kode });
+          if(result.status === "success") {
+            Swal.fire({ icon: 'success', title: 'Terhapus', text: 'Data berhasil dihapus.', timer: 1200, showConfirmButton: false });
+            fetchAdminData();
+          }
+        }
+      });
     }
 
-    async function deleteUser(u) {
-      if(confirm(`Hapus user ${u}?`)) {
-        const res = await postToGAS({ action: 'deleteUser', username: u });
-        if(res.status === "success") fetchUsersList();
-      }
+    function exportCSV() {
+      let csv = "Timestamp,Kode,Nama,Asal Sekolah,Lomba,WhatsApp,Email,Status,Link Audio\n";
+      adminState.pendaftar.forEach(r => {
+        csv += `"${r.timestamp}","${r.kodeRegistrasi}","${r.namaLengkap}","${r.asalSekolah}","${r.cabangLomba}","${r.noWhatsapp}","${r.email}","${r.status}","${r.linkAudio}"\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'pendaftar-pesona-al-firdaus.csv'; a.click();
     }
 
     async function fetchPortalConfig() {
-      const res = await fetch(`${GAS_URL}?action=initPortal`);
-      const result = await res.json();
-      if(result.status === "success") {
-        adminState.lomba = result.lombaList || [];
-        adminState.config = result.config || {};
-        renderLombaCards();
-        if(document.getElementById('cfgHeaderTitle')) document.getElementById('cfgHeaderTitle').value = adminState.config.headerTitle || "PESONA AL FIRDAUS";
-      }
+      try {
+        const res = await fetch(`${GAS_URL}?action=initPortal`);
+        const result = await res.json();
+        if(result.status === "success") {
+          adminState.lomba = result.lombaList || [];
+          adminState.config = result.config || {};
+          renderLombaCards();
+          populateLombaFilter();
+          populateConfigForm();
+          renderSlidersAdmin();
+        }
+      } catch(e) { console.error(e); }
     }
 
     function renderLombaCards() {
       const box = document.getElementById('lombaCardsContainer');
       box.innerHTML = "";
       adminState.lomba.forEach(l => {
+        const imgUrl = parseImageUrl(l.flyerUrl);
         box.innerHTML += `
-          <div class="bg-white p-4 rounded-xl border shadow-sm flex justify-between items-center">
-            <div>
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-purple-100 text-purple-800">${l.tipePeserta || 'Individu'}</span>
-              <h4 class="font-bold text-gray-800 mt-1">${l.judul}</h4>
+          <div class="bg-white p-4 rounded-xl border shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+            <div class="flex items-center gap-3">
+              <img src="${imgUrl || 'https://via.placeholder.com/80'}" class="w-14 h-14 rounded-lg object-cover border shrink-0">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded">${l.kategori || 'SD/SMP/SMA'}</span>
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded ${l.statusLomba === 'TUTUP' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}">${l.statusLomba || 'BUKA'}</span>
+                </div>
+                <h4 class="font-bold text-gray-800 mt-1 text-sm sm:text-base">${l.judul}</h4>
+                <p class="text-[11px] text-gray-600 mt-0.5">
+                  <strong>SD:</strong> ${l.biayaSD || l.biaya || '-'} | 
+                  <strong>SMP:</strong> ${l.biayaSMP || l.biaya || '-'} | 
+                  <strong>SMA:</strong> ${l.biayaSMA || l.biaya || '-'}
+                </p>
+              </div>
             </div>
-            <button onclick="deleteLomba('${l.id}')" class="bg-red-600 text-white text-xs px-3 py-1 rounded font-bold">Hapus</button>
+            <div class="flex gap-1.5 self-end sm:self-center">
+              <button onclick="editLomba('${l.id}')" class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-lg font-bold">Edit</button>
+              <button onclick="deleteLomba('${l.id}')" class="bg-red-600 text-white text-xs px-3 py-1.5 rounded-lg font-bold">Hapus</button>
+            </div>
           </div>
         `;
       });
     }
 
+    function populateLombaFilter() {
+      const sel = document.getElementById('filterLomba');
+      sel.innerHTML = `<option value="">Semua Cabang Lomba</option>`;
+      adminState.lomba.forEach(l => { sel.innerHTML += `<option value="${l.judul}">${l.judul}</option>`; });
+    }
+
+    function editLomba(id) {
+      const item = adminState.lomba.find(x => x.id === id);
+      if(!item) return;
+      document.getElementById('lombaId').value = item.id;
+      document.getElementById('existingFlyerUrl').value = item.flyerUrl;
+      document.getElementById('lombaFlyerPathText').value = item.flyerUrl || '';
+      document.getElementById('lombaJudul').value = item.judul;
+      document.getElementById('lombaBiayaSD').value = item.biayaSD || item.biaya || '';
+      document.getElementById('lombaBiayaSMP').value = item.biayaSMP || item.biaya || '';
+      document.getElementById('lombaBiayaSMA').value = item.biayaSMA || item.biaya || '';
+      document.getElementById('lombaStatus').value = item.statusLomba || "BUKA";
+      document.getElementById('lombaDeskripsi').value = item.deskripsi;
+      document.getElementById('lombaSyarat').value = item.syarat;
+      document.getElementById('lombaHadiah').value = item.hadiah;
+    }
+
+    function resetLombaForm() {
+      document.getElementById('formLomba').reset();
+      document.getElementById('lombaId').value = "";
+      document.getElementById('existingFlyerUrl').value = "";
+      document.getElementById('lombaFlyerPathText').value = "";
+    }
+
     async function saveLomba(e) {
       e.preventDefault();
-      const payload = {
-        action: 'saveLomba', id: document.getElementById('lombaId').value, judul: document.getElementById('lombaJudul').value,
-        tipePeserta: document.getElementById('lombaTipe').value, statusLomba: document.getElementById('lombaStatus').value,
-        kat1: document.getElementById('lombaKat1').value, biaya1: document.getElementById('lombaBiaya1').value, active1: document.getElementById('lombaActive1').checked
-      };
-      const res = await postToGAS(payload);
-      if(res.status === "success") fetchPortalConfig();
+      const btn = e.target.querySelector('button[type="submit"]');
+      btn.disabled = true; btn.innerText = "Menyimpan Lomba...";
+
+      try {
+        const pathInput = document.getElementById('lombaFlyerPathText').value.trim();
+        let flyerUrl = pathInput || document.getElementById('existingFlyerUrl').value;
+
+        const payload = {
+          action: 'saveLomba',
+          id: document.getElementById('lombaId').value,
+          judul: document.getElementById('lombaJudul').value,
+          kategori: 'SD / SMP / SMA',
+          biayaSD: document.getElementById('lombaBiayaSD').value,
+          biayaSMP: document.getElementById('lombaBiayaSMP').value,
+          biayaSMA: document.getElementById('lombaBiayaSMA').value,
+          statusLomba: document.getElementById('lombaStatus').value,
+          flyerUrl: flyerUrl,
+          deskripsi: document.getElementById('lombaDeskripsi').value,
+          syarat: document.getElementById('lombaSyarat').value,
+          hadiah: document.getElementById('lombaHadiah').value,
+        };
+
+        const result = await postToGAS(payload);
+        if(result.status === "success") {
+          Swal.fire({ icon: 'success', title: 'Berhasil Disimpan! ✨', text: 'Data perlombaan telah diperbarui.', confirmButtonColor: '#047857' });
+          resetLombaForm();
+          await fetchPortalConfig();
+        }
+      } catch(err) {
+        Swal.fire({ icon: 'error', title: 'Gagal Menyimpan', text: err.toString(), confirmButtonColor: '#047857' });
+      } finally {
+        btn.disabled = false; btn.innerText = "Simpan Data Lomba";
+      }
+    }
+
+    async function deleteLomba(id) {
+      Swal.fire({
+        title: 'Hapus cabang lomba ini?', icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33', confirmButtonText: 'Ya, Hapus'
+      }).then(async (r) => {
+        if(r.isConfirmed) {
+          await postToGAS({ action: 'deleteLomba', id: id });
+          fetchPortalConfig();
+        }
+      });
+    }
+
+    function renderSlidersAdmin() {
+      adminState.currentSliders = adminState.config.sliders || [{ bgUrl: "banner1.jpg" }];
+      const box = document.getElementById('sliderListContainer');
+      box.innerHTML = "";
+      adminState.currentSliders.forEach((s, idx) => {
+        const imgUrl = parseImageUrl(s.bgUrl);
+        box.innerHTML += `
+          <div class="bg-white p-4 rounded-xl border shadow-sm space-y-3 relative">
+            <button type="button" onclick="removeSlideRow(${idx})" class="absolute top-3 right-3 text-red-600 font-bold text-xs hover:underline">
+              <i class="fa-solid fa-trash mr-1"></i> Hapus
+            </button>
+            <h5 class="font-bold text-xs text-gray-700 flex items-center gap-1.5">
+              <i class="fa-solid fa-image text-emerald-700"></i> Banner Slider #${idx + 1}
+            </h5>
+            
+            <div class="flex flex-col sm:flex-row gap-3 items-start sm:items-center bg-gray-50 p-2.5 rounded-lg border">
+              ${imgUrl ? `<img src="${imgUrl}" class="w-24 h-14 object-cover rounded border shadow-sm shrink-0">` : `<div class="w-24 h-14 bg-gray-200 rounded border flex items-center justify-center text-[10px] text-gray-400 font-bold shrink-0">No Image</div>`}
+              <div class="flex-1 w-full space-y-1">
+                <label class="block text-[10px] text-gray-700 font-bold">URL / Path Banner:</label>
+                <input type="text" value="${s.bgUrl || ''}" placeholder="banner1.jpg atau https://..." class="sld-url-input w-full border rounded px-2.5 py-1.5 text-xs focus:outline-emerald-700">
+              </div>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function addSlideRow() { adminState.currentSliders.push({ bgUrl: "" }); renderSlidersAdmin(); }
+    function removeSlideRow(idx) { adminState.currentSliders.splice(idx, 1); renderSlidersAdmin(); }
+
+    async function saveSliders(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('button[type="submit"]');
+      btn.disabled = true; btn.innerText = "Menyimpan Slider...";
+
+      try {
+        const urlInputs = document.querySelectorAll('.sld-url-input');
+        const sliders = [];
+        urlInputs.forEach(input => {
+          const val = input.value.trim();
+          if(val) sliders.push({ bgUrl: val });
+        });
+
+        if(!adminState.config) adminState.config = {};
+        adminState.config.sliders = sliders;
+
+        const result = await postToGAS({ action: 'saveConfig', config: adminState.config });
+        if(result.status === "success") {
+          Swal.fire({ icon: 'success', title: 'Berhasil Disimpan! 🎉', text: 'Banner slider telah diperbarui.', confirmButtonColor: '#047857' });
+          await fetchPortalConfig();
+        }
+      } catch(err) {
+        Swal.fire({ icon: 'error', title: 'Gagal', text: err.toString(), confirmButtonColor: '#047857' });
+      } finally {
+        btn.disabled = false; btn.innerText = "Simpan Perubahan Slider";
+      }
+    }
+
+    function populateConfigForm() {
+      const cfg = adminState.config || {};
+      const navs = cfg.menuNav || { beranda: true, lomba: true, cek: true, unggah: true, sertifikat: true };
+
+      if(document.getElementById('mNavBeranda')) document.getElementById('mNavBeranda').checked = navs.beranda !== false;
+      if(document.getElementById('mNavLomba')) document.getElementById('mNavLomba').checked = navs.lomba !== false;
+      if(document.getElementById('mNavCek')) document.getElementById('mNavCek').checked = navs.cek !== false;
+      if(document.getElementById('mNavUnggah')) document.getElementById('mNavUnggah').checked = navs.unggah !== false;
+      if(document.getElementById('mNavSertifikat')) document.getElementById('mNavSertifikat').checked = navs.sertifikat !== false;
+
+      if(document.getElementById('cfgLokasi')) document.getElementById('cfgLokasi').value = cfg.lokasi || "Kompleks Pesantren Al Firdaus";
+      if(document.getElementById('cfgWaNumber')) document.getElementById('cfgWaNumber').value = cfg.waNumber || "085366685084";
+      if(document.getElementById('cfgMapUrl')) document.getElementById('cfgMapUrl').value = cfg.mapUrl || "";
+      if(document.getElementById('cfgTargetDate')) document.getElementById('cfgTargetDate').value = cfg.targetDate || "2026-11-20T08:00";
+      if(document.getElementById('cfgLinkIg')) document.getElementById('cfgLinkIg').value = cfg.linkIg || "#";
+      if(document.getElementById('cfgLinkYt')) document.getElementById('cfgLinkYt').value = cfg.linkYt || "#";
+      if(document.getElementById('cfgLinkTt')) document.getElementById('cfgLinkTt').value = cfg.linkTt || "#";
+      if(document.getElementById('cfgLinkTh')) document.getElementById('cfgLinkTh').value = cfg.linkTh || "#";
+
+      if(document.getElementById('cfgHeaderTitle')) document.getElementById('cfgHeaderTitle').value = cfg.headerTitle || "PESONA AL FIRDAUS";
+      if(document.getElementById('cfgHeaderSub')) document.getElementById('cfgHeaderSub').value = cfg.headerSub || "Islamic Youth Festival 2026";
+      if(document.getElementById('cfgRekening')) document.getElementById('cfgRekening').value = cfg.rekening || "BSI: 8500808806 a.n Yayasan Atmo Taruno Joyo";
+      if(document.getElementById('cfgContact')) document.getElementById('cfgContact').value = cfg.contact || "Kontak Panitia: 0853-6668-5084";
+      if(document.getElementById('certTemplateUrlInput')) document.getElementById('certTemplateUrlInput').value = cfg.certTemplate || "";
+    }
+
+    async function saveCertTemplateConfig(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('button[type="submit"]');
+      btn.disabled = true; btn.innerText = "Menyimpan...";
+      try {
+        if(!adminState.config) adminState.config = {};
+        adminState.config.certTemplate = document.getElementById('certTemplateUrlInput').value;
+        const result = await postToGAS({ action: 'saveConfig', config: adminState.config });
+        if(result.status === "success") {
+          Swal.fire({ icon: 'success', title: 'Template Disimpan! ✨', text: 'URL background sertifikat diperbarui.', confirmButtonColor: '#047857' });
+          await fetchPortalConfig();
+        }
+      } catch(err) {
+        Swal.fire({ icon: 'error', title: 'Gagal', text: err.toString(), confirmButtonColor: '#047857' });
+      } finally { btn.disabled = false; btn.innerText = "Simpan Template Sertifikat"; }
+    }
+
+    async function saveNavMenuConfig(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('button[type="submit"]');
+      btn.disabled = true; btn.innerText = "Menyimpan...";
+      try {
+        if(!adminState.config) adminState.config = {};
+        adminState.config.menuNav = {
+          beranda: document.getElementById('mNavBeranda').checked,
+          lomba: document.getElementById('mNavLomba').checked,
+          cek: document.getElementById('mNavCek').checked,
+          unggah: document.getElementById('mNavUnggah').checked,
+          sertifikat: document.getElementById('mNavSertifikat').checked
+        };
+        const result = await postToGAS({ action: 'saveConfig', config: adminState.config });
+        if(result.status === "success") {
+          Swal.fire({ icon: 'success', title: 'Navigasi Disimpan! ✨', text: 'Pengaturan visibilitas menubar diperbarui.', confirmButtonColor: '#047857' });
+          await fetchPortalConfig();
+        }
+      } catch(err) {
+        Swal.fire({ icon: 'error', title: 'Gagal', text: err.toString(), confirmButtonColor: '#047857' });
+      } finally { btn.disabled = false; btn.innerText = "Simpan Menubar Navigasi"; }
+    }
+
+    async function saveTopbarConfig(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('button[type="submit"]');
+      btn.disabled = true; btn.innerText = "Menyimpan...";
+      try {
+        if(!adminState.config) adminState.config = {};
+        adminState.config.lokasi = document.getElementById('cfgLokasi').value;
+        adminState.config.mapUrl = document.getElementById('cfgMapUrl').value;
+        adminState.config.waNumber = document.getElementById('cfgWaNumber').value;
+        adminState.config.targetDate = document.getElementById('cfgTargetDate').value;
+        adminState.config.linkIg = document.getElementById('cfgLinkIg').value;
+        adminState.config.linkYt = document.getElementById('cfgLinkYt').value;
+        adminState.config.linkTt = document.getElementById('cfgLinkTt').value;
+        adminState.config.linkTh = document.getElementById('cfgLinkTh').value;
+
+        const result = await postToGAS({ action: 'saveConfig', config: adminState.config });
+        if(result.status === "success") {
+          Swal.fire({ icon: 'success', title: 'Topbar Disimpan! ✨', text: 'Informasi topbar diperbarui.', confirmButtonColor: '#047857' });
+          await fetchPortalConfig();
+        }
+      } catch(err) {
+        Swal.fire({ icon: 'error', title: 'Gagal', text: err.toString(), confirmButtonColor: '#047857' });
+      } finally { btn.disabled = false; btn.innerText = "Simpan Topbar & Sosmed"; }
     }
 
     async function saveIdentitasConfig(e) {
       e.preventDefault();
-      const themeVal = document.querySelector('input[name="themeColor"]:checked').value;
-      adminState.config.themeColor = themeVal;
-      adminState.config.headerTitle = document.getElementById('cfgHeaderTitle').value;
-      const res = await postToGAS({ action: 'saveConfig', config: adminState.config });
-      if(res.status === "success") Swal.fire({ icon: 'success', title: 'Tema & Config Disimpan!' });
+      const btn = e.target.querySelector('button[type="submit"]');
+      btn.disabled = true; btn.innerText = "Menyimpan...";
+      try {
+        if(!adminState.config) adminState.config = {};
+        adminState.config.headerTitle = document.getElementById('cfgHeaderTitle').value;
+        adminState.config.headerSub = document.getElementById('cfgHeaderSub').value;
+        adminState.config.rekening = document.getElementById('cfgRekening').value;
+        adminState.config.contact = document.getElementById('cfgContact').value;
+
+        const result = await postToGAS({ action: 'saveConfig', config: adminState.config });
+        if(result.status === "success") {
+          Swal.fire({ icon: 'success', title: 'Identitas Disimpan! ✨', text: 'Identitas portal diperbarui.', confirmButtonColor: '#047857' });
+          await fetchPortalConfig();
+        }
+      } catch(err) {
+        Swal.fire({ icon: 'error', title: 'Gagal', text: err.toString(), confirmButtonColor: '#047857' });
+      } finally { btn.disabled = false; btn.innerText = "Simpan Identitas & Rekening"; }
+    }
+
+    // --- MANAJEMEN USER KHUSUS SUPERADMIN ---
+    async function fetchUsers() {
+      try {
+        const res = await fetch(`${GAS_URL}?action=getUsers`);
+        const result = await res.json();
+        if(result.status === "success") {
+          adminState.users = result.users || [];
+          renderUserTable();
+        }
+      } catch(e) { console.error("Error loading users:", e); }
+    }
+
+    function renderUserTable() {
+      const tbody = document.getElementById('userTableBody');
+      if(!tbody) return;
+      tbody.innerHTML = "";
+
+      if(adminState.users.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-gray-400">Belum ada data user.</td></tr>`;
+        return;
+      }
+
+      adminState.users.forEach(u => {
+        let badgeColor = "bg-blue-100 text-blue-800";
+        if(u.role === 'Superadmin') badgeColor = "bg-yellow-100 text-amber-900 border border-yellow-300 font-black";
+        else if(u.role === 'Juri') badgeColor = "bg-purple-100 text-purple-800";
+
+        tbody.innerHTML += `
+          <tr class="hover:bg-gray-50 border-b">
+            <td class="p-3 font-bold text-gray-900">${u.username}</td>
+            <td class="p-3 font-mono text-gray-500">${u.password}</td>
+            <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${badgeColor}">${u.role}</span></td>
+            <td class="p-3 text-center space-x-1">
+              <button onclick="editUser('${u.username}', '${u.password}', '${u.role}')" class="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded text-[10px] font-bold">
+                <i class="fa-solid fa-pen"></i> Edit
+              </button>
+              <button onclick="deleteUser('${u.username}')" class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-[10px] font-bold">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function editUser(u, p, r) {
+      document.getElementById('userOldUsername').value = u;
+      document.getElementById('userUsername').value = u;
+      document.getElementById('userPassword').value = p;
+      document.getElementById('userRole').value = r;
+      document.getElementById('userFormHeader').innerText = `Edit User: ${u}`;
+    }
+
+    function resetUserForm() {
+      document.getElementById('formUser').reset();
+      document.getElementById('userOldUsername').value = "";
+      document.getElementById('userFormHeader').innerText = "Form Tambah User";
+    }
+
+    async function saveUser(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btnSaveUser');
+      btn.disabled = true; btn.innerText = "Menyimpan...";
+
+      try {
+        const payload = {
+          action: 'saveUser',
+          oldUsername: document.getElementById('userOldUsername').value,
+          username: document.getElementById('userUsername').value.trim(),
+          password: document.getElementById('userPassword').value.trim(),
+          role: document.getElementById('userRole').value
+        };
+
+        const result = await postToGAS(payload);
+        if(result.status === "success") {
+          Swal.fire({ icon: 'success', title: 'User Disimpan! 🎉', text: 'Data user berhasil diperbarui.', timer: 1500, showConfirmButton: false });
+          resetUserForm();
+          await fetchUsers();
+        } else {
+          Swal.fire({ icon: 'error', title: 'Gagal', text: result.message || 'Terjadi kesalahan.', confirmButtonColor: '#047857' });
+        }
+      } catch(err) {
+        Swal.fire({ icon: 'error', title: 'Gagal', text: err.toString(), confirmButtonColor: '#047857' });
+      } finally {
+        btn.disabled = false; btn.innerText = "Simpan User";
+      }
+    }
+
+    async function deleteUser(username) {
+      if(username === "superadmin") {
+        Swal.fire({ icon: 'error', title: 'Ditolak', text: 'Akun bawaan superadmin tidak boleh dihapus!', confirmButtonColor: '#047857' });
+        return;
+      }
+
+      Swal.fire({
+        title: `Hapus user ${username}?`, text: "User ini tidak akan dapat login lagi.", icon: 'warning',
+        showCancelButton: true, confirmButtonColor: '#d33', cancelButtonColor: '#3085d6', confirmButtonText: 'Ya, Hapus User'
+      }).then(async (res) => {
+        if(res.isConfirmed) {
+          const result = await postToGAS({ action: 'deleteUser', username: username });
+          if(result.status === "success") {
+            Swal.fire({ icon: 'success', title: 'Terhapus', text: 'User berhasil dihapus.', timer: 1200, showConfirmButton: false });
+            fetchUsers();
+          }
+        }
+      });
     }
   </script>
 </body>
