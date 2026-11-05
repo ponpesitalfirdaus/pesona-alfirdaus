@@ -13,12 +13,6 @@
   <style id="customThemeStyles">
     .swiper-button-next, .swiper-button-prev { color: #facc15 !important; transform: scale(0.6); }
     .swiper-pagination-bullet-active { background: #facc15 !important; }
-    
-    @media print {
-      body > *:not(#printArea) { display: none !important; }
-      #printArea { display: block !important; position: absolute; left: 0; top: 0; width: 100%; }
-      @page { size: A4 portrait; margin: 8mm; }
-    }
   </style>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col">
@@ -26,7 +20,6 @@
   <!-- TOP BAR BANNER -->
   <div id="topbarBg" class="bg-emerald-950 text-emerald-100 text-[11px] sm:text-xs py-2 px-3 sm:px-4 border-b border-white/10 transition-colors">
     <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-2 text-center md:text-left">
-      
       <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 sm:gap-4">
         <div class="flex items-center gap-1.5 text-yellow-300">
           <i class="fa-solid fa-location-dot"></i>
@@ -56,14 +49,12 @@
           <i class="fa-solid fa-user-lock text-yellow-400 text-sm"></i>
         </a>
       </div>
-
     </div>
   </div>
 
   <!-- NAVBAR UTAMA -->
   <header id="mainHeader" class="bg-emerald-800 text-white shadow-md sticky top-0 z-40 transition-colors">
     <div class="container mx-auto px-4 py-2.5 flex justify-between items-center">
-      
       <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('beranda')">
         <img src="https://lh3.googleusercontent.com/d/1Ca6RhNsv0aFWD4EMdkr8uCcSuPDESTpv" alt="Logo" class="w-9 h-9 sm:w-10 sm:h-10 object-contain rounded-full bg-white p-0.5 border border-yellow-400 shadow">
         <div>
@@ -72,7 +63,6 @@
         </div>
       </div>
 
-      <!-- DESKTOP NAV MENU -->
       <nav class="hidden md:flex items-center space-x-5 text-sm font-medium" id="desktopNav">
         <button id="nav-beranda" onclick="switchView('beranda')" class="hover:text-yellow-300 transition inline-flex items-center gap-1.5"><i class="fa-solid fa-house text-amber-300"></i> Beranda</button>
         <button id="nav-lomba" onclick="switchView('lomba')" class="hover:text-yellow-300 transition inline-flex items-center gap-1.5"><i class="fa-solid fa-trophy text-amber-300"></i> Cabang Lomba</button>
@@ -90,10 +80,8 @@
           <i class="fa-solid fa-bars text-xl" id="hamburgerIcon"></i>
         </button>
       </div>
-
     </div>
 
-    <!-- MOBILE MENU DROPDOWN -->
     <div id="mobileMenu" class="hidden md:hidden bg-black/20 border-t border-white/20 px-4 py-3 space-y-2 text-sm font-medium">
       <button id="mnav-beranda" onclick="switchView('beranda'); toggleMobileNav();" class="block w-full text-left py-2 px-3 rounded hover:bg-white/10 transition">
         <i class="fa-solid fa-house w-5 text-yellow-300 mr-1"></i> Beranda
@@ -281,7 +269,7 @@
       </div>
     </section>
 
-    <!-- 6. SERTIFIKAT DIGITAL -->
+    <!-- 6. SERTIFIKAT DIGITAL & VERIFIKASI PRESISI -->
     <section id="view-sertifikat" class="view-page hidden container mx-auto px-4 py-8 max-w-2xl">
       <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg border text-center">
         <div class="w-12 h-12 bg-yellow-100 text-yellow-800 rounded-full flex items-center justify-center mx-auto mb-2 text-xl font-bold">
@@ -295,7 +283,7 @@
           <button onclick="searchCertificate()" class="theme-btn text-white px-5 py-2.5 rounded-lg font-bold text-xs sm:text-sm">Cari Sertifikat</button>
         </div>
 
-        <div id="certResultBox" class="hidden text-left border-t pt-6"></div>
+        <div id="certResultBox" class="hidden text-left"></div>
       </div>
     </section>
 
@@ -374,6 +362,8 @@
     </div>
   </div>
 
+  <canvas id="hiddenDownloadCanvas" width="1920" height="1080" class="hidden"></canvas>
+
   <script>
     const GAS_URL = "https://script.google.com/macros/s/AKfycbw4APJqKIcWVgs1yk29KHmuIeArlCDcu0rruBauZkOOmUmGig9Wvqy2aIKq7_gaUPGkOg/exec";
     const DRIVE_FOLDER_ID = "1i0VnagJrNxjQRWgo-qXZyrzIRX7l85WFZDw3ji6c0ncve_g9hrh811Wwd6l8sojQjbiH1eN";
@@ -382,6 +372,7 @@
     let state = { lombaList: [], config: {}, swiperInstance: null, lombaSwiperInstance: null, isAutoplayRunning: true, viewMode: 'grid' };
     let countdownInterval = null;
     let searchTimeout = null;
+    let lastFetchedCertData = null;
 
     const THEMES = {
       emerald: { top: 'bg-emerald-950', header: 'bg-emerald-800', btn: 'bg-emerald-700 hover:bg-emerald-800', text: 'text-emerald-800', badge: 'bg-emerald-100 text-emerald-800', box: 'bg-emerald-50 border-emerald-200' },
@@ -400,9 +391,9 @@
       const urlParams = new URLSearchParams(window.location.search);
       const kodeScan = urlParams.get('kode') || urlParams.get('query');
       if (kodeScan) {
-        switchView('cek');
-        document.getElementById('inputSearch').value = kodeScan;
-        searchRegistration();
+        switchView('sertifikat');
+        document.getElementById('inputSearchCert').value = kodeScan;
+        searchCertificate();
       }
     };
 
@@ -518,10 +509,6 @@
       return str;
     }
 
-    function getQrCodeUrl(text) {
-      return `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(text)}`;
-    }
-
     function applyPortalConfig() {
       try {
         const cfg = state.config || {};
@@ -545,7 +532,6 @@
         if(cfg.linkTt && document.getElementById('linkTt')) document.getElementById('linkTt').href = cfg.linkTt;
         if(cfg.linkTh && document.getElementById('linkTh')) document.getElementById('linkTh').href = cfg.linkTh;
 
-        // PERBAIKAN PENGATURAN NAVIGASI PORTAL UTAMA: Menggunakan class hidden agar tidak merusak Tailwind layout
         const navs = cfg.menuNav || {};
         const toggleNavElem = (id, active) => {
           const elem = document.getElementById(id);
@@ -864,27 +850,152 @@
       reader.readAsDataURL(file);
     }
 
+    // --- FITUR SERTIFIKAT VERIFIKASI QR SCAN (KARTU MERAH PRESISI PERSIS GAMBAR CONTOH) ---
     async function searchCertificate() {
       const q = document.getElementById('inputSearchCert').value.trim();
       const box = document.getElementById('certResultBox');
       if(!q) return;
-      box.classList.remove('hidden'); box.innerHTML = "<p class='text-xs text-center'>Mencari...</p>";
+      box.classList.remove('hidden'); box.innerHTML = "<p class='text-xs text-center font-bold text-gray-500 py-6'>Mencari data sertifikat...</p>";
 
       const res = await fetch(`${GAS_URL}?action=check&query=${encodeURIComponent(q)}&_t=${Date.now()}`);
       const result = await res.json();
       if(result.status === "success") {
         const d = result.data;
-        const qrUrl = getQrCodeUrl(`${window.location.origin}${window.location.pathname}?kode=${d.kodeRegistrasi}`);
+        lastFetchedCertData = d;
+        const certNo = `0208-${d.kodeRegistrasi}/PESONA-IV/AL-FIRDAUS/XI/2026`;
+        const tgl = d.tanggalFormatted || "31 Oktober 2026";
+        const statusBadgeText = (d.statusJuara || "PESERTA").toUpperCase();
+
         box.innerHTML = `
-          <div class="border-4 border-double border-yellow-500 bg-gray-900 text-white p-6 rounded-xl text-center">
-            <p class="text-[10px] text-yellow-300 font-bold uppercase">SERTIFIKAT APRESIASI RESMI</p>
-            <h2 class="text-xl font-black text-yellow-300 my-1">${d.namaLengkap}</h2>
-            <p class="text-xs text-gray-300">${d.asalSekolah} | Cabang: ${d.cabangLomba}</p>
-            <div class="mt-4 flex justify-center"><img src="${qrUrl}" class="w-16 h-16 bg-white p-1 rounded"></div>
+          <div class="bg-gradient-to-b from-red-600 to-red-700 text-white rounded-2xl p-4 sm:p-6 shadow-2xl space-y-4">
+            
+            <div class="flex flex-col items-center text-center">
+              <div class="w-16 h-16 bg-white rounded-full p-1 shadow border border-yellow-400 flex items-center justify-center mb-2">
+                <img src="https://lh3.googleusercontent.com/d/1Ca6RhNsv0aFWD4EMdkr8uCcSuPDESTpv" class="w-12 h-12 object-contain">
+              </div>
+              <h2 class="text-xl sm:text-2xl font-black tracking-wider uppercase">INFORMASI SERTIFIKAT</h2>
+            </div>
+
+            <div class="bg-white text-gray-800 rounded-2xl p-5 sm:p-6 shadow-xl space-y-4 text-xs sm:text-sm">
+              <div class="border-b pb-3 space-y-0.5">
+                <p class="text-gray-500 font-bold flex items-center gap-1.5"><i class="fa-solid fa-file-lines text-red-500"></i> No. Sertifikat</p>
+                <p class="font-mono font-bold text-gray-900 sm:text-base">${certNo}</p>
+              </div>
+
+              <div class="border-b pb-3 space-y-0.5">
+                <p class="text-gray-500 font-bold flex items-center gap-1.5"><i class="fa-solid fa-calendar-days text-red-500"></i> Kabupaten/Kota, Tanggal</p>
+                <p class="font-bold text-gray-900">Bandar Lampung, ${tgl}</p>
+              </div>
+
+              <div class="border-b pb-3 space-y-0.5">
+                <p class="text-gray-500 font-bold flex items-center gap-1.5"><i class="fa-solid fa-building text-red-500"></i> Nama Lembaga</p>
+                <p class="font-bold text-gray-900">Ponpes & SIT Al Firdaus</p>
+              </div>
+
+              <div class="border-b pb-3 space-y-0.5">
+                <p class="text-gray-500 font-bold flex items-center gap-1.5"><i class="fa-solid fa-pen-nib text-red-500"></i> Ditandatangani</p>
+                <p class="font-bold text-gray-900">Ketua Yayasan Atmo Taruno Joyo - Mudir Ponpes SIT Al Firdaus</p>
+              </div>
+
+              <div class="border-b pb-3 space-y-0.5">
+                <p class="text-gray-500 font-bold flex items-center gap-1.5"><i class="fa-solid fa-envelope text-red-500"></i> Perihal</p>
+                <p class="font-bold text-gray-900">Sertifikat Pesona IV Al Firdaus</p>
+              </div>
+
+              <div class="bg-red-50/60 border border-red-100 rounded-xl p-4 space-y-1">
+                <p class="text-[11px] font-bold text-red-600 flex items-center gap-1.5"><i class="fa-solid fa-user-check"></i> Ditujukan Kepada Pemilik Sertifikat:</p>
+                <h3 class="text-base sm:text-lg font-black text-gray-900 uppercase leading-tight">${d.namaLengkap}</h3>
+                <p class="text-xs text-gray-600 font-semibold"><i class="fa-solid fa-school text-gray-400 mr-1"></i> ${d.asalSekolah} | Cabang: ${d.cabangLomba}</p>
+                <div class="pt-2">
+                  <span class="inline-block bg-red-600 text-white font-extrabold text-xs px-3 py-1 rounded-md shadow">${statusBadgeText}</span>
+                </div>
+              </div>
+
+              <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl p-3 text-center text-xs font-bold flex items-center justify-center gap-2">
+                <i class="fa-solid fa-circle-check text-green-600 text-lg"></i>
+                <span>Sertifikat Terverifikasi Resmi Sistem Pesona Al Firdaus</span>
+              </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3 pt-2">
+              <button onclick="downloadCertificatePNG()" class="flex-1 bg-white hover:bg-gray-100 text-red-700 font-extrabold py-3 rounded-xl text-xs sm:text-sm shadow-md transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-download"></i> Unduh Sertifikat (PNG)
+              </button>
+              <button onclick="copyVerificationLink('${d.kodeRegistrasi}')" class="flex-1 bg-red-800/80 hover:bg-red-900 text-white font-extrabold py-3 rounded-xl text-xs sm:text-sm shadow-md transition flex items-center justify-center gap-2 border border-white/20">
+                <i class="fa-solid fa-link"></i> Salin Tautan Verifikasi
+              </button>
+            </div>
           </div>
-          <button onclick="window.print()" class="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-950 font-bold py-3 rounded-xl mt-4 text-xs">Unduh Sertifikat</button>
         `;
-      } else { box.innerHTML = `<p class="text-xs text-red-500 text-center">Data tidak ditemukan.</p>`; }
+      } else { 
+        box.innerHTML = `<p class="text-xs text-red-600 font-semibold text-center py-4 bg-red-50 rounded-xl border border-red-200">Data sertifikat tidak ditemukan dalam database.</p>`; 
+      }
+    }
+
+    function copyVerificationLink(kode) {
+      const link = `${window.location.origin}${window.location.pathname}?kode=${kode}`;
+      navigator.clipboard.writeText(link).then(() => {
+        Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'Tautan Verifikasi Sertifikat Disalin! 🔗', showConfirmButton: false, timer: 2000 });
+      });
+    }
+
+    // FITUR UNDUH SERTIFIKAT PNG MENGGUNAKAN CANVAS REAL-TIME
+    function downloadCertificatePNG() {
+      if(!lastFetchedCertData) return;
+      const d = lastFetchedCertData;
+      const canvas = document.getElementById('hiddenDownloadCanvas');
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const cfg = (state.config && state.config.certLayout) ? state.config.certLayout : {};
+      const bgUrl = cfg.bgUrl || "";
+
+      const renderText = () => {
+        const namaX = parseInt(cfg.namaX) || 960;
+        const namaY = parseInt(cfg.namaY) || 540;
+        const namaSize = parseInt(cfg.namaSize) || 52;
+
+        const sekX = parseInt(cfg.sekolahX) || 960;
+        const sekY = parseInt(cfg.sekolahY) || 620;
+        const sekSize = parseInt(cfg.sekolahSize) || 32;
+
+        const lomX = parseInt(cfg.lombaX) || 960;
+        const lomY = parseInt(cfg.lombaY) || 700;
+        const lomSize = parseInt(cfg.lombaSize) || 28;
+
+        const stX = parseInt(cfg.statusX) || 960;
+        const stY = parseInt(cfg.statusY) || 780;
+        const stSize = parseInt(cfg.statusSize) || 30;
+
+        ctx.textAlign = "center";
+        
+        ctx.font = `bold ${namaSize}px sans-serif`; ctx.fillStyle = "#0f172a"; ctx.fillText(d.namaLengkap.toUpperCase(), namaX, namaY);
+        ctx.font = `bold ${sekSize}px sans-serif`; ctx.fillStyle = "#334155"; ctx.fillText(d.asalSekolah.toUpperCase(), sekX, sekY);
+        ctx.font = `bold ${lomSize}px sans-serif`; ctx.fillStyle = "#047857"; ctx.fillText(`Cabang Lomba: ${d.cabangLomba}`, lomX, lomY);
+        ctx.font = `bold ${stSize}px sans-serif`; ctx.fillStyle = "#b45309"; ctx.fillText(`Sebagai: ${d.statusJuara || 'PESERTA'}`, stX, stY);
+
+        const image = canvas.toDataURL("image/png");
+        const a = document.createElement("a");
+        a.href = image; a.download = `SERTIFIKAT_${d.kodeRegistrasi}_${d.namaLengkap}.png`;
+        a.click();
+      };
+
+      if(bgUrl) {
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.onload = () => { ctx.drawImage(img, 0, 0, canvas.width, canvas.height); renderText(); };
+        img.onerror = () => { fillDefaultBgCanvas(ctx, canvas); renderText(); };
+        img.src = parseImageUrl(bgUrl);
+      } else {
+        fillDefaultBgCanvas(ctx, canvas); renderText();
+      }
+    }
+
+    function fillDefaultBgCanvas(ctx, canvas) {
+      ctx.fillStyle = "#064e3b"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = "#facc15"; ctx.lineWidth = 14; ctx.strokeRect(30, 30, canvas.width - 60, canvas.height - 60);
+      ctx.fillStyle = "#ffffff"; ctx.font = "bold 44px serif"; ctx.textAlign = "center";
+      ctx.fillText("SERTIFIKAT APRESIASI RESMI PESONA IV AL FIRDAUS", canvas.width / 2, 160);
     }
 
     async function submitRegistration(e) {
