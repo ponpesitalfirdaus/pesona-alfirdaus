@@ -53,6 +53,7 @@
       </button>
     </div>
 
+    <!-- MOBILE BACKDROP -->
     <div id="adminBackdrop" onclick="closeAdminSidebar()" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden transition-opacity"></div>
 
     <!-- SIDEBAR DRAWER -->
@@ -74,6 +75,7 @@
             <i class="fa-solid fa-music w-4"></i> Unggahan Audio
           </button>
 
+          <!-- MENU MODULAR UNTUK ADMIN & SUPERADMIN -->
           <button onclick="navAdmin('sertifikat')" id="m-sertifikat" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
             <i class="fa-solid fa-certificate w-4"></i> Sertifikat Digital
           </button>
@@ -94,6 +96,7 @@
             <i class="fa-solid fa-id-card w-4"></i> Identitas & Warna Tema
           </button>
 
+          <!-- MENU KHUSUS SUPERADMIN -->
           <div id="superadminMenuBlock" class="pt-2 pb-1 border-t border-emerald-900 mt-2">
             <p class="text-[10px] text-yellow-400 uppercase px-3 font-bold tracking-wider mb-1">Manajemen Pengguna</p>
             <button onclick="navAdmin('users')" id="m-users" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl hover:bg-emerald-900 text-yellow-300 transition">
@@ -532,6 +535,7 @@
 
         <form onsubmit="saveIdentitasConfig(event)" class="bg-white p-5 rounded-xl border shadow-sm space-y-4 text-xs max-w-xl">
           
+          <!-- PENGATURAN WAKTU & TEMA WARNA -->
           <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-200 space-y-3">
             <h4 class="font-bold text-sm text-emerald-900 flex items-center gap-2">
               <i class="fa-solid fa-palette text-emerald-700"></i> Skema Warna Tema Portal Pendaftaran
@@ -620,6 +624,7 @@
               </select>
             </div>
 
+            <!-- CEKLIST HAK AKSES MENU MODULAR -->
             <div id="permissionCheckboxesBlock" class="bg-gray-50 p-3 rounded-xl border space-y-2">
               <span class="block text-xs font-bold text-emerald-900 border-b pb-1 flex justify-between items-center">
                 <span>Ceklist Hak Akses Menu Admin:</span>
@@ -815,30 +820,24 @@
       }
     }
 
-    // FUNGSI UTAMA PERBAIKAN: Menjamin Superadmin & Fallback Sesi Selalu Membuka 100% Menu
     function applyRolePermissions() {
-      const role = (localStorage.getItem('adminRole') || 'Superadmin').trim();
-      const user = (localStorage.getItem('adminUser') || 'superadmin').trim();
-      let perms = [];
-      try {
-        perms = JSON.parse(localStorage.getItem('adminPermissions') || '[]');
-      } catch(e) { perms = []; }
+      const role = localStorage.getItem('adminRole') || 'Superadmin';
+      const user = localStorage.getItem('adminUser') || 'admin';
+      const perms = JSON.parse(localStorage.getItem('adminPermissions') || '[]');
       
       const badge = document.getElementById('userRoleBadge');
       if(badge) badge.innerText = `${user} (${role})`;
 
-      const isSuperadmin = (role.toLowerCase() === 'superadmin' || user.toLowerCase() === 'superadmin');
-      const isJuri = (role.toLowerCase() === 'juri');
+      const isSuperadmin = (role === 'Superadmin');
+      const isJuri = (role === 'Juri');
 
-      const superBlock = document.getElementById('superadminMenuBlock');
-      if(superBlock) superBlock.style.display = isSuperadmin ? 'block' : 'none';
+      document.getElementById('superadminMenuBlock').style.display = isSuperadmin ? 'block' : 'none';
 
       const menuKeys = ['pendaftar', 'audio', 'sertifikat', 'lomba', 'sliders', 'navmenu', 'topbar', 'identitas'];
       menuKeys.forEach(key => {
         const btn = document.getElementById(`m-${key}`);
         if(btn) {
-          // Jika Superadmin ATAU perms kosong (fallback cache lama) ATAU ada di perms list
-          if (isSuperadmin || perms.length === 0 || perms.includes(key) || (isJuri && (key === 'pendaftar' || key === 'audio'))) {
+          if(isSuperadmin || perms.includes(key) || (isJuri && (key === 'pendaftar' || key === 'audio'))) {
             btn.style.display = 'flex';
           } else {
             btn.style.display = 'none';
@@ -1515,6 +1514,7 @@
       } finally { btn.disabled = false; btn.innerText = "Simpan Identitas & Warna Tema"; }
     }
 
+    // --- MANAJEMEN USER & CEKLIST HAK AKSES KHUSUS SUPERADMIN ---
     async function fetchUsers() {
       try {
         const res = await fetch(`${GAS_URL}?action=getUsers&_t=${Date.now()}`);
