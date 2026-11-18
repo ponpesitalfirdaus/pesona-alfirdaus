@@ -344,7 +344,7 @@
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
           <div>
             <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Kelola Cabang Lomba</h1>
-            <p class="text-xs text-gray-500">Atur flyer, biaya per tingkat, link Juknis lomba, dan Narahubung WhatsApp</p>
+            <p class="text-xs text-gray-500">Atur sistem lomba (Individu/Tim), jenjang & biaya manual, flyer, link Juknis, dan Narahubung</p>
           </div>
           <button onclick="resetLombaForm()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded-lg text-xs font-bold shadow">
             + Tambah Lomba Baru
@@ -362,28 +362,53 @@
               <input type="text" id="lombaJudul" required placeholder="MHQ / Tari Kreasi / Solosong" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700">
             </div>
 
-            <div>
-              <label class="block text-[11px] font-bold text-gray-700 mb-1">Status Pendaftaran</label>
-              <select id="lombaStatus" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700">
-                <option value="BUKA">BUKA</option>
-                <option value="TUTUP">TUTUP</option>
-              </select>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-[11px] font-bold text-gray-700 mb-1">Sistem Lomba (Individu / Tim) *</label>
+                <select id="lombaTipePeserta" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700 bg-white font-semibold">
+                  <option value="Individu">👤 Individu (Perorangan)</option>
+                  <option value="Team">👥 Team / Kelompok</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-gray-700 mb-1">Status Pendaftaran</label>
+                <select id="lombaStatus" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700 bg-white font-semibold">
+                  <option value="BUKA">BUKA</option>
+                  <option value="TUTUP">TUTUP</option>
+                </select>
+              </div>
             </div>
 
+            <!-- BIAYA REGISTRASI PER TINGKAT: DIBAGI 2 KOLOM KIRI (JENJANG MANUAL) & KANAN (BIAYA) -->
             <div class="bg-gray-50 p-3 rounded-lg border space-y-2">
-              <span class="block font-bold text-[11px] text-emerald-900 border-b pb-1">BIAYA REGISTRASI PER TINGKAT:</span>
-              <div>
-                <label class="block text-[10px] font-bold text-gray-600 mb-0.5">1. Biaya Tingkat SD / MI *</label>
-                <input type="text" id="lombaBiayaSD" required placeholder="Contoh: Rp 35.000" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700 bg-white">
+              <div class="flex justify-between items-center border-b pb-1">
+                <span class="font-bold text-[11px] text-emerald-900">BIAYA REGISTRASI PER TINGKAT:</span>
+                <span class="text-[10px] text-gray-500">Jenjang bisa diinput manual</span>
               </div>
-              <div>
-                <label class="block text-[10px] font-bold text-gray-600 mb-0.5">2. Biaya Tingkat SMP / MTs *</label>
-                <input type="text" id="lombaBiayaSMP" required placeholder="Contoh: Rp 45.000" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700 bg-white">
+
+              <div class="grid grid-cols-2 gap-2 text-[10px] font-bold text-gray-600 px-0.5">
+                <span>Nama / Jenis Jenjang (Manual)</span>
+                <span>Biaya Registrasi</span>
               </div>
-              <div>
-                <label class="block text-[10px] font-bold text-gray-600 mb-0.5">3. Biaya Tingkat SMA / MA *</label>
-                <input type="text" id="lombaBiayaSMA" required placeholder="Contoh: Rp 50.000" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700 bg-white">
+
+              <!-- Baris Jenjang 1 -->
+              <div class="grid grid-cols-2 gap-2">
+                <input type="text" id="lombaKat1" value="SD / MI" required placeholder="Contoh: SD / MI" class="w-full border rounded-lg px-2.5 py-1.5 text-xs focus:outline-emerald-700 bg-white font-semibold">
+                <input type="text" id="lombaBiaya1" required placeholder="Contoh: Rp 35.000" class="w-full border rounded-lg px-2.5 py-1.5 text-xs focus:outline-emerald-700 bg-white">
               </div>
+
+              <!-- Baris Jenjang 2 -->
+              <div class="grid grid-cols-2 gap-2">
+                <input type="text" id="lombaKat2" value="SMP / MTs" placeholder="Contoh: SMP / MTs (Opsional)" class="w-full border rounded-lg px-2.5 py-1.5 text-xs focus:outline-emerald-700 bg-white font-semibold">
+                <input type="text" id="lombaBiaya2" placeholder="Contoh: Rp 45.000" class="w-full border rounded-lg px-2.5 py-1.5 text-xs focus:outline-emerald-700 bg-white">
+              </div>
+
+              <!-- Baris Jenjang 3 -->
+              <div class="grid grid-cols-2 gap-2">
+                <input type="text" id="lombaKat3" value="SMA / MA" placeholder="Contoh: SMA / MA / Umum" class="w-full border rounded-lg px-2.5 py-1.5 text-xs focus:outline-emerald-700 bg-white font-semibold">
+                <input type="text" id="lombaBiaya3" placeholder="Contoh: Rp 50.000" class="w-full border rounded-lg px-2.5 py-1.5 text-xs focus:outline-emerald-700 bg-white">
+              </div>
+              <p class="text-[10px] text-gray-500">Kosongkan kolom Jenjang &amp; Biaya baris ke-2/ke-3 jika lomba hanya berlaku untuk 1 jenjang.</p>
             </div>
 
             <div>
@@ -1307,6 +1332,9 @@
       box.innerHTML = "";
       adminState.lomba.forEach(l => {
         const imgUrl = parseImageUrl(l.flyerUrl);
+        const tipe = l.tipePeserta || 'Individu';
+        const isTeam = tipe === 'Team';
+
         let naraList = l.narahubung || [];
         if (typeof naraList === 'string') {
           try { naraList = JSON.parse(naraList); } catch(e) { naraList = []; }
@@ -1314,13 +1342,21 @@
         const naraCount = Array.isArray(naraList) ? naraList.filter(x => x && x.wa).length : 0;
         const hasJuknis = Boolean(l.juknisUrl && String(l.juknisUrl).trim());
 
+        const jenjangLines = [];
+        if (l.active1 !== false && (l.kat1 || l.biaya1)) jenjangLines.push(`<strong>${l.kat1 || 'Jenjang 1'}:</strong> ${l.biaya1 || '-'}`);
+        if (l.active2 !== false && (l.kat2 || l.biaya2)) jenjangLines.push(`<strong>${l.kat2 || 'Jenjang 2'}:</strong> ${l.biaya2 || '-'}`);
+        if (l.active3 !== false && (l.kat3 || l.biaya3)) jenjangLines.push(`<strong>${l.kat3 || 'Jenjang 3'}:</strong> ${l.biaya3 || '-'}`);
+
         box.innerHTML += `
           <div class="bg-white p-4 rounded-xl border shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
             <div class="flex items-center gap-3">
               <img src="${imgUrl || 'https://via.placeholder.com/80'}" class="w-14 h-14 rounded-lg object-cover border shrink-0">
               <div>
                 <div class="flex flex-wrap items-center gap-1.5">
-                  <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded">${l.kategori || 'SD/SMP/SMA'}</span>
+                  <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded">${l.kategori || 'Multi Kategori'}</span>
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded ${isTeam ? 'bg-purple-100 text-purple-800 border border-purple-200' : 'bg-blue-100 text-blue-800 border border-blue-200'}">
+                    ${isTeam ? '👥 Team' : '👤 Individu'}
+                  </span>
                   <span class="text-[10px] font-bold px-2 py-0.5 rounded ${l.statusLomba === 'TUTUP' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}">${l.statusLomba || 'BUKA'}</span>
                   <span class="text-[10px] font-bold px-2 py-0.5 rounded ${hasJuknis ? 'bg-amber-100 text-amber-800' : 'bg-gray-100 text-gray-500'}">
                     <i class="fa-solid fa-book-open mr-0.5"></i> ${hasJuknis ? 'Juknis Ada' : 'Belum Juknis'}
@@ -1331,9 +1367,7 @@
                 </div>
                 <h4 class="font-bold text-gray-800 mt-1 text-sm sm:text-base">${l.judul}</h4>
                 <p class="text-[11px] text-gray-600 mt-0.5">
-                  <strong>SD:</strong> ${l.biayaSD || l.biaya || '-'} | 
-                  <strong>SMP:</strong> ${l.biayaSMP || l.biaya || '-'} | 
-                  <strong>SMA:</strong> ${l.biayaSMA || l.biaya || '-'}
+                  ${jenjangLines.length > 0 ? jenjangLines.join(' | ') : '-'}
                 </p>
               </div>
             </div>
@@ -1360,13 +1394,21 @@
       document.getElementById('existingFlyerUrl').value = item.flyerUrl;
       document.getElementById('lombaFlyerPathText').value = item.flyerUrl || '';
       document.getElementById('lombaJudul').value = item.judul;
-      document.getElementById('lombaBiayaSD').value = item.biayaSD || item.biaya || '';
-      document.getElementById('lombaBiayaSMP').value = item.biayaSMP || item.biaya || '';
-      document.getElementById('lombaBiayaSMA').value = item.biayaSMA || item.biaya || '';
+      document.getElementById('lombaTipePeserta').value = item.tipePeserta || 'Individu';
       document.getElementById('lombaStatus').value = item.statusLomba || "BUKA";
-      document.getElementById('lombaDeskripsi').value = item.deskripsi;
-      document.getElementById('lombaSyarat').value = item.syarat;
-      document.getElementById('lombaHadiah').value = item.hadiah;
+
+      document.getElementById('lombaKat1').value = item.active1 === false ? '' : (item.kat1 || 'SD / MI');
+      document.getElementById('lombaBiaya1').value = item.active1 === false ? '' : (item.biaya1 || item.biayaSD || item.biaya || '');
+
+      document.getElementById('lombaKat2').value = item.active2 === false ? '' : (item.kat2 || '');
+      document.getElementById('lombaBiaya2').value = item.active2 === false ? '' : (item.biaya2 || item.biayaSMP || '');
+
+      document.getElementById('lombaKat3').value = item.active3 === false ? '' : (item.kat3 || '');
+      document.getElementById('lombaBiaya3').value = item.active3 === false ? '' : (item.biaya3 || item.biayaSMA || '');
+
+      document.getElementById('lombaDeskripsi').value = item.deskripsi || '';
+      document.getElementById('lombaSyarat').value = item.syarat || '';
+      document.getElementById('lombaHadiah').value = item.hadiah || '';
       document.getElementById('lombaJuknisUrl').value = item.juknisUrl || '';
       renderNarahubungRows(item.narahubung || []);
     }
@@ -1377,6 +1419,10 @@
       document.getElementById('lombaId').value = "";
       document.getElementById('existingFlyerUrl').value = "";
       document.getElementById('lombaFlyerPathText').value = "";
+      document.getElementById('lombaTipePeserta').value = "Individu";
+      document.getElementById('lombaKat1').value = "SD / MI";
+      document.getElementById('lombaKat2').value = "SMP / MTs";
+      document.getElementById('lombaKat3').value = "SMA / MA";
       document.getElementById('lombaJuknisUrl').value = "";
       renderNarahubungRows([]);
     }
@@ -1408,14 +1454,36 @@
         const pathInput = document.getElementById('lombaFlyerPathText').value.trim();
         let flyerUrl = pathInput || document.getElementById('existingFlyerUrl').value;
 
+        const kat1 = document.getElementById('lombaKat1').value.trim();
+        const biaya1 = document.getElementById('lombaBiaya1').value.trim();
+        const active1 = Boolean(kat1 || biaya1);
+
+        const kat2 = document.getElementById('lombaKat2').value.trim();
+        const biaya2 = document.getElementById('lombaBiaya2').value.trim();
+        const active2 = Boolean(kat2 || biaya2);
+
+        const kat3 = document.getElementById('lombaKat3').value.trim();
+        const biaya3 = document.getElementById('lombaBiaya3').value.trim();
+        const active3 = Boolean(kat3 || biaya3);
+
+        const kategoriRingkas = [
+          active1 ? kat1 : '',
+          active2 ? kat2 : '',
+          active3 ? kat3 : ''
+        ].filter(Boolean).join(' / ') || 'Umum';
+
         const payload = {
           action: 'saveLomba',
           id: document.getElementById('lombaId').value,
           judul: document.getElementById('lombaJudul').value,
-          kategori: 'SD / SMP / SMA',
-          biayaSD: document.getElementById('lombaBiayaSD').value,
-          biayaSMP: document.getElementById('lombaBiayaSMP').value,
-          biayaSMA: document.getElementById('lombaBiayaSMA').value,
+          tipePeserta: document.getElementById('lombaTipePeserta').value,
+          kategori: kategoriRingkas,
+          kat1: kat1, biaya1: biaya1, active1: active1,
+          kat2: kat2, biaya2: biaya2, active2: active2,
+          kat3: kat3, biaya3: biaya3, active3: active3,
+          biayaSD: biaya1,
+          biayaSMP: biaya2,
+          biayaSMA: biaya3,
           statusLomba: document.getElementById('lombaStatus').value,
           flyerUrl: flyerUrl,
           deskripsi: document.getElementById('lombaDeskripsi').value,
@@ -1427,7 +1495,7 @@
 
         const result = await postToGAS(payload);
         if(result.status === "success") {
-          Swal.fire({ icon: 'success', title: 'Berhasil Disimpan! ✨', text: 'Data perlombaan, Juknis, dan Narahubung telah diperbarui.', confirmButtonColor: '#047857' });
+          Swal.fire({ icon: 'success', title: 'Berhasil Disimpan! ✨', text: 'Data perlombaan, sistem Individu/Tim, jenjang & biaya, Juknis, dan Narahubung telah diperbarui.', confirmButtonColor: '#047857' });
           resetLombaForm();
           await fetchPortalConfig();
         }
