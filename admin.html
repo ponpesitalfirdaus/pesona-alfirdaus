@@ -344,7 +344,7 @@
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
           <div>
             <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Kelola Cabang Lomba</h1>
-            <p class="text-xs text-gray-500">Upload flyer gambar dan atur rincian biaya per tingkat (SD, SMP, SMA)</p>
+            <p class="text-xs text-gray-500">Atur flyer, biaya per tingkat, link Juknis lomba, dan Narahubung WhatsApp</p>
           </div>
           <button onclick="resetLombaForm()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded-lg text-xs font-bold shadow">
             + Tambah Lomba Baru
@@ -404,6 +404,29 @@
             <div>
               <label class="block text-[11px] font-bold text-gray-700 mb-1">Hadiah & Fasilitas</label>
               <textarea id="lombaHadiah" rows="2" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700"></textarea>
+            </div>
+
+            <!-- PENGATURAN LINK JUKNIS LOMBA -->
+            <div class="bg-amber-50/70 p-3 rounded-lg border border-amber-200 space-y-1.5">
+              <label class="block text-[11px] font-bold text-amber-950">
+                <i class="fa-solid fa-book-open text-amber-600 mr-1"></i> Link Juknis Lomba (Google Drive / PDF / Web)
+              </label>
+              <input type="text" id="lombaJuknisUrl" placeholder="Contoh: https://drive.google.com/file/d/..." class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700 bg-white">
+              <p class="text-[10px] text-amber-800">Tautan Juknis akan tampil dengan judul sendiri dan dapat diklik langsung oleh peserta.</p>
+            </div>
+
+            <!-- PENGATURAN NARAHUBUNG (MINIMAL 2 NOMOR + BISA DITAMBAH) -->
+            <div class="bg-emerald-50/70 p-3 rounded-lg border border-emerald-200 space-y-2">
+              <div class="flex justify-between items-center border-b border-emerald-200 pb-1.5">
+                <span class="font-bold text-[11px] text-emerald-950">
+                  <i class="fa-brands fa-whatsapp text-green-600 mr-1"></i> Narahubung (Min. 2 Nomor) *
+                </span>
+                <button type="button" onclick="addNarahubungRow()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-2.5 py-1 rounded-lg text-[10px] font-bold shadow flex items-center gap-1 transition">
+                  <i class="fa-solid fa-plus"></i> Tambah Nomor
+                </button>
+              </div>
+              <div id="lombaNarahubungList" class="space-y-2"></div>
+              <p class="text-[10px] text-gray-600">Masukkan minimal 2 nomor WhatsApp narahubung. Klik <strong>+ Tambah Nomor</strong> jika ingin menambahkan kontak lainnya.</p>
             </div>
 
             <button type="submit" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2.5 rounded-lg text-xs shadow transition flex items-center justify-center gap-2">
@@ -535,7 +558,6 @@
 
         <form onsubmit="saveIdentitasConfig(event)" class="bg-white p-5 rounded-xl border shadow-sm space-y-4 text-xs max-w-xl">
           
-          <!-- PENGATURAN WAKTU & TEMA WARNA -->
           <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-200 space-y-3">
             <h4 class="font-bold text-sm text-emerald-900 flex items-center gap-2">
               <i class="fa-solid fa-palette text-emerald-700"></i> Skema Warna Tema Portal Pendaftaran
@@ -714,6 +736,7 @@
     };
 
     window.onload = () => {
+      renderNarahubungRows([]);
       if(localStorage.getItem('adminAuth') === 'true') {
         document.getElementById('loginSection').classList.add('hidden');
         document.getElementById('dashboardSection').classList.remove('hidden');
@@ -1214,19 +1237,97 @@
       } catch(e) { console.error(e); }
     }
 
+    // --- KELOLA NARAHUBUNG PER LOMBA (MINIMAL 2 NOMOR + BISA DITAMBAH) ---
+    function getCurrentNarahubungValues() {
+      const rows = document.querySelectorAll('.nara-row');
+      const values = [];
+      rows.forEach(row => {
+        const nama = row.querySelector('.nara-nama-input').value;
+        const wa = row.querySelector('.nara-wa-input').value;
+        values.push({ nama, wa });
+      });
+      return values;
+    }
+
+    function renderNarahubungRows(list) {
+      const container = document.getElementById('lombaNarahubungList');
+      if (!container) return;
+
+      let parsedList = list;
+      if (typeof parsedList === 'string') {
+        try { parsedList = JSON.parse(parsedList); } catch(e) { parsedList = []; }
+      }
+
+      const items = Array.isArray(parsedList) ? parsedList.map(x => ({
+        nama: x && x.nama ? String(x.nama) : '',
+        wa: x && x.wa ? String(x.wa) : ''
+      })) : [];
+
+      while (items.length < 2) {
+        items.push({ nama: '', wa: '' });
+      }
+
+      container.innerHTML = '';
+      items.forEach((item, idx) => {
+        const rowDiv = document.createElement('div');
+        rowDiv.className = "nara-row bg-white p-2 rounded-lg border border-emerald-200 space-y-1.5 relative";
+        rowDiv.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-bold text-emerald-800">Narahubung #${idx + 1} ${idx < 2 ? '(Wajib)' : ''}</span>
+            ${idx >= 2 ? `
+              <button type="button" onclick="removeNarahubungRow(this)" title="Hapus Narahubung" class="text-red-500 hover:text-red-700 text-[11px] font-bold flex items-center gap-1">
+                <i class="fa-solid fa-trash"></i> Hapus
+              </button>
+            ` : ''}
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+            <input type="text" value="${item.nama.replace(/"/g, '&quot;')}" placeholder="Nama / Jabatan (cth: Ust. Ahmad)" class="nara-nama-input w-full border rounded px-2.5 py-1.5 text-xs focus:outline-emerald-700">
+            <input type="text" value="${item.wa.replace(/"/g, '&quot;')}" required placeholder="No. WA #${idx + 1} (cth: 085267743284) *" class="nara-wa-input w-full border rounded px-2.5 py-1.5 text-xs focus:outline-emerald-700">
+          </div>
+        `;
+        container.appendChild(rowDiv);
+      });
+    }
+
+    function addNarahubungRow() {
+      const current = getCurrentNarahubungValues();
+      current.push({ nama: '', wa: '' });
+      renderNarahubungRows(current);
+    }
+
+    function removeNarahubungRow(btn) {
+      const rows = document.querySelectorAll('.nara-row');
+      if (rows.length <= 2) return;
+      btn.closest('.nara-row').remove();
+      renderNarahubungRows(getCurrentNarahubungValues());
+    }
+
     function renderLombaCards() {
       const box = document.getElementById('lombaCardsContainer');
       box.innerHTML = "";
       adminState.lomba.forEach(l => {
         const imgUrl = parseImageUrl(l.flyerUrl);
+        let naraList = l.narahubung || [];
+        if (typeof naraList === 'string') {
+          try { naraList = JSON.parse(naraList); } catch(e) { naraList = []; }
+        }
+        const naraCount = Array.isArray(naraList) ? naraList.filter(x => x && x.wa).length : 0;
+        const hasJuknis = Boolean(l.juknisUrl && String(l.juknisUrl).trim());
+
         box.innerHTML += `
           <div class="bg-white p-4 rounded-xl border shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
             <div class="flex items-center gap-3">
               <img src="${imgUrl || 'https://via.placeholder.com/80'}" class="w-14 h-14 rounded-lg object-cover border shrink-0">
               <div>
-                <div class="flex items-center gap-2">
+                <div class="flex flex-wrap items-center gap-1.5">
                   <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded">${l.kategori || 'SD/SMP/SMA'}</span>
                   <span class="text-[10px] font-bold px-2 py-0.5 rounded ${l.statusLomba === 'TUTUP' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}">${l.statusLomba || 'BUKA'}</span>
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded ${hasJuknis ? 'bg-amber-100 text-amber-800' : 'bg-gray-100 text-gray-500'}">
+                    <i class="fa-solid fa-book-open mr-0.5"></i> ${hasJuknis ? 'Juknis Ada' : 'Belum Juknis'}
+                  </span>
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-green-50 text-green-700 border border-green-200">
+                    <i class="fa-brands fa-whatsapp mr-0.5"></i> ${naraCount} Narahubung
+                  </span>
                 </div>
                 <h4 class="font-bold text-gray-800 mt-1 text-sm sm:text-base">${l.judul}</h4>
                 <p class="text-[11px] text-gray-600 mt-0.5">
@@ -1254,6 +1355,7 @@
     function editLomba(id) {
       const item = adminState.lomba.find(x => x.id === id);
       if(!item) return;
+      document.getElementById('lombaFormHeader').innerText = `Edit Lomba: ${item.judul}`;
       document.getElementById('lombaId').value = item.id;
       document.getElementById('existingFlyerUrl').value = item.flyerUrl;
       document.getElementById('lombaFlyerPathText').value = item.flyerUrl || '';
@@ -1265,17 +1367,40 @@
       document.getElementById('lombaDeskripsi').value = item.deskripsi;
       document.getElementById('lombaSyarat').value = item.syarat;
       document.getElementById('lombaHadiah').value = item.hadiah;
+      document.getElementById('lombaJuknisUrl').value = item.juknisUrl || '';
+      renderNarahubungRows(item.narahubung || []);
     }
 
     function resetLombaForm() {
       document.getElementById('formLomba').reset();
+      document.getElementById('lombaFormHeader').innerText = "Form Cabang Lomba";
       document.getElementById('lombaId').value = "";
       document.getElementById('existingFlyerUrl').value = "";
       document.getElementById('lombaFlyerPathText').value = "";
+      document.getElementById('lombaJuknisUrl').value = "";
+      renderNarahubungRows([]);
     }
 
     async function saveLomba(e) {
       e.preventDefault();
+      const rawNarahubung = getCurrentNarahubungValues();
+      const validNarahubung = rawNarahubung
+        .map((c, idx) => ({
+          nama: (c.nama || '').trim() || `Narahubung ${idx + 1}`,
+          wa: (c.wa || '').trim()
+        }))
+        .filter(c => c.wa !== '');
+
+      if (validNarahubung.length < 2) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Narahubung Minimal 2 Nomor',
+          text: 'Harap isi minimal 2 nomor WhatsApp narahubung untuk cabang lomba ini.',
+          confirmButtonColor: '#047857'
+        });
+        return;
+      }
+
       const btn = e.target.querySelector('button[type="submit"]');
       btn.disabled = true; btn.innerText = "Menyimpan Lomba...";
 
@@ -1296,18 +1421,21 @@
           deskripsi: document.getElementById('lombaDeskripsi').value,
           syarat: document.getElementById('lombaSyarat').value,
           hadiah: document.getElementById('lombaHadiah').value,
+          juknisUrl: document.getElementById('lombaJuknisUrl').value.trim(),
+          narahubung: validNarahubung
         };
 
         const result = await postToGAS(payload);
         if(result.status === "success") {
-          Swal.fire({ icon: 'success', title: 'Berhasil Disimpan! ✨', text: 'Data perlombaan telah diperbarui.', confirmButtonColor: '#047857' });
+          Swal.fire({ icon: 'success', title: 'Berhasil Disimpan! ✨', text: 'Data perlombaan, Juknis, dan Narahubung telah diperbarui.', confirmButtonColor: '#047857' });
           resetLombaForm();
           await fetchPortalConfig();
         }
       } catch(err) {
         Swal.fire({ icon: 'error', title: 'Gagal Menyimpan', text: err.toString(), confirmButtonColor: '#047857' });
       } finally {
-        btn.disabled = false; btn.innerText = "Simpan Data Lomba";
+        btn.disabled = false;
+        btn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> <span>Simpan Data Lomba</span>`;
       }
     }
 
