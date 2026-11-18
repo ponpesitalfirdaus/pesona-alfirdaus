@@ -39,6 +39,13 @@
       color: #111827 !important;
     }
 
+    /* Highlight animasi saat langkah Alur Pendaftaran diklik */
+    .alur-step-highlight {
+      ring: 3px solid #facc15;
+      box-shadow: 0 0 0 3px #facc15, 0 10px 25px -5px rgba(0, 0, 0, 0.15) !important;
+      background-color: #fefce8 !important;
+    }
+
     @media print {
       body { background: #ffffff !important; margin: 0 !important; padding: 0 !important; }
       body > *:not(#printArea) { display: none !important; }
@@ -113,6 +120,9 @@
         <button id="nav-beranda" onclick="switchView('beranda')" class="nav-desktop-btn px-3 py-1.5 rounded-xl hover:text-yellow-300 transition-all duration-200 inline-flex items-center gap-1.5">
           <i class="fa-solid fa-house text-amber-300"></i> Beranda
         </button>
+        <button id="nav-alur" onclick="switchView('alur')" class="nav-desktop-btn px-3 py-1.5 rounded-xl hover:text-yellow-300 transition-all duration-200 inline-flex items-center gap-1.5">
+          <i class="fa-solid fa-route text-amber-300"></i> Alur Pendaftaran
+        </button>
         <button id="nav-lomba" onclick="switchView('lomba')" class="nav-desktop-btn px-3 py-1.5 rounded-xl hover:text-yellow-300 transition-all duration-200 inline-flex items-center gap-1.5">
           <i class="fa-solid fa-trophy text-amber-300"></i> Cabang Lomba
         </button>
@@ -127,13 +137,9 @@
         </button>
       </nav>
 
-      <!-- TOMBOL DAFTAR SEKARANG + HAMBURGER -->
-      <div class="flex items-center space-x-2 sm:space-x-3">
-        <button onclick="switchView('lomba')" title="Daftar Sekarang" class="bg-yellow-400 hover:bg-yellow-500 text-gray-950 font-extrabold px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl transition shadow-md flex items-center gap-2 text-xs sm:text-sm">
-          <i class="fa-solid fa-trophy text-gray-900 text-sm"></i>
-          <span>Daftar Sekarang</span>
-        </button>
-        <button onclick="toggleMobileNav()" class="md:hidden w-9 h-9 flex items-center justify-center text-white hover:text-yellow-300 focus:outline-none">
+      <!-- HAMBURGER MOBILE -->
+      <div class="flex items-center md:hidden">
+        <button onclick="toggleMobileNav()" class="w-9 h-9 flex items-center justify-center text-white hover:text-yellow-300 focus:outline-none">
           <i class="fa-solid fa-bars text-xl" id="hamburgerIcon"></i>
         </button>
       </div>
@@ -144,6 +150,9 @@
     <div id="mobileMenu" class="hidden md:hidden bg-black/25 border-t border-white/20 px-4 py-3 space-y-1.5 text-sm font-medium">
       <button id="mnav-beranda" onclick="switchView('beranda'); toggleMobileNav();" class="nav-mobile-btn block w-full text-left py-2 px-3 rounded-xl hover:bg-white/10 transition-all duration-200">
         <i class="fa-solid fa-house w-5 text-yellow-300 mr-1"></i> Beranda
+      </button>
+      <button id="mnav-alur" onclick="switchView('alur'); toggleMobileNav();" class="nav-mobile-btn block w-full text-left py-2 px-3 rounded-xl hover:bg-white/10 transition-all duration-200">
+        <i class="fa-solid fa-route w-5 text-yellow-300 mr-1"></i> Alur Pendaftaran
       </button>
       <button id="mnav-lomba" onclick="switchView('lomba'); toggleMobileNav();" class="nav-mobile-btn block w-full text-left py-2 px-3 rounded-xl hover:bg-white/10 transition-all duration-200">
         <i class="fa-solid fa-trophy w-5 text-yellow-300 mr-1"></i> Cabang Lomba
@@ -205,6 +214,334 @@
             <span>Lihat Semua Cabang Lomba</span>
             <i class="fa-solid fa-arrow-right"></i>
           </button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- 1B. ALUR PENDAFTARAN INTERAKTIF -->
+    <section id="view-alur" class="view-page hidden container mx-auto px-4 py-8 max-w-5xl">
+      
+      <!-- HEADER ALUR PENDAFTARAN -->
+      <div class="bg-white rounded-2xl shadow-lg border overflow-hidden mb-6">
+        <div class="bg-emerald-900 text-white p-6 sm:p-8 relative overflow-hidden">
+          <div class="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <span class="inline-flex items-center gap-1.5 bg-yellow-400 text-gray-950 font-extrabold text-[11px] px-3 py-1 rounded-full uppercase tracking-wider shadow">
+                <i class="fa-solid fa-route"></i> Alur Pendaftaran Interaktif
+              </span>
+              <h2 class="text-xl sm:text-3xl font-black mt-2.5 tracking-tight">ALUR PENDAFTARAN PESONA AL FIRDAUS IV 2027</h2>
+              <p class="text-emerald-100 text-xs sm:text-sm mt-1">Klik langkah pada alur singkat di bawah atau tandai ceklist progres pendaftaran Anda.</p>
+            </div>
+            <div class="bg-black/25 border border-white/20 rounded-xl p-3.5 shrink-0 min-w-[210px]">
+              <div class="flex justify-between items-center text-xs font-bold mb-1.5">
+                <span class="text-yellow-300"><i class="fa-solid fa-list-check mr-1"></i> Progres Anda</span>
+                <span id="alurProgressText" class="font-mono text-white">0 / 11 (0%)</span>
+              </div>
+              <div class="w-full bg-white/20 h-2.5 rounded-full overflow-hidden">
+                <div id="alurProgressBar" class="bg-yellow-400 h-full transition-all duration-300" style="width: 0%"></div>
+              </div>
+              <button type="button" onclick="resetAlurChecklist()" class="mt-2 text-[10px] text-emerald-200 hover:text-yellow-300 underline font-semibold">
+                <i class="fa-solid fa-rotate-left mr-0.5"></i> Reset Ceklist Progres
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ALUR SINGKAT INTERAKTIF -->
+        <div class="p-5 sm:p-6 bg-emerald-50/60 border-b">
+          <div class="flex items-center justify-between gap-2 mb-3">
+            <h3 class="text-xs sm:text-sm font-extrabold uppercase tracking-wider theme-text flex items-center gap-1.5">
+              <i class="fa-solid fa-bolt text-amber-500"></i> Alur Singkat (Klik Langkah untuk Detail)
+            </h3>
+            <span class="text-[11px] text-gray-500 hidden sm:inline">7 Langkah Praktis</span>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2 text-xs font-bold">
+            <button type="button" onclick="jumpToAlurStep(1, 1)" class="alur-pill bg-white hover:bg-yellow-300 text-gray-900 border border-emerald-200 px-3 py-2 rounded-xl shadow-sm transition flex items-center gap-1.5">
+              <span class="w-5 h-5 rounded-full bg-emerald-800 text-white text-[10px] flex items-center justify-center font-extrabold">1</span>
+              <span>Buka Website</span>
+            </button>
+            <span class="text-emerald-700 font-black">➔</span>
+
+            <button type="button" onclick="jumpToAlurStep(1, 2)" class="alur-pill bg-white hover:bg-yellow-300 text-gray-900 border border-emerald-200 px-3 py-2 rounded-xl shadow-sm transition flex items-center gap-1.5">
+              <span class="w-5 h-5 rounded-full bg-emerald-800 text-white text-[10px] flex items-center justify-center font-extrabold">2</span>
+              <span>Pilih Lomba &amp; Baca Juknis</span>
+            </button>
+            <span class="text-emerald-700 font-black">➔</span>
+
+            <button type="button" onclick="jumpToAlurStep(1, 4)" class="alur-pill bg-white hover:bg-yellow-300 text-gray-900 border border-emerald-200 px-3 py-2 rounded-xl shadow-sm transition flex items-center gap-1.5">
+              <span class="w-5 h-5 rounded-full bg-emerald-800 text-white text-[10px] flex items-center justify-center font-extrabold">3</span>
+              <span>Klik Daftar Lomba Ini</span>
+            </button>
+            <span class="text-emerald-700 font-black">➔</span>
+
+            <button type="button" onclick="jumpToAlurStep(2, 5)" class="alur-pill bg-white hover:bg-yellow-300 text-gray-900 border border-emerald-200 px-3 py-2 rounded-xl shadow-sm transition flex items-center gap-1.5">
+              <span class="w-5 h-5 rounded-full bg-emerald-800 text-white text-[10px] flex items-center justify-center font-extrabold">4</span>
+              <span>Transfer &amp; Konfirmasi Bendahara</span>
+            </button>
+            <span class="text-emerald-700 font-black">➔</span>
+
+            <button type="button" onclick="jumpToAlurStep(3, 7)" class="alur-pill bg-white hover:bg-yellow-300 text-gray-900 border border-emerald-200 px-3 py-2 rounded-xl shadow-sm transition flex items-center gap-1.5">
+              <span class="w-5 h-5 rounded-full bg-emerald-800 text-white text-[10px] flex items-center justify-center font-extrabold">5</span>
+              <span>Isi Formulir &amp; Upload Struk</span>
+            </button>
+            <span class="text-emerald-700 font-black">➔</span>
+
+            <button type="button" onclick="jumpToAlurStep(3, 9)" class="alur-pill bg-white hover:bg-yellow-300 text-gray-900 border border-emerald-200 px-3 py-2 rounded-xl shadow-sm transition flex items-center gap-1.5">
+              <span class="w-5 h-5 rounded-full bg-emerald-800 text-white text-[10px] flex items-center justify-center font-extrabold">6</span>
+              <span>Konfirmasi Admin (Verifikasi)</span>
+            </button>
+            <span class="text-emerald-700 font-black">➔</span>
+
+            <button type="button" onclick="jumpToAlurStep(4, 10)" class="alur-pill bg-white hover:bg-yellow-300 text-gray-900 border border-emerald-200 px-3 py-2 rounded-xl shadow-sm transition flex items-center gap-1.5">
+              <span class="w-5 h-5 rounded-full bg-emerald-800 text-white text-[10px] flex items-center justify-center font-extrabold">7</span>
+              <span>Unduh Bukti Pendaftaran</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- FILTER TAHAP INTERAKTIF -->
+        <div class="px-5 sm:px-6 py-3.5 bg-white flex flex-wrap items-center justify-between gap-2">
+          <h3 class="text-sm sm:text-base font-extrabold text-gray-900 flex items-center gap-2">
+            <i class="fa-solid fa-compass theme-text"></i> Panduan Tahap demi Tahap
+          </h3>
+          <div class="flex flex-wrap gap-1.5 text-xs font-bold">
+            <button type="button" onclick="filterAlurTahap('all')" id="btnTahap-all" class="alur-tab-btn px-3 py-1.5 rounded-lg bg-emerald-800 text-white shadow transition">Semua Tahap</button>
+            <button type="button" onclick="filterAlurTahap(1)" id="btnTahap-1" class="alur-tab-btn px-3 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 transition">Tahap 1</button>
+            <button type="button" onclick="filterAlurTahap(2)" id="btnTahap-2" class="alur-tab-btn px-3 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 transition">Tahap 2</button>
+            <button type="button" onclick="filterAlurTahap(3)" id="btnTahap-3" class="alur-tab-btn px-3 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 transition">Tahap 3</button>
+            <button type="button" onclick="filterAlurTahap(4)" id="btnTahap-4" class="alur-tab-btn px-3 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 transition">Tahap 4</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- KARTU TAHAP DEMI TAHAP -->
+      <div class="space-y-6 mb-8">
+
+        <!-- TAHAP 1 -->
+        <div id="alur-tahap-1" class="alur-tahap-card bg-white rounded-2xl shadow-md border overflow-hidden">
+          <div class="bg-emerald-50 border-b border-emerald-200 px-5 py-4 flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-3">
+              <span class="w-9 h-9 rounded-xl bg-emerald-800 text-yellow-300 font-black flex items-center justify-center text-sm shadow">1</span>
+              <div>
+                <span class="text-[10px] uppercase tracking-wider font-bold text-emerald-700 block">Langkah Awal</span>
+                <h4 class="text-base sm:text-lg font-extrabold text-gray-900">Tahap 1: Pemilihan Cabang Lomba</h4>
+              </div>
+            </div>
+            <button type="button" onclick="switchView('lomba')" class="theme-btn text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow flex items-center gap-1.5">
+              <i class="fa-solid fa-trophy text-yellow-300"></i> Buka Cabang Lomba &rarr;
+            </button>
+          </div>
+
+          <div class="p-5 space-y-3 text-xs sm:text-sm">
+            <div id="alur-step-1" class="alur-step-item flex items-start gap-3 p-3 rounded-xl border border-gray-200 bg-gray-50/70 transition-all">
+              <input type="checkbox" id="chk-step-1" onchange="toggleAlurCheck(1)" class="mt-1 w-4 h-4 accent-emerald-700 cursor-pointer shrink-0">
+              <label for="chk-step-1" class="flex-1 cursor-pointer leading-relaxed">
+                <span class="font-extrabold text-emerald-900 mr-1">1.</span> Buka halaman pendaftaran di
+                <a href="https://bit.ly/pesona-alfirdaus" target="_blank" rel="noopener noreferrer" class="font-bold text-emerald-800 underline hover:text-emerald-600 break-all">https://bit.ly/pesona-alfirdaus</a>.
+              </label>
+            </div>
+
+            <div id="alur-step-2" class="alur-step-item flex items-start gap-3 p-3 rounded-xl border border-gray-200 bg-gray-50/70 transition-all">
+              <input type="checkbox" id="chk-step-2" onchange="toggleAlurCheck(2)" class="mt-1 w-4 h-4 accent-emerald-700 cursor-pointer shrink-0">
+              <label for="chk-step-2" class="flex-1 cursor-pointer leading-relaxed">
+                <span class="font-extrabold text-emerald-900 mr-1">2.</span> Klik menu <strong>Cabang Lomba</strong>, lalu pilih cabang lomba yang akan diikuti.
+              </label>
+            </div>
+
+            <div id="alur-step-3" class="alur-step-item flex items-start gap-3 p-3 rounded-xl border border-gray-200 bg-gray-50/70 transition-all">
+              <input type="checkbox" id="chk-step-3" onchange="toggleAlurCheck(3)" class="mt-1 w-4 h-4 accent-emerald-700 cursor-pointer shrink-0">
+              <label for="chk-step-3" class="flex-1 cursor-pointer leading-relaxed">
+                <span class="font-extrabold text-emerald-900 mr-1">3.</span> Baca dengan cermat <strong>Syarat dan Ketentuan</strong> serta <strong>Juknis Lomba</strong>.
+              </label>
+            </div>
+
+            <div id="alur-step-4" class="alur-step-item flex items-start gap-3 p-3 rounded-xl border border-gray-200 bg-gray-50/70 transition-all">
+              <input type="checkbox" id="chk-step-4" onchange="toggleAlurCheck(4)" class="mt-1 w-4 h-4 accent-emerald-700 cursor-pointer shrink-0">
+              <label for="chk-step-4" class="flex-1 cursor-pointer leading-relaxed">
+                <span class="font-extrabold text-emerald-900 mr-1">4.</span> Gulir ke bagian bawah flyer dan klik tombol <strong>Daftar Lomba Ini</strong>.
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAHAP 2 -->
+        <div id="alur-tahap-2" class="alur-tahap-card bg-white rounded-2xl shadow-md border overflow-hidden">
+          <div class="bg-amber-50 border-b border-amber-200 px-5 py-4 flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-3">
+              <span class="w-9 h-9 rounded-xl bg-amber-500 text-gray-950 font-black flex items-center justify-center text-sm shadow">2</span>
+              <div>
+                <span class="text-[10px] uppercase tracking-wider font-bold text-amber-800 block">Administrasi Biaya</span>
+                <h4 class="text-base sm:text-lg font-extrabold text-gray-900">Tahap 2: Pembayaran &amp; Konfirmasi Bendahara</h4>
+              </div>
+            </div>
+            <a href="https://wa.me/6285366327882?text=Assalamu'alaikum%20Kak%20Resta%20(Bendahara%20PESONA%20AL%20FIRDAUS%20IV%202027),%20saya%20ingin%20konfirmasi%20pembayaran%20pendaftaran%20lomba." target="_blank" rel="noopener noreferrer" class="bg-green-600 hover:bg-green-700 text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow flex items-center gap-1.5 transition">
+              <i class="fa-brands fa-whatsapp text-sm"></i> Konfirmasi ke Bendahara
+            </a>
+          </div>
+
+          <div class="p-5 space-y-3 text-xs sm:text-sm">
+            <div id="alur-step-5" class="alur-step-item flex items-start gap-3 p-3 rounded-xl border border-gray-200 bg-gray-50/70 transition-all">
+              <input type="checkbox" id="chk-step-5" onchange="toggleAlurCheck(5)" class="mt-1 w-4 h-4 accent-emerald-700 cursor-pointer shrink-0">
+              <div class="flex-1">
+                <label for="chk-step-5" class="cursor-pointer leading-relaxed block">
+                  <span class="font-extrabold text-emerald-900 mr-1">5.</span> Transfer biaya kegiatan sesuai cabang lomba dan jenjang ke rekening berikut:
+                </label>
+                <div class="mt-2.5 bg-amber-50 border border-amber-300 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <ul class="space-y-1 text-xs text-gray-800">
+                    <li><i class="fa-solid fa-building-columns text-amber-700 w-4 mr-1"></i> Bank: <strong>BSI (Bank Syariah Indonesia)</strong></li>
+                    <li><i class="fa-solid fa-credit-card text-amber-700 w-4 mr-1"></i> No. Rekening: <strong class="font-mono text-sm text-emerald-900">8500808806</strong></li>
+                    <li><i class="fa-solid fa-user-check text-amber-700 w-4 mr-1"></i> Atas Nama: <strong>Yayasan Atmo Taruno Joyo</strong></li>
+                  </ul>
+                  <button type="button" onclick="copyTextWithToast('8500808806', 'No. Rekening BSI (8500808806)')" class="bg-amber-400 hover:bg-amber-500 text-gray-950 font-extrabold px-3.5 py-2 rounded-xl text-xs shadow flex items-center justify-center gap-1.5 shrink-0 transition active:scale-95">
+                    <i class="fa-solid fa-copy"></i> Salin No. Rekening
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div id="alur-step-6" class="alur-step-item flex items-start gap-3 p-3 rounded-xl border border-gray-200 bg-gray-50/70 transition-all">
+              <input type="checkbox" id="chk-step-6" onchange="toggleAlurCheck(6)" class="mt-1 w-4 h-4 accent-emerald-700 cursor-pointer shrink-0">
+              <label for="chk-step-6" class="flex-1 cursor-pointer leading-relaxed">
+                <span class="font-extrabold text-emerald-900 mr-1">6.</span> Konfirmasi pembayaran ke WhatsApp Bendahara di nomor
+                <a href="https://wa.me/6285366327882?text=Assalamu'alaikum%20Kak%20Resta%20(Bendahara%20PESONA%20AL%20FIRDAUS%20IV%202027),%20saya%20ingin%20konfirmasi%20pembayaran%20pendaftaran%20lomba." target="_blank" rel="noopener noreferrer" class="font-bold text-green-700 underline hover:text-green-800">085366327882 (Resta)</a>
+                dengan mengirimkan bukti transfer/pendaftaran.
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAHAP 3 -->
+        <div id="alur-tahap-3" class="alur-tahap-card bg-white rounded-2xl shadow-md border overflow-hidden">
+          <div class="bg-blue-50 border-b border-blue-200 px-5 py-4 flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-3">
+              <span class="w-9 h-9 rounded-xl bg-blue-800 text-white font-black flex items-center justify-center text-sm shadow">3</span>
+              <div>
+                <span class="text-[10px] uppercase tracking-wider font-bold text-blue-700 block">Input Data &amp; Validasi</span>
+                <h4 class="text-base sm:text-lg font-extrabold text-gray-900">Tahap 3: Pengisian Formulir &amp; Verifikasi Admin</h4>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-5 space-y-3 text-xs sm:text-sm">
+            <div id="alur-step-7" class="alur-step-item flex items-start gap-3 p-3 rounded-xl border border-gray-200 bg-gray-50/70 transition-all">
+              <input type="checkbox" id="chk-step-7" onchange="toggleAlurCheck(7)" class="mt-1 w-4 h-4 accent-emerald-700 cursor-pointer shrink-0">
+              <label for="chk-step-7" class="flex-1 cursor-pointer leading-relaxed">
+                <span class="font-extrabold text-emerald-900 mr-1">7.</span> Isi formulir kegiatan yang dipilih sesuai data yang dibutuhkan serta unggah (upload) bukti/struk pembayaran yang sudah ditransfer.
+              </label>
+            </div>
+
+            <div id="alur-step-8" class="alur-step-item flex items-start gap-3 p-3 rounded-xl border border-gray-200 bg-gray-50/70 transition-all">
+              <input type="checkbox" id="chk-step-8" onchange="toggleAlurCheck(8)" class="mt-1 w-4 h-4 accent-emerald-700 cursor-pointer shrink-0">
+              <label for="chk-step-8" class="flex-1 cursor-pointer leading-relaxed">
+                <span class="font-extrabold text-emerald-900 mr-1">8.</span> Klik tombol <strong>Kirim Pendaftaran</strong>.
+              </label>
+            </div>
+
+            <div id="alur-step-9" class="alur-step-item flex items-start gap-3 p-3 rounded-xl border border-gray-200 bg-gray-50/70 transition-all">
+              <input type="checkbox" id="chk-step-9" onchange="toggleAlurCheck(9)" class="mt-1 w-4 h-4 accent-emerald-700 cursor-pointer shrink-0">
+              <label for="chk-step-9" class="flex-1 cursor-pointer leading-relaxed">
+                <span class="font-extrabold text-emerald-900 mr-1">9.</span> Konfirmasi kembali ke nomor <strong>Admin</strong> yang muncul setelah klik <strong>Kirim Pendaftaran</strong> agar data diverifikasi dan status berubah dari <span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-bold text-xs">Menunggu</span> menjadi <span class="px-2 py-0.5 rounded bg-green-100 text-green-800 font-bold text-xs">Terverifikasi</span>.
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAHAP 4 -->
+        <div id="alur-tahap-4" class="alur-tahap-card bg-white rounded-2xl shadow-md border overflow-hidden">
+          <div class="bg-purple-50 border-b border-purple-200 px-5 py-4 flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-3">
+              <span class="w-9 h-9 rounded-xl bg-purple-800 text-white font-black flex items-center justify-center text-sm shadow">4</span>
+              <div>
+                <span class="text-[10px] uppercase tracking-wider font-bold text-purple-700 block">Tahap Akhir</span>
+                <h4 class="text-base sm:text-lg font-extrabold text-gray-900">Tahap 4: Unduh Bukti Pendaftaran</h4>
+              </div>
+            </div>
+            <button type="button" onclick="switchView('cek')" class="bg-purple-700 hover:bg-purple-800 text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow flex items-center gap-1.5 transition">
+              <i class="fa-solid fa-magnifying-glass"></i> Buka Cek Pendaftaran &rarr;
+            </button>
+          </div>
+
+          <div class="p-5 space-y-3 text-xs sm:text-sm">
+            <div id="alur-step-10" class="alur-step-item flex items-start gap-3 p-3 rounded-xl border border-gray-200 bg-gray-50/70 transition-all">
+              <input type="checkbox" id="chk-step-10" onchange="toggleAlurCheck(10)" class="mt-1 w-4 h-4 accent-emerald-700 cursor-pointer shrink-0">
+              <label for="chk-step-10" class="flex-1 cursor-pointer leading-relaxed">
+                <span class="font-extrabold text-emerald-900 mr-1">10.</span> Klik menu <strong>Cek Pendaftaran</strong>, lalu masukkan nama pendaftar.
+              </label>
+            </div>
+
+            <div id="alur-step-11" class="alur-step-item flex items-start gap-3 p-3 rounded-xl border border-gray-200 bg-gray-50/70 transition-all">
+              <input type="checkbox" id="chk-step-11" onchange="toggleAlurCheck(11)" class="mt-1 w-4 h-4 accent-emerald-700 cursor-pointer shrink-0">
+              <label for="chk-step-11" class="flex-1 cursor-pointer leading-relaxed">
+                <span class="font-extrabold text-emerald-900 mr-1">11.</span> Setelah data peserta muncul, unduh <strong>Bukti Pendaftaran</strong> untuk digunakan saat registrasi.
+              </label>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RINGKASAN KONTAK & REKENING PENTING -->
+      <div class="bg-white rounded-2xl shadow-lg border overflow-hidden">
+        <div class="bg-emerald-950 text-white px-5 py-4 flex items-center justify-between">
+          <h3 class="text-sm sm:text-base font-extrabold flex items-center gap-2">
+            <i class="fa-solid fa-address-book text-yellow-400"></i> Ringkasan Kontak &amp; Rekening Penting
+          </h3>
+          <span class="text-[10px] bg-white/15 px-2.5 py-1 rounded-full font-bold text-yellow-300">Info Cepat</span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs sm:text-sm">
+            <thead class="bg-gray-100 text-gray-800 font-extrabold uppercase text-[11px] border-b">
+              <tr>
+                <th class="p-3.5 sm:p-4 w-1/3">Keperluan</th>
+                <th class="p-3.5 sm:p-4">Detail Informasi</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y text-gray-700">
+              <tr class="hover:bg-gray-50">
+                <td class="p-3.5 sm:p-4 font-bold text-gray-900">Link Pendaftaran</td>
+                <td class="p-3.5 sm:p-4 flex flex-wrap items-center justify-between gap-2">
+                  <a href="https://bit.ly/pesona-alfirdaus" target="_blank" rel="noopener noreferrer" class="font-bold text-emerald-800 underline hover:text-emerald-600">https://bit.ly/pesona-alfirdaus</a>
+                  <button type="button" onclick="copyTextWithToast('https://bit.ly/pesona-alfirdaus', 'Link Pendaftaran')" class="bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold px-2.5 py-1 rounded-lg text-xs border">
+                    <i class="fa-solid fa-copy mr-1"></i> Salin Link
+                  </button>
+                </td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <td class="p-3.5 sm:p-4 font-bold text-gray-900">Rekening Pembayaran</td>
+                <td class="p-3.5 sm:p-4 flex flex-wrap items-center justify-between gap-2">
+                  <span><strong>BSI 8500808806</strong> (a.n. Yayasan Atmo Taruno Joyo)</span>
+                  <button type="button" onclick="copyTextWithToast('8500808806', 'No. Rekening BSI')" class="bg-amber-400 hover:bg-amber-500 text-gray-950 font-bold px-2.5 py-1 rounded-lg text-xs shadow-sm">
+                    <i class="fa-solid fa-copy mr-1"></i> Salin No. Rek
+                  </button>
+                </td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <td class="p-3.5 sm:p-4 font-bold text-gray-900">Konfirmasi Transfer</td>
+                <td class="p-3.5 sm:p-4 flex flex-wrap items-center justify-between gap-2">
+                  <span>WA Bendahara: <strong>085366327882 (Resta)</strong></span>
+                  <a href="https://wa.me/6285366327882?text=Assalamu'alaikum%20Kak%20Resta%20(Bendahara%20PESONA%20AL%20FIRDAUS%20IV%202027),%20saya%20ingin%20konfirmasi%20transfer%20pendaftaran." target="_blank" rel="noopener noreferrer" class="bg-green-600 hover:bg-green-700 text-white font-bold px-2.5 py-1 rounded-lg text-xs shadow-sm">
+                    <i class="fa-brands fa-whatsapp mr-1"></i> Chat Bendahara
+                  </a>
+                </td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <td class="p-3.5 sm:p-4 font-bold text-gray-900">Verifikasi Formulir</td>
+                <td class="p-3.5 sm:p-4">WA Admin (muncul otomatis setelah klik <strong>Kirim Pendaftaran</strong>)</td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <td class="p-3.5 sm:p-4 font-bold text-gray-900">Syarat Registrasi</td>
+                <td class="p-3.5 sm:p-4 flex flex-wrap items-center justify-between gap-2">
+                  <span>Dokumen <strong>Bukti Pendaftaran</strong> (diunduh dari menu Cek Pendaftaran)</span>
+                  <button type="button" onclick="switchView('cek')" class="theme-btn text-white font-bold px-2.5 py-1 rounded-lg text-xs shadow-sm">
+                    <i class="fa-solid fa-file-invoice mr-1"></i> Cek Pendaftaran
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
@@ -517,6 +854,7 @@
     window.onload = async () => {
       setActiveNav('beranda');
       initSwiper();
+      initAlurChecklist();
       await loadPortalData();
 
       setInterval(loadPortalData, 30000);
@@ -529,6 +867,103 @@
         searchRegistration();
       }
     };
+
+    // --- LOGIKA INTERAKTIF HALAMAN ALUR PENDAFTARAN ---
+    function filterAlurTahap(tahap) {
+      document.querySelectorAll('.alur-tab-btn').forEach(btn => {
+        btn.className = "alur-tab-btn px-3 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 transition";
+      });
+      const activeTab = document.getElementById(`btnTahap-${tahap}`);
+      if (activeTab) {
+        activeTab.className = "alur-tab-btn px-3 py-1.5 rounded-lg bg-emerald-800 text-white shadow transition";
+      }
+
+      [1, 2, 3, 4].forEach(num => {
+        const card = document.getElementById(`alur-tahap-${num}`);
+        if (!card) return;
+        if (tahap === 'all' || Number(tahap) === num) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    }
+
+    function jumpToAlurStep(tahap, stepNum) {
+      filterAlurTahap('all');
+      document.querySelectorAll('.alur-step-item').forEach(el => el.classList.remove('alur-step-highlight'));
+      const targetStep = document.getElementById(`alur-step-${stepNum}`);
+      if (targetStep) {
+        targetStep.classList.add('alur-step-highlight');
+        targetStep.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(() => targetStep.classList.remove('alur-step-highlight'), 2600);
+      }
+    }
+
+    function initAlurChecklist() {
+      let saved = [];
+      try {
+        saved = JSON.parse(localStorage.getItem('paf_alur_progress') || '[]');
+      } catch (e) {
+        saved = [];
+      }
+      for (let i = 1; i <= 11; i++) {
+        const cb = document.getElementById(`chk-step-${i}`);
+        if (cb) cb.checked = saved.includes(i);
+      }
+      updateAlurProgressUI();
+    }
+
+    function toggleAlurCheck(stepNum) {
+      const checkedSteps = [];
+      for (let i = 1; i <= 11; i++) {
+        const cb = document.getElementById(`chk-step-${i}`);
+        if (cb && cb.checked) checkedSteps.push(i);
+      }
+      localStorage.setItem('paf_alur_progress', JSON.stringify(checkedSteps));
+      updateAlurProgressUI();
+    }
+
+    function updateAlurProgressUI() {
+      let done = 0;
+      for (let i = 1; i <= 11; i++) {
+        const cb = document.getElementById(`chk-step-${i}`);
+        const item = document.getElementById(`alur-step-${i}`);
+        if (cb && cb.checked) {
+          done++;
+          if (item) item.classList.add('bg-emerald-50/80', 'border-emerald-300');
+        } else if (item) {
+          item.classList.remove('bg-emerald-50/80', 'border-emerald-300');
+        }
+      }
+      const pct = Math.round((done / 11) * 100);
+      const txt = document.getElementById('alurProgressText');
+      const bar = document.getElementById('alurProgressBar');
+      if (txt) txt.innerText = `${done} / 11 (${pct}%)`;
+      if (bar) bar.style.width = `${pct}%`;
+    }
+
+    function resetAlurChecklist() {
+      localStorage.removeItem('paf_alur_progress');
+      for (let i = 1; i <= 11; i++) {
+        const cb = document.getElementById(`chk-step-${i}`);
+        if (cb) cb.checked = false;
+      }
+      updateAlurProgressUI();
+    }
+
+    function copyTextWithToast(text, label) {
+      navigator.clipboard.writeText(text).then(() => {
+        Swal.fire({
+          toast: true,
+          position: 'top-end',
+          icon: 'success',
+          title: `${label} Berhasil Disalin! 📋`,
+          showConfirmButton: false,
+          timer: 2000
+        });
+      });
+    }
 
     function escapeHtml(str) {
       return String(str || '')
@@ -725,12 +1160,14 @@
         };
 
         toggleNavElem('nav-beranda', navs.beranda);
+        toggleNavElem('nav-alur', navs.alur);
         toggleNavElem('nav-lomba', navs.lomba);
         toggleNavElem('nav-cek', navs.cek);
         toggleNavElem('nav-unggah', navs.unggah);
         toggleNavElem('nav-sertifikat', navs.sertifikat);
 
         toggleMobileNavElem('mnav-beranda', navs.beranda);
+        toggleMobileNavElem('mnav-alur', navs.alur);
         toggleMobileNavElem('mnav-lomba', navs.lomba);
         toggleMobileNavElem('mnav-cek', navs.cek);
         toggleMobileNavElem('mnav-unggah', navs.unggah);
