@@ -8,6 +8,13 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+  <!-- FIREBASE SDK (COMPAT: APP, AUTH, FIRESTORE) & CONFIG -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+
   <style>
     @media print {
       body > *:not(#printArea) { display: none !important; }
@@ -18,16 +25,21 @@
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans min-h-screen flex flex-col">
 
-  <!-- LOGIN SECTION -->
+  <!-- LOGIN SECTION (FIREBASE AUTHENTICATION) -->
   <div id="loginSection" class="fixed inset-0 bg-emerald-950 flex items-center justify-center p-4 z-50">
     <div class="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 max-w-sm w-full text-center">
       <img src="https://lh3.googleusercontent.com/d/1Ca6RhNsv0aFWD4EMdkr8uCcSuPDESTpv" class="w-16 h-16 object-contain rounded-full bg-emerald-50 p-1 border border-yellow-400 mx-auto mb-3 shadow">
       <h2 class="text-xl sm:text-2xl font-bold text-emerald-950">Admin Control Panel</h2>
-      <p class="text-xs text-gray-500 mb-5">Portal Manajemen Pesona Al Firdaus</p>
+      <p class="text-xs text-gray-500 mb-4">Portal Manajemen Pesona Al Firdaus (Firebase Auth)</p>
       
+      <div id="firebaseWarningBanner" class="hidden bg-amber-50 border border-amber-300 text-amber-900 text-[11px] p-2.5 rounded-xl mb-3 text-left">
+        <strong><i class="fa-solid fa-triangle-exclamation"></i> Konfigurasi Belum Diisi:</strong><br>
+        Tempelkan <code>FIREBASE_CONFIG</code> Anda di file <code>firebase-config.js</code> terlebih dahulu.
+      </div>
+
       <form onsubmit="handleLogin(event)" class="space-y-3">
         <div>
-          <input type="text" id="userInput" placeholder="Username" required class="w-full border rounded-xl px-4 py-2.5 text-xs sm:text-sm text-center focus:outline-emerald-700">
+          <input type="email" id="userInput" placeholder="Email Admin (cth: superadmin@pesonaalfirdaus.id)" required class="w-full border rounded-xl px-4 py-2.5 text-xs sm:text-sm text-center focus:outline-emerald-700">
         </div>
         <div>
           <input type="password" id="passInput" placeholder="Password" required class="w-full border rounded-xl px-4 py-2.5 text-xs sm:text-sm text-center focus:outline-emerald-700">
@@ -60,7 +72,6 @@
     <!-- SIDEBAR DRAWER / COLLAPSIBLE RAIL (HAMBURGER <-> X) -->
     <aside id="adminSidebar" class="fixed inset-y-0 left-0 z-50 w-64 md:w-[72px] bg-emerald-950 text-emerald-100 flex flex-col justify-between p-3 transform -translate-x-full transition-all duration-300 ease-in-out md:static md:translate-x-0 md:flex shrink-0 shadow-xl">
       <div>
-        <!-- HEADER SIDEBAR DENGAN TOMBOL HAMBURGER <-> X -->
         <div id="sidebarHeaderRow" class="flex items-center justify-center py-2.5 border-b border-emerald-900 mb-3 gap-2.5">
           <div id="sidebarBrandInfo" class="hidden items-center gap-2.5 flex-1 min-w-0">
             <img src="https://lh3.googleusercontent.com/d/1Ca6RhNsv0aFWD4EMdkr8uCcSuPDESTpv" class="w-9 h-9 object-contain rounded-full bg-white p-0.5 shrink-0">
@@ -83,8 +94,6 @@
             <i class="fa-solid fa-music w-5 text-center text-sm shrink-0"></i>
             <span class="sidebar-label hidden ml-3 truncate">Unggahan Audio</span>
           </button>
-
-          <!-- MENU MODULAR UNTUK ADMIN & SUPERADMIN -->
           <button onclick="navAdmin('sertifikat')" id="m-sertifikat" title="Sertifikat Digital" class="admin-nav-btn w-full flex items-center justify-center px-3 py-2.5 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
             <i class="fa-solid fa-certificate w-5 text-center text-sm shrink-0"></i>
             <span class="sidebar-label hidden ml-3 truncate">Sertifikat Digital</span>
@@ -97,7 +106,6 @@
             <i class="fa-solid fa-images w-5 text-center text-sm shrink-0"></i>
             <span class="sidebar-label hidden ml-3 truncate">Slider Banner</span>
           </button>
-
           <button onclick="navAdmin('navmenu')" id="m-navmenu" title="Navigasi Menubar" class="admin-nav-btn w-full flex items-center justify-center px-3 py-2.5 rounded-xl hover:bg-emerald-900 text-emerald-300 transition">
             <i class="fa-solid fa-compass w-5 text-center text-sm shrink-0"></i>
             <span class="sidebar-label hidden ml-3 truncate">Navigasi Menubar</span>
@@ -111,7 +119,6 @@
             <span class="sidebar-label hidden ml-3 truncate">Identitas &amp; Warna Tema</span>
           </button>
 
-          <!-- MENU KHUSUS SUPERADMIN -->
           <div id="superadminMenuBlock" class="pt-2 pb-1 border-t border-emerald-900 mt-2">
             <p class="sidebar-label hidden text-[10px] text-yellow-400 uppercase px-2 font-bold tracking-wider mb-1 truncate">Manajemen Pengguna</p>
             <button onclick="navAdmin('users')" id="m-users" title="Kelola User & Hak Akses" class="admin-nav-btn w-full flex items-center justify-center px-3 py-2.5 rounded-xl hover:bg-emerald-900 text-yellow-300 transition">
@@ -137,16 +144,21 @@
     <!-- CONTENT AREA -->
     <main class="flex-1 min-w-0 bg-gray-50 p-4 sm:p-6 md:p-8 overflow-y-auto">
 
-      <!-- 1. DATA PENDAFTAR -->
+      <!-- 1. DATA PENDAFTAR (REAL-TIME FIRESTORE + SYNC GOOGLE SHEETS) -->
       <div id="sec-pendaftar" class="admin-sec space-y-4 sm:space-y-6">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
           <div>
-            <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Rekapitulasi Pendaftar</h1>
-            <p class="text-xs text-gray-500">Kelola pendaftaran, edit biodata peserta, dan status verifikasi</p>
+            <div class="flex items-center gap-2">
+              <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Rekapitulasi Pendaftar</h1>
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-100 text-green-800 border border-green-300">
+                <span class="w-1.5 h-1.5 rounded-full bg-green-600 animate-ping"></span> Live Sync
+              </span>
+            </div>
+            <p class="text-xs text-gray-500">Data tersinkron real-time dengan Firebase &amp; Google Sheets</p>
           </div>
           <div class="flex flex-wrap gap-2 w-full sm:w-auto">
-            <button onclick="fetchAdminData()" class="bg-white border border-gray-300 hover:bg-gray-100 text-gray-800 px-3.5 py-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm">
-              <i class="fa-solid fa-rotate-right text-emerald-700"></i> Refresh Data
+            <button onclick="migrateFromSheetsToFirebase()" title="Impor data lomba, pengaturan & pendaftar lama dari Google Sheets ke Firebase" class="bg-amber-400 hover:bg-amber-500 text-gray-950 px-3.5 py-2 rounded-lg text-xs font-extrabold flex items-center justify-center gap-1.5 shadow-sm">
+              <i class="fa-solid fa-cloud-arrow-down"></i> Migrasi Data Sheets
             </button>
             <button onclick="exportCSV()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-3.5 py-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 shadow">
               <i class="fa-solid fa-file-excel"></i> Ekspor CSV
@@ -400,7 +412,6 @@
               </div>
             </div>
 
-            <!-- BIAYA REGISTRASI PER TINGKAT -->
             <div class="bg-gray-50 p-3 rounded-lg border space-y-2">
               <div class="flex justify-between items-center border-b pb-1">
                 <span class="font-bold text-[11px] text-emerald-900">BIAYA REGISTRASI PER TINGKAT:</span>
@@ -412,19 +423,16 @@
                 <span>Biaya Registrasi</span>
               </div>
 
-              <!-- Baris Jenjang 1 -->
               <div class="grid grid-cols-2 gap-2">
                 <input type="text" id="lombaKat1" value="SD / MI" required placeholder="Contoh: SD / MI" class="w-full border rounded-lg px-2.5 py-1.5 text-xs focus:outline-emerald-700 bg-white font-semibold">
                 <input type="text" id="lombaBiaya1" required placeholder="Contoh: Rp 35.000" class="w-full border rounded-lg px-2.5 py-1.5 text-xs focus:outline-emerald-700 bg-white">
               </div>
 
-              <!-- Baris Jenjang 2 -->
               <div class="grid grid-cols-2 gap-2">
                 <input type="text" id="lombaKat2" value="SMP / MTs" placeholder="Contoh: SMP / MTs (Opsional)" class="w-full border rounded-lg px-2.5 py-1.5 text-xs focus:outline-emerald-700 bg-white font-semibold">
                 <input type="text" id="lombaBiaya2" placeholder="Contoh: Rp 45.000" class="w-full border rounded-lg px-2.5 py-1.5 text-xs focus:outline-emerald-700 bg-white">
               </div>
 
-              <!-- Baris Jenjang 3 -->
               <div class="grid grid-cols-2 gap-2">
                 <input type="text" id="lombaKat3" value="SMA / MA" placeholder="Contoh: SMA / MA / Umum" class="w-full border rounded-lg px-2.5 py-1.5 text-xs focus:outline-emerald-700 bg-white font-semibold">
                 <input type="text" id="lombaBiaya3" placeholder="Contoh: Rp 50.000" class="w-full border rounded-lg px-2.5 py-1.5 text-xs focus:outline-emerald-700 bg-white">
@@ -432,9 +440,8 @@
               <p class="text-[10px] text-gray-500">Kosongkan kolom Jenjang &amp; Biaya baris ke-2/ke-3 jika lomba hanya berlaku untuk 1 jenjang.</p>
             </div>
 
-            <!-- FLYER URL ATAU UPLOAD LANGSUNG -->
             <div class="bg-gray-50 p-3 rounded-lg border space-y-2">
-              <label class="block text-[11px] font-bold text-gray-700">Flyer Lomba (URL / Path atau Upload File)</label>
+              <label class="block text-[11px] font-bold text-gray-700">Flyer Lomba (URL / Path atau Upload File ke Drive)</label>
               <input type="text" id="lombaFlyerPathText" placeholder="Contoh: flyer1.jpg atau https://drive.google.com/..." class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700 bg-white">
               <div>
                 <label class="block text-[10px] font-semibold text-gray-500 mb-1">Atau Unggah File Gambar Flyer (Otomatis ke Drive):</label>
@@ -457,16 +464,13 @@
               <textarea id="lombaHadiah" rows="2" class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700"></textarea>
             </div>
 
-            <!-- PENGATURAN LINK JUKNIS LOMBA -->
             <div class="bg-amber-50/70 p-3 rounded-lg border border-amber-200 space-y-1.5">
               <label class="block text-[11px] font-bold text-amber-950">
                 <i class="fa-solid fa-book-open text-amber-600 mr-1"></i> Link Juknis Lomba (Google Drive / PDF / Web)
               </label>
               <input type="text" id="lombaJuknisUrl" placeholder="Contoh: https://drive.google.com/file/d/..." class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700 bg-white">
-              <p class="text-[10px] text-amber-800">Tautan Juknis akan tampil dengan judul sendiri dan dapat diklik langsung oleh peserta.</p>
             </div>
 
-            <!-- PENGATURAN NARAHUBUNG -->
             <div class="bg-emerald-50/70 p-3 rounded-lg border border-emerald-200 space-y-2">
               <div class="flex justify-between items-center border-b border-emerald-200 pb-1.5">
                 <span class="font-bold text-[11px] text-emerald-950">
@@ -477,7 +481,6 @@
                 </button>
               </div>
               <div id="lombaNarahubungList" class="space-y-2"></div>
-              <p class="text-[10px] text-gray-600">Masukkan minimal 2 nomor WhatsApp narahubung. Klik <strong>+ Tambah Nomor</strong> jika ingin menambahkan kontak lainnya.</p>
             </div>
 
             <button type="submit" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2.5 rounded-lg text-xs shadow transition flex items-center justify-center gap-2">
@@ -495,7 +498,7 @@
         <div class="flex justify-between items-center">
           <div>
             <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Kelola Hero Slider Banner</h1>
-            <p class="text-xs text-gray-500">Atur gambar banner slider utama web portal pendaftaran (URL atau Unggah File)</p>
+            <p class="text-xs text-gray-500">Atur gambar banner slider utama web portal pendaftaran (URL atau Unggah File ke Drive)</p>
           </div>
           <button onclick="addSlideRow()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-3 py-2 rounded-lg text-xs font-bold shadow">+ Tambah Banner</button>
         </div>
@@ -608,7 +611,7 @@
       <div id="sec-identitas" class="admin-sec hidden space-y-6">
         <div>
           <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Pengaturan Identitas &amp; Tema Warna Portal</h1>
-          <p class="text-xs text-gray-500">Atur judul portal, rekening, serta skema warna tema utama (preset atau warna custom Hex)</p>
+          <p class="text-xs text-gray-500">Perubahan warna langsung diterapkan secara real-time di seluruh portal</p>
         </div>
 
         <form onsubmit="saveIdentitasConfig(event)" class="bg-white p-5 rounded-xl border shadow-sm space-y-4 text-xs max-w-xl">
@@ -665,12 +668,12 @@
         </form>
       </div>
 
-      <!-- 9. MENU KELOLA USER & HAK AKSES DENGAN CEKLIST (SUPERADMIN) -->
+      <!-- 9. MENU KELOLA USER & HAK AKSES (FIREBASE AUTH + FIRESTORE PERMISSIONS) -->
       <div id="sec-users" class="admin-sec hidden space-y-6">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
           <div>
-            <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Kelola User &amp; Hak Akses (Ceklist Permissions)</h1>
-            <p class="text-xs text-gray-500">Tambah, edit username/password, serta atur akses menu Admin secara modular menggunakan ceklist</p>
+            <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Kelola User &amp; Hak Akses (Firebase Auth)</h1>
+            <p class="text-xs text-gray-500">Tambah akun admin/juri baru (password min. 6 karakter) &amp; atur hak akses menu modular</p>
           </div>
           <button onclick="resetUserForm()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded-lg text-xs font-bold shadow flex items-center gap-1.5">
             <i class="fa-solid fa-user-plus"></i> + Tambah User Baru
@@ -679,17 +682,18 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
           <form id="formUser" onsubmit="saveUser(event)" class="lg:col-span-5 bg-white p-4 sm:p-5 rounded-xl border shadow-sm space-y-3">
-            <h3 class="font-bold text-sm text-emerald-900 border-b pb-2" id="userFormHeader">Form Tambah User</h3>
-            <input type="hidden" id="userOldUsername">
+            <h3 class="font-bold text-sm text-emerald-900 border-b pb-2" id="userFormHeader">Form Tambah / Edit User</h3>
+            <input type="hidden" id="userIsEdit" value="false">
 
             <div>
-              <label class="block text-xs font-bold text-gray-700 mb-1">Username *</label>
-              <input type="text" id="userUsername" required placeholder="Contoh: adminlomba" class="w-full border rounded-lg px-3 py-2 text-xs focus:outline-emerald-700">
+              <label class="block text-xs font-bold text-gray-700 mb-1">Email Login Admin / Juri *</label>
+              <input type="email" id="userEmail" required placeholder="Contoh: panitia@pesonaalfirdaus.id" class="w-full border rounded-lg px-3 py-2 text-xs focus:outline-emerald-700">
             </div>
 
-            <div>
-              <label class="block text-xs font-bold text-gray-700 mb-1">Password *</label>
-              <input type="text" id="userPassword" required placeholder="Password login user" class="w-full border rounded-lg px-3 py-2 text-xs focus:outline-emerald-700">
+            <div id="userPasswordBlock">
+              <label class="block text-xs font-bold text-gray-700 mb-1">Password Baru (Min. 6 Karakter) *</label>
+              <input type="text" id="userPassword" placeholder="Minimal 6 karakter untuk user baru" class="w-full border rounded-lg px-3 py-2 text-xs focus:outline-emerald-700">
+              <p class="text-[10px] text-gray-400 mt-1">Untuk mengganti password user lama, gunakan menu <em>Reset Password</em> di Firebase Console.</p>
             </div>
 
             <div>
@@ -701,7 +705,6 @@
               </select>
             </div>
 
-            <!-- CEKLIST HAK AKSES MENU MODULAR -->
             <div id="permissionCheckboxesBlock" class="bg-gray-50 p-3 rounded-xl border space-y-2">
               <span class="block text-xs font-bold text-emerald-900 border-b pb-1 flex justify-between items-center">
                 <span>Ceklist Hak Akses Menu Admin:</span>
@@ -739,7 +742,7 @@
                 </label>
                 <label class="flex items-center gap-2 p-1.5 bg-white rounded border cursor-pointer hover:bg-emerald-50">
                   <input type="checkbox" value="identitas" class="user-perm-cb accent-emerald-700" checked>
-                  <span>Identitas &amp; Rekening</span>
+                  <span>Identitas &amp; Warna Tema</span>
                 </label>
               </div>
             </div>
@@ -765,8 +768,7 @@
               <table class="w-full text-left text-xs">
                 <thead class="bg-emerald-900 text-white font-bold uppercase">
                   <tr>
-                    <th class="p-3">User</th>
-                    <th class="p-3">Password</th>
+                    <th class="p-3">Email User</th>
                     <th class="p-3">Role</th>
                     <th class="p-3">Menu Terbuka</th>
                     <th class="p-3 text-center">Aksi</th>
@@ -840,24 +842,67 @@
   </div>
 
   <script>
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbw4APJqKIcWVgs1yk29KHmuIeArlCDcu0rruBauZkOOmUmGig9Wvqy2aIKq7_gaUPGkOg/exec";
-
     let adminState = { 
       pendaftar: [], filteredData: [], lomba: [], config: {}, currentSliders: [], users: [],
-      currentPage: 1, pageSize: 10
+      currentPage: 1, pageSize: 10, currentUserEmail: ''
     };
     let isAdminSidebarExpanded = false;
+    let unsubPendaftar = null;
+    let unsubLomba = null;
+    let unsubConfig = null;
 
     window.onload = () => {
       renderNarahubungRows([]);
       syncSidebarUI();
-      if(localStorage.getItem('adminAuth') === 'true') {
-        document.getElementById('loginSection').classList.add('hidden');
-        document.getElementById('dashboardSection').classList.remove('hidden');
-        applyRolePermissions();
-        initDashboard();
+
+      if (!isFirebaseConfigured()) {
+        document.getElementById('firebaseWarningBanner').classList.remove('hidden');
+        return;
       }
+
+      auth.onAuthStateChanged(async (user) => {
+        if (user) {
+          adminState.currentUserEmail = user.email.toLowerCase();
+          await loadUserRoleAndEnter(user.email.toLowerCase());
+        } else {
+          document.getElementById('loginSection').classList.remove('hidden');
+          document.getElementById('dashboardSection').classList.add('hidden');
+        }
+      });
     };
+
+    async function loadUserRoleAndEnter(email) {
+      let role = 'Superadmin';
+      let permissions = ['pendaftar', 'audio', 'sertifikat', 'lomba', 'sliders', 'navmenu', 'topbar', 'identitas'];
+
+      try {
+        const userDoc = await db.collection('admin_users').doc(email).get();
+        if (userDoc.exists) {
+          const data = userDoc.data();
+          role = data.role || 'Admin';
+          permissions = data.permissions || [];
+        } else {
+          // User pertama yang terdaftar di Firebase Auth otomatis dijadikan Superadmin
+          await db.collection('admin_users').doc(email).set({
+            email: email,
+            role: 'Superadmin',
+            permissions: permissions,
+            createdAt: new Date().toISOString()
+          });
+        }
+      } catch (e) {
+        console.warn("Gagal membaca role user:", e);
+      }
+
+      localStorage.setItem('adminRole', role);
+      localStorage.setItem('adminUser', email);
+      localStorage.setItem('adminPermissions', JSON.stringify(permissions));
+
+      document.getElementById('loginSection').classList.add('hidden');
+      document.getElementById('dashboardSection').classList.remove('hidden');
+      applyRolePermissions();
+      initDashboardRealtime();
+    }
 
     function escapeHtml(str) {
       return String(str || '')
@@ -899,9 +944,7 @@
       if (!url || url === '-') return "";
       if (url.includes('drive.google.com')) {
         const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-        if (match && match[1]) {
-          return `https://docs.google.com/uc?export=download&id=${match[1]}`;
-        }
+        if (match && match[1]) return `https://docs.google.com/uc?export=download&id=${match[1]}`;
       }
       return url;
     }
@@ -919,7 +962,7 @@
       return await res.json();
     }
 
-    // --- KONTROL MENU SIDEBAR HAMBURGER (☰) <-> X (✕) DI SEMUA PERANGKAT ---
+    // --- KONTROL MENU SIDEBAR HAMBURGER (☰) <-> X (✕) ---
     function syncSidebarUI() {
       const sidebar = document.getElementById('adminSidebar');
       const backdrop = document.getElementById('adminBackdrop');
@@ -930,7 +973,6 @@
       const brandInfo = document.getElementById('sidebarBrandInfo');
       const labels = document.querySelectorAll('.sidebar-label');
       const navBtns = document.querySelectorAll('.admin-nav-btn');
-      const footerBtns = document.querySelectorAll('.admin-footer-btn');
 
       if (!sidebar) return;
 
@@ -943,23 +985,10 @@
         if (toggleBtn) toggleBtn.title = 'Ciutkan Menu';
         if (mobileIcon) mobileIcon.className = 'fa-solid fa-xmark text-lg';
 
-        if (headerRow) {
-          headerRow.classList.remove('justify-center');
-          headerRow.classList.add('justify-between', 'px-1');
-        }
-        if (brandInfo) {
-          brandInfo.classList.remove('hidden');
-          brandInfo.classList.add('flex');
-        }
+        if (headerRow) { headerRow.classList.remove('justify-center'); headerRow.classList.add('justify-between', 'px-1'); }
+        if (brandInfo) { brandInfo.classList.remove('hidden'); brandInfo.classList.add('flex'); }
         labels.forEach(el => el.classList.remove('hidden'));
-        navBtns.forEach(btn => {
-          btn.classList.remove('justify-center');
-          btn.classList.add('justify-start');
-        });
-        footerBtns.forEach(btn => {
-          btn.classList.remove('justify-center');
-          btn.classList.add('justify-center');
-        });
+        navBtns.forEach(btn => { btn.classList.remove('justify-center'); btn.classList.add('justify-start'); });
       } else {
         sidebar.classList.add('-translate-x-full', 'md:w-[72px]');
         sidebar.classList.remove('translate-x-0', 'md:w-64');
@@ -969,66 +998,36 @@
         if (toggleBtn) toggleBtn.title = 'Perlebar Menu';
         if (mobileIcon) mobileIcon.className = 'fa-solid fa-bars text-lg';
 
-        if (headerRow) {
-          headerRow.classList.add('justify-center');
-          headerRow.classList.remove('justify-between', 'px-1');
-        }
-        if (brandInfo) {
-          brandInfo.classList.add('hidden');
-          brandInfo.classList.remove('flex');
-        }
+        if (headerRow) { headerRow.classList.add('justify-center'); headerRow.classList.remove('justify-between', 'px-1'); }
+        if (brandInfo) { brandInfo.classList.add('hidden'); brandInfo.classList.remove('flex'); }
         labels.forEach(el => el.classList.add('hidden'));
-        navBtns.forEach(btn => {
-          btn.classList.add('justify-center');
-          btn.classList.remove('justify-start');
-        });
+        navBtns.forEach(btn => { btn.classList.add('justify-center'); btn.classList.remove('justify-start'); });
       }
     }
 
-    function toggleAdminSidebar() {
-      isAdminSidebarExpanded = !isAdminSidebarExpanded;
-      syncSidebarUI();
-    }
+    function toggleAdminSidebar() { isAdminSidebarExpanded = !isAdminSidebarExpanded; syncSidebarUI(); }
+    function collapseAdminSidebar() { isAdminSidebarExpanded = false; syncSidebarUI(); }
 
-    function collapseAdminSidebar() {
-      isAdminSidebarExpanded = false;
-      syncSidebarUI();
-    }
-
+    // --- LOGIN & LOGOUT FIREBASE AUTH ---
     async function handleLogin(e) {
       e.preventDefault();
-      const u = document.getElementById('userInput').value.trim();
-      const p = document.getElementById('passInput').value.trim();
-      const btn = document.getElementById('btnLoginSubmit');
+      if (!isFirebaseConfigured()) {
+        Swal.fire({ icon: 'warning', title: 'Firebase Belum Dikonfigurasi', text: 'Silakan isi FIREBASE_CONFIG di file firebase-config.js terlebih dahulu.' });
+        return;
+      }
 
-      btn.disabled = true;
-      btn.innerText = "Memeriksa...";
+      const email = document.getElementById('userInput').value.trim();
+      const pass = document.getElementById('passInput').value.trim();
+      const btn = document.getElementById('btnLoginSubmit');
+      btn.disabled = true; btn.innerText = "Memeriksa...";
 
       try {
-        const res = await postToGAS({ action: 'login', username: u, password: p });
-        if(res.status === "success") {
-          localStorage.setItem('adminAuth', 'true');
-          localStorage.setItem('adminRole', res.role || 'Superadmin');
-          localStorage.setItem('adminUser', res.username || u);
-          localStorage.setItem('adminPermissions', JSON.stringify(res.permissions || []));
-
-          Swal.fire({
-            icon: 'success', title: 'Login Berhasil! 🎉', text: `Selamat datang, ${res.username} (${res.role}).`,
-            timer: 1500, showConfirmButton: false
-          }).then(() => {
-            document.getElementById('loginSection').classList.add('hidden');
-            document.getElementById('dashboardSection').classList.remove('hidden');
-            applyRolePermissions();
-            initDashboard();
-          });
-        } else {
-          Swal.fire({ icon: 'error', title: 'Login Gagal', text: res.message || 'Username atau Password salah!', confirmButtonColor: '#047857' });
-        }
+        await auth.signInWithEmailAndPassword(email, pass);
+        Swal.fire({ icon: 'success', title: 'Login Berhasil! 🎉', timer: 1200, showConfirmButton: false });
       } catch(err) {
-        Swal.fire({ icon: 'error', title: 'Koneksi Gagal', text: 'Gagal terhubung ke backend server.', confirmButtonColor: '#047857' });
+        Swal.fire({ icon: 'error', title: 'Login Gagal', text: 'Email atau Password salah, atau akun belum terdaftar di Firebase Authentication.', confirmButtonColor: '#047857' });
       } finally {
-        btn.disabled = false;
-        btn.innerText = "Masuk Dashboard";
+        btn.disabled = false; btn.innerText = "Masuk Dashboard";
       }
     }
 
@@ -1059,21 +1058,22 @@
         }
       });
 
-      if(isJuri) {
-        navAdmin('pendaftar');
-      }
+      if(isJuri) navAdmin('pendaftar');
     }
 
     function handleLogout() {
       Swal.fire({
-        title: 'Keluar Admin Portal?', text: 'Anda harus memasukkan kredensial lagi untuk masuk.', icon: 'question',
+        title: 'Keluar Admin Portal?', text: 'Anda harus login kembali untuk masuk.', icon: 'question',
         showCancelButton: true, confirmButtonColor: '#047857', cancelButtonColor: '#d33', confirmButtonText: 'Ya, Keluar'
-      }).then((result) => {
+      }).then(async (result) => {
         if (result.isConfirmed) {
-          localStorage.removeItem('adminAuth');
+          if (unsubPendaftar) unsubPendaftar();
+          if (unsubLomba) unsubLomba();
+          if (unsubConfig) unsubConfig();
           localStorage.removeItem('adminRole');
           localStorage.removeItem('adminUser');
           localStorage.removeItem('adminPermissions');
+          await auth.signOut();
           location.reload();
         }
       });
@@ -1097,31 +1097,106 @@
       if(activeBtn) activeBtn.className = `admin-nav-btn w-full flex items-center ${alignCls} px-3 py-2.5 rounded-xl bg-emerald-800 text-white shadow font-bold transition`;
 
       if(sec === 'users') fetchUsers();
-      if(window.innerWidth < 768) {
-        collapseAdminSidebar();
-      }
+      if(window.innerWidth < 768) collapseAdminSidebar();
     }
 
-    async function initDashboard() {
-      await fetchAdminData();
-      await fetchPortalConfig();
-    }
+    // --- INISIALISASI LISTENER REAL-TIME FIRESTORE UNTUK DASHBOARD ---
+    function initDashboardRealtime() {
+      // 1. Pendaftar Real-time
+      if (unsubPendaftar) unsubPendaftar();
+      unsubPendaftar = db.collection('pendaftar').onSnapshot((snap) => {
+        const list = [];
+        snap.forEach(doc => {
+          const d = doc.data();
+          list.push({
+            kodeRegistrasi: doc.id,
+            ...d,
+            noWhatsapp: String(d.noWhatsapp || '').replace(/^'+/, '')
+          });
+        });
+        list.sort((a, b) => String(b.timestamp || '').localeCompare(String(a.timestamp || '')));
+        adminState.pendaftar = list;
+        applyFilter();
+        updateStats();
+        renderAudioTable();
+        renderCertTable();
+      });
 
-    async function fetchAdminData() {
-      try {
-        const res = await fetch(`${GAS_URL}?action=adminData&_t=${Date.now()}`);
-        const result = await res.json();
-        if(result.status === "success") {
-          adminState.pendaftar = (result.data || []).map(item => ({
-            ...item,
-            noWhatsapp: String(item.noWhatsapp || '').replace(/^'+/, '')
+      // 2. Cabang Lomba Real-time
+      if (unsubLomba) unsubLomba();
+      unsubLomba = db.collection('lomba').onSnapshot((snap) => {
+        const list = [];
+        snap.forEach(doc => list.push({ id: doc.id, ...doc.data() }));
+        list.sort((a, b) => (a.order || 0) - (b.order || 0));
+        adminState.lomba = list;
+        renderLombaCards();
+        populateLombaFilter();
+      });
+
+      // 3. Konfigurasi Portal Real-time
+      if (unsubConfig) unsubConfig();
+      unsubConfig = db.collection('portal').doc('config').onSnapshot((docSnap) => {
+        adminState.config = docSnap.exists ? (docSnap.data() || {}) : {};
+        try {
+          localStorage.setItem('paf_portal_theme', JSON.stringify({
+            themeColor: adminState.config.themeColor || 'emerald',
+            customColor: adminState.config.customColor || '#047857'
           }));
-          applyFilter();
-          updateStats();
-          renderAudioTable();
-          renderCertTable();
+        } catch (e) {}
+        populateConfigForm();
+        renderSlidersAdmin();
+      });
+    }
+
+    // --- MIGRASI 1-KLIK DATA LAMA DARI GOOGLE SHEETS KE FIREBASE ---
+    async function migrateFromSheetsToFirebase() {
+      const confirmRes = await Swal.fire({
+        title: 'Migrasi Data dari Google Sheets?',
+        text: 'Seluruh pengaturan, daftar lomba, dan data pendaftar yang ada di Google Sheets akan disalin ke database Firebase Firestore.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#047857',
+        confirmButtonText: 'Ya, Mulai Migrasi'
+      });
+      if (!confirmRes.isConfirmed) return;
+
+      Swal.fire({ title: 'Memindahkan Data...', text: 'Mohon tunggu sebentar...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+
+      try {
+        const [initRes, adminRes] = await Promise.all([
+          fetch(`${GAS_URL}?action=initPortal&_t=${Date.now()}`).then(r => r.json()),
+          fetch(`${GAS_URL}?action=adminData&_t=${Date.now()}`).then(r => r.json())
+        ]);
+
+        const batch = db.batch();
+
+        if (initRes && initRes.config) {
+          batch.set(db.collection('portal').doc('config'), initRes.config, { merge: true });
         }
-      } catch(e) { console.error(e); }
+
+        if (initRes && Array.isArray(initRes.lombaList)) {
+          initRes.lombaList.forEach((l, idx) => {
+            const docId = l.id || `LOMBA_${idx + 1}`;
+            batch.set(db.collection('lomba').doc(docId), { ...l, id: docId, order: idx }, { merge: true });
+          });
+        }
+
+        if (adminRes && Array.isArray(adminRes.data)) {
+          adminRes.data.forEach((p) => {
+            if (p.kodeRegistrasi) {
+              batch.set(db.collection('pendaftar').doc(p.kodeRegistrasi), {
+                ...p,
+                noWhatsapp: String(p.noWhatsapp || '').replace(/^'+/, '')
+              }, { merge: true });
+            }
+          });
+        }
+
+        await batch.commit();
+        Swal.fire({ icon: 'success', title: 'Migrasi Selesai! 🎉', text: 'Seluruh data Google Sheets berhasil masuk ke Firebase Firestore.', confirmButtonColor: '#047857' });
+      } catch (err) {
+        Swal.fire({ icon: 'error', title: 'Migrasi Gagal', text: err.toString(), confirmButtonColor: '#047857' });
+      }
     }
 
     function updateStats() {
@@ -1154,10 +1229,7 @@
       renderPendaftarTable();
     }
 
-    function prevPage() {
-      if(adminState.currentPage > 1) { adminState.currentPage--; renderPendaftarTable(); }
-    }
-
+    function prevPage() { if(adminState.currentPage > 1) { adminState.currentPage--; renderPendaftarTable(); } }
     function nextPage() {
       const totalPages = Math.ceil(adminState.filteredData.length / adminState.pageSize) || 1;
       if(adminState.currentPage < totalPages) { adminState.currentPage++; renderPendaftarTable(); }
@@ -1168,11 +1240,8 @@
         Swal.fire({ icon: 'info', title: 'Tidak Ada Bukti Transfer', text: 'Peserta belum mengunggah file bukti pembayaran.', confirmButtonColor: '#047857' });
         return;
       }
-      if(link.startsWith('data:image')) {
-        Swal.fire({ title: 'Preview Bukti Transfer', imageUrl: link, confirmButtonColor: '#047857' });
-      } else {
-        window.open(link, '_blank');
-      }
+      if(link.startsWith('data:image')) Swal.fire({ title: 'Preview Bukti Transfer', imageUrl: link, confirmButtonColor: '#047857' });
+      else window.open(link, '_blank');
     }
 
     function openEditRegistrantModal(kode) {
@@ -1188,20 +1257,16 @@
       document.getElementById('editRegistrantModal').classList.remove('hidden');
     }
 
-    function closeEditRegistrantModal() {
-      document.getElementById('editRegistrantModal').classList.add('hidden');
-    }
+    function closeEditRegistrantModal() { document.getElementById('editRegistrantModal').classList.add('hidden'); }
 
     async function submitEditRegistrant(e) {
       e.preventDefault();
       const btn = document.getElementById('btnSaveEditReg');
-      btn.disabled = true;
-      btn.innerText = "Menyimpan...";
+      btn.disabled = true; btn.innerText = "Menyimpan...";
 
       try {
-        const payload = {
-          action: 'updateRegistrant',
-          kodeRegistrasi: document.getElementById('editRegKode').value,
+        const kode = document.getElementById('editRegKode').value;
+        const updatedFields = {
           namaLengkap: document.getElementById('editRegNama').value.trim(),
           asalSekolah: document.getElementById('editRegSekolah').value.trim(),
           cabangLomba: document.getElementById('editRegLomba').value.trim(),
@@ -1210,19 +1275,18 @@
           status: document.getElementById('editRegStatus').value
         };
 
-        const result = await postToGAS(payload);
-        if (result.status === 'success') {
-          closeEditRegistrantModal();
-          Swal.fire({ icon: 'success', title: 'Data Diperbarui! ✨', text: 'Biodata dan status peserta berhasil disimpan.', timer: 1400, showConfirmButton: false });
-          await fetchAdminData();
-        } else {
-          Swal.fire({ icon: 'error', title: 'Gagal', text: result.message || 'Gagal memperbarui data.', confirmButtonColor: '#047857' });
-        }
+        // 1. Update Firestore (Real-time ke seluruh layar)
+        await db.collection('pendaftar').doc(kode).set(updatedFields, { merge: true });
+
+        // 2. Sinkronisasi ke Google Sheets di latar belakang
+        postToGAS({ action: 'updateRegistrant', kodeRegistrasi: kode, ...updatedFields }).catch(() => {});
+
+        closeEditRegistrantModal();
+        Swal.fire({ icon: 'success', title: 'Data Diperbarui! ✨', text: 'Biodata & status tersimpan di Firebase dan Sheets.', timer: 1400, showConfirmButton: false });
       } catch (err) {
         Swal.fire({ icon: 'error', title: 'Error', text: err.toString(), confirmButtonColor: '#047857' });
       } finally {
-        btn.disabled = false;
-        btn.innerHTML = `<i class="fa-solid fa-floppy-disk mr-1"></i> Simpan Perubahan`;
+        btn.disabled = false; btn.innerHTML = `<i class="fa-solid fa-floppy-disk mr-1"></i> Simpan Perubahan`;
       }
     }
 
@@ -1360,7 +1424,6 @@
       tbody.innerHTML = "";
 
       const approvedList = adminState.pendaftar.filter(x => (x.status === 'TERVERIFIKASI' || x.status === 'APPROVED'));
-
       if(approvedList.length === 0) {
         tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-gray-400 font-semibold">Belum ada peserta terverifikasi untuk sertifikat.</td></tr>`;
         return;
@@ -1451,615 +1514,62 @@
         return;
       }
 
-      let certsHtml = "";
-      approvedList.forEach((item) => {
-        certsHtml += buildCertificateHtml(item);
-      });
-
       let printArea = document.getElementById('printArea');
       if (!printArea) {
         printArea = document.createElement('div');
         printArea.id = 'printArea';
         document.body.appendChild(printArea);
       }
-      printArea.innerHTML = certsHtml;
+      printArea.innerHTML = approvedList.map(item => buildCertificateHtml(item)).join('');
       window.print();
-    }
-
-    async function updateStatus(kode, status) {
-      const result = await postToGAS({ action: 'updateStatus', kodeRegistrasi: kode, newStatus: status });
-      if(result.status === "success") {
-        Swal.fire({ icon: 'success', title: 'Status Diperbarui', text: `Status ${kode} diubah menjadi ${status}`, timer: 1200, showConfirmButton: false });
-        fetchAdminData();
-      }
-    }
-
-    async function deleteRegistrant(kode) {
-      Swal.fire({
-        title: `Hapus pendaftar ${kode}?`, text: "Data tidak dapat dikembalikan!", icon: 'warning',
-        showCancelButton: true, confirmButtonColor: '#d33', cancelButtonColor: '#3085d6', confirmButtonText: 'Ya, Hapus Data'
-      }).then(async (res) => {
-        if(res.isConfirmed) {
-          const result = await postToGAS({ action: 'deleteRegistrant', kodeRegistrasi: kode });
-          if(result.status === "success") {
-            Swal.fire({ icon: 'success', title: 'Terhapus', text: 'Data berhasil dihapus.', timer: 1200, showConfirmButton: false });
-            fetchAdminData();
-          }
-        }
-      });
-    }
-
-    function exportCSV() {
-      let csv = "Timestamp,Kode,Nama,Asal Sekolah,Lomba,WhatsApp,Email,Status,Link Bukti,Link Audio\n";
-      adminState.pendaftar.forEach(r => {
-        const cleanWa = String(r.noWhatsapp || '').replace(/^'+/, '');
-        csv += `"${r.timestamp}","${r.kodeRegistrasi}","${r.namaLengkap}","${r.asalSekolah}","${r.cabangLomba}","${cleanWa}","${r.email}","${r.status}","${r.linkBukti || '-'}","${r.linkAudio || '-'}"\n`;
-      });
-      const blob = new Blob([csv], { type: 'text/csv' });
-      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'pendaftar-pesona-al-firdaus.csv'; a.click();
-    }
-
-    async function fetchPortalConfig() {
-      try {
-        const res = await fetch(`${GAS_URL}?action=initPortal&_t=${Date.now()}`);
-        const result = await res.json();
-        if(result.status === "success") {
-          adminState.lomba = result.lombaList || [];
-          adminState.config = result.config || {};
-          try {
-            localStorage.setItem('paf_portal_theme', JSON.stringify({
-              themeColor: adminState.config.themeColor || 'emerald',
-              customColor: adminState.config.customColor || '#047857'
-            }));
-          } catch (e) {}
-          renderLombaCards();
-          populateLombaFilter();
-          populateConfigForm();
-          renderSlidersAdmin();
-        }
-      } catch(e) { console.error(e); }
-    }
-
-    function getCurrentNarahubungValues() {
-      const rows = document.querySelectorAll('.nara-row');
-      const values = [];
-      rows.forEach(row => {
-        const nama = row.querySelector('.nara-nama-input').value;
-        const wa = row.querySelector('.nara-wa-input').value;
-        values.push({ nama, wa });
-      });
-      return values;
-    }
-
-    function renderNarahubungRows(list) {
-      const container = document.getElementById('lombaNarahubungList');
-      if (!container) return;
-
-      let parsedList = list;
-      if (typeof parsedList === 'string') {
-        try { parsedList = JSON.parse(parsedList); } catch(e) { parsedList = []; }
-      }
-
-      const items = Array.isArray(parsedList) ? parsedList.map(x => ({
-        nama: x && x.nama ? String(x.nama) : '',
-        wa: x && x.wa ? String(x.wa) : ''
-      })) : [];
-
-      while (items.length < 2) {
-        items.push({ nama: '', wa: '' });
-      }
-
-      container.innerHTML = '';
-      items.forEach((item, idx) => {
-        const rowDiv = document.createElement('div');
-        rowDiv.className = "nara-row bg-white p-2 rounded-lg border border-emerald-200 space-y-1.5 relative";
-        rowDiv.innerHTML = `
-          <div class="flex items-center justify-between">
-            <span class="text-[10px] font-bold text-emerald-800">Narahubung #${idx + 1} ${idx < 2 ? '(Wajib)' : ''}</span>
-            ${idx >= 2 ? `
-              <button type="button" onclick="removeNarahubungRow(this)" title="Hapus Narahubung" class="text-red-500 hover:text-red-700 text-[11px] font-bold flex items-center gap-1">
-                <i class="fa-solid fa-trash"></i> Hapus
-              </button>
-            ` : ''}
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
-            <input type="text" value="${item.nama.replace(/"/g, '&quot;')}" placeholder="Nama / Jabatan (cth: Ust. Ahmad)" class="nara-nama-input w-full border rounded px-2.5 py-1.5 text-xs focus:outline-emerald-700">
-            <input type="text" value="${item.wa.replace(/"/g, '&quot;')}" required placeholder="No. WA #${idx + 1} (cth: 085267743284) *" class="nara-wa-input w-full border rounded px-2.5 py-1.5 text-xs focus:outline-emerald-700">
-          </div>
-        `;
-        container.appendChild(rowDiv);
-      });
-    }
-
-    function addNarahubungRow() {
-      const current = getCurrentNarahubungValues();
-      current.push({ nama: '', wa: '' });
-      renderNarahubungRows(current);
-    }
-
-    function removeNarahubungRow(btn) {
-      const rows = document.querySelectorAll('.nara-row');
-      if (rows.length <= 2) return;
-      btn.closest('.nara-row').remove();
-      renderNarahubungRows(getCurrentNarahubungValues());
-    }
-
-    function renderLombaCards() {
-      const box = document.getElementById('lombaCardsContainer');
-      box.innerHTML = "";
-      adminState.lomba.forEach(l => {
-        const imgUrl = parseImageUrl(l.flyerUrl);
-        const tipe = l.tipePeserta || 'Individu';
-        const isTeam = tipe === 'Team';
-
-        let naraList = l.narahubung || [];
-        if (typeof naraList === 'string') {
-          try { naraList = JSON.parse(naraList); } catch(e) { naraList = []; }
-        }
-        const naraCount = Array.isArray(naraList) ? naraList.filter(x => x && x.wa).length : 0;
-        const hasJuknis = Boolean(l.juknisUrl && String(l.juknisUrl).trim());
-
-        const isAct1 = (l.active1 !== false && l.active1 !== 'false');
-        const isAct2 = (l.active2 !== false && l.active2 !== 'false');
-        const isAct3 = (l.active3 !== false && l.active3 !== 'false');
-
-        const jenjangLines = [];
-        if (isAct1 && (l.kat1 || l.biaya1)) jenjangLines.push(`<strong>${l.kat1 || 'Jenjang 1'}:</strong> ${l.biaya1 || '-'}`);
-        if (isAct2 && (l.kat2 || l.biaya2)) jenjangLines.push(`<strong>${l.kat2 || 'Jenjang 2'}:</strong> ${l.biaya2 || '-'}`);
-        if (isAct3 && (l.kat3 || l.biaya3)) jenjangLines.push(`<strong>${l.kat3 || 'Jenjang 3'}:</strong> ${l.biaya3 || '-'}`);
-
-        box.innerHTML += `
-          <div class="bg-white p-4 rounded-xl border shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-            <div class="flex items-center gap-3">
-              <img src="${imgUrl || 'https://via.placeholder.com/80'}" class="w-14 h-14 rounded-lg object-cover border shrink-0">
-              <div>
-                <div class="flex flex-wrap items-center gap-1.5">
-                  <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded">${escapeHtml(l.kategori || 'Multi Kategori')}</span>
-                  <span class="text-[10px] font-bold px-2 py-0.5 rounded ${isTeam ? 'bg-purple-100 text-purple-800 border border-purple-200' : 'bg-blue-100 text-blue-800 border border-blue-200'}">
-                    ${isTeam ? '👥 Team' : '👤 Individu'}
-                  </span>
-                  <span class="text-[10px] font-bold px-2 py-0.5 rounded ${l.statusLomba === 'TUTUP' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}">${l.statusLomba || 'BUKA'}</span>
-                  <span class="text-[10px] font-bold px-2 py-0.5 rounded ${hasJuknis ? 'bg-amber-100 text-amber-800' : 'bg-gray-100 text-gray-500'}">
-                    <i class="fa-solid fa-book-open mr-0.5"></i> ${hasJuknis ? 'Juknis Ada' : 'Belum Juknis'}
-                  </span>
-                  <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-green-50 text-green-700 border border-green-200">
-                    <i class="fa-brands fa-whatsapp mr-0.5"></i> ${naraCount} Narahubung
-                  </span>
-                </div>
-                <h4 class="font-bold text-gray-800 mt-1 text-sm sm:text-base">${escapeHtml(l.judul)}</h4>
-                <p class="text-[11px] text-gray-600 mt-0.5">
-                  ${jenjangLines.length > 0 ? jenjangLines.join(' | ') : '-'}
-                </p>
-              </div>
-            </div>
-            <div class="flex gap-1.5 self-end sm:self-center">
-              <button onclick="editLomba('${l.id}')" class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-lg font-bold">Edit</button>
-              <button onclick="deleteLomba('${l.id}')" class="bg-red-600 text-white text-xs px-3 py-1.5 rounded-lg font-bold">Hapus</button>
-            </div>
-          </div>
-        `;
-      });
-    }
-
-    function populateLombaFilter() {
-      const sel = document.getElementById('filterLomba');
-      sel.innerHTML = `<option value="">Semua Cabang Lomba</option>`;
-      adminState.lomba.forEach(l => { sel.innerHTML += `<option value="${escapeHtml(l.judul)}">${escapeHtml(l.judul)}</option>`; });
-    }
-
-    function editLomba(id) {
-      const item = adminState.lomba.find(x => x.id === id);
-      if(!item) return;
-      document.getElementById('lombaFormHeader').innerText = `Edit Lomba: ${item.judul}`;
-      document.getElementById('lombaId').value = item.id;
-      document.getElementById('existingFlyerUrl').value = item.flyerUrl;
-      document.getElementById('lombaFlyerPathText').value = item.flyerUrl || '';
-      document.getElementById('lombaFlyerFile').value = '';
-      document.getElementById('lombaJudul').value = item.judul;
-      document.getElementById('lombaTipePeserta').value = item.tipePeserta || 'Individu';
-      document.getElementById('lombaStatus').value = item.statusLomba || "BUKA";
-
-      const isAct1 = (item.active1 !== false && item.active1 !== 'false');
-      const isAct2 = (item.active2 !== false && item.active2 !== 'false');
-      const isAct3 = (item.active3 !== false && item.active3 !== 'false');
-
-      document.getElementById('lombaKat1').value = !isAct1 ? '' : (item.kat1 || 'SD / MI');
-      document.getElementById('lombaBiaya1').value = !isAct1 ? '' : (item.biaya1 || item.biayaSD || item.biaya || '');
-
-      document.getElementById('lombaKat2').value = !isAct2 ? '' : (item.kat2 || '');
-      document.getElementById('lombaBiaya2').value = !isAct2 ? '' : (item.biaya2 || item.biayaSMP || '');
-
-      document.getElementById('lombaKat3').value = !isAct3 ? '' : (item.kat3 || '');
-      document.getElementById('lombaBiaya3').value = !isAct3 ? '' : (item.biaya3 || item.biayaSMA || '');
-
-      document.getElementById('lombaDeskripsi').value = item.deskripsi || '';
-      document.getElementById('lombaSyarat').value = item.syarat || '';
-      document.getElementById('lombaHadiah').value = item.hadiah || '';
-      document.getElementById('lombaJuknisUrl').value = item.juknisUrl || '';
-      renderNarahubungRows(item.narahubung || []);
-    }
-
-    function resetLombaForm() {
-      document.getElementById('formLomba').reset();
-      document.getElementById('lombaFormHeader').innerText = "Form Cabang Lomba";
-      document.getElementById('lombaId').value = "";
-      document.getElementById('existingFlyerUrl').value = "";
-      document.getElementById('lombaFlyerPathText').value = "";
-      document.getElementById('lombaFlyerFile').value = "";
-      document.getElementById('lombaTipePeserta').value = "Individu";
-      document.getElementById('lombaKat1').value = "SD / MI";
-      document.getElementById('lombaKat2').value = "SMP / MTs";
-      document.getElementById('lombaKat3').value = "SMA / MA";
-      document.getElementById('lombaJuknisUrl').value = "";
-      renderNarahubungRows([]);
-    }
-
-    async function saveLomba(e) {
-      e.preventDefault();
-      const rawNarahubung = getCurrentNarahubungValues();
-      const validNarahubung = rawNarahubung
-        .map((c, idx) => ({
-          nama: (c.nama || '').trim() || `Narahubung ${idx + 1}`,
-          wa: (c.wa || '').trim()
-        }))
-        .filter(c => c.wa !== '');
-
-      if (validNarahubung.length < 2) {
-        Swal.fire({
-          icon: 'warning',
-          title: 'Narahubung Minimal 2 Nomor',
-          text: 'Harap isi minimal 2 nomor WhatsApp narahubung untuk cabang lomba ini.',
-          confirmButtonColor: '#047857'
-        });
-        return;
-      }
-
-      const btn = e.target.querySelector('button[type="submit"]');
-      btn.disabled = true; btn.innerText = "Menyimpan Lomba...";
-
-      try {
-        const pathInput = document.getElementById('lombaFlyerPathText').value.trim();
-        let flyerUrl = pathInput || document.getElementById('existingFlyerUrl').value;
-
-        let flyerBase64 = null;
-        let flyerFileName = null;
-        let flyerFileType = null;
-        const flyerFileInput = document.getElementById('lombaFlyerFile');
-        if (flyerFileInput && flyerFileInput.files && flyerFileInput.files.length > 0) {
-          const f = flyerFileInput.files[0];
-          flyerBase64 = await readFileAsBase64(f);
-          flyerFileName = f.name;
-          flyerFileType = f.type;
-        }
-
-        const kat1 = document.getElementById('lombaKat1').value.trim();
-        const biaya1 = document.getElementById('lombaBiaya1').value.trim();
-        const active1 = Boolean(kat1 || biaya1);
-
-        const kat2 = document.getElementById('lombaKat2').value.trim();
-        const biaya2 = document.getElementById('lombaBiaya2').value.trim();
-        const active2 = Boolean(kat2 || biaya2);
-
-        const kat3 = document.getElementById('lombaKat3').value.trim();
-        const biaya3 = document.getElementById('lombaBiaya3').value.trim();
-        const active3 = Boolean(kat3 || biaya3);
-
-        const kategoriRingkas = [
-          active1 ? kat1 : '',
-          active2 ? kat2 : '',
-          active3 ? kat3 : ''
-        ].filter(Boolean).join(' / ') || 'Umum';
-
-        const payload = {
-          action: 'saveLomba',
-          id: document.getElementById('lombaId').value,
-          judul: document.getElementById('lombaJudul').value,
-          tipePeserta: document.getElementById('lombaTipePeserta').value,
-          kategori: kategoriRingkas,
-          kat1: kat1, biaya1: biaya1, active1: active1,
-          kat2: kat2, biaya2: biaya2, active2: active2,
-          kat3: kat3, biaya3: biaya3, active3: active3,
-          biayaSD: biaya1,
-          biayaSMP: biaya2,
-          biayaSMA: biaya3,
-          statusLomba: document.getElementById('lombaStatus').value,
-          flyerUrl: flyerUrl,
-          flyerBase64: flyerBase64,
-          flyerFileName: flyerFileName,
-          flyerFileType: flyerFileType,
-          deskripsi: document.getElementById('lombaDeskripsi').value,
-          syarat: document.getElementById('lombaSyarat').value,
-          hadiah: document.getElementById('lombaHadiah').value,
-          juknisUrl: document.getElementById('lombaJuknisUrl').value.trim(),
-          narahubung: validNarahubung
-        };
-
-        const result = await postToGAS(payload);
-        if(result.status === "success") {
-          Swal.fire({ icon: 'success', title: 'Berhasil Disimpan! ✨', text: 'Data perlombaan telah diperbarui.', confirmButtonColor: '#047857' });
-          resetLombaForm();
-          await fetchPortalConfig();
-        }
-      } catch(err) {
-        Swal.fire({ icon: 'error', title: 'Gagal Menyimpan', text: err.toString(), confirmButtonColor: '#047857' });
-      } finally {
-        btn.disabled = false;
-        btn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> <span>Simpan Data Lomba</span>`;
-      }
-    }
-
-    async function deleteLomba(id) {
-      Swal.fire({
-        title: 'Hapus cabang lomba ini?', icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33', confirmButtonText: 'Ya, Hapus'
-      }).then(async (r) => {
-        if(r.isConfirmed) {
-          await postToGAS({ action: 'deleteLomba', id: id });
-          fetchPortalConfig();
-        }
-      });
-    }
-
-    function renderSlidersAdmin() {
-      adminState.currentSliders = adminState.config.sliders || [{ bgUrl: "banner1.jpg" }];
-      const box = document.getElementById('sliderListContainer');
-      box.innerHTML = "";
-      adminState.currentSliders.forEach((s, idx) => {
-        const imgUrl = parseImageUrl(s.bgUrl);
-        box.innerHTML += `
-          <div class="sld-row bg-white p-4 rounded-xl border shadow-sm space-y-3 relative">
-            <button type="button" onclick="removeSlideRow(${idx})" class="absolute top-3 right-3 text-red-600 font-bold text-xs hover:underline">
-              <i class="fa-solid fa-trash mr-1"></i> Hapus
-            </button>
-            <h5 class="font-bold text-xs text-gray-700 flex items-center gap-1.5">
-              <i class="fa-solid fa-image text-emerald-700"></i> Banner Slider #${idx + 1}
-            </h5>
-            
-            <div class="flex flex-col sm:flex-row gap-3 items-start sm:items-center bg-gray-50 p-2.5 rounded-lg border">
-              ${imgUrl ? `<img src="${imgUrl}" class="w-24 h-14 object-cover rounded border shadow-sm shrink-0">` : `<div class="w-24 h-14 bg-gray-200 rounded border flex items-center justify-center text-[10px] text-gray-400 font-bold shrink-0">No Image</div>`}
-              <div class="flex-1 w-full space-y-2">
-                <div>
-                  <label class="block text-[10px] text-gray-700 font-bold">URL / Path Banner:</label>
-                  <input type="text" value="${escapeHtml(s.bgUrl || '')}" placeholder="banner1.jpg atau https://..." class="sld-url-input w-full border rounded px-2.5 py-1.5 text-xs focus:outline-emerald-700 bg-white">
-                </div>
-                <div>
-                  <label class="block text-[10px] text-gray-500 font-semibold">Atau Unggah File Gambar Banner Baru:</label>
-                  <input type="file" accept="image/*" class="sld-file-input w-full border rounded p-1 text-[11px] bg-white">
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
-      });
-    }
-
-    function addSlideRow() { adminState.currentSliders.push({ bgUrl: "" }); renderSlidersAdmin(); }
-    function removeSlideRow(idx) { adminState.currentSliders.splice(idx, 1); renderSlidersAdmin(); }
-
-    async function saveSliders(e) {
-      e.preventDefault();
-      const btn = e.target.querySelector('button[type="submit"]');
-      btn.disabled = true; btn.innerText = "Menyimpan Slider...";
-
-      try {
-        const rows = document.querySelectorAll('.sld-row');
-        const sliders = [];
-        for (const row of rows) {
-          const urlVal = row.querySelector('.sld-url-input').value.trim();
-          const fileInput = row.querySelector('.sld-file-input');
-          if (fileInput && fileInput.files && fileInput.files.length > 0) {
-            const f = fileInput.files[0];
-            const b64 = await readFileAsBase64(f);
-            sliders.push({
-              bgUrl: urlVal,
-              bgBase64: b64,
-              bgFileName: f.name,
-              bgFileType: f.type
-            });
-          } else if (urlVal) {
-            sliders.push({ bgUrl: urlVal });
-          }
-        }
-
-        if(!adminState.config) adminState.config = {};
-        adminState.config.sliders = sliders;
-
-        const result = await postToGAS({ action: 'saveConfig', config: adminState.config });
-        if(result.status === "success") {
-          Swal.fire({ icon: 'success', title: 'Berhasil Disimpan! 🎉', text: 'Banner slider telah diperbarui.', confirmButtonColor: '#047857' });
-          await fetchPortalConfig();
-        }
-      } catch(err) {
-        Swal.fire({ icon: 'error', title: 'Gagal', text: err.toString(), confirmButtonColor: '#047857' });
-      } finally {
-        btn.disabled = false; btn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Simpan Perubahan Slider`;
-      }
-    }
-
-    function populateConfigForm() {
-      const cfg = adminState.config || {};
-      const navs = cfg.menuNav || { beranda: true, alur: true, lomba: true, cek: true, unggah: true, sertifikat: true };
-
-      if(document.getElementById('mNavBeranda')) document.getElementById('mNavBeranda').checked = navs.beranda !== false;
-      if(document.getElementById('mNavAlur')) document.getElementById('mNavAlur').checked = navs.alur !== false;
-      if(document.getElementById('mNavLomba')) document.getElementById('mNavLomba').checked = navs.lomba !== false;
-      if(document.getElementById('mNavCek')) document.getElementById('mNavCek').checked = navs.cek !== false;
-      if(document.getElementById('mNavUnggah')) document.getElementById('mNavUnggah').checked = navs.unggah !== false;
-      if(document.getElementById('mNavSertifikat')) document.getElementById('mNavSertifikat').checked = navs.sertifikat !== false;
-
-      if(document.getElementById('cfgThemeColor')) {
-        const tColor = cfg.themeColor || "emerald";
-        document.getElementById('cfgThemeColor').value = tColor;
-        toggleCustomColorInput(tColor);
-      }
-      if(document.getElementById('cfgCustomColor')) document.getElementById('cfgCustomColor').value = cfg.customColor || "#047857";
-      if(document.getElementById('cfgCustomColorPicker')) document.getElementById('cfgCustomColorPicker').value = cfg.customColor || "#047857";
-
-      if(document.getElementById('cfgLokasi')) document.getElementById('cfgLokasi').value = cfg.lokasi || "Kompleks Pesantren Al Firdaus";
-      if(document.getElementById('cfgWaNumber')) document.getElementById('cfgWaNumber').value = cfg.waNumber || "085366685084";
-      if(document.getElementById('cfgMapUrl')) document.getElementById('cfgMapUrl').value = cfg.mapUrl || "";
-      if(document.getElementById('cfgTargetDate')) document.getElementById('cfgTargetDate').value = cfg.targetDate || "2026-11-20T08:00";
-      if(document.getElementById('cfgLinkIg')) document.getElementById('cfgLinkIg').value = cfg.linkIg || "#";
-      if(document.getElementById('cfgLinkYt')) document.getElementById('cfgLinkYt').value = cfg.linkYt || "#";
-      if(document.getElementById('cfgLinkTt')) document.getElementById('cfgLinkTt').value = cfg.linkTt || "#";
-      if(document.getElementById('cfgLinkTh')) document.getElementById('cfgLinkTh').value = cfg.linkTh || "#";
-
-      if(document.getElementById('cfgHeaderTitle')) document.getElementById('cfgHeaderTitle').value = cfg.headerTitle || "PESONA AL FIRDAUS";
-      if(document.getElementById('cfgHeaderSub')) document.getElementById('cfgHeaderSub').value = cfg.headerSub || "Islamic Youth Festival 2026";
-      if(document.getElementById('cfgRekening')) document.getElementById('cfgRekening').value = cfg.rekening || "BSI: 8500808806 a.n Yayasan Atmo Taruno Joyo";
-      if(document.getElementById('cfgContact')) document.getElementById('cfgContact').value = cfg.contact || "Kontak Panitia: 0853-6668-5084";
-      if(document.getElementById('certTemplateUrlInput')) document.getElementById('certTemplateUrlInput').value = cfg.certTemplate || "";
-    }
-
-    function toggleCustomColorInput(val) {
-      const box = document.getElementById('customColorBox');
-      if (box) {
-        if(val === 'custom') box.classList.remove('hidden');
-        else box.classList.add('hidden');
-      }
-    }
-
-    function syncCustomColorInput(hexVal) {
-      if(document.getElementById('cfgCustomColor')) document.getElementById('cfgCustomColor').value = hexVal;
     }
 
     async function saveCertTemplateConfig(e) {
       e.preventDefault();
-      const btn = e.target.querySelector('button[type="submit"]');
-      btn.disabled = true; btn.innerText = "Menyimpan...";
-      try {
-        if(!adminState.config) adminState.config = {};
-        adminState.config.certTemplate = document.getElementById('certTemplateUrlInput').value;
-        const result = await postToGAS({ action: 'saveConfig', config: adminState.config });
-        if(result.status === "success") {
-          Swal.fire({ icon: 'success', title: 'Template Disimpan! ✨', text: 'URL background sertifikat diperbarui.', confirmButtonColor: '#047857' });
-          await fetchPortalConfig();
-        }
-      } catch(err) {
-        Swal.fire({ icon: 'error', title: 'Gagal', text: err.toString(), confirmButtonColor: '#047857' });
-      } finally { btn.disabled = false; btn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Simpan Template Sertifikat`; }
+      await db.collection('portal').doc('config').set({
+        certTemplate: document.getElementById('certTemplateUrlInput').value
+      }, { merge: true });
+      Swal.fire({ icon: 'success', title: 'Tersimpan!', text: 'Template sertifikat diperbarui secara real-time.', timer: 1400, showConfirmButton: false });
     }
 
-    async function saveNavMenuConfig(e) {
-      e.preventDefault();
-      const btn = e.target.querySelector('button[type="submit"]');
-      btn.disabled = true; btn.innerText = "Menyimpan...";
-      try {
-        if(!adminState.config) adminState.config = {};
-        adminState.config.menuNav = {
-          beranda: document.getElementById('mNavBeranda').checked,
-          alur: document.getElementById('mNavAlur').checked,
-          lomba: document.getElementById('mNavLomba').checked,
-          cek: document.getElementById('mNavCek').checked,
-          unggah: document.getElementById('mNavUnggah').checked,
-          sertifikat: document.getElementById('mNavSertifikat').checked
-        };
-        const result = await postToGAS({ action: 'saveConfig', config: adminState.config });
-        if(result.status === "success") {
-          Swal.fire({ icon: 'success', title: 'Navigasi Disimpan! ✨', text: 'Pengaturan visibilitas menubar diperbarui.', confirmButtonColor: '#047857' });
-          await fetchPortalConfig();
-        }
-      } catch(err) {
-        Swal.fire({ icon: 'error', title: 'Gagal', text: err.toString(), confirmButtonColor: '#047857' });
-      } finally { btn.disabled = false; btn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Simpan Menubar Navigasi`; }
-    }
-
-    async function saveTopbarConfig(e) {
-      e.preventDefault();
-      const btn = e.target.querySelector('button[type="submit"]');
-      btn.disabled = true; btn.innerText = "Menyimpan...";
-      try {
-        if(!adminState.config) adminState.config = {};
-        adminState.config.lokasi = document.getElementById('cfgLokasi').value;
-        adminState.config.mapUrl = document.getElementById('cfgMapUrl').value;
-        adminState.config.waNumber = document.getElementById('cfgWaNumber').value;
-        adminState.config.targetDate = document.getElementById('cfgTargetDate').value;
-        adminState.config.linkIg = document.getElementById('cfgLinkIg').value;
-        adminState.config.linkYt = document.getElementById('cfgLinkYt').value;
-        adminState.config.linkTt = document.getElementById('cfgLinkTt').value;
-        adminState.config.linkTh = document.getElementById('cfgLinkTh').value;
-
-        const result = await postToGAS({ action: 'saveConfig', config: adminState.config });
-        if(result.status === "success") {
-          Swal.fire({ icon: 'success', title: 'Topbar Disimpan! ✨', text: 'Informasi topbar diperbarui.', confirmButtonColor: '#047857' });
-          await fetchPortalConfig();
-        }
-      } catch(err) {
-        Swal.fire({ icon: 'error', title: 'Gagal', text: err.toString(), confirmButtonColor: '#047857' });
-      } finally { btn.disabled = false; btn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Simpan Topbar &amp; Sosmed`; }
-    }
-
-    async function saveIdentitasConfig(e) {
-      e.preventDefault();
-      const btn = e.target.querySelector('button[type="submit"]');
-      btn.disabled = true; btn.innerText = "Menyimpan...";
-      try {
-        if(!adminState.config) adminState.config = {};
-        adminState.config.headerTitle = document.getElementById('cfgHeaderTitle').value;
-        adminState.config.headerSub = document.getElementById('cfgHeaderSub').value;
-        adminState.config.rekening = document.getElementById('cfgRekening').value;
-        adminState.config.contact = document.getElementById('cfgContact').value;
-        adminState.config.themeColor = document.getElementById('cfgThemeColor').value;
-        adminState.config.customColor = document.getElementById('cfgCustomColor').value || "#047857";
-
-        try {
-          localStorage.setItem('paf_portal_theme', JSON.stringify({
-            themeColor: adminState.config.themeColor,
-            customColor: adminState.config.customColor
-          }));
-        } catch (errCache) {}
-
-        const result = await postToGAS({ action: 'saveConfig', config: adminState.config });
-        if(result.status === "success") {
-          Swal.fire({ icon: 'success', title: 'Identitas & Warna Disimpan! ✨', text: 'Pengaturan tema portal diperbarui secara instan.', confirmButtonColor: '#047857' });
-          await fetchPortalConfig();
-        }
-      } catch(err) {
-        Swal.fire({ icon: 'error', title: 'Gagal', text: err.toString(), confirmButtonColor: '#047857' });
-      } finally { btn.disabled = false; btn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Simpan Identitas &amp; Warna Tema`; }
-    }
-
-    // --- MANAJEMEN USER & CEKLIST HAK AKSES KHUSUS SUPERADMIN ---
+    // --- KELOLA USER & HAK AKSES (FIREBASE AUTH + FIRESTORE) ---
     async function fetchUsers() {
+      const tbody = document.getElementById('userTableBody');
+      if(!tbody) return;
+      tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-gray-400">Memuat data user...</td></tr>`;
       try {
-        const res = await fetch(`${GAS_URL}?action=getUsers&_t=${Date.now()}`);
-        const result = await res.json();
-        if(result.status === "success") {
-          adminState.users = result.users || [];
-          renderUserTable();
-        }
-      } catch(e) { console.error("Error loading users:", e); }
+        const snap = await db.collection('admin_users').get();
+        const users = [];
+        snap.forEach(doc => users.push({ email: doc.id, ...doc.data() }));
+        adminState.users = users;
+        renderUserTable();
+      } catch(e) {
+        tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-red-500">Gagal memuat user.</td></tr>`;
+      }
     }
 
     function renderUserTable() {
       const tbody = document.getElementById('userTableBody');
       if(!tbody) return;
       tbody.innerHTML = "";
-
-      if(adminState.users.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-gray-400">Belum ada data user.</td></tr>`;
+      if(!adminState.users || adminState.users.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-gray-400">Belum ada user terdaftar.</td></tr>`;
         return;
       }
 
       adminState.users.forEach(u => {
-        let badgeColor = "bg-blue-100 text-blue-800";
-        if(u.role === 'Superadmin') badgeColor = "bg-yellow-100 text-amber-900 border border-yellow-300 font-black";
-        else if(u.role === 'Juri') badgeColor = "bg-purple-100 text-purple-800";
-
-        const permsList = (u.permissions || []).join(", ") || "Akses Default";
+        const roleBadge = u.role === 'Superadmin' ? 'bg-yellow-100 text-yellow-800 border-yellow-300' : (u.role === 'Admin' ? 'bg-emerald-100 text-emerald-800 border-emerald-300' : 'bg-blue-100 text-blue-800 border-blue-300');
+        const permsList = Array.isArray(u.permissions) ? u.permissions : [];
+        const permsText = u.role === 'Superadmin' ? 'Semua Akses Penuh' : (permsList.length > 0 ? permsList.join(', ') : '-');
 
         tbody.innerHTML += `
           <tr class="hover:bg-gray-50 border-b">
-            <td class="p-3 font-bold text-gray-900">${escapeHtml(u.username)}</td>
-            <td class="p-3 font-mono text-gray-500">${escapeHtml(u.password)}</td>
-            <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${badgeColor}">${escapeHtml(u.role)}</span></td>
-            <td class="p-3 text-[10px] text-gray-600 max-w-[150px] truncate" title="${escapeHtml(permsList)}">${escapeHtml(permsList)}</td>
-            <td class="p-3 text-center space-x-1">
-              <button onclick="editUser('${u.username}', '${u.password}', '${u.role}', ${JSON.stringify(u.permissions || []).replace(/"/g, '&quot;')})" class="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded text-[10px] font-bold">
-                <i class="fa-solid fa-pen"></i> Edit
-              </button>
-              <button onclick="deleteUser('${u.username}')" class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-[10px] font-bold">
-                <i class="fa-solid fa-trash"></i>
-              </button>
+            <td class="p-3 font-bold text-gray-900">${escapeHtml(u.email)}</td>
+            <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold border ${roleBadge}">${escapeHtml(u.role)}</span></td>
+            <td class="p-3 text-[10px] text-gray-600 max-w-xs break-words">${escapeHtml(permsText)}</td>
+            <td class="p-3 text-center whitespace-nowrap space-x-1">
+              <button onclick="editUserForm('${u.email}')" class="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded text-[10px] font-bold">Edit Hak Akses</button>
+              <button onclick="deleteUser('${u.email}')" class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-[10px] font-bold">Hapus</button>
             </td>
           </tr>
         `;
@@ -2068,39 +1578,35 @@
 
     function onRoleChange(role) {
       const cbs = document.querySelectorAll('.user-perm-cb');
-      if(role === 'Superadmin') {
-        cbs.forEach(cb => { cb.checked = true; cb.disabled = true; });
-      } else if(role === 'Juri') {
-        cbs.forEach(cb => { cb.checked = (cb.value === 'pendaftar' || cb.value === 'audio'); cb.disabled = true; });
-      } else {
-        cbs.forEach(cb => { cb.disabled = false; });
-      }
+      if (role === 'Superadmin') cbs.forEach(cb => cb.checked = true);
+      else if (role === 'Juri') cbs.forEach(cb => cb.checked = (cb.value === 'pendaftar' || cb.value === 'audio'));
     }
 
-    function toggleAllPermCheckboxes(status) {
-      const cbs = document.querySelectorAll('.user-perm-cb');
-      cbs.forEach(cb => { if(!cb.disabled) cb.checked = status; });
-    }
-
-    function editUser(u, p, r, perms) {
-      document.getElementById('userOldUsername').value = u;
-      document.getElementById('userUsername').value = u;
-      document.getElementById('userPassword').value = p;
-      document.getElementById('userRole').value = r;
-      document.getElementById('userFormHeader').innerText = `Edit User: ${u}`;
-
-      onRoleChange(r);
-      if(r === 'Admin' && Array.isArray(perms)) {
-        const cbs = document.querySelectorAll('.user-perm-cb');
-        cbs.forEach(cb => { cb.checked = perms.includes(cb.value); });
-      }
-    }
+    function toggleAllPermCheckboxes(checked) { document.querySelectorAll('.user-perm-cb').forEach(cb => cb.checked = checked); }
 
     function resetUserForm() {
       document.getElementById('formUser').reset();
-      document.getElementById('userOldUsername').value = "";
-      document.getElementById('userFormHeader').innerText = "Form Tambah User";
-      onRoleChange('Superadmin');
+      document.getElementById('userIsEdit').value = "false";
+      document.getElementById('userEmail').readOnly = false;
+      document.getElementById('userEmail').classList.remove('bg-gray-100');
+      document.getElementById('userPasswordBlock').classList.remove('hidden');
+      document.getElementById('userFormHeader').innerText = "Form Tambah User Baru";
+      toggleAllPermCheckboxes(true);
+    }
+
+    function editUserForm(email) {
+      const u = adminState.users.find(x => x.email === email);
+      if(!u) return;
+      document.getElementById('userIsEdit').value = "true";
+      document.getElementById('userEmail').value = u.email;
+      document.getElementById('userEmail').readOnly = true;
+      document.getElementById('userEmail').classList.add('bg-gray-100');
+      document.getElementById('userPasswordBlock').classList.add('hidden');
+      document.getElementById('userRole').value = u.role || 'Admin';
+      document.getElementById('userFormHeader').innerText = `Edit Hak Akses: ${u.email}`;
+      
+      const perms = Array.isArray(u.permissions) ? u.permissions : [];
+      document.querySelectorAll('.user-perm-cb').forEach(cb => cb.checked = (u.role === 'Superadmin' || perms.includes(cb.value)));
     }
 
     async function saveUser(e) {
@@ -2108,55 +1614,531 @@
       const btn = document.getElementById('btnSaveUser');
       btn.disabled = true; btn.innerText = "Menyimpan...";
 
+      const isEdit = document.getElementById('userIsEdit').value === "true";
+      const email = document.getElementById('userEmail').value.trim().toLowerCase();
+      const password = document.getElementById('userPassword').value.trim();
+      const role = document.getElementById('userRole').value;
+      const checkedPerms = [];
+      document.querySelectorAll('.user-perm-cb:checked').forEach(cb => checkedPerms.push(cb.value));
+
       try {
-        const role = document.getElementById('userRole').value;
-        const selectedPerms = [];
-        document.querySelectorAll('.user-perm-cb').forEach(cb => {
-          if(cb.checked) selectedPerms.push(cb.value);
-        });
-
-        const payload = {
-          action: 'saveUser',
-          oldUsername: document.getElementById('userOldUsername').value,
-          username: document.getElementById('userUsername').value.trim(),
-          password: document.getElementById('userPassword').value.trim(),
-          role: role,
-          permissions: selectedPerms
-        };
-
-        const result = await postToGAS(payload);
-        if(result.status === "success") {
-          Swal.fire({ icon: 'success', title: 'User Disimpan! 🎉', text: 'Data user & hak akses berhasil diperbarui.', timer: 1500, showConfirmButton: false });
-          resetUserForm();
-          await fetchUsers();
-        } else {
-          Swal.fire({ icon: 'error', title: 'Gagal', text: result.message || 'Terjadi kesalahan.', confirmButtonColor: '#047857' });
+        if (!isEdit) {
+          if (password.length < 6) {
+            Swal.fire({ icon: 'warning', title: 'Password Terlalu Pendek', text: 'Firebase mewajibkan password minimal 6 karakter.' });
+            btn.disabled = false; btn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Simpan User`;
+            return;
+          }
+          // Gunakan instance SecondaryApp agar Superadmin tidak ter-logout saat membuat user baru
+          const secondaryApp = firebase.apps.find(a => a.name === 'SecondaryApp') || firebase.initializeApp(FIREBASE_CONFIG, 'SecondaryApp');
+          await secondaryApp.auth().createUserWithEmailAndPassword(email, password);
+          await secondaryApp.auth().signOut();
         }
+
+        await db.collection('admin_users').doc(email).set({
+          email: email,
+          role: role,
+          permissions: checkedPerms,
+          updatedAt: new Date().toISOString()
+        }, { merge: true });
+
+        Swal.fire({ icon: 'success', title: 'Berhasil! 🎉', text: 'User & hak akses berhasil disimpan.', timer: 1500, showConfirmButton: false });
+        resetUserForm();
+        fetchUsers();
       } catch(err) {
-        Swal.fire({ icon: 'error', title: 'Gagal', text: err.toString(), confirmButtonColor: '#047857' });
+        Swal.fire({ icon: 'error', title: 'Gagal Menyimpan User', text: err.message || err.toString(), confirmButtonColor: '#047857' });
       } finally {
         btn.disabled = false; btn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Simpan User`;
       }
     }
 
-    async function deleteUser(username) {
-      if(username === "superadmin") {
-        Swal.fire({ icon: 'error', title: 'Ditolak', text: 'Akun bawaan superadmin tidak boleh dihapus!', confirmButtonColor: '#047857' });
+    function deleteUser(email) {
+      if (email === adminState.currentUserEmail) {
+        Swal.fire({ icon: 'warning', title: 'Tidak Diizinkan', text: 'Anda tidak dapat menghapus akun yang sedang digunakan login.' });
+        return;
+      }
+      Swal.fire({
+        title: `Hapus Hak Akses ${email}?`, text: 'User tidak lagi memiliki izin akses dashboard.', icon: 'warning',
+        showCancelButton: true, confirmButtonColor: '#d33', confirmButtonText: 'Ya, Hapus!'
+      }).then(async (res) => {
+        if (res.isConfirmed) {
+          await db.collection('admin_users').doc(email).delete();
+          Swal.fire({ icon: 'success', title: 'Dihapus!', timer: 1200, showConfirmButton: false });
+          fetchUsers();
+        }
+      });
+    }
+
+    // --- KELOLA CABANG LOMBA (FIRESTORE + DRIVE UPLOAD) ---
+    function renderNarahubungRows(list) {
+      const container = document.getElementById('lombaNarahubungList');
+      if (!container) return;
+      container.innerHTML = "";
+      let items = Array.isArray(list) ? list : [];
+      while (items.length < 2) { items.push({ nama: '', wa: '' }); }
+      items.forEach((item, idx) => addNarahubungRow(item.nama || '', item.wa || '', idx < 2));
+    }
+
+    function addNarahubungRow(nama = '', wa = '', isRequiredDefault = false) {
+      const container = document.getElementById('lombaNarahubungList');
+      if (!container) return;
+      const idx = container.children.length + 1;
+      const isMandatory = isRequiredDefault || container.children.length < 2;
+      const row = document.createElement('div');
+      row.className = "grid grid-cols-12 gap-1.5 items-center narahubung-row";
+      row.innerHTML = `
+        <div class="col-span-5">
+          <input type="text" class="nara-nama w-full border rounded-lg px-2.5 py-1.5 text-xs bg-white focus:outline-emerald-700"
+            value="${escapeHtml(nama)}" placeholder="Nama Kontak ${idx}">
+        </div>
+        <div class="${isMandatory ? 'col-span-7' : 'col-span-6'}">
+          <input type="text" class="nara-wa w-full border rounded-lg px-2.5 py-1.5 text-xs bg-white focus:outline-emerald-700"
+            value="${escapeHtml(wa)}" ${isMandatory ? 'required' : ''} placeholder="No. WA ${idx}${isMandatory ? ' *' : ''}">
+        </div>
+        ${isMandatory ? '' : `
+          <div class="col-span-1 flex justify-center">
+            <button type="button" onclick="this.closest('.narahubung-row').remove()" title="Hapus Narahubung"
+              class="bg-red-500 hover:bg-red-600 text-white w-6 h-6 rounded-lg text-[10px] flex items-center justify-center shadow">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+        `}
+      `;
+      container.appendChild(row);
+    }
+
+    function collectNarahubungInputs() {
+      const rows = document.querySelectorAll('#lombaNarahubungList .narahubung-row');
+      const result = [];
+      rows.forEach((row, idx) => {
+        const nama = (row.querySelector('.nara-nama')?.value || '').trim();
+        const wa = (row.querySelector('.nara-wa')?.value || '').trim();
+        if (nama || wa) result.push({ nama: nama || `Narahubung ${idx + 1}`, wa });
+      });
+      return result;
+    }
+
+    function renderLombaCards() {
+      const container = document.getElementById('lombaCardsContainer');
+      container.innerHTML = "";
+      if(!adminState.lomba || adminState.lomba.length === 0) {
+        container.innerHTML = `<div class="bg-white p-6 rounded-xl border text-center text-gray-400 text-xs">Belum ada data lomba. Klik <strong>Migrasi Data Sheets</strong> atau tambah lomba baru.</div>`;
         return;
       }
 
-      Swal.fire({
-        title: `Hapus user ${username}?`, text: "User ini tidak akan dapat login lagi.", icon: 'warning',
-        showCancelButton: true, confirmButtonColor: '#d33', cancelButtonColor: '#3085d6', confirmButtonText: 'Ya, Hapus User'
-      }).then(async (res) => {
-        if(res.isConfirmed) {
-          const result = await postToGAS({ action: 'deleteUser', username: username });
-          if(result.status === "success") {
-            Swal.fire({ icon: 'success', title: 'Terhapus', text: 'User berhasil dihapus.', timer: 1200, showConfirmButton: false });
-            fetchUsers();
+      adminState.lomba.forEach(item => {
+        const imgUrl = parseImageUrl(item.flyerUrl);
+        const isBuka = item.statusLomba !== 'TUTUP';
+        const tipe = item.tipePeserta || 'Individu';
+
+        let rincianHarga = [];
+        if (item.active1 !== false && (item.kat1 || item.biaya1)) rincianHarga.push(`${item.kat1 || 'Jenjang 1'}: ${item.biaya1 || '-'}`);
+        if (item.active2 !== false && (item.kat2 || item.biaya2)) rincianHarga.push(`${item.kat2 || 'Jenjang 2'}: ${item.biaya2 || '-'}`);
+        if (item.active3 !== false && (item.kat3 || item.biaya3)) rincianHarga.push(`${item.kat3 || 'Jenjang 3'}: ${item.biaya3 || '-'}`);
+
+        const hasJuknis = item.juknisUrl && String(item.juknisUrl).trim() !== '';
+        let naraCount = 0;
+        if (Array.isArray(item.narahubung)) naraCount = item.narahubung.filter(n => n && n.wa).length;
+
+        container.innerHTML += `
+          <div class="bg-white p-3.5 rounded-xl border shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+            <div class="flex items-center gap-3">
+              <img src="${imgUrl || 'https://via.placeholder.com/80'}" class="w-16 h-16 object-cover rounded-lg border bg-gray-50 shrink-0">
+              <div>
+                <div class="flex items-center gap-1.5 flex-wrap mb-1">
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded ${isBuka ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">${isBuka ? 'BUKA' : 'TUTUP'}</span>
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded ${tipe === 'Team' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'}">${tipe === 'Team' ? '👥 Team' : '👤 Individu'}</span>
+                  <span class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded">${escapeHtml(item.kategori || 'Multi Kategori')}</span>
+                  ${hasJuknis ? `<span class="text-[10px] bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded"><i class="fa-solid fa-file-lines mr-0.5"></i> Juknis</span>` : ''}
+                  ${naraCount > 0 ? `<span class="text-[10px] bg-green-50 text-green-700 border border-green-200 font-bold px-2 py-0.5 rounded"><i class="fa-brands fa-whatsapp mr-0.5"></i> ${naraCount} Narahubung</span>` : ''}
+                </div>
+                <h4 class="font-bold text-sm text-gray-900">${escapeHtml(item.judul)}</h4>
+                <p class="text-[11px] font-bold text-emerald-700 mt-0.5">${escapeHtml(rincianHarga.join(' | ') || '-')}</p>
+              </div>
+            </div>
+            <div class="flex gap-2 w-full sm:w-auto justify-end border-t sm:border-t-0 pt-2 sm:pt-0">
+              <button onclick="editLombaForm('${item.id}')" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold">Edit</button>
+              <button onclick="deleteLomba('${item.id}')" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold">Hapus</button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function editLombaForm(id) {
+      const item = adminState.lomba.find(x => x.id === id);
+      if(!item) return;
+      document.getElementById('lombaFormHeader').innerText = `Edit Lomba: ${item.judul}`;
+      document.getElementById('lombaId').value = item.id;
+      document.getElementById('existingFlyerUrl').value = item.flyerUrl || '';
+      document.getElementById('lombaJudul').value = item.judul;
+      document.getElementById('lombaTipePeserta').value = item.tipePeserta || 'Individu';
+      document.getElementById('lombaStatus').value = item.statusLomba || 'BUKA';
+
+      document.getElementById('lombaKat1').value = (item.active1 !== false) ? (item.kat1 || 'SD / MI') : '';
+      document.getElementById('lombaBiaya1').value = (item.active1 !== false) ? (item.biaya1 || '') : '';
+      document.getElementById('lombaKat2').value = (item.active2 !== false) ? (item.kat2 || '') : '';
+      document.getElementById('lombaBiaya2').value = (item.active2 !== false) ? (item.biaya2 || '') : '';
+      document.getElementById('lombaKat3').value = (item.active3 !== false) ? (item.kat3 || '') : '';
+      document.getElementById('lombaBiaya3').value = (item.active3 !== false) ? (item.biaya3 || '') : '';
+
+      document.getElementById('lombaFlyerPathText').value = item.flyerUrl || '';
+      document.getElementById('lombaDeskripsi').value = item.deskripsi || '';
+      document.getElementById('lombaSyarat').value = item.syarat || '';
+      document.getElementById('lombaHadiah').value = item.hadiah || '';
+      document.getElementById('lombaJuknisUrl').value = item.juknisUrl || '';
+
+      let rawNara = item.narahubung || [];
+      if (typeof rawNara === 'string') {
+        try { rawNara = JSON.parse(rawNara); } catch(e) { rawNara = []; }
+      }
+      renderNarahubungRows(rawNara);
+      window.scrollTo(0, 0);
+    }
+
+    function resetLombaForm() {
+      document.getElementById('formLomba').reset();
+      document.getElementById('lombaId').value = '';
+      document.getElementById('existingFlyerUrl').value = '';
+      document.getElementById('lombaKat1').value = 'SD / MI';
+      document.getElementById('lombaKat2').value = 'SMP / MTs';
+      document.getElementById('lombaKat3').value = 'SMA / MA';
+      document.getElementById('lombaFormHeader').innerText = 'Form Cabang Lomba Baru';
+      renderNarahubungRows([]);
+    }
+
+    async function saveLomba(e) {
+      e.preventDefault();
+      const narahubungList = collectNarahubungInputs();
+      const validWaCount = narahubungList.filter(n => n.wa && n.wa.trim() !== '').length;
+      if (validWaCount < 2) {
+        Swal.fire({ icon: 'warning', title: 'Narahubung Belum Lengkap', text: 'Mohon isi minimal 2 nomor WhatsApp narahubung.', confirmButtonColor: '#047857' });
+        return;
+      }
+
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...`; }
+
+      const fileInput = document.getElementById('lombaFlyerFile');
+      const existingId = document.getElementById('lombaId').value;
+      const docId = existingId || ('LOMBA_' + Date.now());
+      const kat1 = document.getElementById('lombaKat1').value.trim();
+      const kat2 = document.getElementById('lombaKat2').value.trim();
+      const kat3 = document.getElementById('lombaKat3').value.trim();
+      const biaya1 = document.getElementById('lombaBiaya1').value.trim();
+      const biaya2 = document.getElementById('lombaBiaya2').value.trim();
+      const biaya3 = document.getElementById('lombaBiaya3').value.trim();
+
+      const activeKategoriArr = [];
+      if (kat1) activeKategoriArr.push(kat1);
+      if (kat2) activeKategoriArr.push(kat2);
+      if (kat3) activeKategoriArr.push(kat3);
+
+      let finalFlyerUrl = document.getElementById('lombaFlyerPathText').value.trim() || document.getElementById('existingFlyerUrl').value;
+
+      const lombaPayload = {
+        id: docId,
+        judul: document.getElementById('lombaJudul').value.trim(),
+        tipePeserta: document.getElementById('lombaTipePeserta').value,
+        kategori: activeKategoriArr.join(', ') || 'Multi Kategori',
+        statusLomba: document.getElementById('lombaStatus').value,
+        kat1: kat1, biaya1: biaya1, active1: Boolean(kat1 || biaya1),
+        kat2: kat2, biaya2: biaya2, active2: Boolean(kat2 || biaya2),
+        kat3: kat3, biaya3: biaya3, active3: Boolean(kat3 || biaya3),
+        flyerUrl: finalFlyerUrl,
+        deskripsi: document.getElementById('lombaDeskripsi').value,
+        syarat: document.getElementById('lombaSyarat').value,
+        hadiah: document.getElementById('lombaHadiah').value,
+        juknisUrl: document.getElementById('lombaJuknisUrl').value.trim(),
+        narahubung: narahubungList
+      };
+
+      try {
+        // Jika admin memilih file flyer dari perangkat, upload dulu ke Google Drive via GAS
+        if (fileInput && fileInput.files.length > 0) {
+          const b64 = await readFileAsBase64(fileInput.files[0]);
+          const gasRes = await postToGAS({
+            action: 'saveLomba',
+            targetFolderId: DRIVE_FOLDER_ID,
+            ...lombaPayload,
+            flyerBase64: b64,
+            fileName: fileInput.files[0].name,
+            fileType: fileInput.files[0].type
+          });
+          if (gasRes && gasRes.flyerUrl) {
+            lombaPayload.flyerUrl = gasRes.flyerUrl;
+          } else {
+            // Ambil URL Drive terbaru dari initPortal jika GAS tidak langsung mengembalikan field flyerUrl
+            const initCheck = await fetch(`${GAS_URL}?action=initPortal&_t=${Date.now()}`).then(r => r.json()).catch(() => null);
+            if (initCheck && Array.isArray(initCheck.lombaList)) {
+              const matched = initCheck.lombaList.find(x => x.judul === lombaPayload.judul);
+              if (matched && matched.flyerUrl) lombaPayload.flyerUrl = matched.flyerUrl;
+            }
           }
+        } else {
+          // Sinkronkan juga ke GAS di latar belakang
+          postToGAS({ action: 'saveLomba', targetFolderId: DRIVE_FOLDER_ID, ...lombaPayload }).catch(() => {});
+        }
+
+        // Simpan ke Firestore (Langsung muncul real-time di Portal Peserta!)
+        await db.collection('lomba').doc(docId).set(lombaPayload, { merge: true });
+
+        resetLombaForm();
+        Swal.fire({ icon: 'success', title: 'Cabang Lomba Tersimpan! 🎉', text: 'Data langsung tampil di Portal Pendaftaran.', timer: 1600, showConfirmButton: false });
+      } catch (err) {
+        Swal.fire({ icon: 'error', title: 'Gagal Menyimpan Lomba', text: err.toString(), confirmButtonColor: '#047857' });
+      } finally {
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> <span>Simpan Data Lomba</span>`; }
+      }
+    }
+
+    function deleteLomba(id) {
+      Swal.fire({
+        title: 'Hapus Cabang Lomba?', text: 'Lomba ini akan dihapus dari portal secara permanen.', icon: 'warning',
+        showCancelButton: true, confirmButtonColor: '#d33', confirmButtonText: 'Ya, Hapus!'
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          await db.collection('lomba').doc(id).delete();
+          postToGAS({ action: 'deleteLomba', id }).catch(() => {});
+          Swal.fire({ icon: 'success', title: 'Terhapus!', timer: 1200, showConfirmButton: false });
         }
       });
+    }
+
+    // --- KELOLA HERO SLIDERS ---
+    function renderSlidersAdmin() {
+      const container = document.getElementById('sliderListContainer');
+      if(!container) return;
+      container.innerHTML = "";
+      adminState.currentSliders = (adminState.config && adminState.config.sliders) || [];
+      if(adminState.currentSliders.length === 0) adminState.currentSliders = [{ bgUrl: "banner1.jpg" }];
+
+      adminState.currentSliders.forEach((s, idx) => {
+        const previewImg = parseImageUrl(s.bgUrl);
+        container.innerHTML += `
+          <div class="bg-white p-4 rounded-xl border shadow-sm space-y-3 relative slider-item-card">
+            <div class="flex justify-between items-center border-b pb-2">
+              <span class="font-bold text-xs text-emerald-900">Banner #${idx + 1}</span>
+              ${idx > 0 ? `<button type="button" onclick="removeSlideRow(this)" class="text-red-500 text-xs font-bold hover:underline">Hapus</button>` : ''}
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center">
+              <div class="sm:col-span-4 bg-gray-100 rounded-lg overflow-hidden border h-24 flex items-center justify-center">
+                <img src="${previewImg || 'https://via.placeholder.com/400x150?text=No+Banner'}" class="w-full h-full object-cover">
+              </div>
+
+              <div class="sm:col-span-8 space-y-2 text-xs">
+                <div>
+                  <label class="block font-bold text-gray-700 mb-1">URL Gambar / Path File Banner</label>
+                  <input type="text" value="${escapeHtml(s.bgUrl || '')}" class="sld-bg w-full border rounded-lg px-2.5 py-1.5" placeholder="Contoh: banner1.jpg atau https://drive.google.com/...">
+                </div>
+                <div>
+                  <label class="block font-semibold text-gray-500 mb-1">Atau Unggah File Gambar Banner Baru (Otomatis ke Drive):</label>
+                  <input type="file" accept="image/*" class="sld-file-input w-full text-[11px] text-gray-600 border rounded-lg p-1 bg-gray-50">
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function addSlideRow() {
+      const container = document.getElementById('sliderListContainer');
+      const idx = container.children.length + 1;
+      const div = document.createElement('div');
+      div.className = "bg-white p-4 rounded-xl border shadow-sm space-y-3 relative slider-item-card";
+      div.innerHTML = `
+        <div class="flex justify-between items-center border-b pb-2">
+          <span class="font-bold text-xs text-emerald-900">Banner #${idx}</span>
+          <button type="button" onclick="removeSlideRow(this)" class="text-red-500 text-xs font-bold hover:underline">Hapus</button>
+        </div>
+        <div class="space-y-2 text-xs">
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">URL Gambar / Path File Banner</label>
+            <input type="text" class="sld-bg w-full border rounded-lg px-2.5 py-1.5" placeholder="Contoh: banner2.jpg">
+          </div>
+          <div>
+            <label class="block font-semibold text-gray-500 mb-1">Atau Unggah File Gambar Banner (Otomatis ke Drive):</label>
+            <input type="file" accept="image/*" class="sld-file-input w-full text-[11px] text-gray-600 border rounded-lg p-1 bg-gray-50">
+          </div>
+        </div>
+      `;
+      container.appendChild(div);
+    }
+
+    function removeSlideRow(btn) { btn.closest('.slider-item-card').remove(); }
+
+    async function saveSliders(e) {
+      e.preventDefault();
+      const cards = document.querySelectorAll('.slider-item-card');
+      const slidersArr = [];
+      let hasNewFile = false;
+
+      for (const card of cards) {
+        const bgUrl = card.querySelector('.sld-bg').value.trim();
+        const fileInp = card.querySelector('.sld-file-input');
+        let bgBase64 = null, fileName = null, fileType = null;
+
+        if (fileInp && fileInp.files.length > 0) {
+          hasNewFile = true;
+          bgBase64 = await readFileAsBase64(fileInp.files[0]);
+          fileName = fileInp.files[0].name;
+          fileType = fileInp.files[0].type;
+        }
+        slidersArr.push({ bgUrl, bgBase64, fileName, fileType });
+      }
+
+      if (hasNewFile) {
+        Swal.fire({ title: 'Mengunggah Banner ke Drive...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+        await postToGAS({
+          action: 'saveConfig',
+          targetFolderId: DRIVE_FOLDER_ID,
+          config: { ...adminState.config, sliders: slidersArr }
+        }).catch(() => {});
+
+        const initCheck = await fetch(`${GAS_URL}?action=initPortal&_t=${Date.now()}`).then(r => r.json()).catch(() => null);
+        const finalSliders = (initCheck && initCheck.config && initCheck.config.sliders)
+          ? initCheck.config.sliders
+          : slidersArr.map(s => ({ bgUrl: s.bgUrl }));
+
+        await db.collection('portal').doc('config').set({ sliders: finalSliders }, { merge: true });
+      } else {
+        const cleanSliders = slidersArr.map(s => ({ bgUrl: s.bgUrl }));
+        await db.collection('portal').doc('config').set({ sliders: cleanSliders }, { merge: true });
+      }
+
+      Swal.fire({ icon: 'success', title: 'Slider Tersimpan! 🎉', text: 'Perubahan banner langsung aktif di halaman depan.', timer: 1400, showConfirmButton: false });
+    }
+
+    // --- PENGATURAN CONFIG (FIRESTORE REAL-TIME) ---
+    function toggleCustomColorInput(val) {
+      const box = document.getElementById('customColorBox');
+      if(box) { if(val === 'custom') box.classList.remove('hidden'); else box.classList.add('hidden'); }
+    }
+    function syncCustomColorInput(val) {
+      const txt = document.getElementById('cfgCustomColor');
+      if(txt) txt.value = val;
+    }
+
+    function populateConfigForm() {
+      const cfg = adminState.config || {};
+      const navs = cfg.menuNav || {};
+      if(document.getElementById('mNavBeranda')) document.getElementById('mNavBeranda').checked = (navs.beranda !== false);
+      if(document.getElementById('mNavAlur')) document.getElementById('mNavAlur').checked = (navs.alur !== false);
+      if(document.getElementById('mNavLomba')) document.getElementById('mNavLomba').checked = (navs.lomba !== false);
+      if(document.getElementById('mNavCek')) document.getElementById('mNavCek').checked = (navs.cek !== false);
+      if(document.getElementById('mNavUnggah')) document.getElementById('mNavUnggah').checked = (navs.unggah !== false);
+      if(document.getElementById('mNavSertifikat')) document.getElementById('mNavSertifikat').checked = (navs.sertifikat !== false);
+
+      if(document.getElementById('cfgLokasi')) document.getElementById('cfgLokasi').value = cfg.lokasi || "";
+      if(document.getElementById('cfgMapUrl')) document.getElementById('cfgMapUrl').value = cfg.mapUrl || "";
+      if(document.getElementById('cfgWaNumber')) document.getElementById('cfgWaNumber').value = cfg.waNumber || "";
+      if(document.getElementById('cfgTargetDate')) document.getElementById('cfgTargetDate').value = cfg.targetDate || "2026-11-20T08:00";
+      if(document.getElementById('cfgLinkIg')) document.getElementById('cfgLinkIg').value = cfg.linkIg || "";
+      if(document.getElementById('cfgLinkYt')) document.getElementById('cfgLinkYt').value = cfg.linkYt || "";
+      if(document.getElementById('cfgLinkTt')) document.getElementById('cfgLinkTt').value = cfg.linkTt || "";
+      if(document.getElementById('cfgLinkTh')) document.getElementById('cfgLinkTh').value = cfg.linkTh || "";
+      
+      const themeVal = cfg.themeColor || 'emerald';
+      const customVal = cfg.customColor || '#047857';
+      if(document.getElementById('cfgThemeColor')) {
+        document.getElementById('cfgThemeColor').value = themeVal;
+        toggleCustomColorInput(themeVal);
+      }
+      if(document.getElementById('cfgCustomColor')) document.getElementById('cfgCustomColor').value = customVal;
+      if(document.getElementById('cfgCustomColorPicker') && customVal.startsWith('#')) document.getElementById('cfgCustomColorPicker').value = customVal;
+
+      if(document.getElementById('cfgHeaderTitle')) document.getElementById('cfgHeaderTitle').value = cfg.headerTitle || "";
+      if(document.getElementById('cfgHeaderSub')) document.getElementById('cfgHeaderSub').value = cfg.headerSub || "";
+      if(document.getElementById('cfgRekening')) document.getElementById('cfgRekening').value = cfg.rekening || "";
+      if(document.getElementById('cfgContact')) document.getElementById('cfgContact').value = cfg.contact || "";
+      if(document.getElementById('certTemplateUrlInput')) document.getElementById('certTemplateUrlInput').value = cfg.certTemplate || "";
+    }
+
+    async function saveNavMenuConfig(e) {
+      e.preventDefault();
+      await db.collection('portal').doc('config').set({
+        menuNav: {
+          beranda: document.getElementById('mNavBeranda').checked,
+          alur: document.getElementById('mNavAlur').checked,
+          lomba: document.getElementById('mNavLomba').checked,
+          cek: document.getElementById('mNavCek').checked,
+          unggah: document.getElementById('mNavUnggah').checked,
+          sertifikat: document.getElementById('mNavSertifikat').checked
+        }
+      }, { merge: true });
+      Swal.fire({ icon: 'success', title: 'Tersimpan!', text: 'Pengaturan menubar langsung aktif.', timer: 1400, showConfirmButton: false });
+    }
+
+    async function saveTopbarConfig(e) {
+      e.preventDefault();
+      await db.collection('portal').doc('config').set({
+        lokasi: document.getElementById('cfgLokasi').value,
+        mapUrl: document.getElementById('cfgMapUrl').value,
+        waNumber: document.getElementById('cfgWaNumber').value,
+        targetDate: document.getElementById('cfgTargetDate').value,
+        linkIg: document.getElementById('cfgLinkIg').value,
+        linkYt: document.getElementById('cfgLinkYt').value,
+        linkTt: document.getElementById('cfgLinkTt').value,
+        linkTh: document.getElementById('cfgLinkTh').value
+      }, { merge: true });
+      Swal.fire({ icon: 'success', title: 'Tersimpan!', text: 'Topbar & sosial media langsung diperbarui.', timer: 1400, showConfirmButton: false });
+    }
+
+    async function saveIdentitasConfig(e) {
+      e.preventDefault();
+      const themeVal = document.getElementById('cfgThemeColor').value;
+      const customVal = document.getElementById('cfgCustomColor').value.trim();
+
+      await db.collection('portal').doc('config').set({
+        themeColor: themeVal,
+        customColor: customVal,
+        headerTitle: document.getElementById('cfgHeaderTitle').value,
+        headerSub: document.getElementById('cfgHeaderSub').value,
+        rekening: document.getElementById('cfgRekening').value,
+        contact: document.getElementById('cfgContact').value
+      }, { merge: true });
+
+      Swal.fire({ icon: 'success', title: 'Tersimpan!', text: 'Identitas & warna tema langsung berubah real-time!', timer: 1400, showConfirmButton: false });
+    }
+
+    // --- VERIFIKASI & HAPUS PENDAFTAR (FIRESTORE + SYNC SHEETS) ---
+    async function updateStatus(kode, newStatus) {
+      await db.collection('pendaftar').doc(kode).set({ status: newStatus }, { merge: true });
+      postToGAS({ action: 'updateStatus', kodeRegistrasi: kode, newStatus }).catch(() => {});
+      Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: `Status ${kode} → ${newStatus}`, showConfirmButton: false, timer: 1500 });
+    }
+
+    function deleteRegistrant(kode) {
+      Swal.fire({
+        title: `Hapus Data ${kode}?`, text: 'Data peserta akan dihapus permanen.', icon: 'warning',
+        showCancelButton: true, confirmButtonColor: '#d33', confirmButtonText: 'Ya, Hapus!'
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          await db.collection('pendaftar').doc(kode).delete();
+          postToGAS({ action: 'deleteRegistrant', kodeRegistrasi: kode }).catch(() => {});
+          Swal.fire({ icon: 'success', title: 'Terhapus!', timer: 1200, showConfirmButton: false });
+        }
+      });
+    }
+
+    function populateLombaFilter() {
+      const sel = document.getElementById('filterLomba');
+      const currentVal = sel.value;
+      sel.innerHTML = `<option value="">Semua Cabang Lomba</option>`;
+      adminState.lomba.forEach(item => { sel.innerHTML += `<option value="${escapeHtml(item.judul)}">${escapeHtml(item.judul)}</option>`; });
+      sel.value = currentVal;
+    }
+
+    function exportCSV() {
+      if (adminState.filteredData.length === 0) return;
+      let csv = "Kode Registrasi,Nama Peserta,Asal Sekolah,Cabang Lomba,No WA,Email,Status,Link Bukti TF,Link Audio\n";
+      adminState.filteredData.forEach(x => {
+        csv += `"${x.kodeRegistrasi}","${x.namaLengkap}","${x.asalSekolah}","${x.cabangLomba}","${x.noWhatsapp}","${x.email}","${x.status}","${x.linkBukti}","${x.linkAudio}"\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'Rekap_Pendaftar_PesonaAlFirdaus.csv'; a.click();
     }
   </script>
 </body>
