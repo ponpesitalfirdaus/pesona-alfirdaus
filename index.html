@@ -51,7 +51,6 @@
     .theme-accent { accent-color: var(--t-700) !important; }
     .alur-step-checked { background-color: var(--t-50) !important; border-color: var(--t-200) !important; }
 
-    /* Highlight Kuning & Shadow untuk Menu Bar Aktif */
     .nav-active-desktop {
       background-color: #facc15 !important;
       color: #030712 !important;
@@ -83,7 +82,6 @@
     }
   </style>
 
-  <!-- TERAPKAN TEMA TANPA JEDA SEBELUM HALAMAN DIREENDER -->
   <script>
     const THEME_PALETTES = {
       emerald: { c950: '#022c22', c900: '#064e3b', c800: '#065f46', c700: '#047857', c600: '#059669', c200: '#a7f3d0', c100: '#d1fae5', c50: '#ecfdf5' },
@@ -154,7 +152,7 @@
           document.documentElement.classList.add('theme-loading');
           setTimeout(function() {
             document.documentElement.classList.remove('theme-loading');
-          }, 600);
+          }, 500);
         }
       } catch (e) {}
     })();
@@ -165,6 +163,8 @@
   <!-- TOP BAR BANNER -->
   <div id="topbarBg" class="theme-topbar text-white text-[11px] sm:text-xs py-2 px-3 sm:px-4 border-b border-white/10 transition-colors">
     <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-2 text-center md:text-left">
+      
+      <!-- LEFT TOPBAR -->
       <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 sm:gap-4">
         <div class="flex items-center gap-1.5 text-yellow-300">
           <i class="fa-solid fa-location-dot"></i>
@@ -184,6 +184,7 @@
         </div>
       </div>
 
+      <!-- RIGHT TOPBAR -->
       <div class="flex items-center justify-center space-x-3 text-sm">
         <a id="linkIg" href="#" target="_blank" title="Instagram" class="hover:text-yellow-300 transition"><i class="fa-brands fa-instagram"></i></a>
         <a id="linkYt" href="#" target="_blank" title="YouTube" class="hover:text-yellow-300 transition"><i class="fa-brands fa-youtube"></i></a>
@@ -194,12 +195,15 @@
           <i class="fa-solid fa-user-lock text-yellow-400 text-sm"></i>
         </a>
       </div>
+
     </div>
   </div>
 
   <!-- NAVBAR UTAMA -->
   <header id="mainHeader" class="theme-header text-white shadow-md sticky top-0 z-40 transition-colors">
     <div class="container mx-auto px-4 py-2.5 flex justify-between items-center">
+      
+      <!-- LOGO -->
       <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('beranda')">
         <img src="https://lh3.googleusercontent.com/d/1Ca6RhNsv0aFWD4EMdkr8uCcSuPDESTpv" alt="Logo" class="w-9 h-9 sm:w-10 sm:h-10 object-contain rounded-full bg-white p-0.5 border border-yellow-400 shadow">
         <div>
@@ -208,6 +212,7 @@
         </div>
       </div>
 
+      <!-- DESKTOP NAV MENU -->
       <nav class="hidden md:flex items-center space-x-2 text-sm font-medium" id="desktopNav">
         <button id="nav-beranda" onclick="switchView('beranda')" class="nav-desktop-btn px-3 py-1.5 rounded-xl hover:text-yellow-300 transition-all duration-200 inline-flex items-center gap-1.5">
           <i class="fa-solid fa-house text-amber-300"></i> Beranda
@@ -229,13 +234,16 @@
         </button>
       </nav>
 
+      <!-- HAMBURGER MOBILE -->
       <div class="flex items-center md:hidden">
         <button onclick="toggleMobileNav()" class="w-9 h-9 flex items-center justify-center text-white hover:text-yellow-300 focus:outline-none">
           <i class="fa-solid fa-bars text-xl" id="hamburgerIcon"></i>
         </button>
       </div>
+
     </div>
 
+    <!-- MOBILE MENU DROPDOWN -->
     <div id="mobileMenu" class="hidden md:hidden bg-black/25 border-t border-white/20 px-4 py-3 space-y-1.5 text-sm font-medium">
       <button id="mnav-beranda" onclick="switchView('beranda'); toggleMobileNav();" class="nav-mobile-btn block w-full text-left py-2 px-3 rounded-xl hover:bg-white/10 transition-all duration-200">
         <i class="fa-solid fa-house w-5 text-yellow-300 mr-1"></i> Beranda
@@ -263,6 +271,8 @@
 
     <!-- 1. BERANDA -->
     <section id="view-beranda" class="view-page container mx-auto px-4 py-6">
+      
+      <!-- HERO SLIDER BANNER -->
       <div class="relative group rounded-2xl overflow-hidden shadow-md border border-gray-200 mb-8 bg-black w-full">
         <div class="swiper heroSlider w-full">
           <div class="swiper-wrapper" id="sliderWrapper">
@@ -279,6 +289,7 @@
         </button>
       </div>
 
+      <!-- DAFTAR CABANG LOMBA CAROUSEL SLIDER -->
       <div class="mb-12">
         <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
           <div class="text-center sm:text-left">
@@ -302,10 +313,12 @@
           </button>
         </div>
       </div>
+
     </section>
 
     <!-- 1B. ALUR PENDAFTARAN RINGKAS, IKONIK & INTERAKTIF -->
     <section id="view-alur" class="view-page hidden container mx-auto px-4 py-8 max-w-5xl">
+      
       <div class="theme-dark-bg text-white rounded-2xl shadow-lg p-5 sm:p-7 mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <span class="inline-flex items-center gap-1.5 bg-yellow-400 text-gray-950 font-extrabold text-[11px] px-3 py-1 rounded-full uppercase tracking-wider shadow">
@@ -449,7 +462,6 @@
         </div>
       </div>
 
-      <!-- KARTU INFO PENTING RINGKAS -->
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div class="bg-white rounded-2xl border p-4 shadow-sm flex items-start gap-3">
           <div class="w-10 h-10 rounded-xl theme-badge flex items-center justify-center text-base shrink-0">
@@ -486,15 +498,17 @@
           </div>
         </div>
       </div>
+
     </section>
 
-    <!-- 2. CABANG LOMBA -->
+    <!-- 2. CABANG LOMBA FULL PAGE GRID / LIST -->
     <section id="view-lomba" class="view-page hidden container mx-auto px-4 py-8">
       <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
         <div>
           <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-900">Daftar Cabang Perlombaan</h2>
           <p class="text-gray-600 text-xs sm:text-sm mt-1">Pilih perlombaan untuk melihat detail syarat dan pendaftaran</p>
         </div>
+
         <div class="bg-gray-200 p-1 rounded-xl flex items-center gap-1 shadow-inner shrink-0">
           <button onclick="toggleViewMode('grid')" id="btnViewGrid" class="px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 shadow bg-white text-gray-900">
             <i class="fa-solid fa-th-large text-amber-500"></i> Grid
@@ -504,10 +518,11 @@
           </button>
         </div>
       </div>
+
       <div id="gridLombaContainer"></div>
     </section>
 
-    <!-- 3. DETAIL LOMBA -->
+    <!-- 3. DETAIL LOMBA PAGE -->
     <section id="view-detail-lomba" class="view-page hidden container mx-auto px-4 py-6 sm:py-8">
       <button onclick="switchView('lomba')" class="mb-4 sm:mb-6 theme-text font-bold text-xs sm:text-sm flex items-center gap-2 hover:underline">
         <i class="fa-solid fa-arrow-left"></i> Kembali ke Daftar Lomba
@@ -515,6 +530,7 @@
 
       <div class="bg-white rounded-2xl shadow-xl border overflow-hidden p-4 sm:p-8">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+          
           <div class="lg:col-span-5 flex flex-col items-center">
             <div onclick="openFlyerZoom()" title="Klik untuk memperbesar / zoom flyer" class="relative group w-full bg-gray-100 rounded-xl overflow-hidden shadow-md border border-gray-200 cursor-zoom-in mb-4">
               <img id="detailFlyerImg" src="" alt="Flyer Lomba" class="w-full h-auto object-contain block mx-auto transition-transform duration-300 group-hover:scale-[1.01]">
@@ -555,10 +571,12 @@
                   <h4 class="font-bold text-gray-900 text-sm sm:text-base mb-1"><i class="fa-solid fa-trophy theme-text mr-2"></i>Hadiah &amp; Fasilitas</h4>
                   <p id="detailHadiah" class="whitespace-pre-line text-gray-600 leading-relaxed"></p>
                 </div>
+
                 <div class="border-t pt-4">
                   <h4 class="font-bold text-gray-900 text-sm sm:text-base mb-2"><i class="fa-solid fa-book-open theme-text mr-2"></i>Juknis Lomba</h4>
                   <div id="detailJuknisContainer"></div>
                 </div>
+
                 <div class="border-t pt-4">
                   <h4 class="font-bold text-gray-900 text-sm sm:text-base mb-2"><i class="fa-brands fa-whatsapp text-green-600 mr-2"></i>Narahubung</h4>
                   <div id="detailNarahubungContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
@@ -566,11 +584,12 @@
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </section>
 
-    <!-- 4. CEK PENDAFTARAN + BUKTI A4 REAL-TIME -->
+    <!-- 4. CEK PENDAFTARAN + BUKTI PENDAFTARAN A4 (REAL-TIME) -->
     <section id="view-cek" class="view-page hidden container mx-auto px-4 py-8 sm:py-10 max-w-3xl">
       <div class="bg-white p-5 sm:p-8 rounded-2xl shadow-lg border">
         <div class="text-center max-w-xl mx-auto">
@@ -578,7 +597,7 @@
             <i class="fa-solid fa-file-invoice"></i>
           </div>
           <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-1">Cek Status &amp; Bukti Pendaftaran</h3>
-          <p class="text-gray-600 text-xs sm:text-sm mb-5">Masukkan Nama Peserta, Kode Registrasi, atau Nomor WhatsApp untuk melihat status secara real-time dan mencetak Bukti Pendaftaran (A4).</p>
+          <p class="text-gray-600 text-xs sm:text-sm mb-5">Masukkan Nama Peserta, Kode Registrasi, atau Nomor WhatsApp untuk melihat status real-time dan mencetak Bukti Pendaftaran (A4 Peserta &amp; Panitia).</p>
           <div class="flex flex-col sm:flex-row gap-2 mb-4">
             <input type="text" id="inputSearch" onkeydown="if(event.key==='Enter') searchRegistration()" placeholder="Ketik Nama Peserta / Kode Registrasi / Nomor WA..." class="flex-1 border rounded-xl px-4 py-2.5 text-xs sm:text-sm focus:outline-none">
             <button onclick="searchRegistration()" class="theme-btn text-white px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm shadow">Cari &amp; Tampilkan Bukti</button>
@@ -619,10 +638,10 @@
           <div>
             <label class="block font-bold text-gray-700 mb-1">Pilih File Audio (MP3, WAV, M4A) *</label>
             <input type="file" id="audioFile" accept="audio/*" required class="w-full border rounded-lg p-2 text-xs bg-gray-50">
-            <p class="text-[10px] text-gray-400 mt-1">Format: MP3/WAV/M4A. File tersimpan ke Google Drive Panitia &amp; tercatat otomatis.</p>
+            <p class="text-[10px] text-gray-400 mt-1">Format: MP3/WAV/M4A. Ukuran disarankan maks. 10 MB.</p>
           </div>
           <button type="submit" id="btnAudioSubmit" class="w-full theme-btn text-white font-bold py-3 rounded-xl text-xs sm:text-sm shadow flex items-center justify-center gap-2">
-            <i class="fa-solid fa-cloud-arrow-up"></i> Unggah Musik / Audio Sekarang
+            <i class="fa-solid fa-cloud-arrow-up"></i> Unggah Musik / Audio Now
           </button>
         </form>
       </div>
@@ -638,7 +657,7 @@
         <p class="text-xs text-gray-500 mb-6">Unduh dan verifikasi keaslian sertifikat keikutsertaan Anda via Barcode/QR Code.</p>
 
         <div class="flex flex-col sm:flex-row gap-2 mb-6">
-          <input type="text" id="inputSearchCert" onkeydown="if(event.key==='Enter') searchCertificate()" placeholder="Kode Registrasi / Nama / No WA..." class="flex-1 border rounded-lg px-4 py-2.5 text-xs sm:text-sm focus:outline-none">
+          <input type="text" id="inputSearchCert" placeholder="Kode Registrasi / Nama / No WA..." class="flex-1 border rounded-lg px-4 py-2.5 text-xs sm:text-sm focus:outline-none">
           <button onclick="searchCertificate()" class="theme-btn text-white px-5 py-2.5 rounded-lg font-bold text-xs sm:text-sm">Cari Sertifikat</button>
         </div>
 
@@ -655,7 +674,7 @@
     </div>
   </footer>
 
-  <!-- MODAL ZOOM FLYER -->
+  <!-- MODAL ZOOM FLYER FULL SCREEN -->
   <div id="flyerZoomModal" onclick="closeFlyerZoomOnBackdrop(event)" class="fixed inset-0 bg-black/90 z-50 hidden flex flex-col">
     <div class="flex flex-wrap items-center justify-between gap-2 px-4 py-3 bg-gray-950/90 border-b border-white/15 text-white z-10">
       <div class="flex items-center gap-2 text-xs sm:text-sm font-bold">
@@ -663,13 +682,20 @@
         <span id="zoomFlyerTitle" class="truncate max-w-[180px] sm:max-w-md">Preview Flyer Lomba</span>
       </div>
       <div class="flex items-center gap-1.5 sm:gap-2">
-        <button type="button" onclick="adjustFlyerZoom(-0.25)" class="bg-white/15 hover:bg-white/25 text-white w-8 h-8 rounded-lg flex items-center justify-center font-bold transition"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
+        <button type="button" onclick="adjustFlyerZoom(-0.25)" title="Perkecil" class="bg-white/15 hover:bg-white/25 text-white w-8 h-8 rounded-lg flex items-center justify-center font-bold transition">
+          <i class="fa-solid fa-magnifying-glass-minus"></i>
+        </button>
         <span id="zoomLevelLabel" class="text-xs font-mono font-bold bg-black/50 px-2.5 py-1 rounded-lg border border-white/20 min-w-[56px] text-center">100%</span>
-        <button type="button" onclick="adjustFlyerZoom(0.25)" class="bg-white/15 hover:bg-white/25 text-white w-8 h-8 rounded-lg flex items-center justify-center font-bold transition"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
-        <button type="button" onclick="resetFlyerZoom()" class="bg-yellow-400 hover:bg-yellow-500 text-gray-950 px-2.5 h-8 rounded-lg text-xs font-extrabold transition">Reset</button>
-        <button type="button" onclick="closeFlyerZoom()" class="bg-red-600 hover:bg-red-700 text-white w-8 h-8 rounded-lg flex items-center justify-center font-bold ml-1 transition"><i class="fa-solid fa-xmark text-base"></i></button>
+        <button type="button" onclick="adjustFlyerZoom(0.25)" title="Perbesar" class="bg-white/15 hover:bg-white/25 text-white w-8 h-8 rounded-lg flex items-center justify-center font-bold transition">
+          <i class="fa-solid fa-magnifying-glass-plus"></i>
+        </button>
+        <button type="button" onclick="resetFlyerZoom()" title="Reset" class="bg-yellow-400 hover:bg-yellow-500 text-gray-950 px-2.5 h-8 rounded-lg text-xs font-extrabold transition">Reset</button>
+        <button type="button" onclick="closeFlyerZoom()" title="Tutup" class="bg-red-600 hover:bg-red-700 text-white w-8 h-8 rounded-lg flex items-center justify-center font-bold ml-1 transition">
+          <i class="fa-solid fa-xmark text-base"></i>
+        </button>
       </div>
     </div>
+
     <div id="flyerZoomViewport" onwheel="handleFlyerWheelZoom(event)" class="flex-1 overflow-auto flex items-center justify-center p-4">
       <img id="zoomedFlyerImg" src="" alt="Flyer Full Zoom" onclick="toggleClickZoom()" style="transform: scale(1); transform-origin: center top;" class="max-w-full max-h-[85vh] w-auto h-auto object-contain rounded-lg shadow-2xl transition-transform duration-150 cursor-zoom-in">
     </div>
@@ -678,7 +704,9 @@
   <!-- MODAL FORM PENDAFTARAN -->
   <div id="formModal" onclick="closeFormOnBackdrop(event)" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
     <div class="bg-white rounded-2xl max-w-md w-full p-5 sm:p-6 relative shadow-2xl my-8 transform transition-all">
-      <button type="button" onclick="closeForm()" title="Tutup Modal" class="absolute top-3.5 right-3.5 bg-gray-100 hover:bg-red-100 text-gray-500 hover:text-red-600 w-8 h-8 rounded-full flex items-center justify-center font-bold text-lg transition shadow-sm border">&times;</button>
+      <button type="button" onclick="closeForm()" title="Tutup Modal" class="absolute top-3.5 right-3.5 bg-gray-100 hover:bg-red-100 text-gray-500 hover:text-red-600 w-8 h-8 rounded-full flex items-center justify-center font-bold text-lg transition shadow-sm border">
+        &times;
+      </button>
 
       <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-1 pr-8">Form Pendaftaran Lomba</h3>
       <p class="text-xs text-gray-500 mb-4">Isi data calon peserta / tim dengan benar.</p>
@@ -730,7 +758,7 @@
           <label class="block text-xs font-bold text-gray-700 mb-1">Upload Bukti Transfer / Pembayaran *</label>
           <input type="file" id="fileBukti" accept="image/*" class="w-full text-xs text-gray-500 border rounded-lg p-1.5 bg-gray-50">
           <p class="text-[10px] theme-text font-medium mt-1">
-            <i class="fa-solid fa-circle-info mr-0.5"></i> Bukti transfer disimpan ke Google Drive &amp; data masuk real-time ke panitia.
+            <i class="fa-solid fa-circle-info mr-0.5"></i> File otomatis tersimpan aman di Google Drive Folder Panitia.
           </p>
         </div>
         
@@ -740,11 +768,6 @@
   </div>
 
   <script>
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbw4APJqKIcWVgs1yk29KHmuIeArlCDcu0rruBauZkOOmUmGig9Wvqy2aIKq7_gaUPGkOg/exec";
-    const DRIVE_FOLDER_ID = "1i0VnagJrNxjQRWgo-qXZyrzIRX7l85WFZDw3ji6c0ncve_g9hrh811Wwd6l8sojQjbiH1eN";
-    const ADMIN_CONFIRM_WA = "6285267743284";
-    const LOGO_URL = "https://lh3.googleusercontent.com/d/1Ca6RhNsv0aFWD4EMdkr8uCcSuPDESTpv";
-
     let state = {
       lombaList: [],
       config: {},
@@ -758,7 +781,7 @@
     let countdownInterval = null;
     let searchTimeout = null;
     let currentFlyerZoom = 1;
-    let activeRegUnsubscribe = null;
+    let activeSlipUnsubscribe = null;
 
     window.onload = async () => {
       setActiveNav('beranda');
@@ -775,60 +798,60 @@
       }
     };
 
-    // --- KONEKSI REAL-TIME FIREBASE FIRESTORE ---
+    // --- LISTENER REAL-TIME FIRESTORE (CONFIG & LOMBA) ---
     function initRealtimePortal() {
-      if (!IS_FIREBASE_CONFIGURED || !fbDb) {
-        loadPortalDataFallbackGAS();
-        return;
-      }
-
-      // 1. Listener Real-Time Config (Tema, Topbar, Slider, Menubar)
-      fbDb.collection('config').doc('portal').onSnapshot((doc) => {
-        if (doc.exists) {
-          state.config = doc.data() || {};
-          applyPortalConfig();
-        } else {
-          // Jika koleksi config di Firebase masih kosong, ambil awal dari GAS
-          loadPortalDataFallbackGAS();
-        }
-        document.documentElement.classList.remove('theme-loading');
-      }, (err) => {
-        console.error("Firestore config listener error:", err);
-        loadPortalDataFallbackGAS();
-      });
-
-      // 2. Listener Real-Time Cabang Lomba
-      fbDb.collection('lomba').onSnapshot((snapshot) => {
-        const list = [];
-        snapshot.forEach((doc) => {
-          list.push({ id: doc.id, ...doc.data() });
+      if (db) {
+        // 1. Real-time Config & Tema
+        db.collection('portal').doc('config').onSnapshot((docSnap) => {
+          if (docSnap.exists) {
+            state.config = docSnap.data() || {};
+            applyPortalConfig();
+          } else {
+            loadPortalDataFromGAS();
+          }
+          document.documentElement.classList.remove('theme-loading');
+        }, (err) => {
+          console.warn("Firestore config listener fallback ke GAS:", err);
+          loadPortalDataFromGAS();
         });
-        list.sort((a, b) => (a.urutan || 99) - (b.urutan || 99));
-        if (list.length > 0) {
-          state.lombaList = list;
-          renderGridLomba();
-        }
-      });
+
+        // 2. Real-time Daftar Lomba
+        db.collection('lomba').onSnapshot((snap) => {
+          if (!snap.empty) {
+            const list = [];
+            snap.forEach(doc => list.push({ id: doc.id, ...doc.data() }));
+            list.sort((a, b) => (a.order || 0) - (b.order || 0));
+            state.lombaList = list;
+            renderGridLomba();
+          } else {
+            loadPortalDataFromGAS();
+          }
+        }, (err) => {
+          console.warn("Firestore lomba listener fallback ke GAS:", err);
+        });
+      } else {
+        loadPortalDataFromGAS();
+      }
     }
 
-    async function loadPortalDataFallbackGAS() {
+    async function loadPortalDataFromGAS() {
       try {
         const res = await fetch(`${GAS_URL}?action=initPortal&_t=${Date.now()}`);
         const result = await res.json();
-        if (result && result.status === "success") {
+        if(result && result.status === "success") {
           state.lombaList = result.lombaList || [];
           state.config = result.config || {};
           applyPortalConfig();
           renderGridLomba();
         }
-      } catch (e) {
-        console.error("Error fallback GAS:", e);
+      } catch(e) {
+        console.error("Error loading GAS fallback:", e);
       } finally {
         document.documentElement.classList.remove('theme-loading');
       }
     }
 
-    // --- LOGIKA INTERAKTIF ALUR PENDAFTARAN (4 LANGKAH) ---
+    // --- ALUR PENDAFTARAN 4 LANGKAH ---
     function initAlurChecklist() {
       let saved = [];
       try { saved = JSON.parse(localStorage.getItem('paf_alur_progress_v2') || '[]'); } catch (e) { saved = []; }
@@ -884,7 +907,12 @@
     }
 
     function escapeHtml(str) {
-      return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
     }
 
     function formatWaLink(rawPhone, messageText) {
@@ -901,7 +929,9 @@
       const trimmed = String(rawUrl).trim();
       if (!trimmed) return '';
       if (/^https?:\/\//i.test(trimmed)) return trimmed;
-      if (trimmed.includes('.') && !trimmed.endsWith('.pdf') && !trimmed.endsWith('.docx')) return 'https://' + trimmed;
+      if (trimmed.includes('.') && !trimmed.endsWith('.pdf') && !trimmed.endsWith('.docx')) {
+        return 'https://' + trimmed;
+      }
       return trimmed;
     }
 
@@ -910,7 +940,10 @@
       const safeCustom = customHex || '#047857';
       applyThemeVarsImmediately(safeKey, safeCustom);
       try {
-        localStorage.setItem('paf_portal_theme', JSON.stringify({ themeColor: safeKey, customColor: safeCustom }));
+        localStorage.setItem('paf_portal_theme', JSON.stringify({
+          themeColor: safeKey,
+          customColor: safeCustom
+        }));
       } catch (e) {}
       document.documentElement.classList.remove('theme-loading');
     }
@@ -921,6 +954,7 @@
         pagination: { el: '.swiper-pagination', clickable: true },
         navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
       });
+
       state.lombaSwiperInstance = new Swiper('.lombaSwiper', {
         slidesPerView: 1.15, spaceBetween: 16, loop: false,
         autoplay: { delay: 3500, disableOnInteraction: false },
@@ -950,6 +984,7 @@
     function setActiveNav(navKey) {
       document.querySelectorAll('.nav-desktop-btn').forEach(btn => btn.classList.remove('nav-active-desktop'));
       document.querySelectorAll('.nav-mobile-btn').forEach(btn => btn.classList.remove('nav-active-mobile'));
+
       const activeDesktop = document.getElementById(`nav-${navKey}`);
       const activeMobile = document.getElementById(`mnav-${navKey}`);
       if (activeDesktop) activeDesktop.classList.add('nav-active-desktop');
@@ -960,6 +995,7 @@
       document.querySelectorAll('.view-page').forEach(el => el.classList.add('hidden'));
       const target = document.getElementById(`view-${viewName}`);
       if(target) target.classList.remove('hidden');
+
       const navKey = (viewName === 'detail-lomba') ? 'lomba' : viewName;
       setActiveNav(navKey);
       window.scrollTo(0,0);
@@ -969,6 +1005,7 @@
       state.viewMode = mode;
       const btnGrid = document.getElementById('btnViewGrid');
       const btnList = document.getElementById('btnViewList');
+
       if(mode === 'list') {
         btnList.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 shadow bg-white text-gray-900";
         btnGrid.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 text-gray-600 hover:text-gray-900";
@@ -980,7 +1017,9 @@
     }
 
     function copyBsiNorek() {
-      copyTextWithToast("8500808806", "No. Rekening BSI");
+      navigator.clipboard.writeText("8500808806").then(() => {
+        Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'No. Rekening BSI Berhasil Disalin! 📋', showConfirmButton: false, timer: 2000 });
+      });
     }
 
     function parseImageUrl(rawUrl) {
@@ -1021,8 +1060,14 @@
         if(cfg.linkTh && document.getElementById('linkTh')) document.getElementById('linkTh').href = cfg.linkTh;
 
         const navs = cfg.menuNav || {};
-        const toggleNavElem = (id, active) => { const elem = document.getElementById(id); if (elem) elem.style.display = (active === false) ? 'none' : 'inline-flex'; };
-        const toggleMobileNavElem = (id, active) => { const elem = document.getElementById(id); if (elem) elem.style.display = (active === false) ? 'none' : 'block'; };
+        const toggleNavElem = (id, active) => {
+          const elem = document.getElementById(id);
+          if (elem) elem.style.display = (active === false) ? 'none' : 'inline-flex';
+        };
+        const toggleMobileNavElem = (id, active) => {
+          const elem = document.getElementById(id);
+          if (elem) elem.style.display = (active === false) ? 'none' : 'block';
+        };
 
         toggleNavElem('nav-beranda', navs.beranda);
         toggleNavElem('nav-alur', navs.alur);
@@ -1097,6 +1142,7 @@
         if((item.active1 !== false && item.active1 !== 'false') && (item.kat1 || item.biaya1)) priceItemsHtml += `<div class="flex justify-between font-bold text-gray-700"><span>• ${item.kat1 || 'Jenjang 1'}:</span> <span class="theme-text font-extrabold">${item.biaya1 || '-'}</span></div>`;
         if((item.active2 !== false && item.active2 !== 'false') && (item.kat2 || item.biaya2)) priceItemsHtml += `<div class="flex justify-between font-bold text-gray-700"><span>• ${item.kat2 || 'Jenjang 2'}:</span> <span class="theme-text font-extrabold">${item.biaya2 || '-'}</span></div>`;
         if((item.active3 !== false && item.active3 !== 'false') && (item.kat3 || item.biaya3)) priceItemsHtml += `<div class="flex justify-between font-bold text-gray-700"><span>• ${item.kat3 || 'Jenjang 3'}:</span> <span class="theme-text font-extrabold">${item.biaya3 || '-'}</span></div>`;
+
         if (!priceItemsHtml) priceItemsHtml = `<div class="text-gray-400 italic">Gratis / Hubungi Panitia</div>`;
 
         const priceBlockHtml = `<div class="theme-box border rounded-lg p-2.5 my-3 text-xs space-y-1">${priceItemsHtml}</div>`;
@@ -1288,7 +1334,9 @@
       const naraBox = document.getElementById('detailNarahubungContainer');
       naraBox.innerHTML = "";
       let rawContacts = item.narahubung || [];
-      if (typeof rawContacts === 'string') { try { rawContacts = JSON.parse(rawContacts); } catch(e) { rawContacts = []; } }
+      if (typeof rawContacts === 'string') {
+        try { rawContacts = JSON.parse(rawContacts); } catch(e) { rawContacts = []; }
+      }
       let contacts = Array.isArray(rawContacts) ? rawContacts.filter(c => c && String(c.wa || '').trim() !== '') : [];
 
       if (contacts.length === 0) {
@@ -1334,10 +1382,11 @@
           document.getElementById('formModal').classList.remove('hidden');
         };
       }
+
       switchView('detail-lomba');
     }
 
-    // --- ZOOM FLYER ---
+    // --- ZOOM FLYER LIGHTBOX ---
     function openFlyerZoom() {
       const src = document.getElementById('detailFlyerImg').src;
       if (!src) return;
@@ -1346,7 +1395,9 @@
       document.getElementById('flyerZoomModal').classList.remove('hidden');
     }
     function closeFlyerZoom() { document.getElementById('flyerZoomModal').classList.add('hidden'); resetFlyerZoom(); }
-    function closeFlyerZoomOnBackdrop(e) { if (e.target === document.getElementById('flyerZoomViewport') || e.target === document.getElementById('flyerZoomModal')) closeFlyerZoom(); }
+    function closeFlyerZoomOnBackdrop(e) {
+      if (e.target === document.getElementById('flyerZoomViewport') || e.target === document.getElementById('flyerZoomModal')) closeFlyerZoom();
+    }
     function applyFlyerZoomTransform() {
       const img = document.getElementById('zoomedFlyerImg');
       const label = document.getElementById('zoomLevelLabel');
@@ -1355,52 +1406,48 @@
       img.style.cursor = currentFlyerZoom > 1 ? 'zoom-out' : 'zoom-in';
       if (label) label.innerText = `${Math.round(currentFlyerZoom * 100)}%`;
     }
-    function adjustFlyerZoom(delta) { currentFlyerZoom = Math.min(3, Math.max(0.5, +(currentFlyerZoom + delta).toFixed(2))); applyFlyerZoomTransform(); }
+    function adjustFlyerZoom(delta) {
+      currentFlyerZoom = Math.min(3, Math.max(0.5, +(currentFlyerZoom + delta).toFixed(2)));
+      applyFlyerZoomTransform();
+    }
     function resetFlyerZoom() { currentFlyerZoom = 1; applyFlyerZoomTransform(); }
     function toggleClickZoom() { currentFlyerZoom = currentFlyerZoom > 1 ? 1 : 1.75; applyFlyerZoomTransform(); }
     function handleFlyerWheelZoom(e) { e.preventDefault(); adjustFlyerZoom(e.deltaY < 0 ? 0.15 : -0.15); }
+
     function closeForm() { document.getElementById('formModal').classList.add('hidden'); }
     function closeFormOnBackdrop(e) { if(e.target === document.getElementById('formModal')) closeForm(); }
 
-    // --- HELPER PENCARIAN DI FIRESTORE ---
-    async function queryRegistrantsFromFirestore(qRaw) {
-      const qLower = qRaw.toLowerCase().trim();
-      const qDigits = qRaw.replace(/[^0-9]/g, '');
+    // --- HELPER PENCARIAN PESERTA DI FIRESTORE (CEPAT < 100ms) ---
+    async function queryRegistrantsHybrid(queryText) {
+      const q = String(queryText || '').trim().toLowerCase();
+      if (!q) return [];
 
-      if (!IS_FIREBASE_CONFIGURED || !fbDb) {
-        const res = await fetch(`${GAS_URL}?action=check&query=${encodeURIComponent(qRaw)}&_t=${Date.now()}`);
-        const result = await res.json();
-        if (result.status === "success") {
-          return (result.results && result.results.length > 0) ? result.results : [result.data];
+      if (db) {
+        const snap = await db.collection('pendaftar').get();
+        if (!snap.empty) {
+          const matches = [];
+          snap.forEach(doc => {
+            const d = doc.data();
+            const kode = String(d.kodeRegistrasi || doc.id).toLowerCase();
+            const nama = String(d.namaLengkap || '').toLowerCase();
+            const wa = String(d.noWhatsapp || '').replace(/^'+/, '').toLowerCase();
+            if (kode.includes(q) || nama.includes(q) || wa.includes(q)) {
+              matches.push({ kodeRegistrasi: doc.id, ...d });
+            }
+          });
+          return matches;
         }
-        return [];
       }
 
-      // Cek langsung berdasarkan kode registrasi exact match dulu (hemat baca dokumen)
-      const exactDoc = await fbDb.collection('pendaftar').doc(qRaw.toUpperCase()).get();
-      if (exactDoc.exists) {
-        return [{ id: exactDoc.id, ...exactDoc.data() }];
+      // Fallback ke GAS jika Firestore belum terisi
+      const res = await fetch(`${GAS_URL}?action=check&query=${encodeURIComponent(queryText)}&_t=${Date.now()}`);
+      const result = await res.json();
+      if (result.status === "success") {
+        return (result.results && result.results.length > 0) ? result.results : [result.data];
       }
-
-      const snap = await fbDb.collection('pendaftar').get();
-      const matches = [];
-      snap.forEach((doc) => {
-        const d = doc.data() || {};
-        const kode = String(d.kodeRegistrasi || doc.id || '').toLowerCase();
-        const nama = String(d.namaLengkap || '').toLowerCase();
-        const wa = String(d.noWhatsapp || '').replace(/[^0-9]/g, '');
-        if (
-          kode.includes(qLower) ||
-          nama.includes(qLower) ||
-          (qDigits.length >= 6 && wa.includes(qDigits))
-        ) {
-          matches.push({ id: doc.id, ...d });
-        }
-      });
-      return matches;
+      return [];
     }
 
-    // --- AUTOCOMPLETE UNGGAHAN AUDIO ---
     function onAudioNamaInput(val) {
       const sugBox = document.getElementById('audioSuggestions');
       if (!val || val.trim().length < 3) { sugBox.classList.add('hidden'); return; }
@@ -1409,10 +1456,10 @@
       searchTimeout = setTimeout(async () => {
         sugBox.classList.remove('hidden');
         sugBox.innerHTML = `<div class="p-2.5 text-center text-gray-400">Mencari...</div>`;
-        const results = await queryRegistrantsFromFirestore(val.trim());
-        if (results.length > 0) {
+        const matches = await queryRegistrantsHybrid(val.trim());
+        if (matches.length > 0) {
           sugBox.innerHTML = "";
-          results.forEach(item => {
+          matches.forEach(item => {
             const div = document.createElement('div');
             div.className = "p-2.5 hover:bg-gray-100 cursor-pointer flex justify-between";
             div.innerHTML = `<div><strong>${escapeHtml(item.namaLengkap)}</strong><br><span class="text-[10px] text-gray-500">${escapeHtml(item.asalSekolah)}</span></div><span class="font-mono text-xs font-bold theme-text">${escapeHtml(item.kodeRegistrasi)}</span>`;
@@ -1426,10 +1473,10 @@
         } else {
           sugBox.innerHTML = `<div class="p-2.5 text-center text-red-500">Tidak ditemukan.</div>`;
         }
-      }, 300);
+      }, 250);
     }
 
-    // --- UNGGAHAN AUDIO (HYBRID: UPLOAD KE GOOGLE DRIVE VIA GAS + UPDATE FIRESTORE) ---
+    // --- UNGGAH AUDIO KE GOOGLE DRIVE + SYNC KE FIRESTORE ---
     async function submitAudioUpload(e) {
       e.preventDefault();
       const btn = document.getElementById('btnAudioSubmit');
@@ -1437,85 +1484,69 @@
       const fileInput = document.getElementById('audioFile');
       if(!fileInput.files.length) return;
       const file = fileInput.files[0];
-      const kodeReg = document.getElementById('audioSelectedKode').value || document.getElementById('audioNamaInput').value.trim();
+      const selectedKode = document.getElementById('audioSelectedKode').value;
+      const kodeOrName = selectedKode || document.getElementById('audioNamaInput').value;
 
       const reader = new FileReader();
       reader.onload = async (ev) => {
         try {
           const payload = {
-            action: 'uploadAudio',
-            targetFolderId: DRIVE_FOLDER_ID,
-            kodeRegistrasi: kodeReg,
+            action: 'uploadAudio', targetFolderId: DRIVE_FOLDER_ID,
+            kodeRegistrasi: kodeOrName,
             cabangLomba: document.getElementById('audioCabang').value,
-            audioBase64: ev.target.result,
-            fileName: file.name,
-            fileType: file.type
+            audioBase64: ev.target.result, fileName: file.name, fileType: file.type
           };
           const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify(payload) });
           const result = await res.json();
 
           if(result.status === 'success') {
-            let linkAudio = result.linkAudio || result.audioUrl || '';
-            if (!linkAudio && kodeReg) {
-              const chkRes = await fetch(`${GAS_URL}?action=check&query=${encodeURIComponent(kodeReg)}&_t=${Date.now()}`);
-              const chkJson = await chkRes.json();
-              if (chkJson.status === 'success' && chkJson.data) {
-                linkAudio = chkJson.data.linkAudio || '';
-              }
+            let finalAudioUrl = result.linkAudio || '';
+            if (!finalAudioUrl && selectedKode) {
+              const chk = await fetch(`${GAS_URL}?action=check&query=${encodeURIComponent(selectedKode)}&_t=${Date.now()}`).then(r => r.json()).catch(() => null);
+              if (chk && chk.data && chk.data.linkAudio) finalAudioUrl = chk.data.linkAudio;
             }
 
-            if (IS_FIREBASE_CONFIGURED && fbDb && kodeReg) {
-              await fbDb.collection('pendaftar').doc(kodeReg).set({
-                linkAudio: linkAudio || 'Sudah Diunggah di Drive'
+            if (db && selectedKode && finalAudioUrl) {
+              await db.collection('pendaftar').doc(selectedKode).set({
+                linkAudio: finalAudioUrl,
+                updatedAt: new Date().toISOString()
               }, { merge: true });
             }
 
-            Swal.fire({ icon: 'success', title: 'Audio Diunggah! 🎵', text: 'File audio tersimpan di Google Drive Panitia & status langsung terupdate.' });
-            fileInput.value = "";
-            document.getElementById('audioNamaInput').value = "";
-            document.getElementById('audioSelectedKode').value = "";
+            Swal.fire({ icon: 'success', title: 'Audio Diunggah! 🎵', text: 'Audio tersimpan di Drive Panitia & status langsung terupdate.' });
+            fileInput.value = ""; document.getElementById('audioNamaInput').value = ""; document.getElementById('audioSelectedKode').value = "";
           } else {
-            Swal.fire({ icon: 'error', title: 'Gagal Unggah', text: result.message || 'Gagal mengunggah audio.' });
+            Swal.fire({ icon: 'error', title: 'Gagal Unggah', text: result.message || 'Gagal mengunggah file audio.' });
           }
         } catch (err) {
-          Swal.fire({ icon: 'error', title: 'Error', text: 'Gagal terhubung ke server.' });
+          Swal.fire({ icon: 'error', title: 'Koneksi Gagal', text: 'Gagal terhubung ke server.' });
         } finally {
-          btn.disabled = false;
-          btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Unggah Musik / Audio Sekarang`;
+          btn.disabled = false; btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Unggah Musik / Audio Now`;
         }
       };
       reader.readAsDataURL(file);
     }
 
-    // --- SERTIFIKAT DIGITAL ---
     async function searchCertificate() {
       const q = document.getElementById('inputSearchCert').value.trim();
       const box = document.getElementById('certResultBox');
       if(!q) return;
-      box.classList.remove('hidden');
-      box.innerHTML = "<p class='text-xs text-center'>Mencari data sertifikat...</p>";
+      box.classList.remove('hidden'); box.innerHTML = "<p class='text-xs text-center'>Mencari...</p>";
 
-      const matches = await queryRegistrantsFromFirestore(q);
+      const matches = await queryRegistrantsHybrid(q);
       if(matches.length > 0) {
         const d = matches[0];
         const qrUrl = getQrCodeUrl(`${window.location.origin}${window.location.pathname}?kode=${d.kodeRegistrasi}`);
-        const customBg = parseImageUrl((state.config && state.config.certTemplate) || '');
-        const bgStyle = customBg
-          ? `background-image: linear-gradient(rgba(6,78,59,0.82), rgba(6,78,59,0.88)), url('${customBg}'); background-size: cover; background-position: center;`
-          : '';
-
         box.innerHTML = `
-          <div style="${bgStyle}" class="border-4 border-double border-yellow-500 theme-dark-bg text-white p-6 rounded-xl text-center">
+          <div class="border-4 border-double border-yellow-500 theme-dark-bg text-white p-6 rounded-xl text-center">
             <p class="text-[10px] text-yellow-300 font-bold uppercase">SERTIFIKAT APRESIASI RESMI</p>
             <h2 class="text-xl font-black text-yellow-300 my-1">${escapeHtml(d.namaLengkap)}</h2>
             <p class="text-xs text-white/90">${escapeHtml(d.asalSekolah)} | Cabang: ${escapeHtml(d.cabangLomba)}</p>
             <div class="mt-4 flex justify-center"><img src="${qrUrl}" class="w-16 h-16 bg-white p-1 rounded"></div>
           </div>
-          <button onclick="printSingleCert('${escapeHtml(d.kodeRegistrasi)}')" class="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-950 font-bold py-3 rounded-xl mt-4 text-xs">Unduh / Cetak Sertifikat</button>
+          <button onclick="printSingleCert('${d.kodeRegistrasi}')" class="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-950 font-bold py-3 rounded-xl mt-4 text-xs">Unduh Sertifikat</button>
         `;
-      } else {
-        box.innerHTML = `<p class="text-xs text-red-500 text-center">Data sertifikat tidak ditemukan.</p>`;
-      }
+      } else { box.innerHTML = `<p class="text-xs text-red-500 text-center">Data tidak ditemukan.</p>`; }
     }
 
     function printSingleCert(kode) {
@@ -1530,7 +1561,7 @@
       window.print();
     }
 
-    // --- PENDAFTARAN BARU (HYBRID: DRIVE + SHEETS VIA GAS + REAL-TIME FIRESTORE) ---
+    // --- PENDAFTARAN HYBRID: UPLOAD DRIVE & SHEETS + SIMPAN INSTAN KE FIRESTORE ---
     async function submitRegistration(e) {
       e.preventDefault();
       const btn = document.getElementById('btnSubmitForm');
@@ -1557,7 +1588,7 @@
 
       const doSend = async (b64, fn, ft) => {
         try {
-          // 1. Kirim ke GAS agar file bukti masuk Google Drive & data masuk Google Sheets
+          // 1. Kirim ke Google Apps Script (Simpan Bukti ke Drive + Baris ke Google Sheets)
           const res = await fetch(GAS_URL, {
             method: 'POST',
             body: JSON.stringify({
@@ -1577,22 +1608,16 @@
 
           if(result.status === "success") {
             const kodeReg = result.kodeRegistrasi;
-            let linkBuktiUrl = result.linkBukti || result.buktiUrl || '-';
+            let linkBuktiUrl = result.linkBukti || '-';
 
-            // Ambil URL Drive jika diunggah namun tidak langsung dikirim di response POST
             if (hasBukti && (!linkBuktiUrl || linkBuktiUrl === '-')) {
-              try {
-                const chkRes = await fetch(`${GAS_URL}?action=check&query=${encodeURIComponent(kodeReg)}&_t=${Date.now()}`);
-                const chkJson = await chkRes.json();
-                if (chkJson.status === 'success' && chkJson.data && chkJson.data.linkBukti) {
-                  linkBuktiUrl = chkJson.data.linkBukti;
-                }
-              } catch (eChk) {}
+              const chk = await fetch(`${GAS_URL}?action=check&query=${encodeURIComponent(kodeReg)}&_t=${Date.now()}`).then(r => r.json()).catch(() => null);
+              if (chk && chk.data && chk.data.linkBukti) linkBuktiUrl = chk.data.linkBukti;
             }
 
-            // 2. Simpan ke Firebase Firestore secara Real-Time
-            if (IS_FIREBASE_CONFIGURED && fbDb) {
-              await fbDb.collection('pendaftar').doc(kodeReg).set({
+            // 2. Simpan ke Firebase Firestore agar Admin & Peserta mendapat update real-time
+            if (db) {
+              await db.collection('pendaftar').doc(kodeReg).set({
                 timestamp: new Date().toISOString(),
                 kodeRegistrasi: kodeReg,
                 namaLengkap: namaLengkapVal,
@@ -1694,7 +1719,9 @@
         ? `height:133mm;box-sizing:border-box;border:1.8px solid ${primaryDark};border-radius:10px;padding:10px 14px;background:#ffffff;display:flex;flex-direction:column;justify-content:space-between;font-family:Arial,Helvetica,sans-serif;color:#111827;`
         : `border:2px solid ${primaryDark};border-radius:12px;padding:14px 16px;background:#ffffff;box-shadow:0 2px 8px rgba(0,0,0,0.05);color:#111827;`;
 
-      const copyBadgeStyle = isPeserta ? `background:${primaryDark};color:#facc15;` : 'background:#1e3a8a;color:#ffffff;';
+      const copyBadgeStyle = isPeserta
+        ? `background:${primaryDark};color:#facc15;`
+        : 'background:#1e3a8a;color:#ffffff;';
 
       return `
         <div style="${wrapperStyle}">
@@ -1824,29 +1851,28 @@
       `;
     }
 
-    function subscribeSelectedRegistrationRealtime(kodeReg) {
-      if (activeRegUnsubscribe) {
-        activeRegUnsubscribe();
-        activeRegUnsubscribe = null;
-      }
-      if (!IS_FIREBASE_CONFIGURED || !fbDb || !kodeReg) return;
-
-      activeRegUnsubscribe = fbDb.collection('pendaftar').doc(kodeReg).onSnapshot((doc) => {
-        if (doc.exists) {
-          const freshData = { id: doc.id, ...doc.data() };
-          state.selectedRegistration = freshData;
-          renderSelectedRegistrationDetail(freshData);
-        }
-      });
-    }
-
     function selectSearchMatch(index) {
       const d = state.searchMatches[index];
       if (!d) return;
       state.selectedRegistration = d;
       renderMatchesSelector(index);
       renderSelectedRegistrationDetail(d);
-      subscribeSelectedRegistrationRealtime(d.kodeRegistrasi);
+
+      // Pasang real-time listener pada dokumen peserta yang dipilih
+      if (activeSlipUnsubscribe) {
+        activeSlipUnsubscribe();
+        activeSlipUnsubscribe = null;
+      }
+      if (db && d.kodeRegistrasi) {
+        activeSlipUnsubscribe = db.collection('pendaftar').doc(d.kodeRegistrasi).onSnapshot((docSnap) => {
+          if (docSnap.exists) {
+            const liveData = { kodeRegistrasi: docSnap.id, ...docSnap.data() };
+            state.selectedRegistration = liveData;
+            state.searchMatches[index] = liveData;
+            renderSelectedRegistrationDetail(liveData);
+          }
+        });
+      }
     }
 
     function renderMatchesSelector(activeIndex) {
@@ -1890,7 +1916,7 @@
         <div class="theme-box rounded-xl p-4 text-xs space-y-2 border mb-5">
           <div class="flex flex-wrap justify-between items-center gap-2">
             <div>
-              <span class="text-[10px] uppercase tracking-wider font-bold text-gray-500 block">Status Pendaftaran Peserta (Live Real-Time)</span>
+              <span class="text-[10px] uppercase tracking-wider font-bold text-gray-500 block">Status Pendaftaran Peserta (Live)</span>
               <span class="text-sm sm:text-base font-extrabold text-gray-900">${escapeHtml(d.namaLengkap)}</span>
             </div>
             <span class="px-3 py-1 rounded-full text-xs font-extrabold ${badgeClass}">${escapeHtml(d.status || 'MENUNGGU')}</span>
@@ -1946,7 +1972,7 @@
       box.innerHTML = "<p class='text-xs text-center py-4 text-gray-500 font-semibold'><i class='fa-solid fa-spinner fa-spin mr-1'></i> Mencari data pendaftaran...</p>";
 
       try {
-        const list = await queryRegistrantsFromFirestore(q);
+        const list = await queryRegistrantsHybrid(q);
         if(list.length > 0) {
           state.searchMatches = list;
           selectSearchMatch(0);
