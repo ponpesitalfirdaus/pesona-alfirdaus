@@ -10,66 +10,42 @@
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
   <style id="customThemeStyles">
     :root {
-      --theme-top: #022c22;
-      --theme-primary: #047857;
-      --theme-hover: #065f46;
-      --theme-text: #065f46;
-      --theme-light: rgba(4, 120, 87, 0.08);
-      --theme-light-strong: rgba(4, 120, 87, 0.16);
-      --theme-border: rgba(4, 120, 87, 0.28);
-      --theme-badge-bg: rgba(4, 120, 87, 0.13);
+      --t-950: #022c22;
+      --t-900: #064e3b;
+      --t-800: #065f46;
+      --t-700: #047857;
+      --t-600: #059669;
+      --t-200: #a7f3d0;
+      --t-100: #d1fae5;
+      --t-50: #ecfdf5;
     }
 
-    .theme-topbar {
-      background-color: var(--theme-top) !important;
-      color: #ffffff;
-    }
-
-    .theme-header {
-      background-color: var(--theme-primary) !important;
-      color: #ffffff;
-    }
-
-    .theme-btn {
-      background-color: var(--theme-primary) !important;
-      color: #ffffff !important;
-    }
-    .theme-btn:hover {
-      background-color: var(--theme-hover) !important;
-    }
-
-    .theme-text {
-      color: var(--theme-text) !important;
-    }
-
-    .theme-badge {
-      background-color: var(--theme-badge-bg) !important;
-      color: var(--theme-text) !important;
-    }
-
-    .theme-box {
-      background-color: var(--theme-light) !important;
-      border-color: var(--theme-border) !important;
-    }
-
-    .theme-step-badge {
-      background-color: var(--theme-primary) !important;
-      color: #ffffff !important;
-    }
-
-    .theme-tab-active {
-      background-color: var(--theme-primary) !important;
-      color: #ffffff !important;
-    }
-
-    .theme-border {
-      border-color: var(--theme-border) !important;
-    }
+    /* Cegah kedipan warna default saat akses pertama kali sebelum config server diterima */
+    html.theme-loading body { opacity: 0; }
+    body { transition: opacity 0.15s ease-in; }
 
     .swiper-button-next, .swiper-button-prev { color: #facc15 !important; transform: scale(0.6); }
     .swiper-pagination-bullet-active { background: #facc15 !important; }
+
+    /* Kelas Warna Tema Dinamis Terpadu */
+    .theme-topbar { background-color: var(--t-950) !important; }
+    .theme-header { background-color: var(--t-800) !important; }
+    .theme-dark-bg { background-color: var(--t-900) !important; }
+    .theme-darker-bg { background-color: var(--t-950) !important; }
+    .theme-btn { background-color: var(--t-700) !important; color: #ffffff !important; }
+    .theme-btn:hover { background-color: var(--t-800) !important; }
+    .theme-text { color: var(--t-800) !important; }
+    .theme-text-accent { color: var(--t-700) !important; }
+    .theme-text-light { color: var(--t-100) !important; }
+    .theme-badge { background-color: var(--t-100) !important; color: var(--t-800) !important; }
+    .theme-box { background-color: var(--t-50) !important; border-color: var(--t-200) !important; }
+    .theme-soft-bg { background-color: var(--t-50) !important; }
+    .theme-border { border-color: var(--t-200) !important; }
+    .theme-accent { accent-color: var(--t-700) !important; }
+    .alur-step-checked { background-color: var(--t-50) !important; border-color: var(--t-200) !important; }
 
     /* Highlight Kuning & Shadow untuk Menu Bar Aktif */
     .nav-active-desktop {
@@ -92,13 +68,8 @@
       color: #111827 !important;
     }
 
-    /* Highlight animasi saat kartu Alur Pendaftaran dipilih */
-    .alur-card-highlight {
-      box-shadow: 0 0 0 3px #facc15, 0 12px 24px -6px rgba(0, 0, 0, 0.16) !important;
-    }
-
     @media print {
-      body { background: #ffffff !important; margin: 0 !important; padding: 0 !important; }
+      body { background: #ffffff !important; margin: 0 !important; padding: 0 !important; opacity: 1 !important; }
       body > *:not(#printArea) { display: none !important; }
       #printArea {
         display: block !important;
@@ -112,83 +83,78 @@
     }
   </style>
 
-  <!-- BOOT TEMA WARNA INSTAN SEBELUM BODY DIRENDER (TANPA JEDA) -->
+  <!-- SCRIPT SINKRON TEMA DI HEAD: TERAPKAN WARNA TANPA JEDA SEBELUM HALAMAN MUNCUL -->
   <script>
-    (function() {
-      var PRESET_PALETTES = {
-        emerald: { primary: '#047857', top: '#022c22' },
-        indigo:  { primary: '#3730a3', top: '#1e1b4b' },
-        blue:    { primary: '#0369a1', top: '#0c4a6e' },
-        purple:  { primary: '#6b21a8', top: '#3b0764' },
-        rose:    { primary: '#be123c', top: '#4c0519' },
-        amber:   { primary: '#b45309', top: '#451a03' }
+    const THEME_PALETTES = {
+      emerald: { c950: '#022c22', c900: '#064e3b', c800: '#065f46', c700: '#047857', c600: '#059669', c200: '#a7f3d0', c100: '#d1fae5', c50: '#ecfdf5' },
+      indigo:  { c950: '#1e1b4b', c900: '#312e81', c800: '#3730a3', c700: '#4338ca', c600: '#4f46e5', c200: '#c7d2fe', c100: '#e0e7ff', c50: '#eef2ff' },
+      blue:    { c950: '#172554', c900: '#1e3a8a', c800: '#1e40af', c700: '#1d4ed8', c600: '#2563eb', c200: '#bfdbfe', c100: '#dbeafe', c50: '#eff6ff' },
+      purple:  { c950: '#3b0764', c900: '#581c87', c800: '#6b21a8', c700: '#7e22ce', c600: '#9333ea', c200: '#e9d5ff', c100: '#f3e8ff', c50: '#faf5ff' },
+      rose:    { c950: '#4c0519', c900: '#881337', c800: '#9f1239', c700: '#be123c', c600: '#e11d48', c200: '#fecdd3', c100: '#ffe4e6', c50: '#fff1f2' },
+      amber:   { c950: '#451a03', c900: '#78350f', c800: '#92400e', c700: '#b45309', c600: '#d97706', c200: '#fde68a', c100: '#fef3c7', c50: '#fffbeb' }
+    };
+
+    function hexToRgb(hex) {
+      let clean = String(hex || '').replace('#', '').trim();
+      if (clean.length === 3) clean = clean.split('').map(c => c + c).join('');
+      if (!/^[0-9a-fA-F]{6}$/.test(clean)) return { r: 4, g: 120, b: 87 };
+      return {
+        r: parseInt(clean.substring(0, 2), 16),
+        g: parseInt(clean.substring(2, 4), 16),
+        b: parseInt(clean.substring(4, 6), 16)
       };
+    }
 
-      function normalizeHex(hex) {
-        if (!hex || typeof hex !== 'string') return '#047857';
-        var clean = hex.trim();
-        if (clean.charAt(0) !== '#') clean = '#' + clean;
-        if (/^#[0-9a-fA-F]{3}$/.test(clean)) {
-          clean = '#' + clean[1] + clean[1] + clean[2] + clean[2] + clean[3] + clean[3];
-        }
-        return /^#[0-9a-fA-F]{6}$/.test(clean) ? clean : '#047857';
-      }
+    function mixHex(hex, targetHex, weight) {
+      const c1 = hexToRgb(hex);
+      const c2 = hexToRgb(targetHex);
+      const r = Math.round(c1.r * (1 - weight) + c2.r * weight);
+      const g = Math.round(c1.g * (1 - weight) + c2.g * weight);
+      const b = Math.round(c1.b * (1 - weight) + c2.b * weight);
+      return '#' + [r, g, b].map(x => Math.max(0, Math.min(255, x)).toString(16).padStart(2, '0')).join('');
+    }
 
-      function hexToRgb(hex) {
-        var h = normalizeHex(hex).slice(1);
+    function resolveThemePalette(colorKey, customHex) {
+      if (colorKey === 'custom' && customHex) {
+        const base = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(customHex.trim()) ? customHex.trim() : '#047857';
         return {
-          r: parseInt(h.slice(0, 2), 16),
-          g: parseInt(h.slice(2, 4), 16),
-          b: parseInt(h.slice(4, 6), 16)
+          c950: mixHex(base, '#000000', 0.58),
+          c900: mixHex(base, '#000000', 0.38),
+          c800: mixHex(base, '#000000', 0.18),
+          c700: base,
+          c600: mixHex(base, '#ffffff', 0.12),
+          c200: mixHex(base, '#ffffff', 0.78),
+          c100: mixHex(base, '#ffffff', 0.88),
+          c50:  mixHex(base, '#ffffff', 0.95)
         };
       }
+      return THEME_PALETTES[colorKey] || THEME_PALETTES.emerald;
+    }
 
-      function shadeHex(hex, factor) {
-        var rgb = hexToRgb(hex);
-        var r = Math.max(0, Math.min(255, Math.round(rgb.r * factor)));
-        var g = Math.max(0, Math.min(255, Math.round(rgb.g * factor)));
-        var b = Math.max(0, Math.min(255, Math.round(rgb.b * factor)));
-        return '#' + [r, g, b].map(function(n) { return n.toString(16).padStart(2, '0'); }).join('');
-      }
+    function applyThemeVarsImmediately(colorKey, customHex) {
+      const p = resolveThemePalette(colorKey, customHex);
+      const root = document.documentElement.style;
+      root.setProperty('--t-950', p.c950);
+      root.setProperty('--t-900', p.c900);
+      root.setProperty('--t-800', p.c800);
+      root.setProperty('--t-700', p.c700);
+      root.setProperty('--t-600', p.c600);
+      root.setProperty('--t-200', p.c200);
+      root.setProperty('--t-100', p.c100);
+      root.setProperty('--t-50', p.c50);
+      return p;
+    }
 
-      window.__applyThemeVarsInstant = function(colorKey, customHex) {
-        var key = colorKey || 'emerald';
-        var primary, top;
-        if (key === 'custom') {
-          primary = normalizeHex(customHex);
-          top = shadeHex(primary, 0.42);
-        } else {
-          var preset = PRESET_PALETTES[key] || PRESET_PALETTES.emerald;
-          primary = preset.primary;
-          top = preset.top;
-        }
-        var rgb = hexToRgb(primary);
-        var hover = shadeHex(primary, 0.82);
-        var text = shadeHex(primary, 0.86);
-        var root = document.documentElement.style;
-        root.setProperty('--theme-top', top);
-        root.setProperty('--theme-primary', primary);
-        root.setProperty('--theme-hover', hover);
-        root.setProperty('--theme-text', text);
-        root.setProperty('--theme-light', 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ',0.08)');
-        root.setProperty('--theme-light-strong', 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ',0.16)');
-        root.setProperty('--theme-border', 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ',0.28)');
-        root.setProperty('--theme-badge-bg', 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ',0.13)');
-      };
-
+    (function() {
       try {
-        var urlParams = new URLSearchParams(window.location.search);
-        var urlTheme = urlParams.get('theme');
-        var urlCustom = urlParams.get('color');
-        if (urlTheme) {
-          window.__applyThemeVarsInstant(urlTheme, urlCustom);
-          localStorage.setItem('paf_theme_cache', JSON.stringify({ themeColor: urlTheme, customColor: urlCustom || '#047857' }));
+        const cached = JSON.parse(localStorage.getItem('paf_portal_theme') || 'null');
+        if (cached && cached.themeColor) {
+          applyThemeVarsImmediately(cached.themeColor, cached.customColor);
         } else {
-          var cachedRaw = localStorage.getItem('paf_theme_cache');
-          if (cachedRaw) {
-            var cached = JSON.parse(cachedRaw);
-            window.__applyThemeVarsInstant(cached.themeColor, cached.customColor);
-          }
+          document.documentElement.classList.add('theme-loading');
+          setTimeout(function() {
+            document.documentElement.classList.remove('theme-loading');
+          }, 850);
         }
       } catch (e) {}
     })();
@@ -197,7 +163,7 @@
 <body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col">
 
   <!-- TOP BAR BANNER -->
-  <div id="topbarBg" class="theme-topbar text-white text-[11px] sm:text-xs py-2 px-3 sm:px-4 border-b border-white/10">
+  <div id="topbarBg" class="theme-topbar text-white text-[11px] sm:text-xs py-2 px-3 sm:px-4 border-b border-white/10 transition-colors">
     <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-2 text-center md:text-left">
       
       <!-- LEFT TOPBAR -->
@@ -214,7 +180,7 @@
             <span id="topbarWaText">0853-6668-5084</span>
           </a>
         </div>
-        <div class="bg-black/25 border border-white/20 px-2.5 py-0.5 rounded-full flex items-center gap-1.5 text-yellow-300 shadow-inner font-bold">
+        <div class="bg-black/20 border border-white/20 px-2.5 py-0.5 rounded-full flex items-center gap-1.5 text-yellow-300 shadow-inner font-bold">
           <i class="fa-solid fa-clock text-amber-400 animate-pulse"></i>
           <span id="topbarCountdown" class="text-white">Menghitung Waktu...</span>
         </div>
@@ -236,7 +202,7 @@
   </div>
 
   <!-- NAVBAR UTAMA -->
-  <header id="mainHeader" class="theme-header text-white shadow-md sticky top-0 z-40">
+  <header id="mainHeader" class="theme-header text-white shadow-md sticky top-0 z-40 transition-colors">
     <div class="container mx-auto px-4 py-2.5 flex justify-between items-center">
       
       <!-- LOGO -->
@@ -352,339 +318,194 @@
 
     </section>
 
-    <!-- 1B. ALUR PENDAFTARAN (RINGKAS, IKONIK & INTERAKTIF) -->
-    <section id="view-alur" class="view-page hidden container mx-auto px-4 py-6 sm:py-8 max-w-5xl">
+    <!-- 1B. ALUR PENDAFTARAN RINGKAS, IKONIK & INTERAKTIF -->
+    <section id="view-alur" class="view-page hidden container mx-auto px-4 py-8 max-w-5xl">
       
-      <!-- HEADER BANNER & PROGRES -->
-      <div class="bg-white rounded-2xl shadow-lg border overflow-hidden mb-6">
-        <div class="theme-topbar text-white p-5 sm:p-7">
-          <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div>
-              <span class="inline-flex items-center gap-1.5 bg-yellow-400 text-gray-950 font-extrabold text-[11px] px-3 py-1 rounded-full uppercase tracking-wider shadow">
-                <i class="fa-solid fa-route"></i> Panduan Cepat 4 Langkah
-              </span>
-              <h2 class="text-xl sm:text-2xl md:text-3xl font-black mt-2 tracking-tight">ALUR PENDAFTARAN PESONA AL FIRDAUS</h2>
-              <p class="text-white/85 text-xs sm:text-sm mt-1">Ikuti 4 langkah mudah di bawah ini. Klik kartu langkah untuk loncat cepat atau centang progres Anda.</p>
-            </div>
-
-            <!-- KARTU PROGRES INTERAKTIF -->
-            <div class="bg-black/25 border border-white/20 rounded-xl p-3.5 shrink-0 min-w-[205px]">
-              <div class="flex justify-between items-center text-xs font-bold mb-1.5">
-                <span class="text-yellow-300"><i class="fa-solid fa-list-check mr-1"></i> Progres</span>
-                <span id="alurProgressText" class="font-mono text-white">0 / 4 Tahap</span>
-              </div>
-              <div class="w-full bg-white/20 h-2.5 rounded-full overflow-hidden">
-                <div id="alurProgressBar" class="bg-yellow-400 h-full transition-all duration-300" style="width: 0%"></div>
-              </div>
-              <button type="button" onclick="resetAlurChecklist()" class="mt-2 text-[10px] text-white/80 hover:text-yellow-300 underline font-semibold inline-flex items-center gap-1">
-                <i class="fa-solid fa-rotate-left"></i> Reset Ceklist
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- STEPPER IKONIK 4 LANGKAH (KLIK UNTUK LOMPAT KE KARTU) -->
-        <div class="p-4 sm:p-5 theme-box border-b">
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3">
-            <button type="button" onclick="jumpToAlurStage(1)" id="stepper-card-1" class="bg-white hover:bg-yellow-50 border theme-border rounded-xl p-3 text-left shadow-sm transition group flex items-center gap-2.5">
-              <div class="w-9 h-9 rounded-xl theme-step-badge flex items-center justify-center shrink-0 text-sm shadow">
-                <i class="fa-solid fa-trophy"></i>
-              </div>
-              <div class="min-w-0">
-                <span class="block text-[10px] font-extrabold uppercase tracking-wider theme-text">Langkah 1</span>
-                <span class="block text-xs font-extrabold text-gray-900 truncate">Pilih Lomba</span>
-              </div>
-            </button>
-
-            <button type="button" onclick="jumpToAlurStage(2)" id="stepper-card-2" class="bg-white hover:bg-yellow-50 border theme-border rounded-xl p-3 text-left shadow-sm transition group flex items-center gap-2.5">
-              <div class="w-9 h-9 rounded-xl theme-step-badge flex items-center justify-center shrink-0 text-sm shadow">
-                <i class="fa-solid fa-money-bill-transfer"></i>
-              </div>
-              <div class="min-w-0">
-                <span class="block text-[10px] font-extrabold uppercase tracking-wider theme-text">Langkah 2</span>
-                <span class="block text-xs font-extrabold text-gray-900 truncate">Transfer Biaya</span>
-              </div>
-            </button>
-
-            <button type="button" onclick="jumpToAlurStage(3)" id="stepper-card-3" class="bg-white hover:bg-yellow-50 border theme-border rounded-xl p-3 text-left shadow-sm transition group flex items-center gap-2.5">
-              <div class="w-9 h-9 rounded-xl theme-step-badge flex items-center justify-center shrink-0 text-sm shadow">
-                <i class="fa-solid fa-file-signature"></i>
-              </div>
-              <div class="min-w-0">
-                <span class="block text-[10px] font-extrabold uppercase tracking-wider theme-text">Langkah 3</span>
-                <span class="block text-xs font-extrabold text-gray-900 truncate">Isi Form &amp; Verifikasi</span>
-              </div>
-            </button>
-
-            <button type="button" onclick="jumpToAlurStage(4)" id="stepper-card-4" class="bg-white hover:bg-yellow-50 border theme-border rounded-xl p-3 text-left shadow-sm transition group flex items-center gap-2.5">
-              <div class="w-9 h-9 rounded-xl theme-step-badge flex items-center justify-center shrink-0 text-sm shadow">
-                <i class="fa-solid fa-file-arrow-down"></i>
-              </div>
-              <div class="min-w-0">
-                <span class="block text-[10px] font-extrabold uppercase tracking-wider theme-text">Langkah 4</span>
-                <span class="block text-xs font-extrabold text-gray-900 truncate">Unduh Bukti</span>
-              </div>
-            </button>
-          </div>
-        </div>
-
-        <!-- FILTER TAMPILAN TAHAP -->
-        <div class="px-4 sm:px-6 py-3 bg-white flex flex-wrap items-center justify-between gap-2">
-          <span class="text-xs font-extrabold text-gray-700 flex items-center gap-1.5">
-            <i class="fa-solid fa-filter theme-text"></i> Filter Tampilan:
+      <!-- HEADER ALUR -->
+      <div class="theme-dark-bg text-white rounded-2xl shadow-lg p-5 sm:p-7 mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <span class="inline-flex items-center gap-1.5 bg-yellow-400 text-gray-950 font-extrabold text-[11px] px-3 py-1 rounded-full uppercase tracking-wider shadow">
+            <i class="fa-solid fa-route"></i> Panduan Cepat
           </span>
-          <div class="flex flex-wrap gap-1.5 text-[11px] font-bold">
-            <button type="button" onclick="filterAlurTahap('all')" id="btnTahap-all" class="alur-tab-btn px-3 py-1.5 rounded-lg theme-tab-active shadow transition">Semua (4 Tahap)</button>
-            <button type="button" onclick="filterAlurTahap(1)" id="btnTahap-1" class="alur-tab-btn px-3 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 transition">1. Lomba</button>
-            <button type="button" onclick="filterAlurTahap(2)" id="btnTahap-2" class="alur-tab-btn px-3 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 transition">2. Bayar</button>
-            <button type="button" onclick="filterAlurTahap(3)" id="btnTahap-3" class="alur-tab-btn px-3 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 transition">3. Formulir</button>
-            <button type="button" onclick="filterAlurTahap(4)" id="btnTahap-4" class="alur-tab-btn px-3 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 transition">4. Bukti</button>
+          <h2 class="text-xl sm:text-2xl font-black mt-2 tracking-tight">Alur Pendaftaran Lomba</h2>
+          <p class="theme-text-light text-xs sm:text-sm mt-1">Cukup <strong>4 langkah mudah</strong> — klik tombol aksi di tiap kartu atau centang progres Anda.</p>
+        </div>
+
+        <div class="bg-black/25 border border-white/20 rounded-xl p-3.5 shrink-0 min-w-[205px]">
+          <div class="flex justify-between items-center text-xs font-bold mb-1.5">
+            <span class="text-yellow-300"><i class="fa-solid fa-list-check mr-1"></i> Progres Anda</span>
+            <span id="alurProgressText" class="font-mono text-white">0 / 4 (0%)</span>
           </div>
+          <div class="w-full bg-white/20 h-2.5 rounded-full overflow-hidden">
+            <div id="alurProgressBar" class="bg-yellow-400 h-full transition-all duration-300" style="width: 0%"></div>
+          </div>
+          <button type="button" onclick="resetAlurChecklist()" class="mt-2 text-[10px] text-white/80 hover:text-yellow-300 underline font-semibold">
+            <i class="fa-solid fa-rotate-left mr-0.5"></i> Reset Progres
+          </button>
         </div>
       </div>
 
-      <!-- GRID 4 KARTU TAHAP PENDAFTARAN YANG RINGKAS & IKONIK -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 mb-6">
+      <!-- 4 LANGKAH UTAMA INTERAKTIF DENGAN IKON -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 mb-7">
 
-        <!-- KARTU TAHAP 1 -->
-        <div id="alur-tahap-1" class="alur-tahap-card bg-white rounded-2xl shadow-md border overflow-hidden flex flex-col justify-between transition-all">
+        <!-- LANGKAH 1 -->
+        <div id="alur-card-1" class="bg-white rounded-2xl shadow-md border-2 border-gray-200 p-5 flex flex-col justify-between transition-all hover:shadow-lg">
           <div>
-            <div class="theme-box border-b px-4 sm:px-5 py-3.5 flex items-center justify-between gap-2">
+            <div class="flex items-start justify-between gap-3 mb-3">
               <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl theme-step-badge flex items-center justify-center text-base shadow shrink-0">
+                <div class="w-12 h-12 rounded-2xl theme-badge flex items-center justify-center text-xl shrink-0 shadow-sm">
                   <i class="fa-solid fa-trophy"></i>
                 </div>
                 <div>
-                  <span class="text-[10px] uppercase tracking-wider font-extrabold theme-text block">Tahap 1</span>
-                  <h4 class="text-sm sm:text-base font-extrabold text-gray-900">Pilih Lomba &amp; Baca Juknis</h4>
+                  <span class="text-[10px] font-extrabold uppercase tracking-wider theme-text-accent block">Langkah 1</span>
+                  <h3 class="text-base sm:text-lg font-extrabold text-gray-900 leading-tight">Pilih Lomba &amp; Baca Juknis</h3>
                 </div>
               </div>
-              <label class="inline-flex items-center gap-1.5 bg-white border rounded-lg px-2.5 py-1 text-[11px] font-bold text-gray-700 cursor-pointer shadow-sm">
-                <input type="checkbox" id="chk-stage-1" onchange="toggleAlurStageCheck(1)" class="w-4 h-4 accent-amber-500 cursor-pointer">
+              <label class="inline-flex items-center gap-1.5 text-[11px] font-bold text-gray-600 cursor-pointer bg-gray-100 hover:bg-gray-200 px-2.5 py-1 rounded-lg shrink-0">
+                <input type="checkbox" id="chk-step-1" onchange="toggleAlurCheck(1)" class="w-4 h-4 theme-accent cursor-pointer">
                 <span>Selesai</span>
               </label>
             </div>
-
-            <div class="p-4 sm:p-5 space-y-3 text-xs sm:text-sm text-gray-700">
-              <div class="flex items-start gap-2.5">
-                <i class="fa-solid fa-globe theme-text mt-1 w-4 text-center shrink-0"></i>
-                <p>Buka portal <a href="https://bit.ly/pesona-alfirdaus" target="_blank" rel="noopener noreferrer" class="font-bold theme-text underline">bit.ly/pesona-alfirdaus</a> lalu pilih menu <strong>Cabang Lomba</strong>.</p>
-              </div>
-              <div class="flex items-start gap-2.5">
-                <i class="fa-solid fa-book-open-reader theme-text mt-1 w-4 text-center shrink-0"></i>
-                <p>Baca <strong>Syarat &amp; Ketentuan</strong> serta <strong>Juknis Lomba</strong>, lalu klik tombol <strong>Daftar Lomba Ini</strong> di bawah flyer.</p>
-              </div>
-            </div>
+            <p class="text-xs sm:text-sm text-gray-600 leading-relaxed mb-4">
+              Buka menu <strong>Cabang Lomba</strong>, pilih kategori lomba, baca <strong>Syarat &amp; Juknis</strong>, lalu klik <strong>Daftar Lomba Ini</strong>.
+            </p>
           </div>
 
-          <div class="px-4 sm:px-5 pb-4 pt-1">
-            <button type="button" onclick="switchView('lomba')" class="w-full theme-btn font-bold py-2.5 px-4 rounded-xl text-xs shadow flex items-center justify-center gap-2 transition">
-              <i class="fa-solid fa-trophy text-yellow-300"></i>
-              <span>Buka Daftar Cabang Lomba</span>
-              <i class="fa-solid fa-arrow-right"></i>
+          <div class="pt-3 border-t flex flex-wrap gap-2">
+            <button type="button" onclick="switchView('lomba')" class="theme-btn text-xs font-bold px-3.5 py-2 rounded-xl shadow-sm inline-flex items-center gap-1.5 transition">
+              <i class="fa-solid fa-trophy text-yellow-300"></i> Pilih Cabang Lomba
             </button>
           </div>
         </div>
 
-        <!-- KARTU TAHAP 2 -->
-        <div id="alur-tahap-2" class="alur-tahap-card bg-white rounded-2xl shadow-md border overflow-hidden flex flex-col justify-between transition-all">
+        <!-- LANGKAH 2 -->
+        <div id="alur-card-2" class="bg-white rounded-2xl shadow-md border-2 border-gray-200 p-5 flex flex-col justify-between transition-all hover:shadow-lg">
           <div>
-            <div class="theme-box border-b px-4 sm:px-5 py-3.5 flex items-center justify-between gap-2">
+            <div class="flex items-start justify-between gap-3 mb-3">
               <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl theme-step-badge flex items-center justify-center text-base shadow shrink-0">
+                <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center text-xl shrink-0 shadow-sm">
                   <i class="fa-solid fa-money-bill-transfer"></i>
                 </div>
                 <div>
-                  <span class="text-[10px] uppercase tracking-wider font-extrabold theme-text block">Tahap 2</span>
-                  <h4 class="text-sm sm:text-base font-extrabold text-gray-900">Transfer &amp; Konfirmasi Bendahara</h4>
+                  <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-700 block">Langkah 2</span>
+                  <h3 class="text-base sm:text-lg font-extrabold text-gray-900 leading-tight">Transfer &amp; Chat Bendahara</h3>
                 </div>
               </div>
-              <label class="inline-flex items-center gap-1.5 bg-white border rounded-lg px-2.5 py-1 text-[11px] font-bold text-gray-700 cursor-pointer shadow-sm">
-                <input type="checkbox" id="chk-stage-2" onchange="toggleAlurStageCheck(2)" class="w-4 h-4 accent-amber-500 cursor-pointer">
+              <label class="inline-flex items-center gap-1.5 text-[11px] font-bold text-gray-600 cursor-pointer bg-gray-100 hover:bg-gray-200 px-2.5 py-1 rounded-lg shrink-0">
+                <input type="checkbox" id="chk-step-2" onchange="toggleAlurCheck(2)" class="w-4 h-4 theme-accent cursor-pointer">
                 <span>Selesai</span>
               </label>
             </div>
-
-            <div class="p-4 sm:p-5 space-y-3 text-xs sm:text-sm text-gray-700">
-              <div class="flex items-start gap-2.5">
-                <i class="fa-solid fa-building-columns theme-text mt-1 w-4 text-center shrink-0"></i>
-                <div class="flex-1">
-                  <p>Transfer biaya lomba ke rekening <strong>BSI</strong>:</p>
-                  <div class="mt-1.5 bg-amber-50 border border-amber-300 rounded-xl p-2.5 flex items-center justify-between gap-2">
-                    <div class="text-xs">
-                      <span class="font-mono font-black text-sm text-gray-900 block">8500808806</span>
-                      <span class="text-[10px] text-gray-600">a.n. <strong>Yayasan Atmo Taruno Joyo</strong></span>
-                    </div>
-                    <button type="button" onclick="copyTextWithToast('8500808806', 'No. Rekening BSI')" class="bg-amber-400 hover:bg-amber-500 text-gray-950 font-extrabold px-2.5 py-1.5 rounded-lg text-[11px] shadow shrink-0 transition active:scale-95">
-                      <i class="fa-solid fa-copy mr-1"></i> Salin
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div class="flex items-start gap-2.5">
-                <i class="fa-brands fa-whatsapp text-green-600 mt-1 w-4 text-center shrink-0"></i>
-                <p>Kirim bukti transfer ke WA Bendahara <strong>085366327882 (Resta)</strong>.</p>
-              </div>
-            </div>
+            <p class="text-xs sm:text-sm text-gray-600 leading-relaxed mb-4">
+              Transfer biaya lomba ke <strong>BSI 8500808806</strong> (<em>a.n. Yayasan Atmo Taruno Joyo</em>), lalu kirim bukti transfer ke WA Bendahara <strong>085366327882 (Resta)</strong>.
+            </p>
           </div>
 
-          <div class="px-4 sm:px-5 pb-4 pt-1">
-            <a href="https://wa.me/6285366327882?text=Assalamu'alaikum%20Kak%20Resta%20(Bendahara%20PESONA%20AL%20FIRDAUS),%20saya%20ingin%20konfirmasi%20pembayaran%20pendaftaran%20lomba." target="_blank" rel="noopener noreferrer" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs shadow flex items-center justify-center gap-2 transition">
-              <i class="fa-brands fa-whatsapp text-sm"></i>
-              <span>Konfirmasi WA Bendahara (Resta)</span>
+          <div class="pt-3 border-t flex flex-wrap gap-2">
+            <button type="button" onclick="copyTextWithToast('8500808806', 'No. Rekening BSI (8500808806)')" class="bg-amber-400 hover:bg-amber-500 text-gray-950 text-xs font-extrabold px-3 py-2 rounded-xl shadow-sm inline-flex items-center gap-1.5 transition active:scale-95">
+              <i class="fa-solid fa-copy"></i> Salin Rek BSI
+            </button>
+            <a href="https://wa.me/6285366327882?text=Assalamu'alaikum%20Kak%20Resta%20(Bendahara%20PESONA%20AL%20FIRDAUS),%20saya%20ingin%20konfirmasi%20pembayaran%20pendaftaran%20lomba." target="_blank" rel="noopener noreferrer" class="bg-green-600 hover:bg-green-700 text-white text-xs font-bold px-3 py-2 rounded-xl shadow-sm inline-flex items-center gap-1.5 transition">
+              <i class="fa-brands fa-whatsapp text-sm"></i> WA Bendahara
             </a>
           </div>
         </div>
 
-        <!-- KARTU TAHAP 3 -->
-        <div id="alur-tahap-3" class="alur-tahap-card bg-white rounded-2xl shadow-md border overflow-hidden flex flex-col justify-between transition-all">
+        <!-- LANGKAH 3 -->
+        <div id="alur-card-3" class="bg-white rounded-2xl shadow-md border-2 border-gray-200 p-5 flex flex-col justify-between transition-all hover:shadow-lg">
           <div>
-            <div class="theme-box border-b px-4 sm:px-5 py-3.5 flex items-center justify-between gap-2">
+            <div class="flex items-start justify-between gap-3 mb-3">
               <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl theme-step-badge flex items-center justify-center text-base shadow shrink-0">
+                <div class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-800 flex items-center justify-center text-xl shrink-0 shadow-sm">
                   <i class="fa-solid fa-file-signature"></i>
                 </div>
                 <div>
-                  <span class="text-[10px] uppercase tracking-wider font-extrabold theme-text block">Tahap 3</span>
-                  <h4 class="text-sm sm:text-base font-extrabold text-gray-900">Isi Formulir &amp; Verifikasi Admin</h4>
+                  <span class="text-[10px] font-extrabold uppercase tracking-wider text-blue-700 block">Langkah 3</span>
+                  <h3 class="text-base sm:text-lg font-extrabold text-gray-900 leading-tight">Isi Formulir &amp; Verifikasi Admin</h3>
                 </div>
               </div>
-              <label class="inline-flex items-center gap-1.5 bg-white border rounded-lg px-2.5 py-1 text-[11px] font-bold text-gray-700 cursor-pointer shadow-sm">
-                <input type="checkbox" id="chk-stage-3" onchange="toggleAlurStageCheck(3)" class="w-4 h-4 accent-amber-500 cursor-pointer">
+              <label class="inline-flex items-center gap-1.5 text-[11px] font-bold text-gray-600 cursor-pointer bg-gray-100 hover:bg-gray-200 px-2.5 py-1 rounded-lg shrink-0">
+                <input type="checkbox" id="chk-step-3" onchange="toggleAlurCheck(3)" class="w-4 h-4 theme-accent cursor-pointer">
                 <span>Selesai</span>
               </label>
             </div>
-
-            <div class="p-4 sm:p-5 space-y-3 text-xs sm:text-sm text-gray-700">
-              <div class="flex items-start gap-2.5">
-                <i class="fa-solid fa-cloud-arrow-up theme-text mt-1 w-4 text-center shrink-0"></i>
-                <p>Lengkapi <strong>Formulir Pendaftaran</strong>, unggah <strong>Struk Transfer</strong>, lalu klik <strong>Kirim Pendaftaran</strong>.</p>
-              </div>
-              <div class="flex items-start gap-2.5">
-                <i class="fa-solid fa-user-check theme-text mt-1 w-4 text-center shrink-0"></i>
-                <p>Konfirmasi ke nomor <strong>WA Admin</strong> yang muncul otomatis agar status berubah dari <span class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 font-bold text-[11px]">Menunggu</span> menjadi <span class="px-1.5 py-0.5 rounded bg-green-100 text-green-800 font-bold text-[11px]">Terverifikasi</span>.</p>
-              </div>
-            </div>
+            <p class="text-xs sm:text-sm text-gray-600 leading-relaxed mb-4">
+              Lengkapi formulir &amp; upload struk transfer, klik <strong>Kirim Pendaftaran</strong>, lalu konfirmasi ke <strong>WA Admin</strong> agar status berubah menjadi <span class="px-1.5 py-0.5 rounded bg-green-100 text-green-800 font-bold text-[11px]">Terverifikasi</span>.
+            </p>
           </div>
 
-          <div class="px-4 sm:px-5 pb-4 pt-1">
-            <div class="w-full theme-box border rounded-xl py-2 px-3 text-[11px] font-semibold text-gray-700 flex items-center justify-center gap-2">
-              <i class="fa-solid fa-circle-info theme-text"></i>
-              <span>Link WA Admin muncul otomatis setelah form dikirim</span>
-            </div>
+          <div class="pt-3 border-t flex items-center gap-2 text-[11px] font-semibold text-gray-500">
+            <i class="fa-solid fa-circle-check text-green-600"></i>
+            <span>Link WA Admin muncul otomatis setelah klik Kirim Pendaftaran</span>
           </div>
         </div>
 
-        <!-- KARTU TAHAP 4 -->
-        <div id="alur-tahap-4" class="alur-tahap-card bg-white rounded-2xl shadow-md border overflow-hidden flex flex-col justify-between transition-all">
+        <!-- LANGKAH 4 -->
+        <div id="alur-card-4" class="bg-white rounded-2xl shadow-md border-2 border-gray-200 p-5 flex flex-col justify-between transition-all hover:shadow-lg">
           <div>
-            <div class="theme-box border-b px-4 sm:px-5 py-3.5 flex items-center justify-between gap-2">
+            <div class="flex items-start justify-between gap-3 mb-3">
               <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl theme-step-badge flex items-center justify-center text-base shadow shrink-0">
-                  <i class="fa-solid fa-file-arrow-down"></i>
+                <div class="w-12 h-12 rounded-2xl bg-purple-100 text-purple-800 flex items-center justify-center text-xl shrink-0 shadow-sm">
+                  <i class="fa-solid fa-file-circle-check"></i>
                 </div>
                 <div>
-                  <span class="text-[10px] uppercase tracking-wider font-extrabold theme-text block">Tahap 4</span>
-                  <h4 class="text-sm sm:text-base font-extrabold text-gray-900">Unduh Bukti Pendaftaran</h4>
+                  <span class="text-[10px] font-extrabold uppercase tracking-wider text-purple-700 block">Langkah 4</span>
+                  <h3 class="text-base sm:text-lg font-extrabold text-gray-900 leading-tight">Unduh Bukti Pendaftaran</h3>
                 </div>
               </div>
-              <label class="inline-flex items-center gap-1.5 bg-white border rounded-lg px-2.5 py-1 text-[11px] font-bold text-gray-700 cursor-pointer shadow-sm">
-                <input type="checkbox" id="chk-stage-4" onchange="toggleAlurStageCheck(4)" class="w-4 h-4 accent-amber-500 cursor-pointer">
+              <label class="inline-flex items-center gap-1.5 text-[11px] font-bold text-gray-600 cursor-pointer bg-gray-100 hover:bg-gray-200 px-2.5 py-1 rounded-lg shrink-0">
+                <input type="checkbox" id="chk-step-4" onchange="toggleAlurCheck(4)" class="w-4 h-4 theme-accent cursor-pointer">
                 <span>Selesai</span>
               </label>
             </div>
-
-            <div class="p-4 sm:p-5 space-y-3 text-xs sm:text-sm text-gray-700">
-              <div class="flex items-start gap-2.5">
-                <i class="fa-solid fa-magnifying-glass theme-text mt-1 w-4 text-center shrink-0"></i>
-                <p>Buka menu <strong>Cek Pendaftaran</strong>, lalu ketik <strong>Nama Peserta</strong> atau <strong>Kode Registrasi</strong>.</p>
-              </div>
-              <div class="flex items-start gap-2.5">
-                <i class="fa-solid fa-print theme-text mt-1 w-4 text-center shrink-0"></i>
-                <p>Setelah data muncul, unduh / cetak <strong>Bukti Pendaftaran</strong> untuk dibawa saat registrasi ulang.</p>
-              </div>
-            </div>
+            <p class="text-xs sm:text-sm text-gray-600 leading-relaxed mb-4">
+              Buka menu <strong>Cek Pendaftaran</strong>, cari nama/kode peserta, lalu unduh <strong>Bukti Pendaftaran (A4)</strong> sebagai syarat wajib registrasi ulang di lokasi.
+            </p>
           </div>
 
-          <div class="px-4 sm:px-5 pb-4 pt-1">
-            <button type="button" onclick="switchView('cek')" class="w-full theme-btn font-bold py-2.5 px-4 rounded-xl text-xs shadow flex items-center justify-center gap-2 transition">
-              <i class="fa-solid fa-magnifying-glass text-yellow-300"></i>
-              <span>Buka Cek Pendaftaran</span>
-              <i class="fa-solid fa-arrow-right"></i>
+          <div class="pt-3 border-t flex flex-wrap gap-2">
+            <button type="button" onclick="switchView('cek')" class="theme-btn text-xs font-bold px-3.5 py-2 rounded-xl shadow-sm inline-flex items-center gap-1.5 transition">
+              <i class="fa-solid fa-magnifying-glass"></i> Cek &amp; Unduh Bukti
             </button>
           </div>
         </div>
 
       </div>
 
-      <!-- RINGKASAN KONTAK & REKENING CEPAT (RESPONSIF) -->
-      <div class="bg-white rounded-2xl shadow-lg border overflow-hidden">
-        <div class="theme-topbar text-white px-4 sm:px-5 py-3.5 flex items-center justify-between">
-          <h3 class="text-xs sm:text-sm font-extrabold flex items-center gap-2">
-            <i class="fa-solid fa-address-book text-yellow-400"></i> Ringkasan Info &amp; Kontak Penting
-          </h3>
-          <span class="text-[10px] bg-white/15 px-2.5 py-0.5 rounded-full font-bold text-yellow-300">Akses Cepat</span>
+      <!-- KARTU INFO PENTING RINGKAS -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="bg-white rounded-2xl border p-4 shadow-sm flex items-start gap-3">
+          <div class="w-10 h-10 rounded-xl theme-badge flex items-center justify-center text-base shrink-0">
+            <i class="fa-solid fa-globe"></i>
+          </div>
+          <div class="min-w-0 flex-1">
+            <p class="text-[11px] font-bold text-gray-500 uppercase">Link Portal Resmi</p>
+            <a href="https://bit.ly/pesona-alfirdaus" target="_blank" rel="noopener noreferrer" class="text-xs font-extrabold theme-text underline block truncate mt-0.5">bit.ly/pesona-alfirdaus</a>
+            <button type="button" onclick="copyTextWithToast('https://bit.ly/pesona-alfirdaus', 'Link Pendaftaran')" class="mt-2 text-[11px] font-bold bg-gray-100 hover:bg-gray-200 text-gray-800 px-2.5 py-1 rounded-lg inline-flex items-center gap-1">
+              <i class="fa-solid fa-copy"></i> Salin Link
+            </button>
+          </div>
         </div>
 
-        <div class="p-4 sm:p-5 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-          <div class="p-3 rounded-xl border bg-gray-50 flex items-center justify-between gap-2">
-            <div class="flex items-center gap-2.5 min-w-0">
-              <div class="w-8 h-8 rounded-lg theme-badge flex items-center justify-center shrink-0">
-                <i class="fa-solid fa-link"></i>
-              </div>
-              <div class="min-w-0">
-                <span class="text-[10px] font-bold text-gray-500 block">Link Pendaftaran</span>
-                <a href="https://bit.ly/pesona-alfirdaus" target="_blank" rel="noopener noreferrer" class="font-bold theme-text underline truncate block">bit.ly/pesona-alfirdaus</a>
-              </div>
-            </div>
-            <button type="button" onclick="copyTextWithToast('https://bit.ly/pesona-alfirdaus', 'Link Pendaftaran')" class="bg-white hover:bg-gray-100 border text-gray-800 font-bold px-2.5 py-1.5 rounded-lg text-[11px] shrink-0">
-              <i class="fa-solid fa-copy"></i>
-            </button>
+        <div class="bg-white rounded-2xl border p-4 shadow-sm flex items-start gap-3">
+          <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center text-base shrink-0">
+            <i class="fa-solid fa-building-columns"></i>
           </div>
-
-          <div class="p-3 rounded-xl border bg-gray-50 flex items-center justify-between gap-2">
-            <div class="flex items-center gap-2.5 min-w-0">
-              <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
-                <i class="fa-solid fa-building-columns"></i>
-              </div>
-              <div class="min-w-0">
-                <span class="text-[10px] font-bold text-gray-500 block">Rekening BSI (a.n. Yayasan Atmo Taruno Joyo)</span>
-                <span class="font-mono font-extrabold text-gray-900">8500808806</span>
-              </div>
-            </div>
-            <button type="button" onclick="copyTextWithToast('8500808806', 'No. Rekening BSI')" class="bg-amber-400 hover:bg-amber-500 text-gray-950 font-bold px-2.5 py-1.5 rounded-lg text-[11px] shrink-0">
-              <i class="fa-solid fa-copy"></i>
-            </button>
+          <div class="min-w-0 flex-1">
+            <p class="text-[11px] font-bold text-gray-500 uppercase">Rekening Pembayaran</p>
+            <p class="text-xs font-extrabold text-gray-900 mt-0.5">BSI <span class="font-mono theme-text">8500808806</span></p>
+            <p class="text-[11px] text-gray-500 truncate">a.n. Yayasan Atmo Taruno Joyo</p>
           </div>
+        </div>
 
-          <div class="p-3 rounded-xl border bg-gray-50 flex items-center justify-between gap-2">
-            <div class="flex items-center gap-2.5 min-w-0">
-              <div class="w-8 h-8 rounded-lg bg-green-100 text-green-700 flex items-center justify-center shrink-0">
-                <i class="fa-brands fa-whatsapp text-sm"></i>
-              </div>
-              <div class="min-w-0">
-                <span class="text-[10px] font-bold text-gray-500 block">Konfirmasi Transfer (Bendahara)</span>
-                <span class="font-bold text-gray-900">085366327882 (Resta)</span>
-              </div>
-            </div>
-            <a href="https://wa.me/6285366327882?text=Assalamu'alaikum%20Kak%20Resta,%20saya%20ingin%20konfirmasi%20pembayaran%20pendaftaran." target="_blank" rel="noopener noreferrer" class="bg-green-600 hover:bg-green-700 text-white font-bold px-2.5 py-1.5 rounded-lg text-[11px] shrink-0">
-              Chat
-            </a>
+        <div class="bg-white rounded-2xl border p-4 shadow-sm flex items-start gap-3">
+          <div class="w-10 h-10 rounded-xl bg-green-100 text-green-700 flex items-center justify-center text-base shrink-0">
+            <i class="fa-brands fa-whatsapp"></i>
           </div>
-
-          <div class="p-3 rounded-xl border bg-gray-50 flex items-center justify-between gap-2">
-            <div class="flex items-center gap-2.5 min-w-0">
-              <div class="w-8 h-8 rounded-lg theme-badge flex items-center justify-center shrink-0">
-                <i class="fa-solid fa-file-invoice"></i>
-              </div>
-              <div class="min-w-0">
-                <span class="text-[10px] font-bold text-gray-500 block">Syarat Registrasi Ulang</span>
-                <span class="font-bold text-gray-900">Bukti Pendaftaran</span>
-              </div>
-            </div>
-            <button type="button" onclick="switchView('cek')" class="theme-btn font-bold px-2.5 py-1.5 rounded-lg text-[11px] shrink-0">
-              Unduh
-            </button>
+          <div class="min-w-0 flex-1">
+            <p class="text-[11px] font-bold text-gray-500 uppercase">Konfirmasi Transfer</p>
+            <p class="text-xs font-extrabold text-gray-900 mt-0.5">085366327882 (Resta)</p>
+            <p class="text-[11px] text-gray-500">Bendahara Panitia Lomba</p>
           </div>
         </div>
       </div>
@@ -732,7 +553,7 @@
               </div>
             </div>
 
-            <button id="btnDaftarSekarang" type="button" class="w-full theme-btn text-white font-extrabold py-3.5 rounded-xl shadow-lg transition flex items-center justify-center gap-2 text-sm sm:text-base">
+            <button id="btnDaftarSekarang" type="button" class="w-full theme-btn font-extrabold py-3.5 rounded-xl shadow-lg transition flex items-center justify-center gap-2 text-sm sm:text-base">
               <i class="fa-solid fa-pen-to-square"></i> Daftar Lomba Ini
             </button>
           </div>
@@ -784,11 +605,11 @@
       </div>
     </section>
 
-    <!-- 4. CEK PENDAFTARAN + BUKTI PENDAFTARAN A4 -->
+    <!-- 4. CEK PENDAFTARAN + BUKTI PENDAFTARAN A4 (PESERTA & PANITIA) -->
     <section id="view-cek" class="view-page hidden container mx-auto px-4 py-8 sm:py-10 max-w-3xl">
       <div class="bg-white p-5 sm:p-8 rounded-2xl shadow-lg border">
         <div class="text-center max-w-xl mx-auto">
-          <div class="w-12 h-12 theme-box theme-text rounded-full flex items-center justify-center mx-auto mb-2 text-xl font-bold border">
+          <div class="w-12 h-12 theme-soft-bg theme-text rounded-full flex items-center justify-center mx-auto mb-2 text-xl font-bold border theme-border">
             <i class="fa-solid fa-file-invoice"></i>
           </div>
           <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-1">Cek Status &amp; Bukti Pendaftaran</h3>
@@ -959,7 +780,7 @@
           </p>
         </div>
         
-        <button type="submit" id="btnSubmitForm" class="w-full theme-btn text-white font-bold py-2.5 rounded-lg text-xs sm:text-sm shadow">Kirim Pendaftaran</button>
+        <button type="submit" id="btnSubmitForm" class="w-full theme-btn font-bold py-2.5 rounded-lg text-xs sm:text-sm shadow">Kirim Pendaftaran</button>
       </form>
     </div>
   </div>
@@ -1001,88 +822,54 @@
       }
     };
 
-    // --- LOGIKA INTERAKTIF ALUR PENDAFTARAN (4 TAHAP) ---
-    function filterAlurTahap(tahap) {
-      document.querySelectorAll('.alur-tab-btn').forEach(btn => {
-        btn.className = "alur-tab-btn px-3 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 transition";
-      });
-      const activeTab = document.getElementById(`btnTahap-${tahap}`);
-      if (activeTab) {
-        activeTab.className = "alur-tab-btn px-3 py-1.5 rounded-lg theme-tab-active shadow transition";
-      }
-
-      [1, 2, 3, 4].forEach(num => {
-        const card = document.getElementById(`alur-tahap-${num}`);
-        if (!card) return;
-        if (tahap === 'all' || Number(tahap) === num) {
-          card.classList.remove('hidden');
-        } else {
-          card.classList.add('hidden');
-        }
-      });
-    }
-
-    function jumpToAlurStage(stageNum) {
-      filterAlurTahap('all');
-      document.querySelectorAll('.alur-tahap-card').forEach(el => el.classList.remove('alur-card-highlight'));
-      const targetCard = document.getElementById(`alur-tahap-${stageNum}`);
-      if (targetCard) {
-        targetCard.classList.add('alur-card-highlight');
-        targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        setTimeout(() => targetCard.classList.remove('alur-card-highlight'), 2400);
-      }
-    }
-
+    // --- LOGIKA INTERAKTIF ALUR PENDAFTARAN (4 LANGKAH) ---
     function initAlurChecklist() {
       let saved = [];
       try {
-        saved = JSON.parse(localStorage.getItem('paf_alur_stages_v2') || '[]');
+        saved = JSON.parse(localStorage.getItem('paf_alur_progress_v2') || '[]');
       } catch (e) {
         saved = [];
       }
       for (let i = 1; i <= 4; i++) {
-        const cb = document.getElementById(`chk-stage-${i}`);
+        const cb = document.getElementById(`chk-step-${i}`);
         if (cb) cb.checked = saved.includes(i);
       }
       updateAlurProgressUI();
     }
 
-    function toggleAlurStageCheck(stageNum) {
-      const checkedStages = [];
+    function toggleAlurCheck(stepNum) {
+      const checkedSteps = [];
       for (let i = 1; i <= 4; i++) {
-        const cb = document.getElementById(`chk-stage-${i}`);
-        if (cb && cb.checked) checkedStages.push(i);
+        const cb = document.getElementById(`chk-step-${i}`);
+        if (cb && cb.checked) checkedSteps.push(i);
       }
-      localStorage.setItem('paf_alur_stages_v2', JSON.stringify(checkedStages));
+      localStorage.setItem('paf_alur_progress_v2', JSON.stringify(checkedSteps));
       updateAlurProgressUI();
     }
 
     function updateAlurProgressUI() {
       let done = 0;
       for (let i = 1; i <= 4; i++) {
-        const cb = document.getElementById(`chk-stage-${i}`);
-        const card = document.getElementById(`alur-tahap-${i}`);
-        const stepCard = document.getElementById(`stepper-card-${i}`);
+        const cb = document.getElementById(`chk-step-${i}`);
+        const card = document.getElementById(`alur-card-${i}`);
         if (cb && cb.checked) {
           done++;
-          if (card) card.classList.add('ring-2', 'ring-amber-400');
-          if (stepCard) stepCard.classList.add('bg-amber-50', 'border-amber-400');
-        } else {
-          if (card) card.classList.remove('ring-2', 'ring-amber-400');
-          if (stepCard) stepCard.classList.remove('bg-amber-50', 'border-amber-400');
+          if (card) card.classList.add('alur-step-checked');
+        } else if (card) {
+          card.classList.remove('alur-step-checked');
         }
       }
       const pct = Math.round((done / 4) * 100);
       const txt = document.getElementById('alurProgressText');
       const bar = document.getElementById('alurProgressBar');
-      if (txt) txt.innerText = `${done} / 4 Tahap`;
+      if (txt) txt.innerText = `${done} / 4 (${pct}%)`;
       if (bar) bar.style.width = `${pct}%`;
     }
 
     function resetAlurChecklist() {
-      localStorage.removeItem('paf_alur_stages_v2');
+      localStorage.removeItem('paf_alur_progress_v2');
       for (let i = 1; i <= 4; i++) {
-        const cb = document.getElementById(`chk-stage-${i}`);
+        const cb = document.getElementById(`chk-step-${i}`);
         if (cb) cb.checked = false;
       }
       updateAlurProgressUI();
@@ -1134,14 +921,16 @@
     }
 
     function applyDynamicTheme(colorKey, customHex) {
-      const key = colorKey || 'emerald';
-      const custom = customHex || '#047857';
-      if (typeof window.__applyThemeVarsInstant === 'function') {
-        window.__applyThemeVarsInstant(key, custom);
-      }
+      const safeKey = colorKey || 'emerald';
+      const safeCustom = customHex || '#047857';
+      applyThemeVarsImmediately(safeKey, safeCustom);
       try {
-        localStorage.setItem('paf_theme_cache', JSON.stringify({ themeColor: key, customColor: custom }));
+        localStorage.setItem('paf_portal_theme', JSON.stringify({
+          themeColor: safeKey,
+          customColor: safeCustom
+        }));
       } catch (e) {}
+      document.documentElement.classList.remove('theme-loading');
     }
 
     function initSwiper() {
@@ -1213,7 +1002,10 @@
     }
 
     function copyBsiNorek() {
-      copyTextWithToast("8500808806", "No. Rekening BSI");
+      const norek = "8500808806";
+      navigator.clipboard.writeText(norek).then(() => {
+        Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'No. Rekening BSI Berhasil Disalin! 📋', showConfirmButton: false, timer: 2000 });
+      });
     }
 
     async function loadPortalData() {
@@ -1224,7 +1016,11 @@
           state.lombaList = result.lombaList || [];
           state.config = result.config || {};
         }
-      } catch(e) { console.error("Error loading portal data:", e); }
+      } catch(e) {
+        console.error("Error loading portal data:", e);
+      } finally {
+        document.documentElement.classList.remove('theme-loading');
+      }
       
       applyPortalConfig();
       renderGridLomba();
@@ -1519,6 +1315,7 @@
       document.getElementById('detailSyarat').innerText = item.syarat || '-';
       document.getElementById('detailHadiah').innerText = item.hadiah || '-';
 
+      // RENDER SEGMEN JUKNIS LOMBA
       const juknisBox = document.getElementById('detailJuknisContainer');
       const safeJuknisUrl = formatExternalUrl(item.juknisUrl);
       if (safeJuknisUrl) {
@@ -1539,6 +1336,7 @@
         juknisBox.innerHTML = `<p class="text-gray-500 italic">Link Juknis lomba belum dilampirkan. Silakan hubungi narahubung di bawah.</p>`;
       }
 
+      // RENDER SEGMEN NARAHUBUNG
       const naraBox = document.getElementById('detailNarahubungContainer');
       naraBox.innerHTML = "";
       let rawContacts = item.narahubung || [];
@@ -1581,7 +1379,7 @@
         btnDaftar.innerText = "Pendaftaran Ditutup";
       } else {
         btnDaftar.disabled = false;
-        btnDaftar.className = "w-full theme-btn text-white font-extrabold py-3.5 rounded-xl shadow-lg transition flex items-center justify-center gap-2 text-sm sm:text-base";
+        btnDaftar.className = "w-full theme-btn font-extrabold py-3.5 rounded-xl shadow-lg transition flex items-center justify-center gap-2 text-sm sm:text-base";
         btnDaftar.innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Daftar Lomba Ini`;
         btnDaftar.onclick = () => {
           document.getElementById('cabangLombaInput').value = item.judul;
@@ -1594,6 +1392,7 @@
       switchView('detail-lomba');
     }
 
+    // --- FITUR ZOOM FLYER LIGHTBOX ---
     function openFlyerZoom() {
       const src = document.getElementById('detailFlyerImg').src;
       if (!src) return;
@@ -1709,10 +1508,10 @@
         const d = result.data;
         const qrUrl = getQrCodeUrl(`${window.location.origin}${window.location.pathname}?kode=${d.kodeRegistrasi}`);
         box.innerHTML = `
-          <div class="border-4 border-double border-yellow-500 bg-gray-900 text-white p-6 rounded-xl text-center">
+          <div class="border-4 border-double border-yellow-500 theme-dark-bg text-white p-6 rounded-xl text-center">
             <p class="text-[10px] text-yellow-300 font-bold uppercase">SERTIFIKAT APRESIASI RESMI</p>
             <h2 class="text-xl font-black text-yellow-300 my-1">${d.namaLengkap}</h2>
-            <p class="text-xs text-gray-300">${d.asalSekolah} | Cabang: ${d.cabangLomba}</p>
+            <p class="text-xs text-white/90">${d.asalSekolah} | Cabang: ${d.cabangLomba}</p>
             <div class="mt-4 flex justify-center"><img src="${qrUrl}" class="w-16 h-16 bg-white p-1 rounded"></div>
           </div>
           <button onclick="printSingleCert('${d.kodeRegistrasi}')" class="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-950 font-bold py-3 rounded-xl mt-4 text-xs">Unduh Sertifikat</button>
@@ -1851,6 +1650,10 @@
             ? 'background:#fee2e2;color:#991b1b;border:1.5px solid #dc2626;'
             : 'background:#fef3c7;color:#92400e;border:1.5px solid #d97706;');
 
+      const palette = resolveThemePalette(state.config.themeColor || 'emerald', state.config.customColor || '#047857');
+      const primaryDark = palette.c900;
+      const primaryMain = palette.c800;
+
       const headerTitle = (state.config && state.config.headerTitle) ? state.config.headerTitle : 'PESONA AL FIRDAUS 2026';
       const headerSub = (state.config && state.config.headerSub) ? state.config.headerSub : 'Islamic Youth Festival 2026';
       const lokasiText = (state.config && state.config.lokasi) ? state.config.lokasi : 'Kompleks Pesantren Al Firdaus';
@@ -1858,20 +1661,21 @@
       const qrUrl = getQrCodeUrl(verifyUrl);
 
       const wrapperStyle = isPrint
-        ? 'height:133mm;box-sizing:border-box;border:1.8px solid #064e3b;border-radius:10px;padding:10px 14px;background:#ffffff;display:flex;flex-direction:column;justify-content:space-between;font-family:Arial,Helvetica,sans-serif;color:#111827;'
-        : 'border:2px solid #064e3b;border-radius:12px;padding:14px 16px;background:#ffffff;box-shadow:0 2px 8px rgba(0,0,0,0.05);color:#111827;';
+        ? `height:133mm;box-sizing:border-box;border:1.8px solid ${primaryDark};border-radius:10px;padding:10px 14px;background:#ffffff;display:flex;flex-direction:column;justify-content:space-between;font-family:Arial,Helvetica,sans-serif;color:#111827;`
+        : `border:2px solid ${primaryDark};border-radius:12px;padding:14px 16px;background:#ffffff;box-shadow:0 2px 8px rgba(0,0,0,0.05);color:#111827;`;
 
       const copyBadgeStyle = isPeserta
-        ? 'background:#064e3b;color:#facc15;'
+        ? `background:${primaryDark};color:#facc15;`
         : 'background:#1e3a8a;color:#ffffff;';
 
       return `
         <div style="${wrapperStyle}">
-          <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #064e3b;padding-bottom:6px;gap:8px;">
+          <!-- KOP BUKTI PENDAFTARAN -->
+          <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid ${primaryDark};padding-bottom:6px;gap:8px;">
             <div style="display:flex;align-items:center;gap:8px;">
               <img src="${LOGO_URL}" alt="Logo" style="width:36px;height:36px;object-fit:contain;border-radius:50%;border:1px solid #d97706;padding:1px;background:#fff;">
               <div>
-                <div style="font-size:13px;font-weight:900;color:#064e3b;line-height:1.15;letter-spacing:0.3px;">${escapeHtml(headerTitle)}</div>
+                <div style="font-size:13px;font-weight:900;color:${primaryDark};line-height:1.15;letter-spacing:0.3px;">${escapeHtml(headerTitle)}</div>
                 <div style="font-size:10px;font-weight:700;color:#374151;">${escapeHtml(headerSub)} &bull; ${escapeHtml(lokasiText)}</div>
                 <div style="font-size:11px;font-weight:800;color:#111827;margin-top:1px;">BUKTI PENDAFTARAN LOMBA</div>
               </div>
@@ -1880,18 +1684,19 @@
               <span style="display:inline-block;padding:3px 9px;border-radius:6px;font-size:10px;font-weight:900;letter-spacing:0.5px;${copyBadgeStyle}">
                 ${isPeserta ? 'LEMBAR UNTUK PESERTA' : 'LEMBAR UNTUK PANITIA'}
               </span>
-              <div style="font-size:10px;font-family:monospace;font-weight:800;color:#064e3b;margin-top:3px;">
+              <div style="font-size:10px;font-family:monospace;font-weight:800;color:${primaryDark};margin-top:3px;">
                 NO. REG: ${escapeHtml(d.kodeRegistrasi)}
               </div>
             </div>
           </div>
 
+          <!-- ISI UTAMA: DATA PESERTA & QR CODE -->
           <div style="display:flex;justify-content:space-between;align-items:stretch;gap:12px;margin:7px 0;flex:1;">
             <table style="width:100%;border-collapse:collapse;font-size:11px;">
               <tr>
                 <td style="width:138px;padding:2.5px 4px;font-weight:700;color:#374151;">Kode Registrasi</td>
                 <td style="width:10px;padding:2.5px 2px;font-weight:700;">:</td>
-                <td style="padding:2.5px 4px;font-family:monospace;font-weight:900;font-size:12px;color:#064e3b;">${escapeHtml(d.kodeRegistrasi)}</td>
+                <td style="padding:2.5px 4px;font-family:monospace;font-weight:900;font-size:12px;color:${primaryDark};">${escapeHtml(d.kodeRegistrasi)}</td>
               </tr>
               <tr>
                 <td style="padding:2.5px 4px;font-weight:700;color:#374151;vertical-align:top;">Nama Peserta / Tim</td>
@@ -1906,7 +1711,7 @@
               <tr>
                 <td style="padding:2.5px 4px;font-weight:700;color:#374151;">Cabang Lomba</td>
                 <td style="padding:2.5px 2px;font-weight:700;">:</td>
-                <td style="padding:2.5px 4px;font-weight:800;color:#065f46;">${escapeHtml(d.cabangLomba)}</td>
+                <td style="padding:2.5px 4px;font-weight:800;color:${primaryMain};">${escapeHtml(d.cabangLomba)}</td>
               </tr>
               <tr>
                 <td style="padding:2.5px 4px;font-weight:700;color:#374151;">No. WhatsApp</td>
@@ -1929,15 +1734,17 @@
               </tr>
             </table>
 
+            <!-- KOLOM KANAN: QR VERIFIKASI -->
             <div style="width:92px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px dashed #9ca3af;border-radius:8px;padding:5px;background:#f9fafb;text-align:center;">
               <img src="${qrUrl}" alt="QR Verifikasi" style="width:66px;height:66px;display:block;">
               <span style="font-size:8px;font-weight:700;color:#4b5563;margin-top:3px;line-height:1.1;">Scan Verifikasi<br>Registrasi Ulang</span>
             </div>
           </div>
 
+          <!-- KOTAK CEKLIST FASILITAS YANG DIDAPAT -->
           <div style="border:1.2px solid #9ca3af;border-radius:7px;padding:6px 10px;background:#f8fafc;">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
-              <span style="font-size:10px;font-weight:800;color:#064e3b;text-transform:uppercase;letter-spacing:0.3px;">
+              <span style="font-size:10px;font-weight:800;color:${primaryDark};text-transform:uppercase;letter-spacing:0.3px;">
                 Ceklist Fasilitas Peserta (Diisi saat Registrasi Ulang):
               </span>
               <span style="font-size:9px;color:#4b5563;font-style:italic;">
@@ -2016,7 +1823,7 @@
         const isActive = idx === activeIndex;
         btnsHtml += `
           <button type="button" onclick="selectSearchMatch(${idx})"
-            class="px-3 py-1.5 rounded-lg text-xs font-bold border transition text-left ${isActive ? 'theme-tab-active shadow' : 'bg-gray-50 hover:bg-gray-100 text-gray-800 border-gray-300'}">
+            class="px-3 py-1.5 rounded-lg text-xs font-bold border transition text-left ${isActive ? 'theme-header text-white shadow' : 'bg-gray-50 hover:bg-gray-100 text-gray-800 border-gray-300'}">
             <span>${escapeHtml(m.namaLengkap)}</span>
             <span class="block text-[10px] opacity-80">${escapeHtml(m.kodeRegistrasi)} &bull; ${escapeHtml(m.cabangLomba)}</span>
           </button>
