@@ -8,12 +8,12 @@ const LOGO_URL = "https://lh3.googleusercontent.com/d/1Ca6RhNsv0aFWD4EMdkr8uCcSu
 
 // GANTI NILAI DI BAWAH INI DENGAN CONFIG DARI FIREBASE CONSOLE ANDA:
 const FIREBASE_CONFIG = {
-  apiKey: "PASTE_API_KEY_ANDA",
-  authDomain: "PASTE_PROJECT_ID.firebaseapp.com",
-  projectId: "PASTE_PROJECT_ID",
-  storageBucket: "PASTE_PROJECT_ID.firebasestorage.app",
-  messagingSenderId: "PASTE_SENDER_ID",
-  appId: "PASTE_APP_ID"
+  apiKey: "AIzaSyAMRrskSuQVVjr9sHAtCxgmiRep2QnVzUg",
+  authDomain: "pesona-al-firdaus.firebaseapp.com",
+  projectId: "pesona-al-firdaus",
+  storageBucket: "pesona-al-firdaus.firebasestorage.app",
+  messagingSenderId: "969672634728",
+  appId: "1:969672634728:web:5dbf8bafe2e234fd8d66dd"
 };
 
 function isFirebaseConfigured() {
