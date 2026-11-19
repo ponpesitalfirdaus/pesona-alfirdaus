@@ -11,6 +11,11 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 
+  <!-- FIREBASE SDK (COMPAT) & CONFIG -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+
   <style id="customThemeStyles">
     :root {
       --t-950: #022c22;
@@ -23,7 +28,6 @@
       --t-50: #ecfdf5;
     }
 
-    /* Cegah kedipan warna default saat akses pertama kali sebelum config server diterima */
     html.theme-loading body { opacity: 0; }
     body { transition: opacity 0.15s ease-in; }
 
@@ -47,16 +51,13 @@
     .theme-accent { accent-color: var(--t-700) !important; }
     .alur-step-checked { background-color: var(--t-50) !important; border-color: var(--t-200) !important; }
 
-    /* Highlight Kuning & Shadow untuk Menu Bar Aktif */
     .nav-active-desktop {
       background-color: #facc15 !important;
       color: #030712 !important;
       font-weight: 800 !important;
       box-shadow: 0 4px 12px rgba(250, 204, 21, 0.45), 0 2px 6px rgba(0, 0, 0, 0.35) !important;
     }
-    .nav-active-desktop i {
-      color: #111827 !important;
-    }
+    .nav-active-desktop i { color: #111827 !important; }
 
     .nav-active-mobile {
       background-color: #facc15 !important;
@@ -64,9 +65,7 @@
       font-weight: 800 !important;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3) !important;
     }
-    .nav-active-mobile i {
-      color: #111827 !important;
-    }
+    .nav-active-mobile i { color: #111827 !important; }
 
     @media print {
       body { background: #ffffff !important; margin: 0 !important; padding: 0 !important; opacity: 1 !important; }
@@ -83,7 +82,6 @@
     }
   </style>
 
-  <!-- SCRIPT SINKRON TEMA DI HEAD: TERAPKAN WARNA TANPA JEDA SEBELUM HALAMAN MUNCUL -->
   <script>
     const THEME_PALETTES = {
       emerald: { c950: '#022c22', c900: '#064e3b', c800: '#065f46', c700: '#047857', c600: '#059669', c200: '#a7f3d0', c100: '#d1fae5', c50: '#ecfdf5' },
@@ -154,7 +152,7 @@
           document.documentElement.classList.add('theme-loading');
           setTimeout(function() {
             document.documentElement.classList.remove('theme-loading');
-          }, 850);
+          }, 500);
         }
       } catch (e) {}
     })();
@@ -321,7 +319,6 @@
     <!-- 1B. ALUR PENDAFTARAN RINGKAS, IKONIK & INTERAKTIF -->
     <section id="view-alur" class="view-page hidden container mx-auto px-4 py-8 max-w-5xl">
       
-      <!-- HEADER ALUR -->
       <div class="theme-dark-bg text-white rounded-2xl shadow-lg p-5 sm:p-7 mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <span class="inline-flex items-center gap-1.5 bg-yellow-400 text-gray-950 font-extrabold text-[11px] px-3 py-1 rounded-full uppercase tracking-wider shadow">
@@ -345,9 +342,7 @@
         </div>
       </div>
 
-      <!-- 4 LANGKAH UTAMA INTERAKTIF DENGAN IKON -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 mb-7">
-
         <!-- LANGKAH 1 -->
         <div id="alur-card-1" class="bg-white rounded-2xl shadow-md border-2 border-gray-200 p-5 flex flex-col justify-between transition-all hover:shadow-lg">
           <div>
@@ -370,7 +365,6 @@
               Buka menu <strong>Cabang Lomba</strong>, pilih kategori lomba, baca <strong>Syarat &amp; Juknis</strong>, lalu klik <strong>Daftar Lomba Ini</strong>.
             </p>
           </div>
-
           <div class="pt-3 border-t flex flex-wrap gap-2">
             <button type="button" onclick="switchView('lomba')" class="theme-btn text-xs font-bold px-3.5 py-2 rounded-xl shadow-sm inline-flex items-center gap-1.5 transition">
               <i class="fa-solid fa-trophy text-yellow-300"></i> Pilih Cabang Lomba
@@ -400,7 +394,6 @@
               Transfer biaya lomba ke <strong>BSI 8500808806</strong> (<em>a.n. Yayasan Atmo Taruno Joyo</em>), lalu kirim bukti transfer ke WA Bendahara <strong>085366327882 (Resta)</strong>.
             </p>
           </div>
-
           <div class="pt-3 border-t flex flex-wrap gap-2">
             <button type="button" onclick="copyTextWithToast('8500808806', 'No. Rekening BSI (8500808806)')" class="bg-amber-400 hover:bg-amber-500 text-gray-950 text-xs font-extrabold px-3 py-2 rounded-xl shadow-sm inline-flex items-center gap-1.5 transition active:scale-95">
               <i class="fa-solid fa-copy"></i> Salin Rek BSI
@@ -433,7 +426,6 @@
               Lengkapi formulir &amp; upload struk transfer, klik <strong>Kirim Pendaftaran</strong>, lalu konfirmasi ke <strong>WA Admin</strong> agar status berubah menjadi <span class="px-1.5 py-0.5 rounded bg-green-100 text-green-800 font-bold text-[11px]">Terverifikasi</span>.
             </p>
           </div>
-
           <div class="pt-3 border-t flex items-center gap-2 text-[11px] font-semibold text-gray-500">
             <i class="fa-solid fa-circle-check text-green-600"></i>
             <span>Link WA Admin muncul otomatis setelah klik Kirim Pendaftaran</span>
@@ -462,17 +454,14 @@
               Buka menu <strong>Cek Pendaftaran</strong>, cari nama/kode peserta, lalu unduh <strong>Bukti Pendaftaran (A4)</strong> sebagai syarat wajib registrasi ulang di lokasi.
             </p>
           </div>
-
           <div class="pt-3 border-t flex flex-wrap gap-2">
             <button type="button" onclick="switchView('cek')" class="theme-btn text-xs font-bold px-3.5 py-2 rounded-xl shadow-sm inline-flex items-center gap-1.5 transition">
               <i class="fa-solid fa-magnifying-glass"></i> Cek &amp; Unduh Bukti
             </button>
           </div>
         </div>
-
       </div>
 
-      <!-- KARTU INFO PENTING RINGKAS -->
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div class="bg-white rounded-2xl border p-4 shadow-sm flex items-start gap-3">
           <div class="w-10 h-10 rounded-xl theme-badge flex items-center justify-center text-base shrink-0">
@@ -520,7 +509,6 @@
           <p class="text-gray-600 text-xs sm:text-sm mt-1">Pilih perlombaan untuk melihat detail syarat dan pendaftaran</p>
         </div>
 
-        <!-- TOGGLE GRID / LIST SWITCH -->
         <div class="bg-gray-200 p-1 rounded-xl flex items-center gap-1 shadow-inner shrink-0">
           <button onclick="toggleViewMode('grid')" id="btnViewGrid" class="px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 shadow bg-white text-gray-900">
             <i class="fa-solid fa-th-large text-amber-500"></i> Grid
@@ -543,7 +531,6 @@
       <div class="bg-white rounded-2xl shadow-xl border overflow-hidden p-4 sm:p-8">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
           
-          <!-- KOLOM FLYER FULL & TOMBOL DAFTAR DI BAWAH FLYER -->
           <div class="lg:col-span-5 flex flex-col items-center">
             <div onclick="openFlyerZoom()" title="Klik untuk memperbesar / zoom flyer" class="relative group w-full bg-gray-100 rounded-xl overflow-hidden shadow-md border border-gray-200 cursor-zoom-in mb-4">
               <img id="detailFlyerImg" src="" alt="Flyer Lomba" class="w-full h-auto object-contain block mx-auto transition-transform duration-300 group-hover:scale-[1.01]">
@@ -558,7 +545,6 @@
             </button>
           </div>
 
-          <!-- KOLOM INFORMASI DETAIL LOMBA -->
           <div class="lg:col-span-7 flex flex-col justify-between">
             <div>
               <div class="flex items-center gap-2 flex-wrap">
@@ -586,13 +572,11 @@
                   <p id="detailHadiah" class="whitespace-pre-line text-gray-600 leading-relaxed"></p>
                 </div>
 
-                <!-- SEGMEN JUKNIS LOMBA -->
                 <div class="border-t pt-4">
                   <h4 class="font-bold text-gray-900 text-sm sm:text-base mb-2"><i class="fa-solid fa-book-open theme-text mr-2"></i>Juknis Lomba</h4>
                   <div id="detailJuknisContainer"></div>
                 </div>
 
-                <!-- SEGMEN NARAHUBUNG -->
                 <div class="border-t pt-4">
                   <h4 class="font-bold text-gray-900 text-sm sm:text-base mb-2"><i class="fa-brands fa-whatsapp text-green-600 mr-2"></i>Narahubung</h4>
                   <div id="detailNarahubungContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
@@ -605,7 +589,7 @@
       </div>
     </section>
 
-    <!-- 4. CEK PENDAFTARAN + BUKTI PENDAFTARAN A4 (PESERTA & PANITIA) -->
+    <!-- 4. CEK PENDAFTARAN + BUKTI PENDAFTARAN A4 (REAL-TIME) -->
     <section id="view-cek" class="view-page hidden container mx-auto px-4 py-8 sm:py-10 max-w-3xl">
       <div class="bg-white p-5 sm:p-8 rounded-2xl shadow-lg border">
         <div class="text-center max-w-xl mx-auto">
@@ -613,7 +597,7 @@
             <i class="fa-solid fa-file-invoice"></i>
           </div>
           <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-1">Cek Status &amp; Bukti Pendaftaran</h3>
-          <p class="text-gray-600 text-xs sm:text-sm mb-5">Masukkan Nama Peserta, Kode Registrasi, atau Nomor WhatsApp untuk melihat status dan mencetak Bukti Pendaftaran (A4 Peserta &amp; Panitia).</p>
+          <p class="text-gray-600 text-xs sm:text-sm mb-5">Masukkan Nama Peserta, Kode Registrasi, atau Nomor WhatsApp untuk melihat status real-time dan mencetak Bukti Pendaftaran (A4 Peserta &amp; Panitia).</p>
           <div class="flex flex-col sm:flex-row gap-2 mb-4">
             <input type="text" id="inputSearch" onkeydown="if(event.key==='Enter') searchRegistration()" placeholder="Ketik Nama Peserta / Kode Registrasi / Nomor WA..." class="flex-1 border rounded-xl px-4 py-2.5 text-xs sm:text-sm focus:outline-none">
             <button onclick="searchRegistration()" class="theme-btn text-white px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm shadow">Cari &amp; Tampilkan Bukti</button>
@@ -698,16 +682,14 @@
         <span id="zoomFlyerTitle" class="truncate max-w-[180px] sm:max-w-md">Preview Flyer Lomba</span>
       </div>
       <div class="flex items-center gap-1.5 sm:gap-2">
-        <button type="button" onclick="adjustFlyerZoom(-0.25)" title="Perkecil (Zoom Out)" class="bg-white/15 hover:bg-white/25 text-white w-8 h-8 rounded-lg flex items-center justify-center font-bold transition">
+        <button type="button" onclick="adjustFlyerZoom(-0.25)" title="Perkecil" class="bg-white/15 hover:bg-white/25 text-white w-8 h-8 rounded-lg flex items-center justify-center font-bold transition">
           <i class="fa-solid fa-magnifying-glass-minus"></i>
         </button>
         <span id="zoomLevelLabel" class="text-xs font-mono font-bold bg-black/50 px-2.5 py-1 rounded-lg border border-white/20 min-w-[56px] text-center">100%</span>
-        <button type="button" onclick="adjustFlyerZoom(0.25)" title="Perbesar (Zoom In)" class="bg-white/15 hover:bg-white/25 text-white w-8 h-8 rounded-lg flex items-center justify-center font-bold transition">
+        <button type="button" onclick="adjustFlyerZoom(0.25)" title="Perbesar" class="bg-white/15 hover:bg-white/25 text-white w-8 h-8 rounded-lg flex items-center justify-center font-bold transition">
           <i class="fa-solid fa-magnifying-glass-plus"></i>
         </button>
-        <button type="button" onclick="resetFlyerZoom()" title="Reset Ukuran" class="bg-yellow-400 hover:bg-yellow-500 text-gray-950 px-2.5 h-8 rounded-lg text-xs font-extrabold transition">
-          Reset
-        </button>
+        <button type="button" onclick="resetFlyerZoom()" title="Reset" class="bg-yellow-400 hover:bg-yellow-500 text-gray-950 px-2.5 h-8 rounded-lg text-xs font-extrabold transition">Reset</button>
         <button type="button" onclick="closeFlyerZoom()" title="Tutup" class="bg-red-600 hover:bg-red-700 text-white w-8 h-8 rounded-lg flex items-center justify-center font-bold ml-1 transition">
           <i class="fa-solid fa-xmark text-base"></i>
         </button>
@@ -786,11 +768,6 @@
   </div>
 
   <script>
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbw4APJqKIcWVgs1yk29KHmuIeArlCDcu0rruBauZkOOmUmGig9Wvqy2aIKq7_gaUPGkOg/exec";
-    const DRIVE_FOLDER_ID = "1i0VnagJrNxjQRWgo-qXZyrzIRX7l85WFZDw3ji6c0ncve_g9hrh811Wwd6l8sojQjbiH1eN";
-    const ADMIN_CONFIRM_WA = "6285267743284";
-    const LOGO_URL = "https://lh3.googleusercontent.com/d/1Ca6RhNsv0aFWD4EMdkr8uCcSuPDESTpv";
-
     let state = {
       lombaList: [],
       config: {},
@@ -804,14 +781,13 @@
     let countdownInterval = null;
     let searchTimeout = null;
     let currentFlyerZoom = 1;
+    let activeSlipUnsubscribe = null;
 
     window.onload = async () => {
       setActiveNav('beranda');
       initSwiper();
       initAlurChecklist();
-      await loadPortalData();
-
-      setInterval(loadPortalData, 30000);
+      initRealtimePortal();
 
       const urlParams = new URLSearchParams(window.location.search);
       const kodeScan = urlParams.get('kode') || urlParams.get('query');
@@ -822,14 +798,63 @@
       }
     };
 
-    // --- LOGIKA INTERAKTIF ALUR PENDAFTARAN (4 LANGKAH) ---
+    // --- LISTENER REAL-TIME FIRESTORE (CONFIG & LOMBA) ---
+    function initRealtimePortal() {
+      if (db) {
+        // 1. Real-time Config & Tema
+        db.collection('portal').doc('config').onSnapshot((docSnap) => {
+          if (docSnap.exists) {
+            state.config = docSnap.data() || {};
+            applyPortalConfig();
+          } else {
+            loadPortalDataFromGAS();
+          }
+          document.documentElement.classList.remove('theme-loading');
+        }, (err) => {
+          console.warn("Firestore config listener fallback ke GAS:", err);
+          loadPortalDataFromGAS();
+        });
+
+        // 2. Real-time Daftar Lomba
+        db.collection('lomba').onSnapshot((snap) => {
+          if (!snap.empty) {
+            const list = [];
+            snap.forEach(doc => list.push({ id: doc.id, ...doc.data() }));
+            list.sort((a, b) => (a.order || 0) - (b.order || 0));
+            state.lombaList = list;
+            renderGridLomba();
+          } else {
+            loadPortalDataFromGAS();
+          }
+        }, (err) => {
+          console.warn("Firestore lomba listener fallback ke GAS:", err);
+        });
+      } else {
+        loadPortalDataFromGAS();
+      }
+    }
+
+    async function loadPortalDataFromGAS() {
+      try {
+        const res = await fetch(`${GAS_URL}?action=initPortal&_t=${Date.now()}`);
+        const result = await res.json();
+        if(result && result.status === "success") {
+          state.lombaList = result.lombaList || [];
+          state.config = result.config || {};
+          applyPortalConfig();
+          renderGridLomba();
+        }
+      } catch(e) {
+        console.error("Error loading GAS fallback:", e);
+      } finally {
+        document.documentElement.classList.remove('theme-loading');
+      }
+    }
+
+    // --- ALUR PENDAFTARAN 4 LANGKAH ---
     function initAlurChecklist() {
       let saved = [];
-      try {
-        saved = JSON.parse(localStorage.getItem('paf_alur_progress_v2') || '[]');
-      } catch (e) {
-        saved = [];
-      }
+      try { saved = JSON.parse(localStorage.getItem('paf_alur_progress_v2') || '[]'); } catch (e) { saved = []; }
       for (let i = 1; i <= 4; i++) {
         const cb = document.getElementById(`chk-step-${i}`);
         if (cb) cb.checked = saved.includes(i);
@@ -877,14 +902,7 @@
 
     function copyTextWithToast(text, label) {
       navigator.clipboard.writeText(text).then(() => {
-        Swal.fire({
-          toast: true,
-          position: 'top-end',
-          icon: 'success',
-          title: `${label} Berhasil Disalin! 📋`,
-          showConfirmButton: false,
-          timer: 2000
-        });
+        Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: `${label} Berhasil Disalin! 📋`, showConfirmButton: false, timer: 2000 });
       });
     }
 
@@ -900,11 +918,8 @@
     function formatWaLink(rawPhone, messageText) {
       let digits = String(rawPhone || '').replace(/[^0-9]/g, '');
       if (!digits) return '#';
-      if (digits.startsWith('0')) {
-        digits = '62' + digits.slice(1);
-      } else if (!digits.startsWith('62')) {
-        digits = '62' + digits;
-      }
+      if (digits.startsWith('0')) digits = '62' + digits.slice(1);
+      else if (!digits.startsWith('62')) digits = '62' + digits;
       const base = `https://wa.me/${digits}`;
       return messageText ? `${base}?text=${encodeURIComponent(messageText)}` : base;
     }
@@ -1002,28 +1017,9 @@
     }
 
     function copyBsiNorek() {
-      const norek = "8500808806";
-      navigator.clipboard.writeText(norek).then(() => {
+      navigator.clipboard.writeText("8500808806").then(() => {
         Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'No. Rekening BSI Berhasil Disalin! 📋', showConfirmButton: false, timer: 2000 });
       });
-    }
-
-    async function loadPortalData() {
-      try {
-        const res = await fetch(`${GAS_URL}?action=initPortal&_t=${Date.now()}`);
-        const result = await res.json();
-        if(result && result.status === "success") {
-          state.lombaList = result.lombaList || [];
-          state.config = result.config || {};
-        }
-      } catch(e) {
-        console.error("Error loading portal data:", e);
-      } finally {
-        document.documentElement.classList.remove('theme-loading');
-      }
-      
-      applyPortalConfig();
-      renderGridLomba();
     }
 
     function parseImageUrl(rawUrl) {
@@ -1315,7 +1311,6 @@
       document.getElementById('detailSyarat').innerText = item.syarat || '-';
       document.getElementById('detailHadiah').innerText = item.hadiah || '-';
 
-      // RENDER SEGMEN JUKNIS LOMBA
       const juknisBox = document.getElementById('detailJuknisContainer');
       const safeJuknisUrl = formatExternalUrl(item.juknisUrl);
       if (safeJuknisUrl) {
@@ -1336,7 +1331,6 @@
         juknisBox.innerHTML = `<p class="text-gray-500 italic">Link Juknis lomba belum dilampirkan. Silakan hubungi narahubung di bawah.</p>`;
       }
 
-      // RENDER SEGMEN NARAHUBUNG
       const naraBox = document.getElementById('detailNarahubungContainer');
       naraBox.innerHTML = "";
       let rawContacts = item.narahubung || [];
@@ -1392,7 +1386,7 @@
       switchView('detail-lomba');
     }
 
-    // --- FITUR ZOOM FLYER LIGHTBOX ---
+    // --- ZOOM FLYER LIGHTBOX ---
     function openFlyerZoom() {
       const src = document.getElementById('detailFlyerImg').src;
       if (!src) return;
@@ -1400,18 +1394,10 @@
       resetFlyerZoom();
       document.getElementById('flyerZoomModal').classList.remove('hidden');
     }
-
-    function closeFlyerZoom() {
-      document.getElementById('flyerZoomModal').classList.add('hidden');
-      resetFlyerZoom();
-    }
-
+    function closeFlyerZoom() { document.getElementById('flyerZoomModal').classList.add('hidden'); resetFlyerZoom(); }
     function closeFlyerZoomOnBackdrop(e) {
-      if (e.target === document.getElementById('flyerZoomViewport') || e.target === document.getElementById('flyerZoomModal')) {
-        closeFlyerZoom();
-      }
+      if (e.target === document.getElementById('flyerZoomViewport') || e.target === document.getElementById('flyerZoomModal')) closeFlyerZoom();
     }
-
     function applyFlyerZoomTransform() {
       const img = document.getElementById('zoomedFlyerImg');
       const label = document.getElementById('zoomLevelLabel');
@@ -1420,29 +1406,47 @@
       img.style.cursor = currentFlyerZoom > 1 ? 'zoom-out' : 'zoom-in';
       if (label) label.innerText = `${Math.round(currentFlyerZoom * 100)}%`;
     }
-
     function adjustFlyerZoom(delta) {
       currentFlyerZoom = Math.min(3, Math.max(0.5, +(currentFlyerZoom + delta).toFixed(2)));
       applyFlyerZoomTransform();
     }
-
-    function resetFlyerZoom() {
-      currentFlyerZoom = 1;
-      applyFlyerZoomTransform();
-    }
-
-    function toggleClickZoom() {
-      currentFlyerZoom = currentFlyerZoom > 1 ? 1 : 1.75;
-      applyFlyerZoomTransform();
-    }
-
-    function handleFlyerWheelZoom(e) {
-      e.preventDefault();
-      adjustFlyerZoom(e.deltaY < 0 ? 0.15 : -0.15);
-    }
+    function resetFlyerZoom() { currentFlyerZoom = 1; applyFlyerZoomTransform(); }
+    function toggleClickZoom() { currentFlyerZoom = currentFlyerZoom > 1 ? 1 : 1.75; applyFlyerZoomTransform(); }
+    function handleFlyerWheelZoom(e) { e.preventDefault(); adjustFlyerZoom(e.deltaY < 0 ? 0.15 : -0.15); }
 
     function closeForm() { document.getElementById('formModal').classList.add('hidden'); }
     function closeFormOnBackdrop(e) { if(e.target === document.getElementById('formModal')) closeForm(); }
+
+    // --- HELPER PENCARIAN PESERTA DI FIRESTORE (CEPAT < 100ms) ---
+    async function queryRegistrantsHybrid(queryText) {
+      const q = String(queryText || '').trim().toLowerCase();
+      if (!q) return [];
+
+      if (db) {
+        const snap = await db.collection('pendaftar').get();
+        if (!snap.empty) {
+          const matches = [];
+          snap.forEach(doc => {
+            const d = doc.data();
+            const kode = String(d.kodeRegistrasi || doc.id).toLowerCase();
+            const nama = String(d.namaLengkap || '').toLowerCase();
+            const wa = String(d.noWhatsapp || '').replace(/^'+/, '').toLowerCase();
+            if (kode.includes(q) || nama.includes(q) || wa.includes(q)) {
+              matches.push({ kodeRegistrasi: doc.id, ...d });
+            }
+          });
+          return matches;
+        }
+      }
+
+      // Fallback ke GAS jika Firestore belum terisi
+      const res = await fetch(`${GAS_URL}?action=check&query=${encodeURIComponent(queryText)}&_t=${Date.now()}`);
+      const result = await res.json();
+      if (result.status === "success") {
+        return (result.results && result.results.length > 0) ? result.results : [result.data];
+      }
+      return [];
+    }
 
     function onAudioNamaInput(val) {
       const sugBox = document.getElementById('audioSuggestions');
@@ -1452,14 +1456,13 @@
       searchTimeout = setTimeout(async () => {
         sugBox.classList.remove('hidden');
         sugBox.innerHTML = `<div class="p-2.5 text-center text-gray-400">Mencari...</div>`;
-        const res = await fetch(`${GAS_URL}?action=check&query=${encodeURIComponent(val.trim())}&_t=${Date.now()}`);
-        const result = await res.json();
-        if (result.status === "success" && result.results) {
+        const matches = await queryRegistrantsHybrid(val.trim());
+        if (matches.length > 0) {
           sugBox.innerHTML = "";
-          result.results.forEach(item => {
+          matches.forEach(item => {
             const div = document.createElement('div');
             div.className = "p-2.5 hover:bg-gray-100 cursor-pointer flex justify-between";
-            div.innerHTML = `<div><strong>${item.namaLengkap}</strong><br><span class="text-[10px] text-gray-500">${item.asalSekolah}</span></div><span class="font-mono text-xs font-bold theme-text">${item.kodeRegistrasi}</span>`;
+            div.innerHTML = `<div><strong>${escapeHtml(item.namaLengkap)}</strong><br><span class="text-[10px] text-gray-500">${escapeHtml(item.asalSekolah)}</span></div><span class="font-mono text-xs font-bold theme-text">${escapeHtml(item.kodeRegistrasi)}</span>`;
             div.onclick = () => {
               document.getElementById('audioNamaInput').value = `${item.namaLengkap} (${item.asalSekolah})`;
               document.getElementById('audioSelectedKode').value = item.kodeRegistrasi;
@@ -1467,31 +1470,59 @@
             };
             sugBox.appendChild(div);
           });
-        } else { sugBox.innerHTML = `<div class="p-2.5 text-center text-red-500">Tidak ditemukan.</div>`; }
-      }, 300);
+        } else {
+          sugBox.innerHTML = `<div class="p-2.5 text-center text-red-500">Tidak ditemukan.</div>`;
+        }
+      }, 250);
     }
 
+    // --- UNGGAH AUDIO KE GOOGLE DRIVE + SYNC KE FIRESTORE ---
     async function submitAudioUpload(e) {
       e.preventDefault();
       const btn = document.getElementById('btnAudioSubmit');
-      btn.disabled = true; btn.innerText = "Mengunggah Audio...";
+      btn.disabled = true; btn.innerText = "Mengunggah Audio ke Drive...";
       const fileInput = document.getElementById('audioFile');
       if(!fileInput.files.length) return;
       const file = fileInput.files[0];
+      const selectedKode = document.getElementById('audioSelectedKode').value;
+      const kodeOrName = selectedKode || document.getElementById('audioNamaInput').value;
+
       const reader = new FileReader();
       reader.onload = async (ev) => {
-        const payload = {
-          action: 'uploadAudio', targetFolderId: DRIVE_FOLDER_ID,
-          kodeRegistrasi: document.getElementById('audioSelectedKode').value || document.getElementById('audioNamaInput').value,
-          cabangLomba: document.getElementById('audioCabang').value, audioBase64: ev.target.result, fileName: file.name, fileType: file.type
-        };
-        const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify(payload) });
-        const result = await res.json();
-        if(result.status === 'success') {
-          Swal.fire({ icon: 'success', title: 'Audio Diunggah! 🎵', text: 'Audio tersimpan di Drive Panitia.' });
-          fileInput.value = ""; document.getElementById('audioNamaInput').value = "";
+        try {
+          const payload = {
+            action: 'uploadAudio', targetFolderId: DRIVE_FOLDER_ID,
+            kodeRegistrasi: kodeOrName,
+            cabangLomba: document.getElementById('audioCabang').value,
+            audioBase64: ev.target.result, fileName: file.name, fileType: file.type
+          };
+          const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify(payload) });
+          const result = await res.json();
+
+          if(result.status === 'success') {
+            let finalAudioUrl = result.linkAudio || '';
+            if (!finalAudioUrl && selectedKode) {
+              const chk = await fetch(`${GAS_URL}?action=check&query=${encodeURIComponent(selectedKode)}&_t=${Date.now()}`).then(r => r.json()).catch(() => null);
+              if (chk && chk.data && chk.data.linkAudio) finalAudioUrl = chk.data.linkAudio;
+            }
+
+            if (db && selectedKode && finalAudioUrl) {
+              await db.collection('pendaftar').doc(selectedKode).set({
+                linkAudio: finalAudioUrl,
+                updatedAt: new Date().toISOString()
+              }, { merge: true });
+            }
+
+            Swal.fire({ icon: 'success', title: 'Audio Diunggah! 🎵', text: 'Audio tersimpan di Drive Panitia & status langsung terupdate.' });
+            fileInput.value = ""; document.getElementById('audioNamaInput').value = ""; document.getElementById('audioSelectedKode').value = "";
+          } else {
+            Swal.fire({ icon: 'error', title: 'Gagal Unggah', text: result.message || 'Gagal mengunggah file audio.' });
+          }
+        } catch (err) {
+          Swal.fire({ icon: 'error', title: 'Koneksi Gagal', text: 'Gagal terhubung ke server.' });
+        } finally {
+          btn.disabled = false; btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Unggah Musik / Audio Now`;
         }
-        btn.disabled = false; btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Unggah Musik / Audio Now`;
       };
       reader.readAsDataURL(file);
     }
@@ -1502,16 +1533,15 @@
       if(!q) return;
       box.classList.remove('hidden'); box.innerHTML = "<p class='text-xs text-center'>Mencari...</p>";
 
-      const res = await fetch(`${GAS_URL}?action=check&query=${encodeURIComponent(q)}&_t=${Date.now()}`);
-      const result = await res.json();
-      if(result.status === "success") {
-        const d = result.data;
+      const matches = await queryRegistrantsHybrid(q);
+      if(matches.length > 0) {
+        const d = matches[0];
         const qrUrl = getQrCodeUrl(`${window.location.origin}${window.location.pathname}?kode=${d.kodeRegistrasi}`);
         box.innerHTML = `
           <div class="border-4 border-double border-yellow-500 theme-dark-bg text-white p-6 rounded-xl text-center">
             <p class="text-[10px] text-yellow-300 font-bold uppercase">SERTIFIKAT APRESIASI RESMI</p>
-            <h2 class="text-xl font-black text-yellow-300 my-1">${d.namaLengkap}</h2>
-            <p class="text-xs text-white/90">${d.asalSekolah} | Cabang: ${d.cabangLomba}</p>
+            <h2 class="text-xl font-black text-yellow-300 my-1">${escapeHtml(d.namaLengkap)}</h2>
+            <p class="text-xs text-white/90">${escapeHtml(d.asalSekolah)} | Cabang: ${escapeHtml(d.cabangLomba)}</p>
             <div class="mt-4 flex justify-center"><img src="${qrUrl}" class="w-16 h-16 bg-white p-1 rounded"></div>
           </div>
           <button onclick="printSingleCert('${d.kodeRegistrasi}')" class="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-950 font-bold py-3 rounded-xl mt-4 text-xs">Unduh Sertifikat</button>
@@ -1531,6 +1561,7 @@
       window.print();
     }
 
+    // --- PENDAFTARAN HYBRID: UPLOAD DRIVE & SHEETS + SIMPAN INSTAN KE FIRESTORE ---
     async function submitRegistration(e) {
       e.preventDefault();
       const btn = document.getElementById('btnSubmitForm');
@@ -1557,6 +1588,7 @@
 
       const doSend = async (b64, fn, ft) => {
         try {
+          // 1. Kirim ke Google Apps Script (Simpan Bukti ke Drive + Baris ke Google Sheets)
           const res = await fetch(GAS_URL, {
             method: 'POST',
             body: JSON.stringify({
@@ -1576,6 +1608,29 @@
 
           if(result.status === "success") {
             const kodeReg = result.kodeRegistrasi;
+            let linkBuktiUrl = result.linkBukti || '-';
+
+            if (hasBukti && (!linkBuktiUrl || linkBuktiUrl === '-')) {
+              const chk = await fetch(`${GAS_URL}?action=check&query=${encodeURIComponent(kodeReg)}&_t=${Date.now()}`).then(r => r.json()).catch(() => null);
+              if (chk && chk.data && chk.data.linkBukti) linkBuktiUrl = chk.data.linkBukti;
+            }
+
+            // 2. Simpan ke Firebase Firestore agar Admin & Peserta mendapat update real-time
+            if (db) {
+              await db.collection('pendaftar').doc(kodeReg).set({
+                timestamp: new Date().toISOString(),
+                kodeRegistrasi: kodeReg,
+                namaLengkap: namaLengkapVal,
+                asalSekolah: asalSekolahFull,
+                cabangLomba: cabangLombaVal,
+                noWhatsapp: noWhatsappVal,
+                email: emailVal,
+                status: 'MENUNGGU',
+                linkBukti: linkBuktiUrl,
+                linkAudio: '-'
+              });
+            }
+
             const waText = [
               `Assalamu'alaikum Admin PESONA AL FIRDAUS 2026,`,
               `Saya ingin melakukan *Konfirmasi Pendaftaran Lomba* dengan detail berikut:`,
@@ -1670,7 +1725,6 @@
 
       return `
         <div style="${wrapperStyle}">
-          <!-- KOP BUKTI PENDAFTARAN -->
           <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid ${primaryDark};padding-bottom:6px;gap:8px;">
             <div style="display:flex;align-items:center;gap:8px;">
               <img src="${LOGO_URL}" alt="Logo" style="width:36px;height:36px;object-fit:contain;border-radius:50%;border:1px solid #d97706;padding:1px;background:#fff;">
@@ -1690,7 +1744,6 @@
             </div>
           </div>
 
-          <!-- ISI UTAMA: DATA PESERTA & QR CODE -->
           <div style="display:flex;justify-content:space-between;align-items:stretch;gap:12px;margin:7px 0;flex:1;">
             <table style="width:100%;border-collapse:collapse;font-size:11px;">
               <tr>
@@ -1734,14 +1787,12 @@
               </tr>
             </table>
 
-            <!-- KOLOM KANAN: QR VERIFIKASI -->
             <div style="width:92px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px dashed #9ca3af;border-radius:8px;padding:5px;background:#f9fafb;text-align:center;">
               <img src="${qrUrl}" alt="QR Verifikasi" style="width:66px;height:66px;display:block;">
               <span style="font-size:8px;font-weight:700;color:#4b5563;margin-top:3px;line-height:1.1;">Scan Verifikasi<br>Registrasi Ulang</span>
             </div>
           </div>
 
-          <!-- KOTAK CEKLIST FASILITAS YANG DIDAPAT -->
           <div style="border:1.2px solid #9ca3af;border-radius:7px;padding:6px 10px;background:#f8fafc;">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
               <span style="font-size:10px;font-weight:800;color:${primaryDark};text-transform:uppercase;letter-spacing:0.3px;">
@@ -1806,6 +1857,22 @@
       state.selectedRegistration = d;
       renderMatchesSelector(index);
       renderSelectedRegistrationDetail(d);
+
+      // Pasang real-time listener pada dokumen peserta yang dipilih
+      if (activeSlipUnsubscribe) {
+        activeSlipUnsubscribe();
+        activeSlipUnsubscribe = null;
+      }
+      if (db && d.kodeRegistrasi) {
+        activeSlipUnsubscribe = db.collection('pendaftar').doc(d.kodeRegistrasi).onSnapshot((docSnap) => {
+          if (docSnap.exists) {
+            const liveData = { kodeRegistrasi: docSnap.id, ...docSnap.data() };
+            state.selectedRegistration = liveData;
+            state.searchMatches[index] = liveData;
+            renderSelectedRegistrationDetail(liveData);
+          }
+        });
+      }
     }
 
     function renderMatchesSelector(activeIndex) {
@@ -1849,7 +1916,7 @@
         <div class="theme-box rounded-xl p-4 text-xs space-y-2 border mb-5">
           <div class="flex flex-wrap justify-between items-center gap-2">
             <div>
-              <span class="text-[10px] uppercase tracking-wider font-bold text-gray-500 block">Status Pendaftaran Peserta</span>
+              <span class="text-[10px] uppercase tracking-wider font-bold text-gray-500 block">Status Pendaftaran Peserta (Live)</span>
               <span class="text-sm sm:text-base font-extrabold text-gray-900">${escapeHtml(d.namaLengkap)}</span>
             </div>
             <span class="px-3 py-1 rounded-full text-xs font-extrabold ${badgeClass}">${escapeHtml(d.status || 'MENUNGGU')}</span>
@@ -1905,10 +1972,8 @@
       box.innerHTML = "<p class='text-xs text-center py-4 text-gray-500 font-semibold'><i class='fa-solid fa-spinner fa-spin mr-1'></i> Mencari data pendaftaran...</p>";
 
       try {
-        const res = await fetch(`${GAS_URL}?action=check&query=${encodeURIComponent(q)}&_t=${Date.now()}`);
-        const result = await res.json();
-        if(result.status === "success") {
-          const list = (result.results && result.results.length > 0) ? result.results : [result.data];
+        const list = await queryRegistrantsHybrid(q);
+        if(list.length > 0) {
           state.searchMatches = list;
           selectSearchMatch(0);
         } else {
