@@ -1466,6 +1466,12 @@
             div.onclick = () => {
               document.getElementById('audioNamaInput').value = `${item.namaLengkap} (${item.asalSekolah})`;
               document.getElementById('audioSelectedKode').value = item.kodeRegistrasi;
+              const cabangLower = String(item.cabangLomba || '').toLowerCase();
+              const audioCabangSel = document.getElementById('audioCabang');
+              if (audioCabangSel) {
+                if (cabangLower.includes('solo')) audioCabangSel.value = 'Solosong';
+                else if (cabangLower.includes('tari')) audioCabangSel.value = 'Tari Kreasi';
+              }
               sugBox.classList.add('hidden');
             };
             sugBox.appendChild(div);
@@ -1476,25 +1482,38 @@
       }, 250);
     }
 
-    // --- UNGGAH AUDIO KE GOOGLE DRIVE + SYNC KE FIRESTORE ---
+    // --- UNGGAH AUDIO KE GOOGLE DRIVE (SESUAI FOLDER CABANG LOMBA) + SYNC KE FIRESTORE ---
     async function submitAudioUpload(e) {
       e.preventDefault();
-      const btn = document.getElementById('btnAudioSubmit');
-      btn.disabled = true; btn.innerText = "Mengunggah Audio ke Drive...";
       const fileInput = document.getElementById('audioFile');
       if(!fileInput.files.length) return;
+
+      const btn = document.getElementById('btnAudioSubmit');
+      btn.disabled = true; btn.innerText = "Mengunggah Audio ke Drive...";
       const file = fileInput.files[0];
       const selectedKode = document.getElementById('audioSelectedKode').value;
       const kodeOrName = selectedKode || document.getElementById('audioNamaInput').value;
+      const cabangAudio = document.getElementById('audioCabang').value;
+
+      const folderSolosong = (typeof DRIVE_FOLDER_AUDIO_SOLOSONG !== 'undefined' && DRIVE_FOLDER_AUDIO_SOLOSONG)
+        ? DRIVE_FOLDER_AUDIO_SOLOSONG
+        : '1bI4WfnXjoCHyexfYemrKmeWpfvcBm0O2';
+      const folderTari = (typeof DRIVE_FOLDER_AUDIO_TARI !== 'undefined' && DRIVE_FOLDER_AUDIO_TARI)
+        ? DRIVE_FOLDER_AUDIO_TARI
+        : '1SqJlhYQHtXVL7JsEb75IsthSpg03k77P';
+      const targetAudioFolderId = (cabangAudio === 'Solosong') ? folderSolosong : folderTari;
 
       const reader = new FileReader();
       reader.onload = async (ev) => {
         try {
           const payload = {
-            action: 'uploadAudio', targetFolderId: DRIVE_FOLDER_ID,
+            action: 'uploadAudio',
+            targetFolderId: targetAudioFolderId,
             kodeRegistrasi: kodeOrName,
-            cabangLomba: document.getElementById('audioCabang').value,
-            audioBase64: ev.target.result, fileName: file.name, fileType: file.type
+            cabangLomba: cabangAudio,
+            audioBase64: ev.target.result,
+            fileName: file.name,
+            fileType: file.type
           };
           const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify(payload) });
           const result = await res.json();
@@ -1513,7 +1532,7 @@
               }, { merge: true });
             }
 
-            Swal.fire({ icon: 'success', title: 'Audio Diunggah! 🎵', text: 'Audio tersimpan di Drive Panitia & status langsung terupdate.' });
+            Swal.fire({ icon: 'success', title: 'Audio Diunggah! 🎵', text: `Audio ${cabangAudio} tersimpan di Drive Panitia & status langsung terupdate.` });
             fileInput.value = ""; document.getElementById('audioNamaInput').value = ""; document.getElementById('audioSelectedKode').value = "";
           } else {
             Swal.fire({ icon: 'error', title: 'Gagal Unggah', text: result.message || 'Gagal mengunggah file audio.' });
