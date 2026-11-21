@@ -1482,8 +1482,10 @@
         try {
           const res = await fetch(`${GAS_URL}?action=check&query=${encodeURIComponent(queryText)}&_t=${Date.now()}`);
           const result = await res.json();
-          if (result && result.status === "found") {
-            matches = (result.matches && result.matches.length > 0) ? result.matches : [result.data];
+          if (result && (result.status === "success" || result.status === "found")) {
+            matches = (result.results && result.results.length > 0)
+              ? result.results
+              : ((result.matches && result.matches.length > 0) ? result.matches : (result.data ? [result.data] : []));
           }
         } catch (e) {}
       }
@@ -1702,10 +1704,13 @@
         namaGabungan = document.getElementById('namaLengkap').value.trim();
       }
 
+      const kodeLokal = "PAF-" + Math.floor(1000 + Math.random() * 9000);
+
       const sendToServer = async (b64Data, fName, fType) => {
         try {
           const payload = {
             action: "register",
+            kodeRegistrasi: kodeLokal,
             targetFolderId: buktiFolderId,
             namaLengkap: namaGabungan,
             asalSekolah: `${sekolahRaw} [${tingkat}]`,
@@ -1722,49 +1727,59 @@
             body: JSON.stringify(payload)
           });
           const result = await res.json();
-          if(result.status === "success") {
-            let linkBuktiUrl = result.linkBukti || result.fileUrl || "-";
-            if (b64Data && (!linkBuktiUrl || linkBuktiUrl === "-")) {
-              const checkRes = await fetch(`${GAS_URL}?action=check&query=${encodeURIComponent(result.kodeRegistrasi)}&_t=${Date.now()}`).then(r => r.json()).catch(() => null);
-              if (checkRes && checkRes.data && checkRes.data.linkBukti) linkBuktiUrl = checkRes.data.linkBukti;
-            }
 
-            if (db && result.kodeRegistrasi) {
-              await db.collection('pendaftar').doc(result.kodeRegistrasi).set({
-                kodeRegistrasi: result.kodeRegistrasi,
-                timestamp: new Date().toISOString(),
-                namaLengkap: namaGabungan,
-                asalSekolah: `${sekolahRaw} [${tingkat}]`,
-                cabangLomba: cabang,
-                noWhatsapp: waRaw,
-                email: emailRaw,
-                linkBukti: linkBuktiUrl,
-                status: 'MENUNGGU',
-                linkAudio: '-'
-              }, { merge: true });
-            }
+          let finalKode = (result && result.kodeRegistrasi) ? result.kodeRegistrasi : kodeLokal;
+          let linkBuktiUrl = (result && (result.linkBukti || result.fileUrl)) ? (result.linkBukti || result.fileUrl) : "-";
 
-            const hasBukti = Boolean(b64Data);
-            const waText = `Assalamu'alaikum Admin PESONA AL FIRDAUS,%0A%0ASaya telah mendaftar cabang lomba dengan detail berikut:%0A- *Kode Registrasi:* ${result.kodeRegistrasi}%0A- *Nama Peserta/Tim:* ${namaGabungan}%0A- *Kategori:* ${tingkat}%0A- *Asal Lembaga:* ${sekolahRaw}%0A- *Cabang Lomba:* ${cabang}%0A- *Bukti Transfer:* ${hasBukti ? 'Sudah diunggah di portal' : 'Menyusul'}%0A%0AMohon verifikasi pendaftaran saya. Terima kasih.`;
-            const waConfirmUrl = `https://wa.me/6285366685084?text=${waText}`;
+          // Fallback: Jika upload file ke GAS gagal, tetap simpan data pendaftaran tanpa file agar data peserta tidak hilang
+          if (!result || result.status !== "success") {
+            const retryRes = await fetch(GAS_URL, {
+              method: 'POST', mode: 'cors', redirect: 'follow',
+              headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+              body: JSON.stringify({ ...payload, buktiBase64: null, fileName: null, fileType: null })
+            }).then(r => r.json()).catch(() => null);
 
-            document.getElementById('regForm').reset();
-            closeForm();
-
-            Swal.fire({
-              icon: 'success',
-              title: 'Pendaftaran Berhasil! 🎉',
-              html: `Kode Registrasi Anda: <strong>${result.kodeRegistrasi}</strong><br><br>Mengarahkan Anda ke WhatsApp Admin untuk konfirmasi...<br><a href="${waConfirmUrl}" target="_blank" class="inline-block mt-3 bg-green-600 hover:bg-green-700 text-white font-bold px-4 py-2 rounded-lg text-xs">Buka WhatsApp Sekarang</a>`,
-              showConfirmButton: false,
-              timer: 2500
-            });
-
-            setTimeout(() => {
-              window.location.href = waConfirmUrl;
-            }, 1300);
-          } else {
-            Swal.fire({ icon: 'error', title: 'Gagal', text: result.message });
+            if (retryRes && retryRes.kodeRegistrasi) finalKode = retryRes.kodeRegistrasi;
           }
+
+          if (b64Data && (!linkBuktiUrl || linkBuktiUrl === "-")) {
+            const checkRes = await fetch(`${GAS_URL}?action=check&query=${encodeURIComponent(finalKode)}&_t=${Date.now()}`).then(r => r.json()).catch(() => null);
+            if (checkRes && checkRes.data && checkRes.data.linkBukti) linkBuktiUrl = checkRes.data.linkBukti;
+          }
+
+          if (db && finalKode) {
+            await db.collection('pendaftar').doc(finalKode).set({
+              kodeRegistrasi: finalKode,
+              timestamp: new Date().toISOString(),
+              namaLengkap: namaGabungan,
+              asalSekolah: `${sekolahRaw} [${tingkat}]`,
+              cabangLomba: cabang,
+              noWhatsapp: waRaw,
+              email: emailRaw,
+              linkBukti: linkBuktiUrl,
+              status: 'MENUNGGU',
+              linkAudio: '-'
+            }, { merge: true });
+          }
+
+          const hasBukti = Boolean(linkBuktiUrl && linkBuktiUrl !== "-");
+          const waText = `Assalamu'alaikum Admin PESONA AL FIRDAUS,%0A%0ASaya telah mendaftar cabang lomba dengan detail berikut:%0A- *Kode Registrasi:* ${finalKode}%0A- *Nama Peserta/Tim:* ${namaGabungan}%0A- *Kategori:* ${tingkat}%0A- *Asal Lembaga:* ${sekolahRaw}%0A- *Cabang Lomba:* ${cabang}%0A- *Bukti Transfer:* ${hasBukti ? 'Sudah diunggah di portal' : 'Dilampirkan di chat WA ini'}%0A%0AMohon verifikasi pendaftaran saya. Terima kasih.`;
+          const waConfirmUrl = `https://wa.me/6285366685084?text=${waText}`;
+
+          document.getElementById('regForm').reset();
+          closeForm();
+
+          Swal.fire({
+            icon: 'success',
+            title: 'Pendaftaran Berhasil! 🎉',
+            html: `Kode Registrasi Anda: <strong>${finalKode}</strong><br><br>Mengarahkan Anda ke WhatsApp Admin untuk konfirmasi...<br><a href="${waConfirmUrl}" target="_blank" class="inline-block mt-3 bg-green-600 hover:bg-green-700 text-white font-bold px-4 py-2 rounded-lg text-xs">Buka WhatsApp Sekarang</a>`,
+            showConfirmButton: false,
+            timer: 2500
+          });
+
+          setTimeout(() => {
+            window.location.href = waConfirmUrl;
+          }, 1300);
         } catch(err) {
           Swal.fire({ icon: 'error', title: 'Error', text: err.toString() });
         } finally {
@@ -2048,4 +2063,3 @@
   </script>
 </body>
 </html>
-```[cite: 15, 16]
