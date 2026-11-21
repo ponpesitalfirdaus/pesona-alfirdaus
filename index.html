@@ -638,7 +638,7 @@
           <div>
             <label class="block font-bold text-gray-700 mb-1">Pilih File Audio (MP3, WAV, M4A) *</label>
             <input type="file" id="audioFile" accept="audio/*" required class="w-full border rounded-lg p-2 text-xs bg-gray-50">
-            <p class="text-[10px] text-gray-400 mt-1">Format: MP3/WAV/M4A. Ukuran disarankan maks. 10 MB.</p>
+            <p class="text-[10px] text-gray-400 mt-1">Format: MP3/WAV/M4A. File otomatis masuk ke folder cabang lomba masing-masing di Google Drive Panitia.</p>
           </div>
           <button type="submit" id="btnAudioSubmit" class="w-full theme-btn text-white font-bold py-3 rounded-xl text-xs sm:text-sm shadow flex items-center justify-center gap-2">
             <i class="fa-solid fa-cloud-arrow-up"></i> Unggah Musik / Audio Now
@@ -755,10 +755,10 @@
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1">Upload Bukti Transfer / Pembayaran *</label>
-          <input type="file" id="fileBukti" accept="image/*" class="w-full text-xs text-gray-500 border rounded-lg p-1.5 bg-gray-50">
+          <label class="block text-xs font-bold text-gray-700 mb-1">Upload Bukti Transfer / Pembayaran (Gambar / PDF)</label>
+          <input type="file" id="fileBukti" accept="image/*,application/pdf" class="w-full text-xs text-gray-500 border rounded-lg p-1.5 bg-gray-50">
           <p class="text-[10px] theme-text font-medium mt-1">
-            <i class="fa-solid fa-circle-info mr-0.5"></i> File otomatis tersimpan aman di Google Drive Folder Panitia.
+            <i class="fa-solid fa-circle-info mr-0.5"></i> Format: JPG, PNG, atau PDF. File otomatis tersimpan aman di Folder Bukti Pembayaran Google Drive Panitia.
           </p>
         </div>
         
@@ -783,6 +783,12 @@
     let currentFlyerZoom = 1;
     let activeSlipUnsubscribe = null;
 
+    function getBuktiDriveFolderId() {
+      if (typeof DRIVE_FOLDER_BUKTI !== 'undefined' && DRIVE_FOLDER_BUKTI) return DRIVE_FOLDER_BUKTI;
+      if (typeof DRIVE_FOLDER_ID !== 'undefined' && DRIVE_FOLDER_ID) return DRIVE_FOLDER_ID;
+      return '1i0VnagJrNxjQRWgoO-qXZyrzIRX7l85WFZDw3ji6c0ncve_g9hrh811Wwd6l8sojQjbiH1eN';
+    }
+
     window.onload = async () => {
       setActiveNav('beranda');
       initSwiper();
@@ -801,7 +807,6 @@
     // --- LISTENER REAL-TIME FIRESTORE (CONFIG & LOMBA) ---
     function initRealtimePortal() {
       if (db) {
-        // 1. Real-time Config & Tema
         db.collection('portal').doc('config').onSnapshot((docSnap) => {
           if (docSnap.exists) {
             state.config = docSnap.data() || {};
@@ -815,7 +820,6 @@
           loadPortalDataFromGAS();
         });
 
-        // 2. Real-time Daftar Lomba
         db.collection('lomba').onSnapshot((snap) => {
           if (!snap.empty) {
             const list = [];
@@ -1041,7 +1045,10 @@
         const cfg = state.config || {};
         applyDynamicTheme(cfg.themeColor || 'emerald', cfg.customColor || '#047857');
 
-        if(cfg.headerTitle && document.getElementById('portalHeaderTitle')) document.getElementById('portalHeaderTitle').innerText = cfg.headerTitle;
+        if(cfg.headerTitle) {
+          document.title = cfg.headerTitle;
+          if(document.getElementById('portalHeaderTitle')) document.getElementById('portalHeaderTitle').innerText = cfg.headerTitle;
+        }
         if(cfg.headerSub && document.getElementById('portalHeaderSub')) document.getElementById('portalHeaderSub').innerText = cfg.headerSub;
         if(cfg.contact && document.getElementById('footerContactInfo')) document.getElementById('footerContactInfo').innerText = cfg.contact;
 
@@ -1134,153 +1141,152 @@
 
       state.lombaList.forEach(item => {
         const isBuka = item.statusLomba !== 'TUTUP';
-        const imgUrl = parseImageUrl(item.flyerUrl);
+        const flyerImg = parseImageUrl(item.flyerUrl);
         const tipe = item.tipePeserta || 'Individu';
-        const isTeam = tipe === 'Team';
 
-        let priceItemsHtml = "";
-        if((item.active1 !== false && item.active1 !== 'false') && (item.kat1 || item.biaya1)) priceItemsHtml += `<div class="flex justify-between font-bold text-gray-700"><span>• ${item.kat1 || 'Jenjang 1'}:</span> <span class="theme-text font-extrabold">${item.biaya1 || '-'}</span></div>`;
-        if((item.active2 !== false && item.active2 !== 'false') && (item.kat2 || item.biaya2)) priceItemsHtml += `<div class="flex justify-between font-bold text-gray-700"><span>• ${item.kat2 || 'Jenjang 2'}:</span> <span class="theme-text font-extrabold">${item.biaya2 || '-'}</span></div>`;
-        if((item.active3 !== false && item.active3 !== 'false') && (item.kat3 || item.biaya3)) priceItemsHtml += `<div class="flex justify-between font-bold text-gray-700"><span>• ${item.kat3 || 'Jenjang 3'}:</span> <span class="theme-text font-extrabold">${item.biaya3 || '-'}</span></div>`;
+        let rincianHarga = [];
+        if (item.active1 !== false && (item.kat1 || item.biaya1)) rincianHarga.push(`${item.kat1 || 'Jenjang 1'}: ${item.biaya1 || '-'}`);
+        if (item.active2 !== false && (item.kat2 || item.biaya2)) rincianHarga.push(`${item.kat2 || 'Jenjang 2'}: ${item.biaya2 || '-'}`);
+        if (item.active3 !== false && (item.kat3 || item.biaya3)) rincianHarga.push(`${item.kat3 || 'Jenjang 3'}: ${item.biaya3 || '-'}`);
+        const hargaRingkas = rincianHarga.join(' | ') || item.biaya || 'Gratis / Hubungi Panitia';
 
-        if (!priceItemsHtml) priceItemsHtml = `<div class="text-gray-400 italic">Gratis / Hubungi Panitia</div>`;
-
-        const priceBlockHtml = `<div class="theme-box border rounded-lg p-2.5 my-3 text-xs space-y-1">${priceItemsHtml}</div>`;
-        const typeBadgeHtml = `<span class="text-[10px] font-bold px-2 py-0.5 rounded ${isTeam ? 'bg-purple-100 text-purple-800 border border-purple-300' : 'bg-blue-100 text-blue-800 border border-blue-300'}">${isTeam ? '👥 Team' : '👤 Individu'}</span>`;
-
-        const homeSlideHtml = `
+        homeContainer.innerHTML += `
           <div class="swiper-slide h-auto">
-            <div class="bg-white rounded-xl shadow border overflow-hidden flex flex-col h-full hover:shadow-lg transition">
-              <img src="${imgUrl || 'https://via.placeholder.com/400x250'}" class="h-44 sm:h-48 w-full object-cover">
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden flex flex-col hover:shadow-xl transition-all duration-300 h-full">
+              <div class="relative bg-gray-100 overflow-hidden group cursor-pointer" onclick="openDetailLomba('${item.id}')">
+                <img src="${flyerImg || 'https://via.placeholder.com/400x400?text=Flyer+Lomba'}" alt="${item.judul}" class="w-full h-52 sm:h-60 object-cover transition-transform duration-300 group-hover:scale-105">
+                <div class="absolute top-3 right-3 flex flex-col items-end gap-1">
+                  <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold shadow ${isBuka ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}">${isBuka ? 'BUKA' : 'TUTUP'}</span>
+                  <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold shadow ${tipe === 'Team' ? 'bg-purple-600 text-white' : 'bg-blue-600 text-white'}">${tipe === 'Team' ? '👥 Team' : '👤 Individu'}</span>
+                </div>
+              </div>
               <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between">
                 <div>
-                  <div class="flex flex-wrap justify-between items-center gap-1 mb-1">
-                    <div class="flex items-center gap-1.5 flex-wrap">
-                      <span class="text-xs theme-badge font-bold px-2.5 py-0.5 rounded">${item.kategori || 'Multi Kategori'}</span>
-                      ${typeBadgeHtml}
-                    </div>
-                    <span class="text-[10px] font-bold px-2 py-0.5 rounded ${isBuka ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">${isBuka ? 'BUKA' : 'TUTUP'}</span>
-                  </div>
-                  <h3 class="text-lg sm:text-xl font-bold text-gray-800">${item.judul}</h3>
-                  ${priceBlockHtml}
+                  <span class="text-[10px] font-bold uppercase tracking-wider theme-text-accent">${item.kategori || 'Multi Kategori'}</span>
+                  <h4 class="font-bold text-base sm:text-lg text-gray-900 mt-1 mb-2 leading-tight line-clamp-2">${item.judul}</h4>
                 </div>
-                <div class="pt-2 border-t flex justify-end items-center">
-                  <button onclick="openDetailLomba('${item.id}')" class="w-full theme-btn text-white text-xs px-3.5 py-2.5 rounded-lg font-bold text-center">Detail &amp; Daftar &rarr;</button>
+                <div class="pt-3 border-t mt-2 flex flex-col gap-2">
+                  <span class="text-[11px] font-bold text-gray-800 line-clamp-1"><i class="fa-solid fa-tag theme-text-accent mr-1"></i> ${hargaRingkas}</span>
+                  <button onclick="openDetailLomba('${item.id}')" class="w-full theme-btn px-4 py-2 rounded-lg text-xs font-bold shadow transition">Detail &amp; Daftar</button>
                 </div>
               </div>
             </div>
           </div>
         `;
 
-        let cardHtml = "";
-        if(state.viewMode === 'list') {
-          cardHtml = `
-            <div class="bg-white rounded-2xl shadow border overflow-hidden flex flex-col sm:flex-row hover:shadow-lg transition p-3 sm:p-4 gap-4 items-center">
-              <img src="${imgUrl || 'https://via.placeholder.com/400x250'}" class="w-full sm:w-48 h-36 object-cover rounded-xl border shrink-0">
-              <div class="flex-1 w-full flex flex-col justify-between">
+        if (state.viewMode === 'list') {
+          container.innerHTML += `
+            <div class="bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden flex flex-col sm:flex-row hover:shadow-lg transition-all duration-300">
+              <div class="relative w-full sm:w-44 h-44 sm:h-auto bg-gray-100 shrink-0 cursor-pointer overflow-hidden group" onclick="openDetailLomba('${item.id}')">
+                <img src="${flyerImg || 'https://via.placeholder.com/400x400?text=Flyer+Lomba'}" alt="${item.judul}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+              </div>
+              <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between">
                 <div>
-                  <div class="flex flex-wrap justify-between items-center gap-1 mb-1">
-                    <div class="flex items-center gap-1.5 flex-wrap">
-                      <span class="text-xs theme-badge font-bold px-2.5 py-0.5 rounded">${item.kategori || 'Multi Kategori'}</span>
-                      ${typeBadgeHtml}
-                    </div>
-                    <span class="text-[10px] font-bold px-2 py-0.5 rounded ${isBuka ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">${isBuka ? 'BUKA' : 'TUTUP'}</span>
+                  <div class="flex items-center gap-1.5 flex-wrap mb-1.5">
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold ${isBuka ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">${isBuka ? 'BUKA' : 'TUTUP'}</span>
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${tipe === 'Team' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'}">${tipe === 'Team' ? '👥 Team' : '👤 Individu'}</span>
+                    <span class="text-[10px] font-bold uppercase tracking-wider theme-text-accent bg-gray-100 px-2 py-0.5 rounded">${item.kategori || 'Multi Kategori'}</span>
                   </div>
-                  <h3 class="text-lg font-extrabold text-gray-900">${item.judul}</h3>
-                  ${priceBlockHtml}
+                  <h4 class="font-bold text-base sm:text-xl text-gray-900 mb-1">${item.judul}</h4>
+                  <p class="text-xs text-gray-500 line-clamp-2 mb-3">${item.deskripsi || ''}</p>
                 </div>
-                <button onclick="openDetailLomba('${item.id}')" class="theme-btn text-white text-xs px-4 py-2.5 rounded-lg font-bold self-end sm:self-start mt-2">Detail &amp; Daftar &rarr;</button>
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 pt-3 border-t">
+                  <span class="text-xs font-extrabold theme-text"><i class="fa-solid fa-tag mr-1"></i> ${hargaRingkas}</span>
+                  <button onclick="openDetailLomba('${item.id}')" class="w-full sm:w-auto theme-btn px-5 py-2 rounded-lg text-xs font-bold shadow transition">Detail &amp; Daftar</button>
+                </div>
               </div>
             </div>
           `;
         } else {
-          cardHtml = `
-            <div class="bg-white rounded-xl shadow border overflow-hidden flex flex-col hover:shadow-lg transition">
-              <img src="${imgUrl || 'https://via.placeholder.com/400x250'}" class="h-44 sm:h-48 w-full object-cover">
+          container.innerHTML += `
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden flex flex-col hover:shadow-xl transition-all duration-300">
+              <div class="relative bg-gray-100 overflow-hidden group cursor-pointer" onclick="openDetailLomba('${item.id}')">
+                <img src="${flyerImg || 'https://via.placeholder.com/400x400?text=Flyer+Lomba'}" alt="${item.judul}" class="w-full h-56 sm:h-64 object-cover transition-transform duration-300 group-hover:scale-105">
+                <div class="absolute top-3 right-3 flex flex-col items-end gap-1">
+                  <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold shadow ${isBuka ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}">${isBuka ? 'BUKA' : 'TUTUP'}</span>
+                  <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold shadow ${tipe === 'Team' ? 'bg-purple-600 text-white' : 'bg-blue-600 text-white'}">${tipe === 'Team' ? '👥 Team' : '👤 Individu'}</span>
+                </div>
+              </div>
               <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between">
                 <div>
-                  <div class="flex flex-wrap justify-between items-center gap-1 mb-1">
-                    <div class="flex items-center gap-1.5 flex-wrap">
-                      <span class="text-xs theme-badge font-bold px-2.5 py-0.5 rounded">${item.kategori || 'Multi Kategori'}</span>
-                      ${typeBadgeHtml}
-                    </div>
-                    <span class="text-[10px] font-bold px-2 py-0.5 rounded ${isBuka ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">${isBuka ? 'BUKA' : 'TUTUP'}</span>
-                  </div>
-                  <h3 class="text-lg sm:text-xl font-bold text-gray-800">${item.judul}</h3>
-                  ${priceBlockHtml}
+                  <span class="text-[10px] font-bold uppercase tracking-wider theme-text-accent">${item.kategori || 'Multi Kategori'}</span>
+                  <h4 class="font-bold text-base sm:text-lg text-gray-900 mt-1 mb-2 leading-tight">${item.judul}</h4>
                 </div>
-                <div class="pt-2 border-t flex justify-end items-center">
-                  <button onclick="openDetailLomba('${item.id}')" class="w-full theme-btn text-white text-xs px-3.5 py-2.5 rounded-lg font-bold text-center">Detail &amp; Daftar &rarr;</button>
+                <div class="pt-3 border-t mt-2 flex flex-col gap-2">
+                  <span class="text-xs font-extrabold text-gray-900 line-clamp-1"><i class="fa-solid fa-tag theme-text-accent mr-1"></i> ${hargaRingkas}</span>
+                  <button onclick="openDetailLomba('${item.id}')" class="w-full theme-btn px-4 py-2 rounded-lg text-xs font-bold shadow transition">Detail &amp; Daftar</button>
                 </div>
               </div>
             </div>
           `;
         }
-
-        homeContainer.innerHTML += homeSlideHtml;
-        container.innerHTML += cardHtml;
       });
 
       if(state.lombaSwiperInstance) state.lombaSwiperInstance.update();
     }
 
     function populateTingkatDropdown(item) {
-      const select = document.getElementById('tingkatPesertaInput');
-      if (!select) return;
-      select.innerHTML = '';
-      const list = [];
-      if (item) {
-        if (item.active1 !== false && item.active1 !== 'false' && item.kat1) list.push(item.kat1);
-        if (item.active2 !== false && item.active2 !== 'false' && item.kat2) list.push(item.kat2);
-        if (item.active3 !== false && item.active3 !== 'false' && item.kat3) list.push(item.kat3);
+      const sel = document.getElementById('tingkatPesertaInput');
+      if(!sel) return;
+      sel.innerHTML = "";
+      let count = 0;
+
+      if (item.active1 !== false && (item.kat1 || item.biaya1)) {
+        const k1 = item.kat1 || 'Jenjang 1';
+        const val = item.biaya1 ? `${k1} (${item.biaya1})` : k1;
+        sel.innerHTML += `<option value="${escapeHtml(val)}">${escapeHtml(val)}</option>`; count++;
       }
-      if (list.length === 0) list.push('SD / MI', 'SMP / MTs', 'SMA / MA', 'Umum');
-      list.forEach(kat => {
-        const opt = document.createElement('option');
-        opt.value = kat; opt.textContent = kat;
-        select.appendChild(opt);
-      });
+      if (item.active2 !== false && (item.kat2 || item.biaya2)) {
+        const k2 = item.kat2 || 'Jenjang 2';
+        const val = item.biaya2 ? `${k2} (${item.biaya2})` : k2;
+        sel.innerHTML += `<option value="${escapeHtml(val)}">${escapeHtml(val)}</option>`; count++;
+      }
+      if (item.active3 !== false && (item.kat3 || item.biaya3)) {
+        const k3 = item.kat3 || 'Jenjang 3';
+        const val = item.biaya3 ? `${k3} (${item.biaya3})` : k3;
+        sel.innerHTML += `<option value="${escapeHtml(val)}">${escapeHtml(val)}</option>`; count++;
+      }
+      if (count === 0) {
+        sel.innerHTML = `<option value="Umum">Umum (${item.biaya || '-'})</option>`;
+      }
     }
 
     function renderNamaPesertaFields(tipePeserta) {
       const container = document.getElementById('namaPesertaContainer');
-      if (!container) return;
-      container.innerHTML = "";
+      if(!container) return;
 
       if (tipePeserta === 'Team') {
         container.innerHTML = `
-          <div class="bg-purple-50 p-3 rounded-xl border border-purple-200">
-            <div class="flex justify-between items-center mb-2">
-              <label class="block text-xs font-bold text-purple-900"><i class="fa-solid fa-users text-purple-700 mr-1"></i> Daftar Nama Anggota Tim / Kelompok *</label>
-              <button type="button" onclick="addTeamMemberField()" class="bg-purple-700 hover:bg-purple-800 text-white px-2.5 py-1 rounded-lg text-[10px] font-bold shadow flex items-center gap-1 transition">
-                <i class="fa-solid fa-plus"></i> Tambah Anggota
-              </button>
-            </div>
-            <div id="teamMemberList" class="space-y-2">
-              <div class="flex items-center gap-2"><input type="text" class="input-nama-peserta flex-1 border rounded-lg px-3 py-1.5 text-xs focus:outline-none" required placeholder="Peserta 1 (Ketua Tim) *"></div>
-              <div class="flex items-center gap-2"><input type="text" class="input-nama-peserta flex-1 border rounded-lg px-3 py-1.5 text-xs focus:outline-none" required placeholder="Peserta 2 *"></div>
-            </div>
+          <div class="flex justify-between items-center mb-1">
+            <label class="block text-xs font-bold text-gray-700">Nama Anggota Kelompok / Tim *</label>
+            <button type="button" onclick="addTeamMemberField()" class="theme-badge hover:opacity-80 font-bold text-[10px] px-2.5 py-1 rounded-lg flex items-center gap-1 shadow-sm transition">
+              <i class="fa-solid fa-plus"></i> Tambah Anggota
+            </button>
+          </div>
+          <div id="teamMembersList" class="space-y-2">
+            <div><input type="text" required class="team-member-input w-full border rounded-lg px-3 py-2 text-xs sm:text-sm" placeholder="Nama Peserta 1 (Ketua Tim)"></div>
+            <div><input type="text" required class="team-member-input w-full border rounded-lg px-3 py-2 text-xs sm:text-sm" placeholder="Nama Peserta 2"></div>
           </div>
         `;
       } else {
         container.innerHTML = `
           <div>
             <label class="block text-xs font-bold text-gray-700 mb-1">Nama Lengkap Peserta *</label>
-            <input type="text" class="input-nama-peserta w-full border rounded-lg px-3 py-2 text-xs sm:text-sm focus:outline-none" required placeholder="Masukkan nama lengkap peserta">
+            <input type="text" id="namaLengkap" required class="w-full border rounded-lg px-3 py-2 text-xs sm:text-sm" placeholder="Masukkan nama lengkap peserta">
           </div>
         `;
       }
     }
 
     function addTeamMemberField() {
-      const list = document.getElementById('teamMemberList');
-      if (!list) return;
+      const list = document.getElementById('teamMembersList');
+      if(!list) return;
       const count = list.children.length + 1;
       const div = document.createElement('div');
-      div.className = "flex items-center gap-2";
+      div.className = "flex items-center gap-1.5";
       div.innerHTML = `
-        <input type="text" class="input-nama-peserta flex-1 border rounded-lg px-3 py-1.5 text-xs focus:outline-none" required placeholder="Peserta ${count} *">
-        <button type="button" onclick="this.parentElement.remove()" class="bg-red-500 hover:bg-red-600 text-white w-7 h-7 rounded-lg text-xs flex items-center justify-center shrink-0 shadow"><i class="fa-solid fa-trash"></i></button>
+        <input type="text" required class="team-member-input flex-1 border rounded-lg px-3 py-2 text-xs sm:text-sm" placeholder="Nama Peserta ${count}">
+        <button type="button" onclick="this.parentElement.remove()" title="Hapus Baris" class="bg-red-500 hover:bg-red-600 text-white w-8 h-8 rounded-lg flex items-center justify-center text-xs shrink-0"><i class="fa-solid fa-trash"></i></button>
       `;
       list.appendChild(div);
     }
@@ -1288,90 +1294,91 @@
     function openDetailLomba(id) {
       const item = state.lombaList.find(x => x.id === id);
       if(!item) return;
-      const tipe = item.tipePeserta || 'Individu';
-      const flyerFullUrl = parseImageUrl(item.flyerUrl) || 'https://via.placeholder.com/400x500';
 
-      document.getElementById('detailFlyerImg').src = flyerFullUrl;
-      document.getElementById('zoomedFlyerImg').src = flyerFullUrl;
-      document.getElementById('zoomFlyerTitle').innerText = item.judul;
-      document.getElementById('detailJudulLomba').innerText = item.judul;
-      document.getElementById('detailBadgeKategori').innerText = item.kategori || 'Multi Kategori';
+      const flyerImg = parseImageUrl(item.flyerUrl);
+      const isBuka = item.statusLomba !== 'TUTUP';
+      const tipe = item.tipePeserta || 'Individu';
+
+      document.getElementById('detailFlyerImg').src = flyerImg || 'https://via.placeholder.com/400x400?text=Flyer+Lomba';
+      document.getElementById('zoomedFlyerImg').src = flyerImg || 'https://via.placeholder.com/400x400?text=Flyer+Lomba';
+      document.getElementById('zoomFlyerTitle').innerText = `Flyer: ${item.judul}`;
+      document.getElementById('detailBadgeKategori').innerText = item.kategori || "Umum";
       
       const badgeTipe = document.getElementById('detailBadgeTipe');
-      badgeTipe.className = tipe === 'Team' ? "bg-purple-100 text-purple-800 border border-purple-300 font-bold text-xs px-3 py-1 rounded-full" : "bg-blue-100 text-blue-800 border border-blue-300 font-bold text-xs px-3 py-1 rounded-full";
-      badgeTipe.innerText = tipe === 'Team' ? "👥 Team / Berkelompok" : "👤 Individu";
+      badgeTipe.innerText = tipe === 'Team' ? '👥 Sistem Team / Kelompok' : '👤 Sistem Individu';
+      badgeTipe.className = `font-bold text-xs px-3 py-1 rounded-full ${tipe === 'Team' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'}`;
 
-      const detailBiayaBox = document.getElementById('detailBiayaContainer');
-      detailBiayaBox.innerHTML = "";
-      if (item.active1 !== false && (item.kat1 || item.biaya1)) detailBiayaBox.innerHTML += `<div class="flex justify-between py-1 border-b font-medium"><span>• ${item.kat1 || 'Jenjang 1'} :</span><span class="font-bold theme-text">${item.biaya1 || '-'}</span></div>`;
-      if (item.active2 !== false && (item.kat2 || item.biaya2)) detailBiayaBox.innerHTML += `<div class="flex justify-between py-1 border-b font-medium"><span>• ${item.kat2 || 'Jenjang 2'} :</span><span class="font-bold theme-text">${item.biaya2 || '-'}</span></div>`;
-      if (item.active3 !== false && (item.kat3 || item.biaya3)) detailBiayaBox.innerHTML += `<div class="flex justify-between py-1 font-medium"><span>• ${item.kat3 || 'Jenjang 3'} :</span><span class="font-bold theme-text">${item.biaya3 || '-'}</span></div>`;
+      document.getElementById('detailJudulLomba').innerText = item.judul;
+      document.getElementById('detailDeskripsi').innerText = item.deskripsi || "-";
+      document.getElementById('detailSyarat').innerText = item.syarat || "-";
+      document.getElementById('detailHadiah').innerText = item.hadiah || "-";
 
-      document.getElementById('detailDeskripsi').innerText = item.deskripsi || '-';
-      document.getElementById('detailSyarat').innerText = item.syarat || '-';
-      document.getElementById('detailHadiah').innerText = item.hadiah || '-';
+      const biayaCont = document.getElementById('detailBiayaContainer');
+      biayaCont.innerHTML = "";
+      let hasPrice = false;
 
-      const juknisBox = document.getElementById('detailJuknisContainer');
-      const safeJuknisUrl = formatExternalUrl(item.juknisUrl);
-      if (safeJuknisUrl) {
-        juknisBox.innerHTML = `
-          <a href="${safeJuknisUrl}" target="_blank" rel="noopener noreferrer"
-             class="inline-flex items-center gap-3 bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-950 font-bold px-4 py-2.5 rounded-xl transition shadow-sm group max-w-full">
-            <div class="w-8 h-8 rounded-lg bg-amber-400 text-amber-950 flex items-center justify-center shrink-0">
-              <i class="fa-solid fa-file-lines text-sm"></i>
-            </div>
-            <div class="min-w-0 text-left">
-              <span class="block text-xs sm:text-sm font-extrabold group-hover:underline">Buka / Unduh Juknis ${item.judul}</span>
-              <span class="block text-[10px] text-amber-700 truncate max-w-[210px] sm:max-w-sm">${safeJuknisUrl}</span>
-            </div>
-            <i class="fa-solid fa-arrow-up-right-from-square text-xs text-amber-700 ml-1 shrink-0"></i>
-          </a>
-        `;
-      } else {
-        juknisBox.innerHTML = `<p class="text-gray-500 italic">Link Juknis lomba belum dilampirkan. Silakan hubungi narahubung di bawah.</p>`;
+      if (item.active1 !== false && (item.kat1 || item.biaya1)) {
+        biayaCont.innerHTML += `<div class="flex justify-between font-bold text-gray-800 border-b border-gray-200 pb-1"><span>${escapeHtml(item.kat1 || 'Jenjang 1')}:</span><span class="theme-text">${escapeHtml(item.biaya1 || '-')}</span></div>`;
+        hasPrice = true;
+      }
+      if (item.active2 !== false && (item.kat2 || item.biaya2)) {
+        biayaCont.innerHTML += `<div class="flex justify-between font-bold text-gray-800 border-b border-gray-200 pb-1"><span>${escapeHtml(item.kat2 || 'Jenjang 2')}:</span><span class="theme-text">${escapeHtml(item.biaya2 || '-')}</span></div>`;
+        hasPrice = true;
+      }
+      if (item.active3 !== false && (item.kat3 || item.biaya3)) {
+        biayaCont.innerHTML += `<div class="flex justify-between font-bold text-gray-800"><span>${escapeHtml(item.kat3 || 'Jenjang 3')}:</span><span class="theme-text">${escapeHtml(item.biaya3 || '-')}</span></div>`;
+        hasPrice = true;
+      }
+      if(!hasPrice) biayaCont.innerHTML = `<p class="font-bold theme-text">${escapeHtml(item.biaya || 'Hubungi Panitia')}</p>`;
+
+      const juknisCont = document.getElementById('detailJuknisContainer');
+      if (juknisCont) {
+        const juknisHref = formatExternalUrl(item.juknisUrl);
+        if (juknisHref) {
+          juknisCont.innerHTML = `
+            <a href="${escapeHtml(juknisHref)}" target="_blank" rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-500 text-gray-950 font-bold text-xs sm:text-sm px-4 py-2.5 rounded-xl shadow transition">
+              <i class="fa-solid fa-file-pdf text-red-700"></i>
+              <span>Buka / Unduh Juknis Lomba</span>
+              <i class="fa-solid fa-arrow-up-right-from-square text-[11px]"></i>
+            </a>
+          `;
+        } else {
+          juknisCont.innerHTML = `<p class="text-xs text-gray-400 italic">Link juknis belum tersedia untuk cabang lomba ini.</p>`;
+        }
       }
 
-      const naraBox = document.getElementById('detailNarahubungContainer');
-      naraBox.innerHTML = "";
-      let rawContacts = item.narahubung || [];
-      if (typeof rawContacts === 'string') {
-        try { rawContacts = JSON.parse(rawContacts); } catch(e) { rawContacts = []; }
+      const naraCont = document.getElementById('detailNarahubungContainer');
+      if (naraCont) {
+        let naraList = item.narahubung || [];
+        if (typeof naraList === 'string') {
+          try { naraList = JSON.parse(naraList); } catch(e) { naraList = []; }
+        }
+        const validNara = Array.isArray(naraList) ? naraList.filter(n => n && n.wa && String(n.wa).trim() !== '') : [];
+        if (validNara.length > 0) {
+          naraCont.innerHTML = validNara.map((n, idx) => {
+            const labelNama = n.nama && n.nama.trim() !== '' ? n.nama.trim() : `Narahubung ${idx + 1}`;
+            const waHref = formatWaLink(n.wa, `Assalamu'alaikum ${labelNama}, saya ingin bertanya mengenai lomba *${item.judul}* di PESONA AL FIRDAUS.`);
+            return `
+              <a href="${escapeHtml(waHref)}" target="_blank" rel="noopener noreferrer"
+                class="flex items-center justify-between gap-2 bg-green-50 hover:bg-green-100 border border-green-200 rounded-xl px-3.5 py-2.5 transition shadow-sm">
+                <div class="min-w-0">
+                  <p class="font-bold text-gray-900 text-xs truncate">${escapeHtml(labelNama)}</p>
+                  <p class="text-[11px] font-mono text-green-800 font-semibold">${escapeHtml(n.wa)}</p>
+                </div>
+                <span class="bg-green-600 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg shrink-0 flex items-center gap-1">
+                  <i class="fa-brands fa-whatsapp"></i> Chat
+                </span>
+              </a>
+            `;
+          }).join('');
+        } else {
+          naraCont.innerHTML = `<p class="text-xs text-gray-400 italic col-span-full">Belum ada kontak narahubung terdaftar.</p>`;
+        }
       }
-      let contacts = Array.isArray(rawContacts) ? rawContacts.filter(c => c && String(c.wa || '').trim() !== '') : [];
-
-      if (contacts.length === 0) {
-        contacts = [
-          { nama: 'Narahubung 1 (Admin)', wa: '085267743284' },
-          { nama: 'Narahubung 2 (Panitia)', wa: state.config.waNumber || '085366685084' }
-        ];
-      }
-
-      contacts.forEach((c, idx) => {
-        const labelNama = (c.nama && c.nama.trim()) ? c.nama.trim() : `Narahubung ${idx + 1}`;
-        const rawWa = String(c.wa || '').trim();
-        const waGreeting = `Assalamu'alaikum ${labelNama}, saya ingin bertanya mengenai cabang lomba *${item.judul}* pada PESONA AL FIRDAUS 2026.`;
-        const waHref = formatWaLink(rawWa, waGreeting);
-
-        naraBox.innerHTML += `
-          <a href="${waHref}" target="_blank" rel="noopener noreferrer"
-             class="flex items-center gap-3 bg-green-50 hover:bg-green-100 border border-green-200 hover:border-green-400 rounded-xl p-3 transition shadow-sm group">
-            <div class="w-9 h-9 rounded-full bg-green-600 text-white flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 transition">
-              <i class="fa-brands fa-whatsapp text-lg"></i>
-            </div>
-            <div class="min-w-0">
-              <p class="text-[11px] font-bold text-gray-700 truncate">${labelNama}</p>
-              <p class="text-xs sm:text-sm font-extrabold text-green-800 group-hover:underline">${rawWa}</p>
-            </div>
-          </a>
-        `;
-      });
 
       const btnDaftar = document.getElementById('btnDaftarSekarang');
-      if(item.statusLomba === 'TUTUP') {
-        btnDaftar.disabled = true;
-        btnDaftar.className = "w-full bg-gray-400 text-white font-extrabold py-3.5 rounded-xl cursor-not-allowed text-sm sm:text-base";
-        btnDaftar.innerText = "Pendaftaran Ditutup";
-      } else {
+      if(isBuka) {
         btnDaftar.disabled = false;
         btnDaftar.className = "w-full theme-btn font-extrabold py-3.5 rounded-xl shadow-lg transition flex items-center justify-center gap-2 text-sm sm:text-base";
         btnDaftar.innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Daftar Lomba Ini`;
@@ -1381,522 +1388,540 @@
           renderNamaPesertaFields(tipe);
           document.getElementById('formModal').classList.remove('hidden');
         };
+      } else {
+        btnDaftar.disabled = true;
+        btnDaftar.className = "w-full bg-gray-400 text-white font-extrabold py-3.5 rounded-xl cursor-not-allowed text-sm sm:text-base";
+        btnDaftar.innerHTML = `<i class="fa-solid fa-lock"></i> Pendaftaran Ditutup`;
+        btnDaftar.onclick = null;
       }
 
       switchView('detail-lomba');
     }
 
-    // --- ZOOM FLYER LIGHTBOX ---
     function openFlyerZoom() {
-      const src = document.getElementById('detailFlyerImg').src;
-      if (!src) return;
-      document.getElementById('zoomedFlyerImg').src = src;
-      resetFlyerZoom();
-      document.getElementById('flyerZoomModal').classList.remove('hidden');
+      const modal = document.getElementById('flyerZoomModal');
+      if (!modal) return;
+      currentFlyerZoom = 1;
+      applyFlyerZoomTransform();
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
     }
-    function closeFlyerZoom() { document.getElementById('flyerZoomModal').classList.add('hidden'); resetFlyerZoom(); }
+
+    function closeFlyerZoom() {
+      const modal = document.getElementById('flyerZoomModal');
+      if (!modal) return;
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
     function closeFlyerZoomOnBackdrop(e) {
-      if (e.target === document.getElementById('flyerZoomViewport') || e.target === document.getElementById('flyerZoomModal')) closeFlyerZoom();
+      if (e.target.id === 'flyerZoomModal' || e.target.id === 'flyerZoomViewport') closeFlyerZoom();
     }
+
     function applyFlyerZoomTransform() {
       const img = document.getElementById('zoomedFlyerImg');
       const label = document.getElementById('zoomLevelLabel');
-      if (!img) return;
-      img.style.transform = `scale(${currentFlyerZoom})`;
-      img.style.cursor = currentFlyerZoom > 1 ? 'zoom-out' : 'zoom-in';
+      if (img) {
+        img.style.transform = `scale(${currentFlyerZoom})`;
+        img.style.cursor = currentFlyerZoom > 1 ? 'zoom-out' : 'zoom-in';
+      }
       if (label) label.innerText = `${Math.round(currentFlyerZoom * 100)}%`;
     }
+
     function adjustFlyerZoom(delta) {
-      currentFlyerZoom = Math.min(3, Math.max(0.5, +(currentFlyerZoom + delta).toFixed(2)));
+      currentFlyerZoom = Math.min(3.5, Math.max(0.5, Number((currentFlyerZoom + delta).toFixed(2))));
       applyFlyerZoomTransform();
     }
+
     function resetFlyerZoom() { currentFlyerZoom = 1; applyFlyerZoomTransform(); }
-    function toggleClickZoom() { currentFlyerZoom = currentFlyerZoom > 1 ? 1 : 1.75; applyFlyerZoomTransform(); }
-    function handleFlyerWheelZoom(e) { e.preventDefault(); adjustFlyerZoom(e.deltaY < 0 ? 0.15 : -0.15); }
+    function toggleClickZoom() { currentFlyerZoom = currentFlyerZoom > 1 ? 1 : 2; applyFlyerZoomTransform(); }
+    function handleFlyerWheelZoom(e) {
+      e.preventDefault();
+      adjustFlyerZoom(e.deltaY < 0 ? 0.2 : -0.2);
+    }
 
     function closeForm() { document.getElementById('formModal').classList.add('hidden'); }
-    function closeFormOnBackdrop(e) { if(e.target === document.getElementById('formModal')) closeForm(); }
+    function closeFormOnBackdrop(e) { if (e.target.id === 'formModal') closeForm(); }
 
-    // --- HELPER PENCARIAN PESERTA DI FIRESTORE (CEPAT < 100ms) ---
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const zoomModal = document.getElementById('flyerZoomModal');
+        if (zoomModal && !zoomModal.classList.contains('hidden')) { closeFlyerZoom(); return; }
+        const formModal = document.getElementById('formModal');
+        if (formModal && !formModal.classList.contains('hidden')) closeForm();
+      }
+    });
+
+    // --- HELPER QUERY DATA PENDAFTAR REAL-TIME FIRESTORE + FALLBACK GAS ---
     async function queryRegistrantsHybrid(queryText) {
       const q = String(queryText || '').trim().toLowerCase();
       if (!q) return [];
 
+      let matches = [];
       if (db) {
-        const snap = await db.collection('pendaftar').get();
-        if (!snap.empty) {
-          const matches = [];
+        try {
+          const snap = await db.collection('pendaftar').get();
           snap.forEach(doc => {
             const d = doc.data();
-            const kode = String(d.kodeRegistrasi || doc.id).toLowerCase();
-            const nama = String(d.namaLengkap || '').toLowerCase();
-            const wa = String(d.noWhatsapp || '').replace(/^'+/, '').toLowerCase();
-            if (kode.includes(q) || nama.includes(q) || wa.includes(q)) {
-              matches.push({ kodeRegistrasi: doc.id, ...d });
+            const item = { kodeRegistrasi: doc.id, ...d, noWhatsapp: String(d.noWhatsapp || '').replace(/^'+/, '') };
+            if (
+              String(item.kodeRegistrasi).toLowerCase().includes(q) ||
+              String(item.namaLengkap || '').toLowerCase().includes(q) ||
+              String(item.noWhatsapp || '').toLowerCase().includes(q) ||
+              String(item.asalSekolah || '').toLowerCase().includes(q)
+            ) {
+              matches.push(item);
             }
           });
-          return matches;
+        } catch (err) {
+          console.warn("Firestore query fallback ke GAS:", err);
         }
       }
 
-      // Fallback ke GAS jika Firestore belum terisi
-      const res = await fetch(`${GAS_URL}?action=check&query=${encodeURIComponent(queryText)}&_t=${Date.now()}`);
-      const result = await res.json();
-      if (result.status === "success") {
-        return (result.results && result.results.length > 0) ? result.results : [result.data];
+      if (matches.length === 0) {
+        try {
+          const res = await fetch(`${GAS_URL}?action=check&query=${encodeURIComponent(queryText)}&_t=${Date.now()}`);
+          const result = await res.json();
+          if (result && result.status === "found") {
+            matches = (result.matches && result.matches.length > 0) ? result.matches : [result.data];
+          }
+        } catch (e) {}
       }
-      return [];
+
+      return matches;
     }
 
+    // --- UNGGAHAN AUDIO ---
     function onAudioNamaInput(val) {
-      const sugBox = document.getElementById('audioSuggestions');
-      if (!val || val.trim().length < 3) { sugBox.classList.add('hidden'); return; }
+      document.getElementById('audioSelectedKode').value = "";
+      clearTimeout(searchTimeout);
+      const box = document.getElementById('audioSuggestions');
+      if (val.trim().length < 3) { box.classList.add('hidden'); return; }
 
-      if (searchTimeout) clearTimeout(searchTimeout);
       searchTimeout = setTimeout(async () => {
-        sugBox.classList.remove('hidden');
-        sugBox.innerHTML = `<div class="p-2.5 text-center text-gray-400">Mencari...</div>`;
-        const matches = await queryRegistrantsHybrid(val.trim());
-        if (matches.length > 0) {
-          sugBox.innerHTML = "";
-          matches.forEach(item => {
-            const div = document.createElement('div');
-            div.className = "p-2.5 hover:bg-gray-100 cursor-pointer flex justify-between";
-            div.innerHTML = `<div><strong>${escapeHtml(item.namaLengkap)}</strong><br><span class="text-[10px] text-gray-500">${escapeHtml(item.asalSekolah)}</span></div><span class="font-mono text-xs font-bold theme-text">${escapeHtml(item.kodeRegistrasi)}</span>`;
-            div.onclick = () => {
-              document.getElementById('audioNamaInput').value = `${item.namaLengkap} (${item.asalSekolah})`;
-              document.getElementById('audioSelectedKode').value = item.kodeRegistrasi;
-              const cabangLower = String(item.cabangLomba || '').toLowerCase();
-              const audioCabangSel = document.getElementById('audioCabang');
-              if (audioCabangSel) {
-                if (cabangLower.includes('solo')) audioCabangSel.value = 'Solosong';
-                else if (cabangLower.includes('tari')) audioCabangSel.value = 'Tari Kreasi';
-              }
-              sugBox.classList.add('hidden');
-            };
-            sugBox.appendChild(div);
-          });
-        } else {
-          sugBox.innerHTML = `<div class="p-2.5 text-center text-red-500">Tidak ditemukan.</div>`;
-        }
-      }, 250);
+        try {
+          const matches = await queryRegistrantsHybrid(val.trim());
+          if (matches.length > 0) {
+            box.innerHTML = "";
+            matches.forEach(m => {
+              const div = document.createElement('div');
+              div.className = "p-2.5 hover:bg-gray-100 cursor-pointer flex justify-between items-center transition";
+              div.innerHTML = `
+                <div>
+                  <p class="font-bold text-gray-900">${m.namaLengkap} <span class="text-[10px] theme-text-accent">(${m.kodeRegistrasi})</span></p>
+                  <p class="text-[10px] text-gray-500">${m.asalSekolah} &bull; <strong>${m.cabangLomba}</strong></p>
+                </div>
+                <span class="theme-badge text-[10px] font-bold px-2 py-0.5 rounded">Pilih</span>
+              `;
+              div.onclick = () => {
+                document.getElementById('audioNamaInput').value = m.namaLengkap;
+                document.getElementById('audioSelectedKode').value = m.kodeRegistrasi;
+                const selCab = document.getElementById('audioCabang');
+                if (m.cabangLomba.toLowerCase().includes('solo')) selCab.value = "Solosong";
+                else if (m.cabangLomba.toLowerCase().includes('tari')) selCab.value = "Tari Kreasi";
+                box.classList.add('hidden');
+              };
+              box.appendChild(div);
+            });
+            box.classList.remove('hidden');
+          } else {
+            box.innerHTML = `<div class="p-2.5 text-red-500 font-semibold text-center">Nama peserta tidak ditemukan.</div>`;
+            box.classList.remove('hidden');
+          }
+        } catch(e) { console.error(e); }
+      }, 300);
     }
 
-    // --- UNGGAH AUDIO KE GOOGLE DRIVE (SESUAI FOLDER CABANG LOMBA) + SYNC KE FIRESTORE ---
     async function submitAudioUpload(e) {
       e.preventDefault();
-      const fileInput = document.getElementById('audioFile');
-      if(!fileInput.files.length) return;
-
       const btn = document.getElementById('btnAudioSubmit');
-      btn.disabled = true; btn.innerText = "Mengunggah Audio ke Drive...";
-      const file = fileInput.files[0];
-      const selectedKode = document.getElementById('audioSelectedKode').value;
-      const kodeOrName = selectedKode || document.getElementById('audioNamaInput').value;
+      const fileInp = document.getElementById('audioFile');
+      let selectedKode = document.getElementById('audioSelectedKode').value.trim();
+      const kodeOrName = selectedKode || document.getElementById('audioNamaInput').value.trim();
       const cabangAudio = document.getElementById('audioCabang').value;
 
-      const folderSolosong = (typeof DRIVE_FOLDER_AUDIO_SOLOSONG !== 'undefined' && DRIVE_FOLDER_AUDIO_SOLOSONG)
-        ? DRIVE_FOLDER_AUDIO_SOLOSONG
-        : '1bI4WfnXjoCHyexfYemrKmeWpfvcBm0O2';
-      const folderTari = (typeof DRIVE_FOLDER_AUDIO_TARI !== 'undefined' && DRIVE_FOLDER_AUDIO_TARI)
-        ? DRIVE_FOLDER_AUDIO_TARI
-        : '1SqJlhYQHtXVL7JsEb75IsthSpg03k77P';
-      const targetAudioFolderId = (cabangAudio === 'Solosong') ? folderSolosong : folderTari;
+      if(fileInp.files.length === 0) return;
 
-      const reader = new FileReader();
-      reader.onload = async (ev) => {
-        try {
-          const payload = {
-            action: 'uploadAudio',
-            targetFolderId: targetAudioFolderId,
-            kodeRegistrasi: kodeOrName,
-            cabangLomba: cabangAudio,
-            audioBase64: ev.target.result,
-            fileName: file.name,
-            fileType: file.type
-          };
-          const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify(payload) });
-          const result = await res.json();
+      const targetAudioFolderId = (cabangAudio === 'Solosong')
+        ? ((typeof DRIVE_FOLDER_AUDIO_SOLOSONG !== 'undefined' && DRIVE_FOLDER_AUDIO_SOLOSONG) ? DRIVE_FOLDER_AUDIO_SOLOSONG : '1bI4WfnXjoCHyexfYemrKmeWpfvcBm0O2')
+        : ((typeof DRIVE_FOLDER_AUDIO_TARI !== 'undefined' && DRIVE_FOLDER_AUDIO_TARI) ? DRIVE_FOLDER_AUDIO_TARI : '1SqJlhYQHtXVL7JsEb75IsthSpg03k77P');
 
-          if(result.status === 'success') {
-            let finalAudioUrl = result.linkAudio || '';
-            if (!finalAudioUrl && selectedKode) {
-              const chk = await fetch(`${GAS_URL}?action=check&query=${encodeURIComponent(selectedKode)}&_t=${Date.now()}`).then(r => r.json()).catch(() => null);
-              if (chk && chk.data && chk.data.linkAudio) finalAudioUrl = chk.data.linkAudio;
-            }
+      btn.disabled = true; btn.innerText = "Mengunggah Audio...";
 
-            if (db && selectedKode && finalAudioUrl) {
-              await db.collection('pendaftar').doc(selectedKode).set({
-                linkAudio: finalAudioUrl,
-                updatedAt: new Date().toISOString()
-              }, { merge: true });
-            }
-
-            Swal.fire({ icon: 'success', title: 'Audio Diunggah! 🎵', text: `Audio ${cabangAudio} tersimpan di Drive Panitia & status langsung terupdate.` });
-            fileInput.value = ""; document.getElementById('audioNamaInput').value = ""; document.getElementById('audioSelectedKode').value = "";
-          } else {
-            Swal.fire({ icon: 'error', title: 'Gagal Unggah', text: result.message || 'Gagal mengunggah file audio.' });
+      try {
+        if (!selectedKode && kodeOrName) {
+          const matchedList = await queryRegistrantsHybrid(kodeOrName);
+          if (matchedList.length === 1) {
+            selectedKode = matchedList[0].kodeRegistrasi;
+          } else if (matchedList.length > 1) {
+            const exact = matchedList.find(x => String(x.namaLengkap || '').toLowerCase() === kodeOrName.toLowerCase());
+            if (exact) selectedKode = exact.kodeRegistrasi;
           }
-        } catch (err) {
-          Swal.fire({ icon: 'error', title: 'Koneksi Gagal', text: 'Gagal terhubung ke server.' });
-        } finally {
-          btn.disabled = false; btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Unggah Musik / Audio Now`;
         }
-      };
-      reader.readAsDataURL(file);
+
+        const reader = new FileReader();
+        reader.onload = async function(ev) {
+          try {
+            const res = await fetch(GAS_URL, {
+              method: 'POST', mode: 'cors', redirect: 'follow',
+              headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+              body: JSON.stringify({
+                action: "uploadAudio",
+                targetFolderId: targetAudioFolderId,
+                kodeRegistrasi: selectedKode || kodeOrName,
+                namaLengkap: document.getElementById('audioNamaInput').value.trim(),
+                cabangLomba: cabangAudio,
+                audioBase64: ev.target.result,
+                fileName: fileInp.files[0].name,
+                fileType: fileInp.files[0].type
+              })
+            });
+            const result = await res.json();
+            if(result.status === "success") {
+              let finalAudioUrl = result.audioUrl || result.linkAudio || '';
+              if (!finalAudioUrl && selectedKode) {
+                const checkRes = await fetch(`${GAS_URL}?action=check&query=${encodeURIComponent(selectedKode)}&_t=${Date.now()}`).then(r => r.json()).catch(() => null);
+                if (checkRes && checkRes.data && checkRes.data.linkAudio) finalAudioUrl = checkRes.data.linkAudio;
+              }
+              if (db && selectedKode && finalAudioUrl) {
+                await db.collection('pendaftar').doc(selectedKode).set({ linkAudio: finalAudioUrl }, { merge: true });
+              }
+
+              Swal.fire({ icon: 'success', title: 'Berhasil! 🎵', text: `Audio berhasil disimpan ke folder ${cabangAudio}.`, confirmButtonColor: '#047857' });
+              document.getElementById('audioNamaInput').value = "";
+              document.getElementById('audioSelectedKode').value = "";
+              fileInp.value = "";
+            } else {
+              Swal.fire({ icon: 'error', title: 'Gagal', text: result.message });
+            }
+          } catch(err) {
+            Swal.fire({ icon: 'error', title: 'Error', text: err.toString() });
+          } finally {
+            btn.disabled = false; btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Unggah Musik / Audio Now`;
+          }
+        };
+        reader.readAsDataURL(fileInp.files[0]);
+      } catch(e) {
+        btn.disabled = false; btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Unggah Musik / Audio Now`;
+      }
     }
 
+    // --- SERTIFIKAT DIGITAL ---
     async function searchCertificate() {
       const q = document.getElementById('inputSearchCert').value.trim();
-      const box = document.getElementById('certResultBox');
       if(!q) return;
-      box.classList.remove('hidden'); box.innerHTML = "<p class='text-xs text-center'>Mencari...</p>";
+      const box = document.getElementById('certResultBox');
+      box.classList.remove('hidden');
+      box.innerHTML = `<p class="text-center text-gray-500 font-semibold text-xs">Mencari data sertifikat...</p>`;
 
-      const matches = await queryRegistrantsHybrid(q);
-      if(matches.length > 0) {
-        const d = matches[0];
-        const qrUrl = getQrCodeUrl(`${window.location.origin}${window.location.pathname}?kode=${d.kodeRegistrasi}`);
-        box.innerHTML = `
-          <div class="border-4 border-double border-yellow-500 theme-dark-bg text-white p-6 rounded-xl text-center">
-            <p class="text-[10px] text-yellow-300 font-bold uppercase">SERTIFIKAT APRESIASI RESMI</p>
-            <h2 class="text-xl font-black text-yellow-300 my-1">${escapeHtml(d.namaLengkap)}</h2>
-            <p class="text-xs text-white/90">${escapeHtml(d.asalSekolah)} | Cabang: ${escapeHtml(d.cabangLomba)}</p>
-            <div class="mt-4 flex justify-center"><img src="${qrUrl}" class="w-16 h-16 bg-white p-1 rounded"></div>
-          </div>
-          <button onclick="printSingleCert('${d.kodeRegistrasi}')" class="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-950 font-bold py-3 rounded-xl mt-4 text-xs">Unduh Sertifikat</button>
-        `;
-      } else { box.innerHTML = `<p class="text-xs text-red-500 text-center">Data tidak ditemukan.</p>`; }
+      try {
+        const matches = await queryRegistrantsHybrid(q);
+        if(matches.length > 0) {
+          const d = matches[0];
+          const isApproved = (d.status === 'TERVERIFIKASI' || d.status === 'APPROVED');
+          if(!isApproved) {
+            box.innerHTML = `<div class="p-4 bg-amber-50 border border-amber-200 rounded-xl text-center text-xs text-amber-800"><strong>Sertifikat Belum Tersedia</strong><br>Pendaftaran peserta (<strong>${d.namaLengkap}</strong>) masih berstatus <strong>${d.status}</strong>.</div>`;
+            return;
+          }
+
+          const verifyUrl = `${window.location.origin}${window.location.pathname}?kode=${d.kodeRegistrasi}`;
+          const qrUrl = getQrCodeUrl(verifyUrl);
+          const customBg = parseImageUrl((state.config && state.config.certTemplate) || '');
+          const bgStyle = customBg
+            ? `background-image: linear-gradient(rgba(6,78,59,0.82), rgba(6,78,59,0.88)), url('${customBg}'); background-size: cover; background-position: center;`
+            : '';
+
+          box.innerHTML = `
+            <div id="certPreviewContainer" style="${bgStyle}" class="border-4 border-double border-yellow-600 p-4 sm:p-8 rounded-xl theme-dark-bg text-white text-center relative shadow-2xl">
+              <p class="text-[10px] sm:text-xs font-bold text-yellow-400 tracking-widest uppercase">Sertifikat Apresiasi Resmi</p>
+              <h2 class="text-sm sm:text-lg font-extrabold theme-text-light mt-1 mb-4">${(state.config && state.config.headerTitle) || 'PESONA AL FIRDAUS 2026'}</h2>
+              <div class="my-4 py-3 border-y border-yellow-500/30">
+                <p class="text-xs text-white/80">Diberikan Kepada Peserta:</p>
+                <h1 class="text-xl sm:text-3xl font-black text-yellow-300 tracking-wide my-1">${d.namaLengkap}</h1>
+                <p class="text-xs sm:text-sm font-bold text-white">${d.asalSekolah}</p>
+              </div>
+              <p class="text-xs text-white/80 mb-6">Atas keikutsertaannya sebagai peserta cabang lomba <strong>${d.cabangLomba}</strong></p>
+              <div class="flex justify-between items-end mt-6 pt-4 border-t border-white/10">
+                <div class="text-left text-[10px] text-white/80 font-mono">
+                  <span>Kode: ${d.kodeRegistrasi}</span><br>
+                  <span class="text-green-400 font-bold">✔ Verified Certificate</span>
+                </div>
+                <div class="text-center">
+                  <img src="${qrUrl}" alt="Barcode Verifikasi" class="w-16 h-16 sm:w-20 sm:h-20 bg-white p-1 rounded shadow mx-auto">
+                  <span class="text-[9px] text-yellow-300 mt-1 block">Scan Verifikasi</span>
+                </div>
+              </div>
+            </div>
+            <div class="text-center mt-4">
+              <button onclick="printSingleCert()" class="bg-yellow-500 hover:bg-yellow-600 text-gray-950 font-bold px-6 py-2.5 rounded-xl text-xs sm:text-sm shadow-lg inline-flex items-center gap-2">
+                <i class="fa-solid fa-print"></i> Cetak / Simpan PDF Sertifikat
+              </button>
+            </div>
+          `;
+        } else {
+          box.innerHTML = `<p class="text-center text-red-500 font-bold text-xs">Data peserta tidak ditemukan.</p>`;
+        }
+      } catch(e) {
+        box.innerHTML = `<p class="text-center text-red-500 text-xs">Terjadi kesalahan.</p>`;
+      }
     }
 
-    function printSingleCert(kode) {
-      const boxHtml = document.getElementById('certResultBox').innerHTML;
+    function printSingleCert() {
+      const content = document.getElementById('certPreviewContainer').outerHTML;
       let printArea = document.getElementById('printArea');
-      if (!printArea) {
+      if(!printArea) {
         printArea = document.createElement('div');
         printArea.id = 'printArea';
         document.body.appendChild(printArea);
       }
-      printArea.innerHTML = `<div style="padding:20px;">${boxHtml}</div>`;
+      printArea.innerHTML = content;
       window.print();
     }
 
-    // --- PENDAFTARAN HYBRID: UPLOAD DRIVE & SHEETS + SIMPAN INSTAN KE FIRESTORE ---
+    // --- SUBMIT PENDAFTARAN (FIRESTORE REAL-TIME + GOOGLE DRIVE BUKTI + SHEETS SYNC) ---
     async function submitRegistration(e) {
       e.preventDefault();
       const btn = document.getElementById('btnSubmitForm');
-      btn.disabled = true;
-      btn.innerText = "Mengirim Pendaftaran...";
+      btn.disabled = true; btn.innerText = "Memproses Pendaftaran...";
 
-      const inputs = document.querySelectorAll('.input-nama-peserta');
-      const namaList = [];
-      inputs.forEach((inp, idx) => {
-        if(inp.value.trim()) {
-          namaList.push(inputs.length > 1 ? `${idx+1}. ${inp.value.trim()}` : inp.value.trim());
-        }
-      });
+      const cabang = document.getElementById('cabangLombaInput').value;
+      const tingkat = document.getElementById('tingkatPesertaInput').value;
+      const sekolahRaw = document.getElementById('asalSekolah').value.trim();
+      const waRaw = document.getElementById('noWhatsapp').value.trim();
+      const emailRaw = document.getElementById('email').value.trim();
+      const fileInp = document.getElementById('fileBukti');
+      const buktiFolderId = getBuktiDriveFolderId();
 
-      const namaLengkapVal = namaList.join(", ");
-      const tingkatVal = document.getElementById('tingkatPesertaInput').value;
-      const asalSekolahRaw = document.getElementById('asalSekolah').value.trim();
-      const asalSekolahFull = `${asalSekolahRaw} (${tingkatVal})`;
-      const cabangLombaVal = document.getElementById('cabangLombaInput').value;
-      const noWhatsappVal = document.getElementById('noWhatsapp').value.trim();
-      const emailVal = document.getElementById('email').value.trim();
-      const fileInput = document.getElementById('fileBukti');
-      const hasBukti = fileInput.files.length > 0;
+      let namaGabungan = "";
+      const teamInputs = document.querySelectorAll('.team-member-input');
+      if (teamInputs.length > 0) {
+        const names = [];
+        teamInputs.forEach(inp => { if(inp.value.trim()) names.push(inp.value.trim()); });
+        namaGabungan = names.join(', ');
+      } else {
+        namaGabungan = document.getElementById('namaLengkap').value.trim();
+      }
 
-      const doSend = async (b64, fn, ft) => {
+      const sendToServer = async (b64Data, fName, fType) => {
         try {
-          // 1. Kirim ke Google Apps Script (Simpan Bukti ke Drive + Baris ke Google Sheets)
+          const payload = {
+            action: "register",
+            targetFolderId: buktiFolderId,
+            namaLengkap: namaGabungan,
+            asalSekolah: `${sekolahRaw} [${tingkat}]`,
+            cabangLomba: cabang,
+            noWhatsapp: waRaw,
+            email: emailRaw,
+            buktiBase64: b64Data,
+            fileName: fName,
+            fileType: fType
+          };
           const res = await fetch(GAS_URL, {
-            method: 'POST',
-            body: JSON.stringify({
-              action: 'register',
-              targetFolderId: DRIVE_FOLDER_ID,
-              namaLengkap: namaLengkapVal,
-              asalSekolah: asalSekolahFull,
-              cabangLomba: cabangLombaVal,
-              noWhatsapp: noWhatsappVal,
-              email: emailVal,
-              buktiBase64: b64,
-              fileName: fn,
-              fileType: ft
-            })
+            method: 'POST', mode: 'cors', redirect: 'follow',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(payload)
           });
           const result = await res.json();
-
           if(result.status === "success") {
-            const kodeReg = result.kodeRegistrasi;
-            let linkBuktiUrl = result.linkBukti || '-';
-
-            if (hasBukti && (!linkBuktiUrl || linkBuktiUrl === '-')) {
-              const chk = await fetch(`${GAS_URL}?action=check&query=${encodeURIComponent(kodeReg)}&_t=${Date.now()}`).then(r => r.json()).catch(() => null);
-              if (chk && chk.data && chk.data.linkBukti) linkBuktiUrl = chk.data.linkBukti;
+            let linkBuktiUrl = result.linkBukti || result.fileUrl || "-";
+            if (b64Data && (!linkBuktiUrl || linkBuktiUrl === "-")) {
+              const checkRes = await fetch(`${GAS_URL}?action=check&query=${encodeURIComponent(result.kodeRegistrasi)}&_t=${Date.now()}`).then(r => r.json()).catch(() => null);
+              if (checkRes && checkRes.data && checkRes.data.linkBukti) linkBuktiUrl = checkRes.data.linkBukti;
             }
 
-            // 2. Simpan ke Firebase Firestore agar Admin & Peserta mendapat update real-time
-            if (db) {
-              await db.collection('pendaftar').doc(kodeReg).set({
+            if (db && result.kodeRegistrasi) {
+              await db.collection('pendaftar').doc(result.kodeRegistrasi).set({
+                kodeRegistrasi: result.kodeRegistrasi,
                 timestamp: new Date().toISOString(),
-                kodeRegistrasi: kodeReg,
-                namaLengkap: namaLengkapVal,
-                asalSekolah: asalSekolahFull,
-                cabangLomba: cabangLombaVal,
-                noWhatsapp: noWhatsappVal,
-                email: emailVal,
-                status: 'MENUNGGU',
+                namaLengkap: namaGabungan,
+                asalSekolah: `${sekolahRaw} [${tingkat}]`,
+                cabangLomba: cabang,
+                noWhatsapp: waRaw,
+                email: emailRaw,
                 linkBukti: linkBuktiUrl,
+                status: 'MENUNGGU',
                 linkAudio: '-'
-              });
+              }, { merge: true });
             }
 
-            const waText = [
-              `Assalamu'alaikum Admin PESONA AL FIRDAUS 2026,`,
-              `Saya ingin melakukan *Konfirmasi Pendaftaran Lomba* dengan detail berikut:`,
-              ``,
-              `• *Kode Registrasi:* ${kodeReg}`,
-              `• *Cabang Lomba:* ${cabangLombaVal}`,
-              `• *Kategori / Tingkat:* ${tingkatVal}`,
-              `• *Nama Peserta / Tim:* ${namaLengkapVal}`,
-              `• *Asal Sekolah / Lembaga:* ${asalSekolahRaw}`,
-              `• *No. WhatsApp:* ${noWhatsappVal}`,
-              `• *Email:* ${emailVal}`,
-              `• *Bukti Transfer:* ${hasBukti ? 'Sudah diunggah di portal' : 'Belum diunggah (akan dikirim menyusul)'}`,
-              ``,
-              `Mohon untuk diverifikasi. Terima kasih.`
-            ].join('\n');
+            const hasBukti = Boolean(b64Data);
+            const waText = `Assalamu'alaikum Admin PESONA AL FIRDAUS,%0A%0ASaya telah mendaftar cabang lomba dengan detail berikut:%0A- *Kode Registrasi:* ${result.kodeRegistrasi}%0A- *Nama Peserta/Tim:* ${namaGabungan}%0A- *Kategori:* ${tingkat}%0A- *Asal Lembaga:* ${sekolahRaw}%0A- *Cabang Lomba:* ${cabang}%0A- *Bukti Transfer:* ${hasBukti ? 'Sudah diunggah di portal' : 'Menyusul'}%0A%0AMohon verifikasi pendaftaran saya. Terima kasih.`;
+            const waConfirmUrl = `https://wa.me/6285366685084?text=${waText}`;
 
-            const waConfirmUrl = `https://wa.me/${ADMIN_CONFIRM_WA}?text=${encodeURIComponent(waText)}`;
-
+            document.getElementById('regForm').reset();
             closeForm();
-            switchView('cek');
-            document.getElementById('inputSearch').value = kodeReg;
-            searchRegistration();
 
             Swal.fire({
               icon: 'success',
               title: 'Pendaftaran Berhasil! 🎉',
-              html: `Kode Registrasi: <strong>${kodeReg}</strong><br><span class="text-xs text-gray-600">Mengarahkan ke halaman konfirmasi WhatsApp Admin...</span>`,
-              timer: 1400,
-              showConfirmButton: false
+              html: `Kode Registrasi Anda: <strong>${result.kodeRegistrasi}</strong><br><br>Mengarahkan Anda ke WhatsApp Admin untuk konfirmasi...<br><a href="${waConfirmUrl}" target="_blank" class="inline-block mt-3 bg-green-600 hover:bg-green-700 text-white font-bold px-4 py-2 rounded-lg text-xs">Buka WhatsApp Sekarang</a>`,
+              showConfirmButton: false,
+              timer: 2500
             });
 
             setTimeout(() => {
               window.location.href = waConfirmUrl;
-            }, 1200);
+            }, 1300);
           } else {
-            Swal.fire({ icon: 'error', title: 'Gagal Mendaftar', text: result.message || 'Terjadi kesalahan saat menyimpan data.' });
+            Swal.fire({ icon: 'error', title: 'Gagal', text: result.message });
           }
-        } catch (err) {
-          Swal.fire({ icon: 'error', title: 'Koneksi Bermasalah', text: 'Gagal terhubung ke server. Silakan coba kembali.' });
+        } catch(err) {
+          Swal.fire({ icon: 'error', title: 'Error', text: err.toString() });
         } finally {
-          btn.disabled = false;
-          btn.innerText = "Kirim Pendaftaran";
+          btn.disabled = false; btn.innerText = "Kirim Pendaftaran";
         }
       };
 
-      if(hasBukti) {
+      if(fileInp.files.length > 0) {
         const reader = new FileReader();
-        reader.onload = (ev) => doSend(ev.target.result, fileInput.files[0].name, fileInput.files[0].type);
-        reader.readAsDataURL(fileInput.files[0]);
+        reader.onload = function(ev) { sendToServer(ev.target.result, fileInp.files[0].name, fileInp.files[0].type); };
+        reader.readAsDataURL(fileInp.files[0]);
       } else {
-        doSend(null, null, null);
+        sendToServer(null, null, null);
       }
     }
 
-    function formatTanggalIndo(ts) {
-      if (!ts) return '-';
-      const dt = new Date(ts);
-      if (isNaN(dt.getTime())) return String(ts);
-      return dt.toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' });
+    // --- CEK PENDAFTARAN + TEMPLATE BUKTI PENDAFTARAN A4 (REAL-TIME LISTENER) ---
+    function formatTanggalIndo(rawTs) {
+      if (!rawTs) return new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' });
+      const d = new Date(rawTs);
+      if (isNaN(d.getTime())) return String(rawTs);
+      return d.toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }) + ' WIB';
     }
 
-    function buildSingleSlipHtml(d, copyType, isPrint) {
-      const isPeserta = copyType === 'PESERTA';
-      const statusUpper = String(d.status || 'MENUNGGU').toUpperCase();
-      const isVerified = statusUpper === 'TERVERIFIKASI' || statusUpper === 'APPROVED';
-      const isRejected = statusUpper === 'DITOLAK';
-
-      const statusText = isVerified ? 'TERVERIFIKASI' : (isRejected ? 'DITOLAK' : 'MENUNGGU VERIFIKASI');
-      const statusStyle = isVerified
-        ? 'background:#dcfce7;color:#166534;border:1.5px solid #16a34a;'
-        : (isRejected
-            ? 'background:#fee2e2;color:#991b1b;border:1.5px solid #dc2626;'
-            : 'background:#fef3c7;color:#92400e;border:1.5px solid #d97706;');
-
-      const palette = resolveThemePalette(state.config.themeColor || 'emerald', state.config.customColor || '#047857');
-      const primaryDark = palette.c900;
-      const primaryMain = palette.c800;
-
-      const headerTitle = (state.config && state.config.headerTitle) ? state.config.headerTitle : 'PESONA AL FIRDAUS 2026';
-      const headerSub = (state.config && state.config.headerSub) ? state.config.headerSub : 'Islamic Youth Festival 2026';
-      const lokasiText = (state.config && state.config.lokasi) ? state.config.lokasi : 'Kompleks Pesantren Al Firdaus';
+    function buildSingleSlipHtml(d, copyLabel, badgeColorHex) {
       const verifyUrl = `${window.location.origin}${window.location.pathname}?kode=${encodeURIComponent(d.kodeRegistrasi)}`;
       const qrUrl = getQrCodeUrl(verifyUrl);
-
-      const wrapperStyle = isPrint
-        ? `height:133mm;box-sizing:border-box;border:1.8px solid ${primaryDark};border-radius:10px;padding:10px 14px;background:#ffffff;display:flex;flex-direction:column;justify-content:space-between;font-family:Arial,Helvetica,sans-serif;color:#111827;`
-        : `border:2px solid ${primaryDark};border-radius:12px;padding:14px 16px;background:#ffffff;box-shadow:0 2px 8px rgba(0,0,0,0.05);color:#111827;`;
-
-      const copyBadgeStyle = isPeserta
-        ? `background:${primaryDark};color:#facc15;`
-        : 'background:#1e3a8a;color:#ffffff;';
+      const isApproved = (d.status === 'TERVERIFIKASI' || d.status === 'APPROVED');
+      const isRejected = (d.status === 'DITOLAK');
+      const statusText = isApproved ? 'TERVERIFIKASI' : (isRejected ? 'DITOLAK' : 'MENUNGGU VERIFIKASI');
+      const statusBg = isApproved ? '#dcfce7' : (isRejected ? '#fee2e2' : '#fef3c7');
+      const statusColor = isApproved ? '#166534' : (isRejected ? '#991b1b' : '#92400e');
+      const hasBukti = (d.linkBukti && d.linkBukti !== '-');
+      const portalTitle = (state.config && state.config.headerTitle) ? state.config.headerTitle : 'PESONA AL FIRDAUS 2026';
+      const portalSub = (state.config && state.config.headerSub) ? state.config.headerSub : 'Islamic Youth Festival 2026 - Yayasan Atmo Taruno Joyo';
+      const lokasiAcara = (state.config && state.config.lokasi) ? state.config.lokasi : 'Kompleks Pesantren Al Firdaus';
+      const cleanWa = String(d.noWhatsapp || '').replace(/^'+/, '');
 
       return `
-        <div style="${wrapperStyle}">
-          <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid ${primaryDark};padding-bottom:6px;gap:8px;">
-            <div style="display:flex;align-items:center;gap:8px;">
-              <img src="${LOGO_URL}" alt="Logo" style="width:36px;height:36px;object-fit:contain;border-radius:50%;border:1px solid #d97706;padding:1px;background:#fff;">
+        <div style="border: 2px solid #065f46; border-radius: 10px; padding: 12px 15px; background: #ffffff; color: #111827; font-family: 'Segoe UI', Arial, sans-serif; box-sizing: border-box;">
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #065f46; padding-bottom: 8px; margin-bottom: 9px; gap: 10px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <img src="https://lh3.googleusercontent.com/d/1Ca6RhNsv0aFWD4EMdkr8uCcSuPDESTpv" alt="Logo" style="width: 40px; height: 40px; object-fit: contain; border-radius: 50%; border: 1.5px solid #eab308; padding: 2px; background: #ffffff;">
               <div>
-                <div style="font-size:13px;font-weight:900;color:${primaryDark};line-height:1.15;letter-spacing:0.3px;">${escapeHtml(headerTitle)}</div>
-                <div style="font-size:10px;font-weight:700;color:#374151;">${escapeHtml(headerSub)} &bull; ${escapeHtml(lokasiText)}</div>
-                <div style="font-size:11px;font-weight:800;color:#111827;margin-top:1px;">BUKTI PENDAFTARAN LOMBA</div>
+                <div style="font-size: 13px; font-weight: 800; color: #064e3b; letter-spacing: 0.3px; line-height: 1.2;">${escapeHtml(portalTitle)}</div>
+                <div style="font-size: 9.5px; color: #4b5563; font-weight: 600;">${escapeHtml(portalSub)}</div>
+                <div style="font-size: 9px; color: #047857; font-weight: 600;">Lokasi: ${escapeHtml(lokasiAcara)}</div>
               </div>
             </div>
-            <div style="text-align:right;">
-              <span style="display:inline-block;padding:3px 9px;border-radius:6px;font-size:10px;font-weight:900;letter-spacing:0.5px;${copyBadgeStyle}">
-                ${isPeserta ? 'LEMBAR UNTUK PESERTA' : 'LEMBAR UNTUK PANITIA'}
-              </span>
-              <div style="font-size:10px;font-family:monospace;font-weight:800;color:${primaryDark};margin-top:3px;">
-                NO. REG: ${escapeHtml(d.kodeRegistrasi)}
-              </div>
+            <div style="text-align: right;">
+              <span style="display: inline-block; background: ${badgeColorHex}; color: #ffffff; font-size: 9px; font-weight: 800; padding: 3px 8px; border-radius: 4px; letter-spacing: 0.6px; text-transform: uppercase;">${escapeHtml(copyLabel)}</span>
+              <div style="font-size: 11px; font-weight: 800; color: #111827; margin-top: 3px;">BUKTI PENDAFTARAN</div>
             </div>
           </div>
 
-          <div style="display:flex;justify-content:space-between;align-items:stretch;gap:12px;margin:7px 0;flex:1;">
-            <table style="width:100%;border-collapse:collapse;font-size:11px;">
-              <tr>
-                <td style="width:138px;padding:2.5px 4px;font-weight:700;color:#374151;">Kode Registrasi</td>
-                <td style="width:10px;padding:2.5px 2px;font-weight:700;">:</td>
-                <td style="padding:2.5px 4px;font-family:monospace;font-weight:900;font-size:12px;color:${primaryDark};">${escapeHtml(d.kodeRegistrasi)}</td>
-              </tr>
-              <tr>
-                <td style="padding:2.5px 4px;font-weight:700;color:#374151;vertical-align:top;">Nama Peserta / Tim</td>
-                <td style="padding:2.5px 2px;font-weight:700;vertical-align:top;">:</td>
-                <td style="padding:2.5px 4px;font-weight:800;color:#111827;">${escapeHtml(d.namaLengkap)}</td>
-              </tr>
-              <tr>
-                <td style="padding:2.5px 4px;font-weight:700;color:#374151;">Asal Sekolah / Jenjang</td>
-                <td style="padding:2.5px 2px;font-weight:700;">:</td>
-                <td style="padding:2.5px 4px;font-weight:600;">${escapeHtml(d.asalSekolah)}</td>
-              </tr>
-              <tr>
-                <td style="padding:2.5px 4px;font-weight:700;color:#374151;">Cabang Lomba</td>
-                <td style="padding:2.5px 2px;font-weight:700;">:</td>
-                <td style="padding:2.5px 4px;font-weight:800;color:${primaryMain};">${escapeHtml(d.cabangLomba)}</td>
-              </tr>
-              <tr>
-                <td style="padding:2.5px 4px;font-weight:700;color:#374151;">No. WhatsApp</td>
-                <td style="padding:2.5px 2px;font-weight:700;">:</td>
-                <td style="padding:2.5px 4px;">${escapeHtml(String(d.noWhatsapp || '').replace(/^'/, ''))}</td>
-              </tr>
-              <tr>
-                <td style="padding:2.5px 4px;font-weight:700;color:#374151;">Tanggal Daftar</td>
-                <td style="padding:2.5px 2px;font-weight:700;">:</td>
-                <td style="padding:2.5px 4px;">${escapeHtml(formatTanggalIndo(d.timestamp))}</td>
-              </tr>
-              <tr>
-                <td style="padding:3px 4px;font-weight:700;color:#374151;">Status Pendaftaran</td>
-                <td style="padding:3px 2px;font-weight:700;">:</td>
-                <td style="padding:3px 4px;">
-                  <span style="display:inline-block;padding:2px 8px;border-radius:5px;font-size:10px;font-weight:900;${statusStyle}">
-                    ${statusText}
-                  </span>
-                </td>
-              </tr>
-            </table>
+          <div style="display: flex; justify-content: space-between; align-items: stretch; gap: 12px;">
+            <div style="flex: 1; min-width: 0;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 10.5px; line-height: 1.38;">
+                <tr>
+                  <td style="width: 128px; padding: 2.5px 0; color: #4b5563; font-weight: 600;">Kode Registrasi</td>
+                  <td style="padding: 2.5px 0; font-family: monospace; font-size: 12px; font-weight: 800; color: #065f46;">: ${escapeHtml(d.kodeRegistrasi)}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 2.5px 0; color: #4b5563; font-weight: 600;">Nama Peserta / Tim</td>
+                  <td style="padding: 2.5px 0; font-weight: 700; color: #111827;">: ${escapeHtml(d.namaLengkap)}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 2.5px 0; color: #4b5563; font-weight: 600;">Asal Sekolah / Jenjang</td>
+                  <td style="padding: 2.5px 0; color: #111827;">: ${escapeHtml(d.asalSekolah)}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 2.5px 0; color: #4b5563; font-weight: 600;">Cabang Perlombaan</td>
+                  <td style="padding: 2.5px 0; font-weight: 700; color: #065f46;">: ${escapeHtml(d.cabangLomba)}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 2.5px 0; color: #4b5563; font-weight: 600;">No. WhatsApp / Email</td>
+                  <td style="padding: 2.5px 0; color: #111827;">: ${escapeHtml(cleanWa || '-')} ${d.email ? `(${escapeHtml(d.email)})` : ''}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 2.5px 0; color: #4b5563; font-weight: 600;">Waktu Daftar</td>
+                  <td style="padding: 2.5px 0; color: #374151;">: ${escapeHtml(formatTanggalIndo(d.timestamp))}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 3px 0; color: #4b5563; font-weight: 600;">Status &amp; Pembayaran</td>
+                  <td style="padding: 3px 0;">: 
+                    <span style="display: inline-block; background: ${statusBg}; color: ${statusColor}; font-weight: 800; font-size: 9.5px; padding: 1.5px 7px; border-radius: 4px; border: 1px solid ${statusColor}33;">${statusText}</span>
+                    <span style="font-size: 9.5px; color: #374151; margin-left: 4px;">(${hasBukti ? 'Bukti TF Terlampir' : 'Belum Upload TF'})</span>
+                  </td>
+                </tr>
+              </table>
+            </div>
 
-            <div style="width:92px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px dashed #9ca3af;border-radius:8px;padding:5px;background:#f9fafb;text-align:center;">
-              <img src="${qrUrl}" alt="QR Verifikasi" style="width:66px;height:66px;display:block;">
-              <span style="font-size:8px;font-weight:700;color:#4b5563;margin-top:3px;line-height:1.1;">Scan Verifikasi<br>Registrasi Ulang</span>
+            <div style="width: 112px; shrink-0; border-left: 1px dashed #d1d5db; padding-left: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+              <img src="${qrUrl}" alt="QR Verifikasi" style="width: 78px; height: 78px; border: 1px solid #d1d5db; border-radius: 6px; padding: 2px; background: #ffffff;">
+              <span style="font-size: 8.5px; font-weight: 700; color: #065f46; margin-top: 3px;">SCAN VERIFIKASI</span>
+              <span style="font-size: 8px; color: #6b7280; font-family: monospace;">${escapeHtml(d.kodeRegistrasi)}</span>
             </div>
           </div>
 
-          <div style="border:1.2px solid #9ca3af;border-radius:7px;padding:6px 10px;background:#f8fafc;">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
-              <span style="font-size:10px;font-weight:800;color:${primaryDark};text-transform:uppercase;letter-spacing:0.3px;">
-                Ceklist Fasilitas Peserta (Diisi saat Registrasi Ulang):
-              </span>
-              <span style="font-size:9px;color:#4b5563;font-style:italic;">
-                ${isPeserta ? '*Simpan sebagai bukti pengambilan fasilitas' : '*Arsip Panitia Registrasi Ulang'}
-              </span>
+          <div style="margin-top: 8px; padding-top: 6px; border-top: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: flex-end; gap: 10px; font-size: 9px; color: #4b5563;">
+            <div style="max-width: 68%; line-height: 1.35;">
+              <strong>Catatan Penting:</strong> Wajib membawa &amp; menunjukkan bukti pendaftaran ini (cetak/digital) saat registrasi ulang di lokasi lomba.
             </div>
-
-            <table style="width:100%;border-collapse:collapse;font-size:10.5px;">
-              <tr>
-                <td style="width:33%;border:1px solid #cbd5e1;background:#ffffff;padding:4px 7px;font-weight:700;">
-                  <span style="display:inline-block;width:12px;height:12px;border:1.5px solid #111827;vertical-align:middle;margin-right:5px;border-radius:2px;"></span>
-                  e-Sertifikat
-                </td>
-                <td style="width:34%;border:1px solid #cbd5e1;background:#ffffff;padding:4px 7px;font-weight:700;">
-                  <span style="display:inline-block;width:12px;height:12px;border:1.5px solid #111827;vertical-align:middle;margin-right:5px;border-radius:2px;"></span>
-                  Nomor Peserta <span style="font-weight:400;color:#6b7280;">(No: _____)</span>
-                </td>
-                <td style="width:33%;border:1px solid #cbd5e1;background:#ffffff;padding:4px 7px;font-weight:700;">
-                  <span style="display:inline-block;width:12px;height:12px;border:1.5px solid #111827;vertical-align:middle;margin-right:5px;border-radius:2px;"></span>
-                  Snack
-                </td>
-              </tr>
-            </table>
-
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:5px;font-size:9.5px;color:#374151;">
-              <span>Catatan: Tunjukkan bukti pendaftaran ini kepada panitia saat daftar ulang di lokasi lomba.</span>
-              <span style="font-weight:700;white-space:nowrap;margin-left:8px;">Paraf Panitia: ( ____________ )</span>
+            <div style="text-align: center; min-width: 115px;">
+              <div style="font-size: 8.5px; color: #6b7280; margin-bottom: 16px;">Panitia Pelaksana,</div>
+              <div style="border-top: 1px solid #374151; font-weight: 700; color: #111827; padding-top: 2px; font-size: 9px;">Sekretariat PESONA</div>
             </div>
           </div>
         </div>
       `;
     }
 
-    function buildFullA4BuktiHtml(d, isPrint) {
-      const cutLineStyle = isPrint
-        ? 'height:12mm;display:flex;align-items:center;justify-content:center;font-size:9.5px;color:#6b7280;font-weight:700;letter-spacing:1px;'
-        : 'margin:14px 0;display:flex;align-items:center;justify-content:center;font-size:11px;color:#6b7280;font-weight:700;';
-
-      const containerStyle = isPrint
-        ? 'width:100%;height:280mm;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between;background:#ffffff;'
-        : 'width:100%;';
-
+    function buildFullA4BuktiHtml(d) {
       return `
-        <div style="${containerStyle}">
-          ${buildSingleSlipHtml(d, 'PESERTA', isPrint)}
-          <div style="${cutLineStyle}">
-            <div style="flex:1;border-top:1.5px dashed #9ca3af;"></div>
-            <span style="padding:0 10px;">&#9986; POTONG DI SINI (ATAS: PESERTA | BAWAH: PANITIA) &#9986;</span>
-            <div style="flex:1;border-top:1.5px dashed #9ca3af;"></div>
+        <div id="buktiA4Sheet" style="width: 100%; max-width: 760px; margin: 0 auto; background: #ffffff; box-sizing: border-box;">
+          ${buildSingleSlipHtml(d, 'LEMBRAN 1 : ARSIP PESERTA', '#065f46')}
+
+          <div style="margin: 12px 0; display: flex; align-items: center; gap: 8px; color: #6b7280; font-size: 9.5px; font-weight: 700; letter-spacing: 1px;">
+            <div style="flex: 1; border-top: 1.5px dashed #9ca3af;"></div>
+            <span><i class="fa-solid fa-scissors"></i> POTONG DI SINI (UNTUK REGISTRASI ULANG PANITIA)</span>
+            <div style="flex: 1; border-top: 1.5px dashed #9ca3af;"></div>
           </div>
-          ${buildSingleSlipHtml(d, 'PANITIA', isPrint)}
+
+          ${buildSingleSlipHtml(d, 'LEMBAR 2 : ARSIP PANITIA / REGISTRASI ULANG', '#b45309')}
         </div>
       `;
     }
 
-    function selectSearchMatch(index) {
-      const d = state.searchMatches[index];
-      if (!d) return;
-      state.selectedRegistration = d;
-      renderMatchesSelector(index);
-      renderSelectedRegistrationDetail(d);
+    function selectSearchMatch(idx) {
+      const selected = state.searchMatches[idx];
+      if (!selected) return;
+      state.selectedRegistration = selected;
+      renderMatchesSelector();
+      renderSelectedRegistrationDetail();
+      subscribeToSelectedRegistration(selected.kodeRegistrasi);
+    }
 
-      // Pasang real-time listener pada dokumen peserta yang dipilih
+    function subscribeToSelectedRegistration(kode) {
       if (activeSlipUnsubscribe) {
         activeSlipUnsubscribe();
         activeSlipUnsubscribe = null;
       }
-      if (db && d.kodeRegistrasi) {
-        activeSlipUnsubscribe = db.collection('pendaftar').doc(d.kodeRegistrasi).onSnapshot((docSnap) => {
+      if (db && kode) {
+        activeSlipUnsubscribe = db.collection('pendaftar').doc(kode).onSnapshot((docSnap) => {
           if (docSnap.exists) {
-            const liveData = { kodeRegistrasi: docSnap.id, ...docSnap.data() };
-            state.selectedRegistration = liveData;
-            state.searchMatches[index] = liveData;
-            renderSelectedRegistrationDetail(liveData);
+            const updated = { kodeRegistrasi: docSnap.id, ...docSnap.data(), noWhatsapp: String(docSnap.data().noWhatsapp || '').replace(/^'+/, '') };
+            state.selectedRegistration = updated;
+            renderSelectedRegistrationDetail();
           }
         });
       }
     }
 
-    function renderMatchesSelector(activeIndex) {
+    function renderMatchesSelector() {
       const bar = document.getElementById('searchMatchesBar');
       if (!bar) return;
+
       if (!state.searchMatches || state.searchMatches.length <= 1) {
         bar.classList.add('hidden');
         bar.innerHTML = '';
@@ -1904,106 +1929,123 @@
       }
 
       bar.classList.remove('hidden');
-      let btnsHtml = `<p class="text-xs font-bold text-gray-700 mb-2">Ditemukan ${state.searchMatches.length} peserta yang cocok. Pilih data peserta:</p><div class="flex flex-wrap gap-2">`;
-      state.searchMatches.forEach((m, idx) => {
-        const isActive = idx === activeIndex;
-        btnsHtml += `
-          <button type="button" onclick="selectSearchMatch(${idx})"
-            class="px-3 py-1.5 rounded-lg text-xs font-bold border transition text-left ${isActive ? 'theme-header text-white shadow' : 'bg-gray-50 hover:bg-gray-100 text-gray-800 border-gray-300'}">
-            <span>${escapeHtml(m.namaLengkap)}</span>
-            <span class="block text-[10px] opacity-80">${escapeHtml(m.kodeRegistrasi)} &bull; ${escapeHtml(m.cabangLomba)}</span>
-          </button>
-        `;
-      });
-      btnsHtml += `</div>`;
-      bar.innerHTML = btnsHtml;
-    }
-
-    function renderSelectedRegistrationDetail(d) {
-      const box = document.getElementById('searchResult');
-      if (!box || !d) return;
-
-      const statusUpper = String(d.status || 'MENUNGGU').toUpperCase();
-      const isVerified = statusUpper === 'TERVERIFIKASI' || statusUpper === 'APPROVED';
-      const isRejected = statusUpper === 'DITOLAK';
-      const badgeClass = isVerified
-        ? 'bg-green-100 text-green-800 border border-green-300'
-        : (isRejected ? 'bg-red-100 text-red-800 border border-red-300' : 'bg-amber-100 text-amber-800 border border-amber-300');
-
-      box.classList.remove('hidden');
-      box.innerHTML = `
-        <div class="theme-box rounded-xl p-4 text-xs space-y-2 border mb-5">
-          <div class="flex flex-wrap justify-between items-center gap-2">
-            <div>
-              <span class="text-[10px] uppercase tracking-wider font-bold text-gray-500 block">Status Pendaftaran Peserta (Live)</span>
-              <span class="text-sm sm:text-base font-extrabold text-gray-900">${escapeHtml(d.namaLengkap)}</span>
-            </div>
-            <span class="px-3 py-1 rounded-full text-xs font-extrabold ${badgeClass}">${escapeHtml(d.status || 'MENUNGGU')}</span>
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2 border-t text-xs">
-            <p><strong>Kode:</strong> <span class="font-mono font-bold theme-text">${escapeHtml(d.kodeRegistrasi)}</span></p>
-            <p><strong>Lomba:</strong> ${escapeHtml(d.cabangLomba)}</p>
-            <p><strong>Asal:</strong> ${escapeHtml(d.asalSekolah)}</p>
-          </div>
-        </div>
-
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3">
-          <div>
-            <h4 class="text-sm sm:text-base font-extrabold text-gray-900">
-              <i class="fa-solid fa-file-lines theme-text mr-1.5"></i> Bukti Pendaftaran (Ukuran A4: Atas Peserta &amp; Bawah Panitia)
-            </h4>
-            <p class="text-[11px] text-gray-500">Berisi informasi peserta, status pendaftaran, dan ceklist fasilitas (e-Sertifikat, Nomor Peserta, Snack).</p>
-          </div>
-          <button type="button" onclick="printBuktiPendaftaran()" class="bg-amber-400 hover:bg-amber-500 text-gray-950 font-extrabold px-4 py-2.5 rounded-xl text-xs shadow flex items-center gap-2 shrink-0 transition">
-            <i class="fa-solid fa-print"></i> Cetak / Simpan PDF (A4)
-          </button>
-        </div>
-
-        <div class="bg-gray-100 p-3 sm:p-4 rounded-xl border border-gray-300 overflow-x-auto">
-          <div class="min-w-[600px]">
-            ${buildFullA4BuktiHtml(d, false)}
-          </div>
+      bar.innerHTML = `
+        <p class="text-xs font-bold text-gray-700 mb-2">
+          <i class="fa-solid fa-users theme-text-accent mr-1"></i> Ditemukan ${state.searchMatches.length} data pendaftar. Klik salah satu untuk melihat bukti pendaftarannya:
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          ${state.searchMatches.map((m, idx) => {
+            const isSelected = state.selectedRegistration && state.selectedRegistration.kodeRegistrasi === m.kodeRegistrasi;
+            const isApproved = (m.status === 'TERVERIFIKASI' || m.status === 'APPROVED');
+            return `
+              <button type="button" onclick="selectSearchMatch(${idx})"
+                class="text-left p-2.5 rounded-xl border transition flex items-center justify-between gap-2 ${isSelected ? 'theme-box border-2 shadow-sm' : 'bg-gray-50 hover:bg-gray-100 border-gray-200'}">
+                <div class="min-w-0">
+                  <p class="text-xs font-extrabold text-gray-900 truncate">${escapeHtml(m.namaLengkap)}</p>
+                  <p class="text-[11px] text-gray-600 truncate">${escapeHtml(m.cabangLomba)} &bull; <span class="font-mono font-bold">${escapeHtml(m.kodeRegistrasi)}</span></p>
+                </div>
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold shrink-0 ${isApproved ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800'}">${escapeHtml(m.status)}</span>
+              </button>
+            `;
+          }).join('')}
         </div>
       `;
     }
 
-    function printBuktiPendaftaran() {
+    function renderSelectedRegistrationDetail() {
+      const resDiv = document.getElementById('searchResult');
       const d = state.selectedRegistration;
-      if (!d) return;
+      if (!resDiv || !d) return;
+
+      const isApproved = (d.status === 'TERVERIFIKASI' || d.status === 'APPROVED');
+      const isRejected = (d.status === 'DITOLAK');
+      const hasBukti = (d.linkBukti && d.linkBukti !== '-');
+      const cleanWa = String(d.noWhatsapp || '').replace(/^'+/, '');
+
+      const waAdminMsg = `Assalamu'alaikum Admin PESONA AL FIRDAUS, saya ingin konfirmasi/cek status pendaftaran atas nama *${d.namaLengkap}* (Kode: *${d.kodeRegistrasi}*, Lomba: *${d.cabangLomba}*).`;
+      const waAdminLink = formatWaLink('085366685084', waAdminMsg);
+
+      resDiv.classList.remove('hidden');
+      resDiv.innerHTML = `
+        <div class="bg-gray-50 border rounded-xl p-3.5 mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div class="flex items-center gap-2.5">
+            <span class="px-3 py-1 rounded-lg text-xs font-extrabold ${isApproved ? 'bg-green-100 text-green-800 border border-green-300' : (isRejected ? 'bg-red-100 text-red-800 border border-red-300' : 'bg-amber-100 text-amber-800 border border-amber-300')}">
+              <i class="fa-solid ${isApproved ? 'fa-circle-check' : (isRejected ? 'fa-circle-xmark' : 'fa-clock')} mr-1"></i>
+              Status: ${escapeHtml(d.status)}
+            </span>
+            <span class="text-xs font-mono font-bold text-gray-600 hidden sm:inline">Kode: ${escapeHtml(d.kodeRegistrasi)}</span>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2">
+            <button type="button" onclick="printBuktiPendaftaran()"
+              class="theme-btn text-xs font-extrabold px-4 py-2 rounded-xl shadow inline-flex items-center gap-1.5 transition">
+              <i class="fa-solid fa-print"></i> Unduh / Cetak Bukti (A4)
+            </button>
+            ${hasBukti && !String(d.linkBukti).startsWith('data:image') ? `
+              <a href="${escapeHtml(d.linkBukti)}" target="_blank" rel="noopener noreferrer"
+                class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-3 py-2 rounded-xl shadow inline-flex items-center gap-1">
+                <i class="fa-solid fa-receipt"></i> Bukti TF
+              </a>
+            ` : ''}
+            <a href="${escapeHtml(waAdminLink)}" target="_blank" rel="noopener noreferrer"
+              class="bg-green-600 hover:bg-green-700 text-white text-xs font-bold px-3 py-2 rounded-xl shadow inline-flex items-center gap-1">
+              <i class="fa-brands fa-whatsapp"></i> Hubungi Admin
+            </a>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto pb-2">
+          <div class="min-w-[600px] border rounded-2xl p-3 bg-gray-100/70 shadow-inner">
+            ${buildFullA4BuktiHtml(d)}
+          </div>
+        </div>
+        <p class="text-[11px] text-gray-500 text-center mt-2">
+          <i class="fa-solid fa-circle-info theme-text-accent mr-1"></i> Klik tombol <strong>Unduh / Cetak Bukti (A4)</strong> lalu pilih <em>Save as PDF / Simpan sebagai PDF</em> untuk menyimpan file bukti pendaftaran (Lembar Peserta &amp; Panitia dalam 1 halaman A4).
+        </p>
+      `;
+    }
+
+    function printBuktiPendaftaran() {
+      if (!state.selectedRegistration) return;
       let printArea = document.getElementById('printArea');
       if (!printArea) {
         printArea = document.createElement('div');
         printArea.id = 'printArea';
         document.body.appendChild(printArea);
       }
-      printArea.innerHTML = buildFullA4BuktiHtml(d, true);
-      window.print();
+      printArea.innerHTML = buildFullA4BuktiHtml(state.selectedRegistration);
+      setTimeout(() => { window.print(); }, 200);
     }
 
     async function searchRegistration() {
       const q = document.getElementById('inputSearch').value.trim();
-      const box = document.getElementById('searchResult');
-      const bar = document.getElementById('searchMatchesBar');
       if(!q) return;
 
-      bar.classList.add('hidden');
-      box.classList.remove('hidden');
-      box.innerHTML = "<p class='text-xs text-center py-4 text-gray-500 font-semibold'><i class='fa-solid fa-spinner fa-spin mr-1'></i> Mencari data pendaftaran...</p>";
+      const matchesBar = document.getElementById('searchMatchesBar');
+      const resDiv = document.getElementById('searchResult');
+      if (matchesBar) { matchesBar.classList.add('hidden'); matchesBar.innerHTML = ''; }
+      resDiv.classList.remove('hidden');
+      resDiv.innerHTML = `<p class="text-center text-gray-500 font-semibold text-xs py-4"><i class="fa-solid fa-spinner fa-spin mr-1"></i> Mencari data pendaftaran...</p>`;
 
       try {
-        const list = await queryRegistrantsHybrid(q);
-        if(list.length > 0) {
-          state.searchMatches = list;
-          selectSearchMatch(0);
+        const matches = await queryRegistrantsHybrid(q);
+
+        if(matches.length > 0) {
+          state.searchMatches = matches;
+          state.selectedRegistration = state.searchMatches[0];
+          renderMatchesSelector();
+          renderSelectedRegistrationDetail();
+          subscribeToSelectedRegistration(state.selectedRegistration.kodeRegistrasi);
         } else {
           state.searchMatches = [];
           state.selectedRegistration = null;
-          box.innerHTML = "<p class='text-xs text-red-600 font-semibold text-center py-3'>Data pendaftaran tidak ditemukan. Pastikan penulisan nama, kode registrasi, atau nomor WhatsApp sudah sesuai.</p>";
+          resDiv.innerHTML = `<p class="text-center text-red-500 font-bold text-xs py-4"><i class="fa-solid fa-circle-exclamation mr-1"></i> Data pendaftaran tidak ditemukan. Pastikan penulisan Nama Peserta, Kode Registrasi, atau Nomor WA sudah sesuai.</p>`;
         }
-      } catch (err) {
-        box.innerHTML = "<p class='text-xs text-red-600 font-semibold text-center py-3'>Gagal terhubung ke server. Silakan coba kembali.</p>";
+      } catch(err) {
+        resDiv.innerHTML = `<p class="text-center text-red-500 text-xs py-4">Gagal memuat data. Silakan coba lagi.</p>`;
       }
     }
   </script>
 </body>
 </html>
+```[cite: 15, 16]
