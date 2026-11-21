@@ -3,14 +3,14 @@
 // =========================================================================
 const GAS_URL = "https://script.google.com/macros/s/AKfycbw4APJqKIcWVgs1yk29KHmuIeArlCDcu0rruBauZkOOmUmGig9Wvqy2aIKq7_gaUPGkOg/exec";
 
-// Folder Utama Penampung Bukti Pembayaran & Berkas Lomba
-const DRIVE_FOLDER_ID = "1i0VnagJrNxjQRWgoO-qXZyrzIRX7l85WFZDw3ji6c0ncve_g9hrh811Wwd6l8sojQjbiH1eN";
+// Struktur Lengkap 5 Folder Google Drive
+const DRIVE_FOLDER_ROOT = "1K2wJSKK1PeqtwtQWFvfkm-ekix8t7pQp"; // ID Folder Besar / Utama (Semua Berkas, Flyer & Banner)
+const DRIVE_FOLDER_BUKTI = "1i0VnagJrNxjQRWgoO-qXZyrzIRX7l85WFZDw3ji6c0ncve_g9hrh811Wwd6l8sojQjbiH1eN"; // Folder Penampung Bukti Pembayaran
+const DRIVE_FOLDER_ID = DRIVE_FOLDER_BUKTI; // Alias kompatibilitas default bukti pembayaran
 
-// Referensi Struktur Folder Google Drive Lainnya
-const DRIVE_FOLDER_ROOT = "1K2wJSKK1PeqtwtQWFvfkm-ekix8t7pQp";
-const DRIVE_FOLDER_AUDIO_ROOT = "1dDB5y_8eL2-qccCbXjGtg4OVZecG0VLK";
-const DRIVE_FOLDER_AUDIO_SOLOSONG = "1bI4WfnXjoCHyexfYemrKmeWpfvcBm0O2";
-const DRIVE_FOLDER_AUDIO_TARI = "1SqJlhYQHtXVL7JsEb75IsthSpg03k77P";
+const DRIVE_FOLDER_AUDIO_ROOT = "1dDB5y_8eL2-qccCbXjGtg4OVZecG0VLK"; // ID Folder Besar Upload Instrumen Solosong & Tari Kreasi
+const DRIVE_FOLDER_AUDIO_SOLOSONG = "1bI4WfnXjoCHyexfYemrKmeWpfvcBm0O2"; // ID Folder Penampung Audio Solosong
+const DRIVE_FOLDER_AUDIO_TARI = "1SqJlhYQHtXVL7JsEb75IsthSpg03k77P"; // ID Folder Penampung Audio Tari Kreasi
 
 const ADMIN_CONFIRM_WA = "6285267743284";
 const LOGO_URL = "https://lh3.googleusercontent.com/d/1Ca6RhNsv0aFWD4EMdkr8uCcSuPDESTpv";
