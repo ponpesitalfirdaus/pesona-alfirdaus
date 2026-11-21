@@ -1274,16 +1274,18 @@
           });
         }
 
-        if (adminRes && Array.isArray(adminRes.data)) {
-          adminRes.data.forEach((p) => {
-            if (p.kodeRegistrasi) {
-              batch.set(db.collection('pendaftar').doc(p.kodeRegistrasi), {
-                ...p,
-                noWhatsapp: String(p.noWhatsapp || '').replace(/^'+/, '')
-              }, { merge: true });
-            }
-          });
-        }
+        const sheetRegistrants = (adminRes && Array.isArray(adminRes.results))
+          ? adminRes.results
+          : ((adminRes && Array.isArray(adminRes.data)) ? adminRes.data : []);
+
+        sheetRegistrants.forEach((p) => {
+          if (p.kodeRegistrasi) {
+            batch.set(db.collection('pendaftar').doc(p.kodeRegistrasi), {
+              ...p,
+              noWhatsapp: String(p.noWhatsapp || '').replace(/^'+/, '')
+            }, { merge: true });
+          }
+        });
 
         await batch.commit();
         Swal.fire({ icon: 'success', title: 'Migrasi Selesai! 🎉', text: 'Seluruh data Google Sheets berhasil masuk ke Firebase Firestore.', confirmButtonColor: '#047857' });
@@ -1515,11 +1517,10 @@
       if (!driveUrl && typeof GAS_URL !== 'undefined' && GAS_URL) {
         try {
           const checkRes = await fetch(`${GAS_URL}?action=adminData&_t=${Date.now()}`).then(r => r.json()).catch(() => null);
-          if (checkRes && Array.isArray(checkRes.data)) {
-            const matched = checkRes.data.find(x => x.kodeRegistrasi === kode);
-            if (matched && matched.linkBukti && matched.linkBukti !== '-' && matched.linkBukti.startsWith('http')) {
-              driveUrl = matched.linkBukti;
-            }
+          const list = (checkRes && Array.isArray(checkRes.results)) ? checkRes.results : ((checkRes && Array.isArray(checkRes.data)) ? checkRes.data : []);
+          const matched = list.find(x => x.kodeRegistrasi === kode);
+          if (matched && matched.linkBukti && matched.linkBukti !== '-' && matched.linkBukti.startsWith('http')) {
+            driveUrl = matched.linkBukti;
           }
         } catch (e) {}
       }
