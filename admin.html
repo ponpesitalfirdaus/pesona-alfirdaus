@@ -157,6 +157,12 @@
             <p class="text-xs text-gray-500">Data tersinkron real-time dengan Firebase &amp; Google Sheets</p>
           </div>
           <div class="flex flex-wrap gap-2 w-full sm:w-auto">
+            <a href="https://drive.google.com/drive/folders/1i0VnagJrNxjQRWgoO-qXZyrzIRX7l85WFZDw3ji6c0ncve_g9hrh811Wwd6l8sojQjbiH1eN" target="_blank" rel="noopener noreferrer" title="Buka Folder Bukti Pembayaran di Google Drive" class="bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 shadow">
+              <i class="fa-brands fa-google-drive"></i> Folder Bukti TF
+            </a>
+            <a href="https://drive.google.com/drive/folders/1K2wJSKK1PeqtwtQWFvfkm-ekix8t7pQp" target="_blank" rel="noopener noreferrer" title="Buka Folder Utama Google Drive" class="bg-gray-800 hover:bg-gray-900 text-white px-3.5 py-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 shadow">
+              <i class="fa-solid fa-folder-tree"></i> Folder Utama
+            </a>
             <button onclick="migrateFromSheetsToFirebase()" title="Impor data lomba, pengaturan & pendaftar lama dari Google Sheets ke Firebase" class="bg-amber-400 hover:bg-amber-500 text-gray-950 px-3.5 py-2 rounded-lg text-xs font-extrabold flex items-center justify-center gap-1.5 shadow-sm">
               <i class="fa-solid fa-cloud-arrow-down"></i> Migrasi Data Sheets
             </button>
@@ -262,6 +268,17 @@
           <div>
             <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Monitoring Unggahan Audio</h1>
             <p class="text-xs text-gray-500">Lacak, sortir, dan putar musik peserta lomba Tari Kreasi &amp; Solosong</p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <a href="https://drive.google.com/drive/folders/1bI4WfnXjoCHyexfYemrKmeWpfvcBm0O2" target="_blank" rel="noopener noreferrer" class="bg-emerald-700 hover:bg-emerald-800 text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 shadow">
+              <i class="fa-brands fa-google-drive"></i> Folder Solosong
+            </a>
+            <a href="https://drive.google.com/drive/folders/1SqJlhYQHtXVL7JsEb75IsthSpg03k77P" target="_blank" rel="noopener noreferrer" class="bg-purple-700 hover:bg-purple-800 text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 shadow">
+              <i class="fa-brands fa-google-drive"></i> Folder Tari Kreasi
+            </a>
+            <a href="https://drive.google.com/drive/folders/1dDB5y_8eL2-qccCbXjGtg4OVZecG0VLK" target="_blank" rel="noopener noreferrer" class="bg-gray-800 hover:bg-gray-900 text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 shadow">
+              <i class="fa-solid fa-folder-open"></i> Induk Audio
+            </a>
           </div>
         </div>
 
@@ -441,10 +458,10 @@
             </div>
 
             <div class="bg-gray-50 p-3 rounded-lg border space-y-2">
-              <label class="block text-[11px] font-bold text-gray-700">Flyer Lomba (URL / Path atau Upload File ke Drive)</label>
+              <label class="block text-[11px] font-bold text-gray-700">Flyer Lomba (URL / Path atau Upload File ke Folder Utama Drive)</label>
               <input type="text" id="lombaFlyerPathText" placeholder="Contoh: flyer1.jpg atau https://drive.google.com/..." class="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-emerald-700 bg-white">
               <div>
-                <label class="block text-[10px] font-semibold text-gray-500 mb-1">Atau Unggah File Gambar Flyer (Otomatis ke Drive):</label>
+                <label class="block text-[10px] font-semibold text-gray-500 mb-1">Atau Unggah File Gambar Flyer (Otomatis ke Folder Utama Drive):</label>
                 <input type="file" id="lombaFlyerFile" accept="image/*" class="w-full text-[11px] text-gray-600 border rounded-lg p-1 bg-white">
               </div>
             </div>
@@ -498,7 +515,7 @@
         <div class="flex justify-between items-center">
           <div>
             <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Kelola Hero Slider Banner</h1>
-            <p class="text-xs text-gray-500">Atur gambar banner slider utama web portal pendaftaran (URL atau Unggah File ke Drive)</p>
+            <p class="text-xs text-gray-500">Atur gambar banner slider utama web portal pendaftaran (URL atau Unggah File ke Folder Utama Drive)</p>
           </div>
           <button onclick="addSlideRow()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-3 py-2 rounded-lg text-xs font-bold shadow">+ Tambah Banner</button>
         </div>
@@ -828,7 +845,7 @@
               <i class="fa-solid fa-receipt text-blue-600"></i> Bukti Pembayaran (TF)
             </span>
             <span class="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">
-              <i class="fa-brands fa-google-drive"></i> Tersinkron Folder Penampungan
+              <i class="fa-brands fa-google-drive"></i> Tersinkron Folder Bukti TF
             </span>
           </div>
 
@@ -842,7 +859,7 @@
             </label>
             <input type="file" id="editRegBuktiFile" accept="image/*,application/pdf" onchange="handleEditBuktiFilePreview(this)" class="w-full text-[11px] text-gray-700 border border-blue-200 rounded-lg p-1.5 bg-white cursor-pointer">
             <p class="text-[10px] text-gray-500 mt-1">
-              Otomatis diunggah ke folder penampungan Google Drive &amp; langsung tampil di kolom <strong>Bukti Pembayaran (TF)</strong>.
+              Otomatis diunggah ke folder bukti pembayaran Google Drive &amp; langsung tampil di kolom <strong>Bukti Pembayaran (TF)</strong>.
             </p>
           </div>
 
@@ -892,6 +909,17 @@
     let unsubLomba = null;
     let unsubConfig = null;
 
+    function getRootDriveFolderId() {
+      if (typeof DRIVE_FOLDER_ROOT !== 'undefined' && DRIVE_FOLDER_ROOT) return DRIVE_FOLDER_ROOT;
+      return '1K2wJSKK1PeqtwtQWFvfkm-ekix8t7pQp';
+    }
+
+    function getBuktiDriveFolderId() {
+      if (typeof DRIVE_FOLDER_BUKTI !== 'undefined' && DRIVE_FOLDER_BUKTI) return DRIVE_FOLDER_BUKTI;
+      if (typeof DRIVE_FOLDER_ID !== 'undefined' && DRIVE_FOLDER_ID) return DRIVE_FOLDER_ID;
+      return '1i0VnagJrNxjQRWgoO-qXZyrzIRX7l85WFZDw3ji6c0ncve_g9hrh811Wwd6l8sojQjbiH1eN';
+    }
+
     window.onload = () => {
       renderNarahubungRows([]);
       syncSidebarUI();
@@ -923,7 +951,6 @@
           role = data.role || 'Admin';
           permissions = data.permissions || [];
         } else {
-          // User pertama yang terdaftar di Firebase Auth otomatis dijadikan Superadmin
           await db.collection('admin_users').doc(email).set({
             email: email,
             role: 'Superadmin',
@@ -1171,7 +1198,6 @@
 
     // --- INISIALISASI LISTENER REAL-TIME FIRESTORE UNTUK DASHBOARD ---
     function initDashboardRealtime() {
-      // 1. Pendaftar Real-time
       if (unsubPendaftar) unsubPendaftar();
       unsubPendaftar = db.collection('pendaftar').onSnapshot((snap) => {
         const list = [];
@@ -1191,7 +1217,6 @@
         renderCertTable();
       });
 
-      // 2. Cabang Lomba Real-time
       if (unsubLomba) unsubLomba();
       unsubLomba = db.collection('lomba').onSnapshot((snap) => {
         const list = [];
@@ -1202,7 +1227,6 @@
         populateLombaFilter();
       });
 
-      // 3. Konfigurasi Portal Real-time
       if (unsubConfig) unsubConfig();
       unsubConfig = db.collection('portal').doc('config').onSnapshot((docSnap) => {
         adminState.config = docSnap.exists ? (docSnap.data() || {}) : {};
@@ -1462,11 +1486,10 @@
       const b64 = await readFileAsBase64(file);
       const safeName = String(namaLengkap || 'Peserta').replace(/[^a-zA-Z0-9_-]/g, '_');
       const uploadFileName = `BuktiTF_${kode}_${safeName}_${file.name}`;
-      const folderId = (typeof DRIVE_FOLDER_ID !== 'undefined') ? DRIVE_FOLDER_ID : '';
+      const folderId = getBuktiDriveFolderId();
 
       let driveUrl = '';
 
-      // 1. Kirim ke Google Apps Script agar file masuk ke folder penampungan Google Drive
       try {
         const gasRes = await postToGAS({
           action: 'uploadBukti',
@@ -1489,7 +1512,6 @@
         console.warn('Upload via action uploadBukti mencoba sinkronisasi lanjutan:', e);
       }
 
-      // 2. Cek apakah GAS sudah menyimpan tautan Google Drive di Google Sheets
       if (!driveUrl && typeof GAS_URL !== 'undefined' && GAS_URL) {
         try {
           const checkRes = await fetch(`${GAS_URL}?action=adminData&_t=${Date.now()}`).then(r => r.json()).catch(() => null);
@@ -1502,7 +1524,6 @@
         } catch (e) {}
       }
 
-      // 3. Fallback jika endpoint GAS belum mengembalikan URL Drive agar data tetap muncul di tabel admin
       if (!driveUrl && file.type.startsWith('image/')) {
         driveUrl = await compressImageToDataUrl(file, 1000, 0.78);
       }
@@ -1554,13 +1575,11 @@
           linkBukti: finalLinkBukti
         };
 
-        // 1. Update Firestore (Real-time langsung muncul di kolom Bukti Pembayaran (TF) portal admin)
         await db.collection('pendaftar').doc(kode).set(updatedFields, { merge: true });
 
-        // 2. Sinkronisasi ke Google Sheets di latar belakang
         postToGAS({
           action: 'updateRegistrant',
-          targetFolderId: (typeof DRIVE_FOLDER_ID !== 'undefined') ? DRIVE_FOLDER_ID : '',
+          targetFolderId: getBuktiDriveFolderId(),
           kodeRegistrasi: kode,
           ...updatedFields
         }).catch(() => {});
@@ -1569,7 +1588,7 @@
         Swal.fire({
           icon: 'success',
           title: 'Data Diperbarui! ✨',
-          text: 'Biodata, bukti pembayaran (TF) & status tersimpan di Firebase dan folder penampungan.',
+          text: 'Biodata, bukti pembayaran (TF) & status tersimpan di Firebase dan folder bukti pembayaran.',
           timer: 1600,
           showConfirmButton: false
         });
@@ -1669,7 +1688,7 @@
       const filtered = audioReqList.filter(item => {
         const hasAudio = (item.linkAudio && item.linkAudio !== '-');
         const matchesSearch = (item.namaLengkap.toLowerCase().includes(q) || item.kodeRegistrasi.toLowerCase().includes(q) || item.asalSekolah.toLowerCase().includes(q));
-        if (filterStatus === "SUDUH") return matchesSearch && hasAudio;
+        if (filterStatus === "SUDUH" || filterStatus === "SUDAH") return matchesSearch && hasAudio;
         if (filterStatus === "BELUM") return matchesSearch && !hasAudio;
         return matchesSearch;
       });
@@ -1919,7 +1938,6 @@
             btn.disabled = false; btn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Simpan User`;
             return;
           }
-          // Gunakan instance SecondaryApp agar Superadmin tidak ter-logout saat membuat user baru
           const secondaryApp = firebase.apps.find(a => a.name === 'SecondaryApp') || firebase.initializeApp(FIREBASE_CONFIG, 'SecondaryApp');
           await secondaryApp.auth().createUserWithEmailAndPassword(email, password);
           await secondaryApp.auth().signOut();
@@ -1959,7 +1977,7 @@
       });
     }
 
-    // --- KELOLA CABANG LOMBA (FIRESTORE + DRIVE UPLOAD) ---
+    // --- KELOLA CABANG LOMBA (FIRESTORE + DRIVE FOLDER UTAMA UPLOAD) ---
     function renderNarahubungRows(list) {
       const container = document.getElementById('lombaNarahubungList');
       if (!container) return;
@@ -2125,6 +2143,7 @@
       if (kat3) activeKategoriArr.push(kat3);
 
       let finalFlyerUrl = document.getElementById('lombaFlyerPathText').value.trim() || document.getElementById('existingFlyerUrl').value;
+      const rootFolderId = getRootDriveFolderId();
 
       const lombaPayload = {
         id: docId,
@@ -2144,21 +2163,21 @@
       };
 
       try {
-        // Jika admin memilih file flyer dari perangkat, upload dulu ke Google Drive via GAS
         if (fileInput && fileInput.files.length > 0) {
           const b64 = await readFileAsBase64(fileInput.files[0]);
           const gasRes = await postToGAS({
             action: 'saveLomba',
-            targetFolderId: DRIVE_FOLDER_ID,
+            targetFolderId: rootFolderId,
             ...lombaPayload,
             flyerBase64: b64,
+            flyerFileName: fileInput.files[0].name,
+            flyerFileType: fileInput.files[0].type,
             fileName: fileInput.files[0].name,
             fileType: fileInput.files[0].type
           });
           if (gasRes && gasRes.flyerUrl) {
             lombaPayload.flyerUrl = gasRes.flyerUrl;
           } else {
-            // Ambil URL Drive terbaru dari initPortal jika GAS tidak langsung mengembalikan field flyerUrl
             const initCheck = await fetch(`${GAS_URL}?action=initPortal&_t=${Date.now()}`).then(r => r.json()).catch(() => null);
             if (initCheck && Array.isArray(initCheck.lombaList)) {
               const matched = initCheck.lombaList.find(x => x.judul === lombaPayload.judul);
@@ -2166,15 +2185,13 @@
             }
           }
         } else {
-          // Sinkronkan juga ke GAS di latar belakang
-          postToGAS({ action: 'saveLomba', targetFolderId: DRIVE_FOLDER_ID, ...lombaPayload }).catch(() => {});
+          postToGAS({ action: 'saveLomba', targetFolderId: rootFolderId, ...lombaPayload }).catch(() => {});
         }
 
-        // Simpan ke Firestore (Langsung muncul real-time di Portal Peserta!)
         await db.collection('lomba').doc(docId).set(lombaPayload, { merge: true });
 
         resetLombaForm();
-        Swal.fire({ icon: 'success', title: 'Cabang Lomba Tersimpan! 🎉', text: 'Data langsung tampil di Portal Pendaftaran.', timer: 1600, showConfirmButton: false });
+        Swal.fire({ icon: 'success', title: 'Cabang Lomba Tersimpan! 🎉', text: 'Data & Flyer langsung tampil di Portal Pendaftaran.', timer: 1600, showConfirmButton: false });
       } catch (err) {
         Swal.fire({ icon: 'error', title: 'Gagal Menyimpan Lomba', text: err.toString(), confirmButtonColor: '#047857' });
       } finally {
@@ -2223,7 +2240,7 @@
                   <input type="text" value="${escapeHtml(s.bgUrl || '')}" class="sld-bg w-full border rounded-lg px-2.5 py-1.5" placeholder="Contoh: banner1.jpg atau https://drive.google.com/...">
                 </div>
                 <div>
-                  <label class="block font-semibold text-gray-500 mb-1">Atau Unggah File Gambar Banner Baru (Otomatis ke Drive):</label>
+                  <label class="block font-semibold text-gray-500 mb-1">Atau Unggah File Gambar Banner Baru (Otomatis ke Folder Utama Drive):</label>
                   <input type="file" accept="image/*" class="sld-file-input w-full text-[11px] text-gray-600 border rounded-lg p-1 bg-gray-50">
                 </div>
               </div>
@@ -2249,7 +2266,7 @@
             <input type="text" class="sld-bg w-full border rounded-lg px-2.5 py-1.5" placeholder="Contoh: banner2.jpg">
           </div>
           <div>
-            <label class="block font-semibold text-gray-500 mb-1">Atau Unggah File Gambar Banner (Otomatis ke Drive):</label>
+            <label class="block font-semibold text-gray-500 mb-1">Atau Unggah File Gambar Banner (Otomatis ke Folder Utama Drive):</label>
             <input type="file" accept="image/*" class="sld-file-input w-full text-[11px] text-gray-600 border rounded-lg p-1 bg-gray-50">
           </div>
         </div>
@@ -2276,21 +2293,24 @@
           fileName = fileInp.files[0].name;
           fileType = fileInp.files[0].type;
         }
-        slidersArr.push({ bgUrl, bgBase64, fileName, fileType });
+        slidersArr.push({ bgUrl, bgBase64, bgFileName: fileName, bgFileType: fileType, fileName, fileType });
       }
 
       if (hasNewFile) {
-        Swal.fire({ title: 'Mengunggah Banner ke Drive...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-        await postToGAS({
+        Swal.fire({ title: 'Mengunggah Banner ke Folder Utama Drive...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+        const gasRes = await postToGAS({
           action: 'saveConfig',
-          targetFolderId: DRIVE_FOLDER_ID,
+          targetFolderId: getRootDriveFolderId(),
           config: { ...adminState.config, sliders: slidersArr }
-        }).catch(() => {});
+        }).catch(() => null);
 
-        const initCheck = await fetch(`${GAS_URL}?action=initPortal&_t=${Date.now()}`).then(r => r.json()).catch(() => null);
-        const finalSliders = (initCheck && initCheck.config && initCheck.config.sliders)
-          ? initCheck.config.sliders
-          : slidersArr.map(s => ({ bgUrl: s.bgUrl }));
+        let finalSliders = (gasRes && gasRes.config && Array.isArray(gasRes.config.sliders)) ? gasRes.config.sliders : null;
+        if (!finalSliders) {
+          const initCheck = await fetch(`${GAS_URL}?action=initPortal&_t=${Date.now()}`).then(r => r.json()).catch(() => null);
+          finalSliders = (initCheck && initCheck.config && initCheck.config.sliders)
+            ? initCheck.config.sliders
+            : slidersArr.map(s => ({ bgUrl: s.bgUrl }));
+        }
 
         await db.collection('portal').doc('config').set({ sliders: finalSliders }, { merge: true });
       } else {
